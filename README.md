@@ -7,7 +7,6 @@ A Persian RTL workspace for finding and managing paid online work. This project 
 2. AI music creation: commissioned music, sound effects, and audio assets.
 3. Music voting and judging: paid music polls, listening contests, and track-rating programs where real compensation and rules are verified.
 4. Paid surveys and market research: general surveys and product research, distinct from music voting.
-5. Paid microtasks: app/site testing, AI response evaluation, data labeling, and small online tasks.
 6. AI image and video creation: commissioned visuals, short videos, advertising assets, and content marketplace submissions.
 
 ## Operating principles
@@ -26,7 +25,7 @@ npm run dev
 ```
 
 ## Current status
-The application has a static dashboard foundation, browser-local opportunity/delivery/income tracking, and a server-side Google OAuth authorization-code flow. The income hub now displays six separate work categories. Opportunity discovery, platform integrations, production APIs, durable cross-device storage, and payout tracking are not connected yet.
+The application has a static dashboard foundation, browser-local opportunity/delivery/income tracking, and a server-side Google OAuth authorization-code flow. The income hub now displays five approved work categories: paid writing, AI music production, paid music voting/judging, paid surveys/market research, and AI image/video production. Opportunity discovery, platform integrations, production APIs, durable cross-device storage, and payout tracking are not connected yet.
 
 ## Google OAuth setup
 To enable Google sign-in:
@@ -41,3 +40,9 @@ To enable Google sign-in:
 4. Redeploy after adding the variables.
 
 The app stores a signed, HTTP-only session cookie. It requests only OpenID, email, and basic profile scopes. It does not request Gmail mailbox access. Never commit OAuth secrets to GitHub or paste them into chat.
+
+
+## Explicit exclusions
+- Do not add game testing, game installation offers, Freecash, app-install rewards, or unrelated microtask platforms.
+- The five approved work streams are paid writing, AI music/audio production, paid music voting/judging, paid surveys/market research, and AI image/video production.
+- Payouts must be crypto-only to the user's wallet, with USDT preferred. Do not claim a platform qualifies until its crypto payout, fees, minimum withdrawal, and country eligibility have been verified.
