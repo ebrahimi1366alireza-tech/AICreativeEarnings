@@ -50,6 +50,7 @@ The app stores a signed, HTTP-only session cookie. It requests only OpenID, emai
 ## Installed creative toolkit
 The current phone toolkit is:
 - Dreamina: AI image and video drafts.
+- Krea: connected to ChatGPT for image/video generation and editing; the free plan has a daily quota, while commercial-use rights are limited and must be checked per asset.
 - Canva: layouts, ads, and product visuals.
 - CapCut: video editing, captions, and audio finishing.
 - ElevenLabs: AI voice/audio and music exploration.
