@@ -92,7 +92,7 @@ export default function Home() {
 
         <div className="section-heading"><div><span className="eyebrow">PERFORMANCE</span><h2>نمای کلی عملکرد</h2></div><span className="muted">هنوز سفارش یا درآمدی ثبت نشده است</span></div>
         <section className="stats">
-          <article className="stat-card"><span className="stat-icon purple">⌕</span><span className="stat-label">فرصت‌های بررسی‌شده</span><strong>{opportunities.length}</strong><small>فرصت‌های ذخیره‌شده در این مرورگر</small></article>
+          <article className="stat-card"><span className="stat-icon purple">⌕</span><span className="stat-label">فرصت‌های ثبت‌شده</span><strong>{opportunities.length}</strong><small>فرصت‌های ذخیره‌شده در این مرورگر</small></article>
           <article className="stat-card"><span className="stat-icon blue">▧</span><span className="stat-label">محتوای تولیدشده</span><strong>{deliveries.length}</strong><small>سفارش‌های ثبت‌شده برای تولید</small></article>
           <article className="stat-card"><span className="stat-icon green">⇧</span><span className="stat-label">تحویل‌های موفق</span><strong>{deliveries.filter(item => item.status === "تحویل شد").length}</strong><small>تحویل‌های ثبت‌شده</small></article>
           <article className="stat-card"><span className="stat-icon amber">₮</span><span className="stat-label">درآمد رمزارزی دریافت‌شده</span><strong>{income.filter(item => item.received && item.currency === "USDT").reduce((sum, item) => sum + item.amount, 0).toFixed(2)} USDT</strong><small>فقط رمزارز دریافت‌شده به USDT</small></article>
@@ -150,7 +150,7 @@ export default function Home() {
           </div>
           <div className="income-manager" id="income-manager">
             <div><span className="eyebrow">INCOME MANAGER</span><h3>مدیریت یکپارچه درآمد</h3><p>درآمد هر مسیر جداگانه ثبت می‌شود؛ فقط USDT دریافت‌شده به کیف پول در جمع کل می‌آید.</p></div>
-            <div className="income-manager-stats"><div><small>مسیرهای درآمدی</small><strong>۵</strong></div><div><small>درآمد تأییدشده</small><strong>0 USDT</strong></div><div><small>هزینه ابزار</small><strong>$0</strong></div></div>
+            <div className="income-manager-stats"><div><small>مسیرهای درآمدی</small><strong>۵</strong></div><div><small>درآمد تأییدشده</small><strong>0 USDT</strong></div><div><small>هزینه ابزار</small><strong>0 USDT</strong></div></div>
           </div>
           <p className="hub-footnote">این بخش فعلاً رابط و نقشه اجرایی است؛ هنوز به پلتفرم‌های نظرسنجی، بازار سفارش متن/موسیقی یا شبکه‌های تسک متصل نشده. هیچ درآمدی تضمین‌شده نیست. ثبت‌نام، احراز هویت و تأییدهای مالی فقط با دخالت و تأیید خودت انجام می‌شود؛ هیچ هزینه یا سپرده‌ای برای بازکردن تسک پرداخت نمی‌کنیم.</p>
         </section>
