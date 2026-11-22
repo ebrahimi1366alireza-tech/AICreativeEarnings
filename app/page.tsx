@@ -26,12 +26,18 @@ type Opportunity = { id: string; title: string; platform: string; pay: string; s
 type Delivery = { id: string; title: string; client: string; due: string; status: string };
 type Income = { id: string; source: string; amount: number; currency: string; received: boolean; date: string };
 
+const DEFAULT_WALLET_ADDRESS = "0x9f53b26aec605212f239c33e1017c5d2d188eb4c";
+const INITIAL_OPPORTUNITIES: Opportunity[] = [
+  { id: "survey-tokens-2026", title: "نظرسنجی پولی با برداشت USDT", platform: "SurveyTokens", pay: "متغیر بر اساس کشور و پنل نظرسنجی", status: "نیازمند بررسی", stream: "نظرسنجی", country: "پذیرش ایران/ارمنستان و موجودی نظرسنجی هنوز تأیید نشده", payout: "مستقیم به کیف پول", network: "USDT روی BNB Smart Chain (BEP20)", minimum: "0.50 USD", fee: "حدود 0.12 USD کارمزد شبکه طبق سایت؛ هنگام برداشت بررسی شود", kyc: "تأیید ایمیل لازم؛ KYC نامشخص", proofUrl: "https://surveytokens.org/terms" },
+  { id: "subnano-2026", title: "فروش مقاله و محتوای دیجیتال", platform: "Subnano", pay: "فروش تکی؛ وابسته به خریدار", status: "نیازمند بررسی", stream: "نوشتن و مقاله", country: "پذیرش حساب از کشور محل اقامت باید تأیید شود", payout: "مستقیم به کیف پول", network: "USDC روی Base", minimum: "بدون حداقل موجودی؛ حداقل قیمت پست متنی 0.10 USDC", fee: "15% برای USDC؛ 7.5% برای Nano", kyc: "ورود با ایمیل یا کیف پول؛ KYC نامشخص", proofUrl: "https://subnano.ai/faq" }
+];
+
 export default function Home() {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [deliveries, setDeliveries] = useState<Delivery[]>([]);
   const [income, setIncome] = useState<Income[]>([]);
-  const [walletAddress, setWalletAddress] = useState("");
+  const [walletAddress, setWalletAddress] = useState(DEFAULT_WALLET_ADDRESS);
   const [walletNetwork, setWalletNetwork] = useState("EVM - انتخاب شبکه هنگام برداشت");
   const [walletNotice, setWalletNotice] = useState("");
   const receivedUsdt = income.filter(item => item.received && item.currency === "USDT").reduce((sum, item) => sum + item.amount, 0);
@@ -40,6 +46,7 @@ export default function Home() {
     try {
       const saved = localStorage.getItem("creativeops-opportunities-v1");
       if (saved) setOpportunities(JSON.parse(saved) as Opportunity[]);
+      else setOpportunities(INITIAL_OPPORTUNITIES);
       const savedDeliveries = localStorage.getItem("creativeops-deliveries-v1");
       if (savedDeliveries) setDeliveries(JSON.parse(savedDeliveries) as Delivery[]);
       const savedIncome = localStorage.getItem("creativeops-income-v1");
@@ -60,6 +67,9 @@ export default function Home() {
         if (typeof parsed.address === "string") setWalletAddress(parsed.address);
         if (typeof parsed.network === "string") setWalletNetwork(parsed.network);
       } catch { /* ignore invalid wallet data */ }
+    } else {
+      localStorage.setItem("creativeops-wallet-v1", JSON.stringify({ address: DEFAULT_WALLET_ADDRESS, network: "EVM - انتخاب شبکه هنگام برداشت" }));
+      setWalletNotice("آدرس عمومی منتخب در این مرورگر ذخیره شد؛ این کار به معنی تأیید AML یا انجام تراکنش نیست.");
     }
   }, [loaded]);
   function saveWallet(event: React.FormEvent<HTMLFormElement>) {
@@ -114,7 +124,8 @@ export default function Home() {
       exportedAt: new Date().toISOString(),
       opportunities,
       deliveries,
-      income
+      income,
+      wallet: { address: walletAddress, network: walletNetwork }
     };
     const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -134,12 +145,13 @@ export default function Home() {
     try {
       const parsed: unknown = JSON.parse(await file.text());
       if (!parsed || typeof parsed !== "object") throw new Error("invalid");
-      const data = parsed as { app?: unknown; schemaVersion?: unknown; opportunities?: unknown; deliveries?: unknown; income?: unknown };
+      const data = parsed as { app?: unknown; schemaVersion?: unknown; opportunities?: unknown; deliveries?: unknown; income?: unknown; wallet?: unknown };
       const isRecord = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === "object" && !Array.isArray(value);
       const validOpportunities = Array.isArray(data.opportunities) && data.opportunities.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
       const validDeliveries = Array.isArray(data.deliveries) && data.deliveries.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
       const validIncome = Array.isArray(data.income) && data.income.every(item => isRecord(item) && typeof item.id === "string" && typeof item.source === "string" && typeof item.amount === "number" && Number.isFinite(item.amount) && typeof item.received === "boolean");
-      if (data.app !== "AI Creative Earnings" || data.schemaVersion !== 1 || !validOpportunities || !validDeliveries || !validIncome) throw new Error("invalid");
+      const validWallet = data.wallet === undefined || (isRecord(data.wallet) && typeof data.wallet.address === "string" && /^0x[a-fA-F0-9]{40}$/.test(data.wallet.address) && typeof data.wallet.network === "string");
+      if (data.app !== "AI Creative Earnings" || data.schemaVersion !== 1 || !validOpportunities || !validDeliveries || !validIncome || !validWallet) throw new Error("invalid");
       if (!window.confirm("اطلاعات فعلی جایگزین اطلاعات داخل فایل پشتیبان شود؟ قبل از ادامه، از داده‌های فعلی خروجی بگیر.")) {
         event.target.value = "";
         return;
@@ -147,6 +159,12 @@ export default function Home() {
       setOpportunities(data.opportunities as Opportunity[]);
       setDeliveries(data.deliveries as Delivery[]);
       setIncome(data.income as Income[]);
+      if (data.wallet && typeof data.wallet === "object" && "address" in data.wallet && "network" in data.wallet) {
+        const restoredWallet = data.wallet as { address: string; network: string };
+        setWalletAddress(restoredWallet.address);
+        setWalletNetwork(restoredWallet.network);
+        localStorage.setItem("creativeops-wallet-v1", JSON.stringify(restoredWallet));
+      }
       setBackupNotice("اطلاعات فایل پشتیبان با موفقیت در این دستگاه بازیابی شد.");
     } catch {
       setBackupNotice("فایل معتبر نیست یا با نسخه پشتیبان این برنامه سازگار نیست.");
@@ -306,7 +324,7 @@ export default function Home() {
               <input type="file" accept="application/json,.json" onChange={importBackup}/>
             </label>
           </div>
-          <p className="backup-notice" role="status">{backupNotice || "فایل پشتیبان شامل فرصت‌ها، سفارش‌ها و دفتر درآمد است؛ آدرس کیف پول و اطلاعات ورود Google داخل آن قرار نمی‌گیرد."}</p>
+          <p className="backup-notice" role="status">{backupNotice || "فایل پشتیبان شامل فرصت‌ها، سفارش‌ها، دفتر درآمد و آدرس عمومی کیف پول است؛ اطلاعات ورود Google و کلیدهای خصوصی هرگز ذخیره نمی‌شوند."}</p>
         </section>
 
         <footer id="deliveries"><span>CREATIVEOPS · نسخه ۰.۲.۰</span><span>ساخته‌شده برای گردش‌کار کم‌هزینه و شفاف</span></footer>
