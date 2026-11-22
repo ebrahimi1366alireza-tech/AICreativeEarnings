@@ -69,6 +69,56 @@ export default function Home() {
   function removeOpportunity(id: string) {
     setOpportunities(current => current.filter(item => item.id !== id));
   }
+
+  const [backupNotice, setBackupNotice] = useState("");
+
+  function exportBackup() {
+    const backup = {
+      app: "AI Creative Earnings",
+      schemaVersion: 1,
+      exportedAt: new Date().toISOString(),
+      opportunities,
+      deliveries,
+      income
+    };
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `ai-creative-earnings-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    setBackupNotice("فایل پشتیبان ساخته شد. آن را در جای امن نگه دار.");
+  }
+
+  async function importBackup(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    try {
+      const parsed: unknown = JSON.parse(await file.text());
+      if (!parsed || typeof parsed !== "object") throw new Error("invalid");
+      const data = parsed as { app?: unknown; schemaVersion?: unknown; opportunities?: unknown; deliveries?: unknown; income?: unknown };
+      const isRecord = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === "object" && !Array.isArray(value);
+      const validOpportunities = Array.isArray(data.opportunities) && data.opportunities.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
+      const validDeliveries = Array.isArray(data.deliveries) && data.deliveries.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
+      const validIncome = Array.isArray(data.income) && data.income.every(item => isRecord(item) && typeof item.id === "string" && typeof item.source === "string" && typeof item.amount === "number" && Number.isFinite(item.amount) && typeof item.received === "boolean");
+      if (data.app !== "AI Creative Earnings" || data.schemaVersion !== 1 || !validOpportunities || !validDeliveries || !validIncome) throw new Error("invalid");
+      if (!window.confirm("اطلاعات فعلی جایگزین اطلاعات داخل فایل پشتیبان شود؟ قبل از ادامه، از داده‌های فعلی خروجی بگیر.")) {
+        event.target.value = "";
+        return;
+      }
+      setOpportunities(data.opportunities as Opportunity[]);
+      setDeliveries(data.deliveries as Delivery[]);
+      setIncome(data.income as Income[]);
+      setBackupNotice("اطلاعات فایل پشتیبان با موفقیت در این دستگاه بازیابی شد.");
+    } catch {
+      setBackupNotice("فایل معتبر نیست یا با نسخه پشتیبان این برنامه سازگار نیست.");
+    } finally {
+      event.target.value = "";
+    }
+  }
   return (
     <main className="shell">
       <aside className="sidebar">
@@ -195,6 +245,18 @@ export default function Home() {
         <section className="panel income-log"><div className="panel-head"><div><span className="eyebrow">PAYMENT TRACKER</span><h2>ثبت درآمد و پرداخت‌ها</h2></div><span className="free-tag">ثبت دستی و شفاف</span></div><p className="hub-intro">فقط پرداخت رمزارزی که واقعاً به کیف پول رسیده باشد ثبت می‌شود. پرداخت فیات در این دفتر پذیرفته نیست. اطلاعات این دفتر فقط در همین مرورگر و دستگاه ذخیره می‌شود.</p>
           <form className="income-form" onSubmit={addIncome}><input name="incomeSource" required placeholder="منبع درآمد / سفارش" aria-label="منبع درآمد"/><input name="amount" type="number" min="0.01" step="0.01" required placeholder="مبلغ" aria-label="مبلغ"/><select name="currency" aria-label="واحد پول"><option value="USDT">USDT</option></select><label className="received-check"><input name="received" type="checkbox"/> واقعاً دریافت شده</label><button type="submit">+ ثبت درآمد</button></form>
           {income.length === 0 ? <div className="empty-state"><span>₮</span><strong>هنوز پرداختی ثبت نشده</strong><p>درآمد واقعی را پس از دریافت ثبت کن.</p></div> : <div className="saved-opportunities">{income.map(item => <article className="saved-opportunity" key={item.id}><div><strong>{item.source}</strong><p>{item.date} · {item.amount.toFixed(2)} {item.currency}</p></div><label className="received-check"><input type="checkbox" checked={item.received} onChange={e => setIncome(rows => rows.map(row => row.id === item.id ? {...row,received:e.target.checked} : row))}/>{item.received ? "دریافت شده" : "در انتظار دریافت"}</label><button type="button" className="remove-opportunity" onClick={() => setIncome(rows => rows.filter(row => row.id !== item.id))} aria-label="حذف درآمد">×</button></article>)}</div>}
+        </section>
+
+        <section className="panel backup-panel" id="backup">
+          <div className="panel-head"><div><span className="eyebrow">DATA SAFETY</span><h2>پشتیبان‌گیری و بازیابی اطلاعات</h2></div><span className="free-tag">بدون هزینه</span></div>
+          <p className="hub-intro">از فرصت‌ها، سفارش‌های تولید و درآمدهای ثبت‌شده یک فایل پشتیبان JSON بساز. برای انتقال اطلاعات به گوشی یا مرورگر دیگر، فایل را همان‌جا بازیابی کن. این قابلیت جایگزین فضای ابری نیست و اطلاعات را خودکار همگام‌سازی نمی‌کند.</p>
+          <div className="backup-actions">
+            <button type="button" onClick={exportBackup}>دانلود فایل پشتیبان</button>
+            <label className="backup-import">بازیابی از فایل پشتیبان
+              <input type="file" accept="application/json,.json" onChange={importBackup}/>
+            </label>
+          </div>
+          <p className="backup-notice" role="status">{backupNotice || "فایل پشتیبان شامل فرصت‌ها، سفارش‌ها و دفتر درآمد است؛ آدرس کیف پول و اطلاعات ورود Google داخل آن قرار نمی‌گیرد."}</p>
         </section>
 
         <footer id="deliveries"><span>CREATIVEOPS · نسخه ۰.۲.۰</span><span>ساخته‌شده برای گردش‌کار کم‌هزینه و شفاف</span></footer>
