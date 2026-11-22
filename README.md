@@ -7,7 +7,7 @@ A Persian RTL workspace for finding and managing paid online work. This project 
 2. AI music creation: commissioned music, sound effects, and audio assets.
 3. Music voting and judging: paid music polls, listening contests, and track-rating programs where real compensation and rules are verified.
 4. Paid surveys and market research: general surveys and product research, distinct from music voting.
-6. AI image and video creation: commissioned visuals, short videos, advertising assets, and content marketplace submissions.
+5. AI image and video creation: commissioned visuals, short videos, advertising assets, and content marketplace submissions.
 
 ## Operating principles
 - Keep AI Creative Earnings separate from AIRDROP AI; do not mix airdrop tasks, wallets, balances, or reports into this workspace.
