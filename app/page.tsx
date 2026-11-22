@@ -8,12 +8,11 @@ const workflow = [
   { number: "۰۲", title: "بررسی شرایط", detail: "کنترل کشور مجاز، روش پرداخت، حق استفاده تجاری و زمان تحویل", state: "در صف راه‌اندازی" },
   { number: "۰۳", title: "تولید محتوا", detail: "انتخاب ابزار رایگان مناسب و ساخت تصویر یا ویدئو", state: "آماده طراحی" },
   { number: "۰۴", title: "کنترل کیفیت", detail: "بازبینی خروجی، اصلاح و آماده‌سازی فایل نهایی", state: "آماده طراحی" },
-  { number: "۰۵", title: "تحویل و درآمد", detail: "ثبت تحویل، پیگیری دستمزد و ثبت درآمد دریافتی", state: "در صف راه‌اندازی" }
+  { number: "۰۵", title: "تحویل و درآمد", detail: "ثبت تحویل، پیگیری دستمزد و ثبت درآمد رمزارزی دریافتی", state: "در صف راه‌اندازی" }
 ];
 
 const tools = [
-  { name: "Adobe Firefly", note: "حساب رایگان اعتبار تولید روزانه محدود دارد؛ اکنون تولید موسیقی و افکت صوتی هم در Firefly موجود است.", status: "موسیقی و افکت‌های تولیدشده با نسخه تجاری منتشرشده Firefly برای استفاده تجاری مجازند؛ سهمیه روزانه متغیر است", mark: "FIREFLY", url: "https://firefly.adobe.com/" },
-  { name: "Adobe Express", note: "پلن رایگان ۰ دلار؛ ویرایش پایه و تعداد محدودی تولید روزانه تصویر و ویدئوی ۵ ثانیه‌ای.", status: "برای بنر و مونتاژ تبلیغ؛ مجوز تجاری ویژگی‌های مولد را جداگانه بررسی کن", mark: "ADOBE", url: "https://www.adobe.com/express/pricing" },
+    { name: "Adobe Express", note: "پلن رایگان ۰ دلار؛ ویرایش پایه و تعداد محدودی تولید روزانه تصویر و ویدئوی ۵ ثانیه‌ای.", status: "برای بنر و مونتاژ تبلیغ؛ مجوز تجاری ویژگی‌های مولد را جداگانه بررسی کن", mark: "ADOBE", url: "https://www.adobe.com/express/pricing" },
   { name: "Canva Free", note: "تا ۲۰ استفاده از ابزارهای AI در ماه در پلن رایگان؛ سهمیه در اول هر ماه UTC بازنشانی می‌شود.", status: "برای بنر، پست و کاتالوگ؛ Canva AI استفاده تجاری را مجاز می‌داند اما خروجی ممکن است منحصربه‌فرد نباشد", mark: "CANVA", url: "https://www.canva.com/pricing/" },
   { name: "Dreamina", note: "اعتبار رایگان روزانه برای برخی گردش‌کارهای تصویر؛ تعداد اعتبار به مدل و تنظیمات بستگی دارد.", status: "برای تست تصویر؛ مجوز تجاری، واترمارک و دسترسی منطقه‌ای را پیش از تحویل مشتری تأیید کن", mark: "DREAMINA", url: "https://dreamina.capcut.com/" },
   { name: "CapCut", note: "تدوین پایه رایگان؛ امکانات AI و قالب‌ها ممکن است پولی یا منطقه‌ای باشند.", status: "فقط برای مونتاژ با دارایی‌های دارای مجوز تجاری؛ شرایط عمومی بسیاری از محتواها را غیرتجاری می‌داند", mark: "CAPCUT", url: "https://www.capcut.com/" },
@@ -51,7 +50,7 @@ export default function Home() {
   }
   function addIncome(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault(); const form = new FormData(event.currentTarget); const source = String(form.get("incomeSource") || "").trim(); const amount = Number(form.get("amount")); if (!source || !Number.isFinite(amount) || amount <= 0) return;
-    setIncome(rows => [{ id: crypto.randomUUID(), source, amount, currency: String(form.get("currency") || "USD"), received: form.get("received") === "on", date: new Date().toISOString().slice(0,10) }, ...rows]); event.currentTarget.reset();
+    setIncome(rows => [{ id: crypto.randomUUID(), source, amount, currency: "USDT", received: form.get("received") === "on", date: new Date().toISOString().slice(0,10) }, ...rows]); event.currentTarget.reset();
   }
   function addOpportunity(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -87,7 +86,7 @@ export default function Home() {
         <header className="topbar"><div><div className="eyebrow">WORKSPACE / OVERVIEW</div><h1>استودیوی درآمد خلاق</h1><p>از پیدا کردن سفارش تا آماده‌سازی خروجی، همه‌چیز در یک جا.</p></div><div className="top-actions"><span className="live-dot">● محیط آزمایشی</span><div className="date-chip">۲۳ نوامبر ۲۰۲۶</div></div></header>
 
         <section className="hero">
-          <div className="hero-copy"><span className="pill">شروع بدون سرمایه</span><h2>اول سفارش معتبر،<br/><em>بعد تولید هوشمند.</em></h2><p>سیستم را طوری می‌سازیم که ابتدا فرصت‌های واقعی و قابل پرداخت را پیدا کند؛ بعد با ابزارهای رایگان یا دارای اعتبار روزانه، خروجی مناسب سفارش را آماده کنیم.</p><a className="hero-link" href="#workflow">مشاهده مسیر اجرا <span>←</span></a></div>
+          <div className="hero-copy"><span className="pill">شروع بدون سرمایه</span><h2>اول سفارش معتبر،<br/><em>بعد تولید هوشمند.</em></h2><p>پنج مسیر درآمدی را مدیریت می‌کنیم؛ هر فرصت پیش از اقدام از نظر اعتبار، کشور مجاز و پرداخت مستقیم رمزارزی بررسی می‌شود.</p><a className="hero-link" href="#workflow">مشاهده مسیر اجرا <span>←</span></a></div>
           <div className="hero-art"><div className="orbit orbit-one"></div><div className="orbit orbit-two"></div><div className="art-core">✳<small>AI</small></div><div className="float-card card-a">✦ تصویر</div><div className="float-card card-b">▶ ویدئو</div><div className="float-card card-c">↗ درآمد</div></div>
         </section>
 
@@ -96,12 +95,12 @@ export default function Home() {
           <article className="stat-card"><span className="stat-icon purple">⌕</span><span className="stat-label">فرصت‌های بررسی‌شده</span><strong>{opportunities.length}</strong><small>فرصت‌های ذخیره‌شده در این مرورگر</small></article>
           <article className="stat-card"><span className="stat-icon blue">▧</span><span className="stat-label">محتوای تولیدشده</span><strong>{deliveries.length}</strong><small>سفارش‌های ثبت‌شده برای تولید</small></article>
           <article className="stat-card"><span className="stat-icon green">⇧</span><span className="stat-label">تحویل‌های موفق</span><strong>{deliveries.filter(item => item.status === "تحویل شد").length}</strong><small>تحویل‌های ثبت‌شده</small></article>
-          <article className="stat-card"><span className="stat-icon amber">$</span><span className="stat-label">درآمد دریافت‌شده</span><strong>${income.filter(item => item.received && item.currency === "USD").reduce((sum, item) => sum + item.amount, 0).toFixed(2)}</strong><small>فقط مبالغ دریافت‌شده به USD</small></article>
+          <article className="stat-card"><span className="stat-icon amber">$</span><span className="stat-label">درآمد دریافت‌شده</span><strong>${income.filter(item => item.received && item.currency === "USDT").reduce((sum, item) => sum + item.amount, 0).toFixed(2)}</strong><small>فقط رمزارز دریافت‌شده به USDT</small></article>
         </section>
 
         <section className="content-grid" id="workflow">
           <div className="panel workflow-panel"><div className="panel-head"><div><span className="eyebrow">PIPELINE</span><h2>مراحل اجرای سفارش</h2></div><span className="counter">۰ از ۵</span></div><div className="workflow-list">{workflow.map((item) => <div className="workflow-row" key={item.number}><div className="step-number">{item.number}</div><div className="step-copy"><strong>{item.title}</strong><p>{item.detail}</p></div><span className="status">{item.state}</span></div>)}</div></div>
-          <div className="panel goal-panel" id="finance"><span className="eyebrow">WEEKLY TARGET</span><h2>هدف هفته اول</h2><div className="goal-value">$50</div><p>هدف آزمایشی است، نه درآمد تضمین‌شده. درآمد فقط پس از دریافت واقعی ثبت می‌شود.</p><div className="progress-track"><span></span></div><div className="goal-foot"><span>درآمد ثبت‌شده</span><strong>${income.filter(item => item.received && item.currency === "USD").reduce((sum, item) => sum + item.amount, 0).toFixed(2)} / $50</strong></div><div className="goal-note">هزینه شروع موردنظر: <b>$0</b></div></div>
+          <div className="panel goal-panel" id="finance"><span className="eyebrow">WEEKLY TARGET</span><h2>هدف هفته اول</h2><div className="goal-value">50 USDT</div><p>هدف آزمایشی است، نه درآمد تضمین‌شده. درآمد فقط پس از دریافت واقعی ثبت می‌شود.</p><div className="progress-track"><span></span></div><div className="goal-foot"><span>درآمد ثبت‌شده</span><strong>${income.filter(item => item.received && item.currency === "USD").reduce((sum, item) => sum + item.amount, 0).toFixed(2)} / $50</strong></div><div className="goal-note">هزینه شروع موردنظر: <b>$0</b></div></div>
         </section>
 
         <section className="panel tools-panel" id="tools"><div className="panel-head"><div><span className="eyebrow">FREE AI TOOLKIT</span><h2>مدیریت ابزارهای تولید</h2></div><span className="free-tag">اولویت با رایگان‌ها</span></div><div className="tool-grid">{tools.map((tool) => <article className="tool-card" key={tool.mark}><div className="tool-mark">{tool.mark}</div><div><strong>{tool.name}</strong><p>{tool.note}</p><small>{tool.status}</small><a href={tool.url} target="_blank" rel="noreferrer" style={{display:"inline-block",marginTop:7,color:"#b9a4ff",fontSize:10,textDecoration:"none"}}>بازکردن ابزار ↗</a></div></article>)}</div><p className="footnote">این فهرست برای سفارش‌های تولید محتوا و تبلیغات دراپ‌شیپینگ مشترک است. سهمیه روزانه تضمین‌شده نیست؛ منطقه، محدودیت خروجی، واترمارک و مجوز تجاری باید داخل حساب و شرایط رسمی هر ابزار کنترل شود.</p></section>
@@ -142,7 +141,7 @@ export default function Home() {
               <a href="#opportunities">ثبت نظرسنجی ←</a>
             </article>
             <article className="income-module">
-              <div className="module-icon video">▧</div><div className="module-kicker">06 · AI VISUAL CONTENT</div><h3>ساخت عکس و ویدئو</h3>
+              <div className="module-icon video">▧</div><div className="module-kicker">05 · AI VISUAL CONTENT</div><h3>ساخت عکس و ویدئو</h3>
               <p>تولید تصویر، ویدئوی کوتاه، تبلیغات محصول، محتوای شبکه‌های اجتماعی و تحویل فایل به سفارش‌دهنده یا بازار فروش محتوا.</p>
               <ul><li>تولید تصویر و طراحی تبلیغاتی</li><li>ساخت و تدوین ویدئوهای کوتاه</li><li>کنترل واترمارک و مجوز استفاده تجاری</li></ul>
               <span className="module-status">مرحله فعلی: ابزارها فهرست شده‌اند؛ اتصال سفارش و تحویل در حال توسعه</span>
@@ -150,8 +149,8 @@ export default function Home() {
             </article>
           </div>
           <div className="income-manager" id="income-manager">
-            <div><span className="eyebrow">INCOME MANAGER</span><h3>مدیریت یکپارچه درآمد</h3><p>درآمد هر مسیر جداگانه ثبت و فقط پس از دریافت واقعی به جمع کل اضافه می‌شود.</p></div>
-            <div className="income-manager-stats"><div><small>مسیرهای درآمدی</small><strong>۵</strong></div><div><small>درآمد تأییدشده</small><strong>$0</strong></div><div><small>هزینه ابزار</small><strong>$0</strong></div></div>
+            <div><span className="eyebrow">INCOME MANAGER</span><h3>مدیریت یکپارچه درآمد</h3><p>درآمد هر مسیر جداگانه ثبت می‌شود؛ فقط USDT دریافت‌شده به کیف پول در جمع کل می‌آید.</p></div>
+            <div className="income-manager-stats"><div><small>مسیرهای درآمدی</small><strong>۵</strong></div><div><small>درآمد تأییدشده</small><strong>0 USDT</strong></div><div><small>هزینه ابزار</small><strong>$0</strong></div></div>
           </div>
           <p className="hub-footnote">این بخش فعلاً رابط و نقشه اجرایی است؛ هنوز به پلتفرم‌های نظرسنجی، بازار سفارش متن/موسیقی یا شبکه‌های تسک متصل نشده. هیچ درآمدی تضمین‌شده نیست. ثبت‌نام، احراز هویت و تأییدهای مالی فقط با دخالت و تأیید خودت انجام می‌شود؛ هیچ هزینه یا سپرده‌ای برای بازکردن تسک پرداخت نمی‌کنیم.</p>
         </section>
@@ -161,8 +160,7 @@ export default function Home() {
         <section className="panel vetted-opportunities" id="verified-opportunities">
           <div className="panel-head"><div><span className="eyebrow">CRYPTO-ONLY OPPORTUNITIES</span><h2>فرصت‌های درآمدی با برداشت رمزارزی</h2></div><span className="free-tag">بدون پرداخت اولیه</span></div>
           <p className="hub-intro">فقط پلتفرم‌هایی در این فهرست می‌مانند که روش برداشت رمزارزی را اعلام کرده‌اند. «جهانی» به معنی دسترسی در همه کشورها نیست؛ محدودیت کشور، احراز هویت، موجودی تسک و شرایط هر حساب باید پیش از شروع بررسی شود.</p>
-          <div className="lead-grid">
-            </div>
+          <div className="lead-grid"><div className="empty-state"><span>⌕</span><strong>هنوز فرصت تأییدشده‌ای وجود ندارد</strong><p>تا زمانی که برداشت مستقیم رمزارزی، حداقل برداشت، کارمزد و دسترسی کشور تأیید نشود، هیچ پلتفرمی به‌عنوان فرصت معتبر معرفی نمی‌شود.</p></div></div>
           <p className="hub-footnote">قانون ثابت پروژه: PayPal، Payoneer، Wise، کارت هدیه و برداشت بانکی پذیرفته نیست. هیچ Deposit، خرید، اشتراک یا هزینه‌ای برای بازکردن تسک پرداخت نمی‌شود. ابتدا کشور واقعی و روش برداشت داخل حساب را بررسی می‌کنیم، سپس یک برداشت کوچک آزمایشی می‌گیریم. هیچ محدودیت کشوری را با VPN یا اطلاعات نادرست دور نمی‌زنیم.</p>
         </section>
 
@@ -183,8 +181,8 @@ export default function Home() {
           <form className="opportunity-form" onSubmit={addDelivery}><input name="deliveryTitle" required placeholder="عنوان سفارش / نوع محتوا" aria-label="عنوان سفارش"/><input name="client" placeholder="مشتری یا پلتفرم" aria-label="مشتری"/><input name="due" type="date" aria-label="مهلت تحویل"/><button type="submit">+ ثبت سفارش تولید</button></form>
           {deliveries.length === 0 ? <div className="empty-state"><span>✧</span><strong>هنوز سفارش تولیدی ثبت نشده</strong><p>سفارش پذیرفته‌شده را اینجا ثبت و تا تحویل پیگیری کن.</p></div> : <div className="saved-opportunities">{deliveries.map(item => <article className="saved-opportunity" key={item.id}><div><strong>{item.title}</strong><p>{item.client}{item.due ? " · مهلت: "+item.due : ""}</p></div><select aria-label="وضعیت تحویل" value={item.status} onChange={e => setDeliveries(rows => rows.map(row => row.id === item.id ? {...row,status:e.target.value} : row))}><option>در حال آماده‌سازی</option><option>در انتظار بازبینی</option><option>آماده تحویل</option><option>تحویل شد</option><option>لغو شد</option></select><button type="button" className="remove-opportunity" onClick={() => setDeliveries(rows => rows.filter(row => row.id !== item.id))} aria-label="حذف سفارش">×</button></article>)}</div>}
         </div></section>
-        <section className="panel income-log"><div className="panel-head"><div><span className="eyebrow">PAYMENT TRACKER</span><h2>ثبت درآمد و پرداخت‌ها</h2></div><span className="free-tag">ثبت دستی و شفاف</span></div><p className="hub-intro">فقط مبالغی که واقعاً دریافت شده‌اند در آمار درآمد قطعی محاسبه می‌شوند.</p>
-          <form className="income-form" onSubmit={addIncome}><input name="incomeSource" required placeholder="منبع درآمد / سفارش" aria-label="منبع درآمد"/><input name="amount" type="number" min="0.01" step="0.01" required placeholder="مبلغ" aria-label="مبلغ"/><select name="currency" aria-label="واحد پول"><option value="USD">USD</option><option value="EUR">EUR</option><option value="TRY">TRY</option><option value="AMD">AMD</option><option value="USDT">USDT</option></select><label className="received-check"><input name="received" type="checkbox"/> واقعاً دریافت شده</label><button type="submit">+ ثبت درآمد</button></form>
+        <section className="panel income-log"><div className="panel-head"><div><span className="eyebrow">PAYMENT TRACKER</span><h2>ثبت درآمد و پرداخت‌ها</h2></div><span className="free-tag">ثبت دستی و شفاف</span></div><p className="hub-intro">فقط پرداخت رمزارزی که واقعاً به کیف پول رسیده باشد ثبت می‌شود. پرداخت فیات در این دفتر پذیرفته نیست.</p>
+          <form className="income-form" onSubmit={addIncome}><input name="incomeSource" required placeholder="منبع درآمد / سفارش" aria-label="منبع درآمد"/><input name="amount" type="number" min="0.01" step="0.01" required placeholder="مبلغ" aria-label="مبلغ"/><select name="currency" aria-label="واحد پول"><option value="USDT">USDT</option></select><label className="received-check"><input name="received" type="checkbox"/> واقعاً دریافت شده</label><button type="submit">+ ثبت درآمد</button></form>
           {income.length === 0 ? <div className="empty-state"><span>$</span><strong>هنوز پرداختی ثبت نشده</strong><p>درآمد واقعی را پس از دریافت ثبت کن.</p></div> : <div className="saved-opportunities">{income.map(item => <article className="saved-opportunity" key={item.id}><div><strong>{item.source}</strong><p>{item.date} · {item.amount.toFixed(2)} {item.currency}</p></div><label className="received-check"><input type="checkbox" checked={item.received} onChange={e => setIncome(rows => rows.map(row => row.id === item.id ? {...row,received:e.target.checked} : row))}/>{item.received ? "دریافت شده" : "در انتظار دریافت"}</label><button type="button" className="remove-opportunity" onClick={() => setIncome(rows => rows.filter(row => row.id !== item.id))} aria-label="حذف درآمد">×</button></article>)}</div>}
         </section>
 
