@@ -34,6 +34,10 @@ export default function Home() {
     try {
       const saved = localStorage.getItem("creativeops-opportunities-v1");
       if (saved) setOpportunities(JSON.parse(saved) as Opportunity[]);
+      const savedDeliveries = localStorage.getItem("creativeops-deliveries-v1");
+      if (savedDeliveries) setDeliveries(JSON.parse(savedDeliveries) as Delivery[]);
+      const savedIncome = localStorage.getItem("creativeops-income-v1");
+      if (savedIncome) setIncome(JSON.parse(savedIncome) as Income[]);
     } catch { /* ignore invalid local data */ }
     setLoaded(true);
   }, []);
