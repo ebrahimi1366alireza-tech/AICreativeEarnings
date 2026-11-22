@@ -17,3 +17,5 @@
 
 .income-log{margin-top:16px}.income-form{display:grid;grid-template-columns:2fr 1fr .8fr 1.3fr auto;gap:8px;margin:14px 0}.income-form input,.income-form select{min-width:0;background:#111a27;border:1px solid #303d51;color:#e8edf7;border-radius:8px;padding:10px;font:inherit;font-size:11px}.income-form button{border:0;border-radius:8px;padding:9px 13px;background:#8d75df;color:white;font:inherit;font-size:11px;cursor:pointer}.received-check{display:flex;align-items:center;gap:7px;color:#bdc8d9;font-size:10px}.received-check input{accent-color:#8d75df}.saved-opportunity select{max-width:155px}
 @media(max-width:850px){.income-form{grid-template-columns:1fr 1fr}.income-form button{min-height:38px}.income-form .received-check{grid-column:span 2}}
+
+.crypto-only-policy{margin:14px 0;padding:14px 16px;border:1px solid #385347;border-radius:10px;background:#14251f}.crypto-only-policy strong{font-size:12px;color:#8ee0b9}.crypto-only-policy p{font-size:10px;color:#b4c6bd;line-height:2;margin:6px 0 0}.lead-grid .empty-state{grid-column:1/-1}
