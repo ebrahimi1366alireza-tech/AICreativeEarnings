@@ -25,7 +25,7 @@ npm run dev
 ```
 
 ## Current status
-The application has a static dashboard foundation, browser-local opportunity/delivery/income tracking, and a server-side Google OAuth authorization-code flow. The income hub now displays five approved work categories: paid writing, AI music production, paid music voting/judging, paid surveys/market research, and AI image/video production. Opportunity discovery, platform integrations, production APIs, durable cross-device storage, and payout tracking are not connected yet.
+The application has a dashboard foundation, browser-local opportunity/delivery/income tracking, and a server-side Google OAuth authorization-code flow. Google sign-in currently verifies an account session only; it does not sync dashboard data or connect Gmail services. The income hub now displays five configured work streams: paid writing, AI music production, paid music voting/judging, paid surveys/market research, and AI image/video production. These are categories, not verified earning opportunities. Automatic opportunity discovery, platform integrations, production APIs, durable cross-device storage, and on-chain payout verification are not connected yet. Entries are manual records and must not be treated as verified jobs or confirmed blockchain receipts.
 
 ## Google OAuth setup
 To enable Google sign-in:
