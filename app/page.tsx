@@ -58,6 +58,7 @@ export default function Home() {
         <a className="nav-item" href="#opportunities"><span>⌕</span> فرصت‌های درآمدی</a>
         <a className="nav-item" href="#production"><span>▧</span> استودیو تولید</a>
         <a className="nav-item" href="#tools"><span>◈</span> ابزارهای هوش مصنوعی</a>
+        <a className="nav-item" href="#accounts"><span>◎</span> اتصال حساب‌ها</a>
         <a className="nav-item" href="#deliveries"><span>⇧</span> تحویل‌ها</a>
         <a className="nav-item" href="#finance"><span>＄</span> درآمدها</a>
         <div className="sidebar-bottom"><div className="avatar">AI</div><div><strong>مدیریت پروژه</strong><small>نسخه آزمایشی شخصی</small></div></div>
