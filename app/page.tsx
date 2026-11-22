@@ -12,12 +12,13 @@ const workflow = [
 ];
 
 const tools = [
-  { name: "Adobe Firefly", note: "کاربران رایگان تعداد محدودی تولید روزانه تصویر، ویدئو و صدا دارند؛ سهمیه و مدل‌های مجاز تغییر می‌کنند.", status: "اولویت اول: خروجی قابلیت‌های غیر-Beta طبق FAQ رسمی قابل استفاده تجاری است؛ استثناهای هر قابلیت را بخوان", mark: "FIREFLY", url: "https://firefly.adobe.com/" },
+  { name: "Adobe Firefly", note: "حساب رایگان اعتبار تولید روزانه محدود دارد؛ اکنون تولید موسیقی و افکت صوتی هم در Firefly موجود است.", status: "موسیقی و افکت‌های تولیدشده با نسخه تجاری منتشرشده Firefly برای استفاده تجاری مجازند؛ سهمیه روزانه متغیر است", mark: "FIREFLY", url: "https://firefly.adobe.com/" },
   { name: "Adobe Express", note: "پلن رایگان ۰ دلار؛ ویرایش پایه و تعداد محدودی تولید روزانه تصویر و ویدئوی ۵ ثانیه‌ای.", status: "برای بنر و مونتاژ تبلیغ؛ مجوز تجاری ویژگی‌های مولد را جداگانه بررسی کن", mark: "ADOBE", url: "https://www.adobe.com/express/pricing" },
   { name: "Canva Free", note: "تا ۲۰ استفاده از ابزارهای AI در ماه در پلن رایگان؛ سهمیه در اول هر ماه UTC بازنشانی می‌شود.", status: "برای بنر، پست و کاتالوگ؛ Canva AI استفاده تجاری را مجاز می‌داند اما خروجی ممکن است منحصربه‌فرد نباشد", mark: "CANVA", url: "https://www.canva.com/pricing/" },
   { name: "Dreamina", note: "اعتبار رایگان روزانه برای برخی گردش‌کارهای تصویر؛ تعداد اعتبار به مدل و تنظیمات بستگی دارد.", status: "برای تست تصویر؛ مجوز تجاری، واترمارک و دسترسی منطقه‌ای را پیش از تحویل مشتری تأیید کن", mark: "DREAMINA", url: "https://dreamina.capcut.com/" },
   { name: "CapCut", note: "تدوین پایه رایگان؛ امکانات AI و قالب‌ها ممکن است پولی یا منطقه‌ای باشند.", status: "فقط برای مونتاژ با دارایی‌های دارای مجوز تجاری؛ شرایط عمومی بسیاری از محتواها را غیرتجاری می‌داند", mark: "CAPCUT", url: "https://www.capcut.com/" },
-  { name: "Google Flow", note: "۵۰ اعتبار رایگان روزانه حتی بدون اشتراک؛ مدل‌ها اعتبار متفاوت مصرف می‌کنند و ساعات اوج محدودیت ویدئو ممکن است.", status: "گزینه قوی ویدئو؛ فقط در کشورهای پشتیبانی‌شده، از جمله با بررسی دسترسی حساب خودت", mark: "FLOW", url: "https://labs.google/fx/tools/flow" }
+  { name: "Adobe Firefly Music & Audio", note: "تولید موسیقی پس‌زمینه و افکت صوتی با اعتبار روزانه محدود در حساب رایگان.", status: "Adobe استفاده تجاری از موسیقی و افکت‌های نسخه منتشرشده را مجاز اعلام می‌کند؛ سهمیه رایگان و شرایط هر قابلیت را بررسی کن", mark: "FIRE AUDIO", url: "https://www.adobe.com/products/firefly/features/ai-music-generator.html" },
+  { name: "Google Flow", note: "بدون اشتراک ۵۰ اعتبار روزانه؛ در ساعات اوج ممکن است تولید ویدئو محدود شود، اما تصویر و بعضی قابلیت‌ها در دسترس می‌مانند.", status: "ارمنستان در فهرست رسمی کشورهای پشتیبانی‌شده است؛ امکانات هر حساب و سهمیه را داخل Google بررسی کن", mark: "FLOW", url: "https://labs.google/fx/tools/flow" }
 ];
 
 type Opportunity = { id: string; title: string; platform: string; pay: string; status: string };
