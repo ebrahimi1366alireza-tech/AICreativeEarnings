@@ -151,7 +151,7 @@ export default function Home() {
           </div>
           <div className="income-manager" id="income-manager">
             <div><span className="eyebrow">INCOME MANAGER</span><h3>مدیریت یکپارچه درآمد</h3><p>درآمد هر مسیر جداگانه ثبت و فقط پس از دریافت واقعی به جمع کل اضافه می‌شود.</p></div>
-            <div className="income-manager-stats"><div><small>مسیرهای درآمدی</small><strong>۶</strong></div><div><small>درآمد تأییدشده</small><strong>$0</strong></div><div><small>هزینه ابزار</small><strong>$0</strong></div></div>
+            <div className="income-manager-stats"><div><small>مسیرهای درآمدی</small><strong>۵</strong></div><div><small>درآمد تأییدشده</small><strong>$0</strong></div><div><small>هزینه ابزار</small><strong>$0</strong></div></div>
           </div>
           <p className="hub-footnote">این بخش فعلاً رابط و نقشه اجرایی است؛ هنوز به پلتفرم‌های نظرسنجی، بازار سفارش متن/موسیقی یا شبکه‌های تسک متصل نشده. هیچ درآمدی تضمین‌شده نیست. ثبت‌نام، احراز هویت و تأییدهای مالی فقط با دخالت و تأیید خودت انجام می‌شود؛ هیچ هزینه یا سپرده‌ای برای بازکردن تسک پرداخت نمی‌کنیم.</p>
         </section>
