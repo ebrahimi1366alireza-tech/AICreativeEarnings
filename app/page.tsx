@@ -31,6 +31,9 @@ export default function Home() {
   const [loaded, setLoaded] = useState(false);
   const [deliveries, setDeliveries] = useState<Delivery[]>([]);
   const [income, setIncome] = useState<Income[]>([]);
+  const [walletAddress, setWalletAddress] = useState("");
+  const [walletNetwork, setWalletNetwork] = useState("EVM - انتخاب شبکه هنگام برداشت");
+  const [walletNotice, setWalletNotice] = useState("");
   const receivedUsdt = income.filter(item => item.received && item.currency === "USDT").reduce((sum, item) => sum + item.amount, 0);
   const goalProgress = Math.min(100, Math.max(0, receivedUsdt / 50 * 100));
   useEffect(() => {
@@ -48,6 +51,37 @@ export default function Home() {
     if (loaded) localStorage.setItem("creativeops-opportunities-v1", JSON.stringify(opportunities));
   }, [opportunities, loaded]);
   useEffect(() => { if (loaded) { localStorage.setItem("creativeops-deliveries-v1", JSON.stringify(deliveries)); localStorage.setItem("creativeops-income-v1", JSON.stringify(income)); } }, [deliveries, income, loaded]);
+  useEffect(() => {
+    if (!loaded) return;
+    const savedWallet = localStorage.getItem("creativeops-wallet-v1");
+    if (savedWallet) {
+      try {
+        const parsed = JSON.parse(savedWallet) as { address?: unknown; network?: unknown };
+        if (typeof parsed.address === "string") setWalletAddress(parsed.address);
+        if (typeof parsed.network === "string") setWalletNetwork(parsed.network);
+      } catch { /* ignore invalid wallet data */ }
+    }
+  }, [loaded]);
+  function saveWallet(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const address = walletAddress.trim();
+    if (!/^0x[a-fA-F0-9]{40}$/.test(address)) {
+      setWalletNotice("آدرس واردشده معتبر نیست؛ آدرس EVM باید با 0x شروع شود و ۴۰ رقم هگزادسیمال داشته باشد.");
+      return;
+    }
+    localStorage.setItem("creativeops-wallet-v1", JSON.stringify({ address, network: walletNetwork }));
+    setWalletAddress(address);
+    setWalletNotice("آدرس در همین مرورگر ذخیره شد. این کار به معنی تأیید AML یا انجام تراکنش نیست.");
+  }
+  async function copyWallet() {
+    if (!walletAddress) return;
+    try {
+      await navigator.clipboard.writeText(walletAddress);
+      setWalletNotice("آدرس کیف پول کپی شد.");
+    } catch {
+      setWalletNotice("کپی خودکار در این مرورگر در دسترس نیست؛ آدرس را دستی انتخاب و کپی کن.");
+    }
+  }
   function addDelivery(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault(); const form = new FormData(event.currentTarget); const title = String(form.get("deliveryTitle") || "").trim(); if (!title) return;
     setDeliveries(rows => [{ id: crypto.randomUUID(), title, client: String(form.get("client") || "نامشخص"), due: String(form.get("due") || ""), status: "در حال آماده‌سازی" }, ...rows]); event.currentTarget.reset();
@@ -246,6 +280,21 @@ export default function Home() {
         <section className="panel income-log"><div className="panel-head"><div><span className="eyebrow">PAYMENT TRACKER</span><h2>ثبت درآمد و پرداخت‌ها</h2></div><span className="free-tag">ثبت دستی و شفاف</span></div><p className="hub-intro">فقط پرداخت رمزارزی که واقعاً به کیف پول رسیده باشد ثبت می‌شود. پرداخت فیات در این دفتر پذیرفته نیست. اطلاعات این دفتر فقط در همین مرورگر و دستگاه ذخیره می‌شود.</p>
           <form className="income-form" onSubmit={addIncome}><input name="incomeSource" required placeholder="منبع درآمد / سفارش" aria-label="منبع درآمد"/><input name="amount" type="number" min="0.01" step="0.01" required placeholder="مبلغ" aria-label="مبلغ"/><select name="currency" aria-label="واحد پول"><option value="USDT">USDT</option></select><label className="received-check"><input name="received" type="checkbox"/> واقعاً دریافت شده</label><button type="submit">+ ثبت درآمد</button></form>
           {income.length === 0 ? <div className="empty-state"><span>₮</span><strong>هنوز پرداختی ثبت نشده</strong><p>درآمد واقعی را پس از دریافت ثبت کن.</p></div> : <div className="saved-opportunities">{income.map(item => <article className="saved-opportunity" key={item.id}><div><strong>{item.source}</strong><p>{item.date} · {item.amount.toFixed(2)} {item.currency}</p></div><label className="received-check"><input type="checkbox" checked={item.received} onChange={e => setIncome(rows => rows.map(row => row.id === item.id ? {...row,received:e.target.checked} : row))}/>{item.received ? "دریافت شده" : "در انتظار دریافت"}</label><button type="button" className="remove-opportunity" onClick={() => setIncome(rows => rows.filter(row => row.id !== item.id))} aria-label="حذف درآمد">×</button></article>)}</div>}
+        </section>
+
+        <section className="panel wallet-panel" id="wallet">
+          <div className="panel-head"><div><span className="eyebrow">PAYOUT DESTINATION</span><h2>کیف پول دریافت درآمد</h2></div><span className="free-tag">ذخیره محلی</span></div>
+          <p className="hub-intro">این بخش فقط مقصد دریافت را نگه می‌دارد و خودش پرداخت یا اتصال کیف پول انجام نمی‌دهد. آدرس EVM می‌تواند روی چند شبکه استفاده شود؛ هنگام برداشت باید همان شبکه‌ای را انتخاب کنی که پلتفرم پرداخت پشتیبانی می‌کند.</p>
+          <form className="opportunity-form" onSubmit={saveWallet}>
+            <input name="walletAddress" value={walletAddress} onChange={e => setWalletAddress(e.target.value)} placeholder="آدرس عمومی EVM با 0x" aria-label="آدرس عمومی کیف پول" autoComplete="off" spellCheck={false}/>
+            <select aria-label="شبکه کیف پول" value={walletNetwork} onChange={e => setWalletNetwork(e.target.value)}>
+              <option>EVM - انتخاب شبکه هنگام برداشت</option>
+              <option>Ethereum</option><option>BNB Smart Chain (BEP20)</option><option>Polygon</option><option>Arbitrum One</option><option>Base</option>
+            </select>
+            <button type="submit">ذخیره آدرس در این دستگاه</button>
+            <button type="button" onClick={copyWallet} disabled={!walletAddress}>کپی آدرس</button>
+          </form>
+          <p className="backup-notice" role="status">{walletNotice || "هشدار: اعتبار قالب آدرس به معنی تأیید AML، نبود فلگ یا امن‌بودن همه شبکه‌ها نیست. پیش از دریافت وجه، شبکه و وضعیت آدرس را در سرویس پرداخت بررسی کن."}</p>
         </section>
 
         <section className="panel backup-panel" id="backup">
