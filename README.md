@@ -25,7 +25,7 @@ npm run dev
 ```
 
 ## Current status
-The application has a dashboard foundation, browser-local opportunity/delivery/income tracking, and a server-side Google OAuth authorization-code flow. Google sign-in currently verifies an account session only; it does not sync dashboard data or connect Gmail services. The income hub now displays five configured work streams: paid writing, AI music production, paid music voting/judging, paid surveys/market research, and AI image/video production. These are categories, not verified earning opportunities. Automatic opportunity discovery, platform integrations, production APIs, durable cross-device storage, and on-chain payout verification are not connected yet. Entries are manual records and must not be treated as verified jobs or confirmed blockchain receipts. Opportunity records now include income stream, eligible countries, payout route, network, minimum withdrawal, fees, KYC requirement, and an official evidence URL. Their status defaults to `needs review`; entering these fields does not independently verify a platform or make it eligible.
+The application has a dashboard foundation, browser-local opportunity/delivery/income tracking, a preloaded EVM payout destination, wallet-inclusive JSON backup/restore, and a server-side Google OAuth authorization-code flow. Google sign-in currently verifies an account session only; it does not sync dashboard data or connect Gmail services. The income hub now displays five configured work streams: paid writing, AI music production, paid music voting/judging, paid surveys/market research, and AI image/video production. These are categories, not verified earning opportunities. Automatic opportunity discovery, marketplace integrations, production APIs inside the app, durable cross-device storage, and on-chain payout verification are not connected yet. Subnano is listed only as a review lead for selling paid posts: it supports creator payouts in USDC on Base or Nano, takes 15% on USDC sales and 7.5% on Nano sales, and pays each sale individually; country access and audience demand still need manual validation. Entries are manual records and must not be treated as verified jobs or confirmed blockchain receipts. Opportunity records now include income stream, eligible countries, payout route, network, minimum withdrawal, fees, KYC requirement, and an official evidence URL. Their status defaults to `needs review`; entering these fields does not independently verify a platform or make it eligible.
 
 ## Google OAuth setup
 To enable Google sign-in:
@@ -50,7 +50,7 @@ The app stores a signed, HTTP-only session cookie. It requests only OpenID, emai
 ## Installed creative toolkit
 The current phone toolkit is:
 - Dreamina: AI image and video drafts.
-- Krea: connected to ChatGPT for image/video generation and editing; the free plan has a daily quota, while commercial-use rights are limited and must be checked per asset.
+- Krea: connected to ChatGPT for image/video generation and editing. Its current pricing page lists 100 free units per day and a commercial license; verify the current terms and model-specific rights before client delivery. Krea API billing is separate from the consumer app plan and is pay-per-generation, so do not trigger API generations unless the exact cost is known and approved.
 - Canva: layouts, ads, and product visuals.
 - CapCut: video editing, captions, and audio finishing.
 - ElevenLabs: AI voice/audio and music exploration.
@@ -59,3 +59,10 @@ The current phone toolkit is:
 - Notion: connected workspace for project documents and content management; ChatGPT handles English spelling, grammar, sentence flow, and final proofreading.
 
 A free tier does not automatically grant unlimited generations or commercial-use rights. Before accepting paid work, verify the specific account's quota, regional availability, watermark rules, and license for every generated asset. Do not purchase subscriptions or credits without the user's explicit approval.
+
+
+## Payout wallet and opportunity review
+- The selected public EVM payout address is preloaded into the browser-local wallet settings on first load and can be changed by the user. It is included in JSON backups; private keys, seed phrases, and Google credentials are never stored or exported.
+- The wallet address passed an initial third-party sanctions-list lookup with no record found, but that is not a full AML clearance or an on-chain risk analysis. Always confirm the destination network and the receiving platform's requirements before accepting a payout.
+- Subnano is a review-only lead for selling paid posts, not a guaranteed job source. Its official FAQ lists USDC on Base and Nano payouts, no minimum creator balance, a 15% USDC fee, and a 7.5% Nano fee. Country eligibility, KYC requirements, and whether the user can attract buyers remain unverified.
+- Do not treat any lead as verified income until country eligibility, identity requirements, commercial rights, payout destination, and a small successful test payout have been checked.
