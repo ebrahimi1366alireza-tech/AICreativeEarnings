@@ -131,6 +131,35 @@ export default function Home() {
         </section>
 
 
+
+        <section className="panel vetted-opportunities" id="verified-opportunities">
+          <div className="panel-head"><div><span className="eyebrow">RESEARCHED OPPORTUNITIES</span><h2>فرصت‌های بررسی‌شده برای شروع</h2></div><span className="free-tag">بدون هزینه ثبت‌نام</span></div>
+          <p className="hub-intro">این فهرست بر اساس شرایط منتشرشده رسمی بررسی شده است. وضعیت پرداخت و پذیرش کشور باید داخل حساب خود پلتفرم تأیید شود؛ تا آن زمان هیچ درآمدی قطعی فرض نمی‌شود.</p>
+          <div className="lead-grid">
+            <article className="lead-card">
+              <div className="lead-top"><span className="lead-type">تست نرم‌افزار و گزارش باگ</span><span className="lead-state review">نیازمند بررسی پرداخت</span></div>
+              <h3>uTest</h3><p>پروژه‌های تست اپلیکیشن و وب‌سایت، اجرای test case و گزارش خطا. پرداخت دوبار در ماه از طریق PayPal، Payoneer یا انتقال بانکی Wise؛ اما Wise Direct Bank فعلاً ارمنستان را در فهرست پشتیبانی‌شده نشان نمی‌دهد.</p>
+              <div className="lead-meta"><span>هزینه شروع: $0</span><span>کریپتو: اعلام نشده</span></div>
+              <a href="https://support.utest.com/csp?id=kb_article_view&sysparm_article=KB0010036" target="_blank" rel="noreferrer">قوانین رسمی پرداخت ↗</a>
+              <a href="https://support.utest.com/csp/csp/csp?id=kb_article_view&sysparm_article=KB0010884" target="_blank" rel="noreferrer">کشورهای Wise ↗</a>
+            </article>
+            <article className="lead-card">
+              <div className="lead-top"><span className="lead-type">میکروتسک و داده</span><span className="lead-state review">اولویت آزمایشی</span></div>
+              <h3>Clickworker</h3><p>وظایف خرد و پروژه‌های داده. ثبت‌نام بعضی کشورها موقتاً بسته می‌شود. eWallet در برخی کشورها امکان برداشت با Bitcoin دارد، اما روش‌های قابل انتخاب به کشور حساب وابسته‌اند.</p>
+              <div className="lead-meta"><span>هزینه شروع: $0</span><span>Bitcoin: مشروط به کشور</span></div>
+              <a href="https://support-workplace.clickworker.com/support/solutions/articles/80000671469-is-it-possible-to-work-from-many" target="_blank" rel="noreferrer">شرایط کشورها ↗</a>
+              <a href="https://support-workplace.clickworker.com/support/solutions/articles/80001161102" target="_blank" rel="noreferrer">روش‌های eWallet و Bitcoin ↗</a>
+            </article>
+            <article className="lead-card">
+              <div className="lead-top"><span className="lead-type">تست تجربه کاربری</span><span className="lead-state blocked">فعلاً حذف از فهرست</span></div>
+              <h3>UserTesting</h3><p>طبق فهرست رسمی به‌روزشده ۲۰ نوامبر ۲۰۲۶، ارمنستان جزو کشورهای تحت پوشش جذب تستر نیست. برای جلوگیری از اتلاف وقت، فعلاً این پلتفرم را پیشنهاد نمی‌کنیم.</p>
+              <div className="lead-meta"><span>کشور: ارمنستان</span><span>وضعیت: پشتیبانی نمی‌شود</span></div>
+              <a href="https://help.usertesting.com/hc/en-us/articles/11880389286429-Which-countries-can-I-test-in" target="_blank" rel="noreferrer">فهرست رسمی کشورها ↗</a>
+            </article>
+          </div>
+          <p className="hub-footnote">نکته مهم: Clickworker را فقط وقتی جلو می‌بریم که ثبت‌نام با کشور واقعی محل اقامت ممکن باشد و روش برداشت قابل استفاده در همان حساب نمایش داده شود. در uTest نیز پیش از صرف وقت، روش پرداخت واقعی را بررسی می‌کنیم. هیچ کشور یا هویتی را به‌اشتباه انتخاب نمی‌کنیم.</p>
+        </section>
+
         <section className="bottom-grid"><div className="panel" id="opportunities"><span className="eyebrow">OPPORTUNITY RADAR</span><h2>فرصت‌های درآمدی</h2><form onSubmit={addOpportunity} className="opportunity-form">
               <input name="title" required placeholder="عنوان سفارش یا فرصت" aria-label="عنوان فرصت"/>
               <input name="platform" placeholder="پلتفرم / کارفرما" aria-label="پلتفرم"/>
