@@ -57,6 +57,7 @@ export default function Home() {
         <a className="nav-item active" href="#overview"><span>▦</span> نمای کلی</a>
         <a className="nav-item" href="#opportunities"><span>⌕</span> فرصت‌های درآمدی</a>
         <a className="nav-item" href="#production"><span>▧</span> استودیو تولید</a>
+        <a className="nav-item" href="#income-hub"><span>✳</span> مرکز درآمد چندگانه</a>
         <a className="nav-item" href="#tools"><span>◈</span> ابزارهای هوش مصنوعی</a>
         <a className="nav-item" href="#accounts"><span>◎</span> اتصال حساب‌ها</a>
         <a className="nav-item" href="#deliveries"><span>⇧</span> تحویل‌ها</a>
@@ -88,6 +89,47 @@ export default function Home() {
         <section className="panel tools-panel" id="tools"><div className="panel-head"><div><span className="eyebrow">FREE AI TOOLKIT</span><h2>مدیریت ابزارهای تولید</h2></div><span className="free-tag">اولویت با رایگان‌ها</span></div><div className="tool-grid">{tools.map((tool) => <article className="tool-card" key={tool.mark}><div className="tool-mark">{tool.mark}</div><div><strong>{tool.name}</strong><p>{tool.note}</p><small>{tool.status}</small><a href={tool.url} target="_blank" rel="noreferrer" style={{display:"inline-block",marginTop:7,color:"#b9a4ff",fontSize:10,textDecoration:"none"}}>بازکردن ابزار ↗</a></div></article>)}</div><p className="footnote">این فهرست برای سفارش‌های تولید محتوا و تبلیغات دراپ‌شیپینگ مشترک است. سهمیه روزانه تضمین‌شده نیست؛ منطقه، محدودیت خروجی، واترمارک و مجوز تجاری باید داخل حساب و شرایط رسمی هر ابزار کنترل شود.</p></section>
 
         <AccountConnections />
+
+        <section className="panel income-hub" id="income-hub">
+          <div className="panel-head"><div><span className="eyebrow">MULTI-STREAM INCOME</span><h2>مرکز درآمد چندگانه · AI Income Hub</h2></div><span className="free-tag">شروع با هزینه صفر</span></div>
+          <p className="hub-intro">چهار مسیر تازه در کنار تولید تصویر و ویدئو؛ فرصت‌ها ابتدا از نظر اعتبار، کشور مجاز، زمان، حداقل برداشت و روش پرداخت بررسی می‌شوند.</p>
+          <div className="income-module-grid">
+            <article className="income-module">
+              <div className="module-icon writing">✎</div><div className="module-kicker">01 · AI WRITING</div><h3>تولید متن و مقاله</h3>
+              <p>مقاله، توضیحات محصول، محتوای وبلاگ، متن تبلیغاتی و ویرایش سفارش‌های مشتری.</p>
+              <ul><li>سفارش‌های نگارش و ویرایش</li><li>محتوای فروشگاهی و سئو</li><li>بازبینی کیفیت و اصالت متن</li></ul>
+              <span className="module-status">مرحله فعلی: آماده طراحی گردش‌کار</span>
+              <a href="#opportunities">ثبت فرصت نگارش ←</a>
+            </article>
+            <article className="income-module">
+              <div className="module-icon music">♫</div><div className="module-kicker">02 · AI MUSIC</div><h3>موسیقی و تولید صدا</h3>
+              <p>ساخت موسیقی اختصاصی، افکت صوتی، صدای پس‌زمینه و فایل صوتی تبلیغاتی.</p>
+              <ul><li>موسیقی تبلیغاتی و سینمایی</li><li>افکت صوتی و صداگذاری</li><li>کنترل مجوز تجاری و حقوق خروجی</li></ul>
+              <span className="module-status">مرحله فعلی: بررسی ابزارهای رایگان و مجوزها</span>
+              <a href="#opportunities">ثبت فرصت صوتی ←</a>
+            </article>
+            <article className="income-module">
+              <div className="module-icon survey">☷</div><div className="module-kicker">03 · PAID SURVEYS</div><h3>نظرسنجی و تحقیقات بازار</h3>
+              <p>شرکت در نظرسنجی‌های پولی، رأی‌گیری‌های معتبر، تست محصول و تحقیقات بازار.</p>
+              <ul><li>بررسی واجد شرایط بودن کشور</li><li>ثبت زمان صرف‌شده و پاداش</li><li>کنترل حداقل برداشت و کارمزد</li></ul>
+              <span className="module-status">مرحله فعلی: نیازمند فهرست پلتفرم‌های معتبر</span>
+              <a href="#opportunities">ثبت نظرسنجی ←</a>
+            </article>
+            <article className="income-module">
+              <div className="module-icon tasks">✓</div><div className="module-kicker">04 · PAID TASKS</div><h3>تسک و تست اپلیکیشن</h3>
+              <p>تست وب‌سایت و اپلیکیشن، ارزیابی پاسخ هوش مصنوعی و کارهای خرد آنلاین.</p>
+              <ul><li>تست کاربردپذیری و گزارش باگ</li><li>ارزیابی و برچسب‌گذاری داده</li><li>ثبت دستمزد به‌ازای هر وظیفه</li></ul>
+              <span className="module-status">مرحله فعلی: نیازمند بررسی دسترسی و پرداخت</span>
+              <a href="#opportunities">ثبت تسک ←</a>
+            </article>
+          </div>
+          <div className="income-manager" id="income-manager">
+            <div><span className="eyebrow">INCOME MANAGER</span><h3>مدیریت یکپارچه درآمد</h3><p>درآمد هر مسیر جداگانه ثبت و فقط پس از دریافت واقعی به جمع کل اضافه می‌شود.</p></div>
+            <div className="income-manager-stats"><div><small>مسیرهای درآمدی</small><strong>۵</strong></div><div><small>درآمد تأییدشده</small><strong>$0</strong></div><div><small>هزینه ابزار</small><strong>$0</strong></div></div>
+          </div>
+          <p className="hub-footnote">این بخش فعلاً رابط و نقشه اجرایی است؛ هنوز به پلتفرم‌های نظرسنجی، بازار سفارش متن/موسیقی یا شبکه‌های تسک متصل نشده. هیچ درآمدی تضمین‌شده نیست. ثبت‌نام، احراز هویت و تأییدهای مالی فقط با دخالت و تأیید خودت انجام می‌شود؛ هیچ هزینه یا سپرده‌ای برای بازکردن تسک پرداخت نمی‌کنیم.</p>
+        </section>
+
 
         <section className="bottom-grid"><div className="panel" id="opportunities"><span className="eyebrow">OPPORTUNITY RADAR</span><h2>فرصت‌های درآمدی</h2><form onSubmit={addOpportunity} className="opportunity-form">
               <input name="title" required placeholder="عنوان سفارش یا فرصت" aria-label="عنوان فرصت"/>
