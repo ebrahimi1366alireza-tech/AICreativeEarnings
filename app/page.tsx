@@ -96,7 +96,7 @@ export default function Home() {
         <div className="section-heading"><div><span className="eyebrow">PERFORMANCE</span><h2>نمای کلی عملکرد</h2></div><span className="muted">هنوز سفارش یا درآمدی ثبت نشده است</span></div>
         <section className="stats">
           <article className="stat-card"><span className="stat-icon purple">⌕</span><span className="stat-label">فرصت‌های ثبت‌شده</span><strong>{opportunities.length}</strong><small>فرصت‌های ذخیره‌شده در این مرورگر</small></article>
-          <article className="stat-card"><span className="stat-icon blue">▧</span><span className="stat-label">محتوای تولیدشده</span><strong>{deliveries.length}</strong><small>سفارش‌های ثبت‌شده برای تولید</small></article>
+          <article className="stat-card"><span className="stat-icon blue">▧</span><span className="stat-label">سفارش‌های تولید ثبت‌شده</span><strong>{deliveries.length}</strong><small>سفارش‌های ثبت‌شده برای تولید</small></article>
           <article className="stat-card"><span className="stat-icon green">⇧</span><span className="stat-label">تحویل‌های موفق</span><strong>{deliveries.filter(item => item.status === "تحویل شد").length}</strong><small>تحویل‌های ثبت‌شده</small></article>
           <article className="stat-card"><span className="stat-icon amber">₮</span><span className="stat-label">درآمد رمزارزی دریافت‌شده</span><strong>{receivedUsdt.toFixed(2)} USDT</strong><small>فقط رمزارز دریافت‌شده به USDT</small></article>
         </section>
