@@ -13,7 +13,7 @@ const workflow = [
 
 const tools = [
   { name: "Dreamina", note: "ساخت تصویر و ویدئو با هوش مصنوعی؛ اعتبار رایگان، دسترسی منطقه‌ای و مجوز تجاری را داخل حساب بررسی کن.", status: "برای نمونه‌کار عکس و ویدئو", mark: "DREAMINA", url: "https://dreamina.capcut.com/" },
-  { name: "Krea", note: "تولید و ویرایش تصویر و ویدئو؛ پلن رایگان سهمیه روزانه دارد، اما میزان مصرف به مدل بستگی دارد و مجوز تجاری پلن رایگان محدود است.", status: "اتصال به ChatGPT فعال؛ اولویت با سهمیه رایگان", mark: "KREA", url: "https://www.krea.ai/" },
+  { name: "Krea", note: "تولید و ویرایش تصویر و ویدئو؛ پلن رایگان سهمیه روزانه دارد، اما میزان مصرف به مدل بستگی دارد و مجوز تجاری پلن رایگان محدود است.", status: "اتصال ابزار به ChatGPT فعال؛ وب‌اپ رایگان ۱۰۰ واحد روزانه؛ API ممکن است هزینه جدا داشته باشد", mark: "KREA", url: "https://www.krea.ai/" },
   { name: "Canva", note: "طراحی پوستر، تبلیغات، تصاویر محصول و محتوای شبکه‌های اجتماعی؛ امکانات AI رایگان محدود است.", status: "برای طراحی و آماده‌سازی فایل مشتری", mark: "CANVA", url: "https://www.canva.com/" },
   { name: "CapCut", note: "تدوین ویدئو، زیرنویس و صداگذاری؛ برخی قابلیت‌ها و دارایی‌ها پولی یا منطقه‌ای هستند.", status: "برای تدوین و خروجی نهایی ویدئو", mark: "CAPCUT", url: "https://www.capcut.com/" },
   { name: "ElevenLabs", note: "تولید صدا و موسیقی با هوش مصنوعی؛ سهمیه رایگان و مجوز استفاده تجاری به طرح و نوع خروجی بستگی دارد.", status: "پیش از سفارش پولی، مجوز تجاری را بررسی کن", mark: "ELEVENLABS", url: "https://elevenlabs.io/" },
@@ -28,7 +28,6 @@ type Income = { id: string; source: string; amount: number; currency: string; re
 
 const DEFAULT_WALLET_ADDRESS = "0x9f53b26aec605212f239c33e1017c5d2d188eb4c";
 const INITIAL_OPPORTUNITIES: Opportunity[] = [
-  { id: "survey-tokens-2026", title: "نظرسنجی پولی با برداشت USDT", platform: "SurveyTokens", pay: "متغیر بر اساس کشور و پنل نظرسنجی", status: "نیازمند بررسی", stream: "نظرسنجی", country: "پذیرش ایران/ارمنستان و موجودی نظرسنجی هنوز تأیید نشده", payout: "مستقیم به کیف پول", network: "USDT روی BNB Smart Chain (BEP20)", minimum: "0.50 USD", fee: "حدود 0.12 USD کارمزد شبکه طبق سایت؛ هنگام برداشت بررسی شود", kyc: "تأیید ایمیل لازم؛ KYC نامشخص", proofUrl: "https://surveytokens.org/terms" },
   { id: "subnano-2026", title: "فروش مقاله و محتوای دیجیتال", platform: "Subnano", pay: "فروش تکی؛ وابسته به خریدار", status: "نیازمند بررسی", stream: "نوشتن و مقاله", country: "پذیرش حساب از کشور محل اقامت باید تأیید شود", payout: "مستقیم به کیف پول", network: "USDC روی Base", minimum: "بدون حداقل موجودی؛ حداقل قیمت پست متنی 0.10 USDC", fee: "15% برای USDC؛ 7.5% برای Nano", kyc: "ورود با ایمیل یا کیف پول؛ KYC نامشخص", proofUrl: "https://subnano.ai/faq" }
 ];
 
