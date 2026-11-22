@@ -18,7 +18,7 @@ const tools = [
   { name: "ElevenLabs", note: "تولید صدا و موسیقی با هوش مصنوعی؛ سهمیه رایگان و مجوز استفاده تجاری به طرح و نوع خروجی بستگی دارد.", status: "پیش از سفارش پولی، مجوز تجاری را بررسی کن", mark: "ELEVENLABS", url: "https://elevenlabs.io/" },
   { name: "ChatGPT", note: "کمک در تحقیق، طرح مقاله، نگارش، بازنویسی، ویرایش و کنترل کیفیت محتوا.", status: "دستیار اصلی مسیر مقاله و متن", mark: "CHATGPT", url: "https://chatgpt.com/" },
   { name: "Google Docs", note: "نگارش، قالب‌بندی، بازبینی و آماده‌سازی نسخه نهایی برای تحویل به مشتری.", status: "برای تنظیم و تحویل مقاله", mark: "GOOGLE DOCS", url: "https://docs.google.com/" },
-  { name: "Notion", note: "مدیریت اسناد و محتوای پروژه؛ بازبینی املا، دستور زبان و روانی متن انگلیسی را ChatGPT انجام می‌دهد.", status: "متصل به ChatGPT؛ جایگزین گردش‌کار Grammarly", mark: "NOTION", url: "https://www.notion.so/" }
+  { name: "Notion", note: "مدیریت اسناد و محتوای پروژه؛ بازبینی املا، دستور زبان و روانی متن انگلیسی را ChatGPT انجام می‌دهد.", status: "متصل به ChatGPT؛ مدیریت اسناد و بازبینی نگارش", mark: "NOTION", url: "https://www.notion.so/" }
 ];
 
 type Opportunity = { id: string; title: string; platform: string; pay: string; status: string; stream?: string; country?: string; payout?: string; network?: string; minimum?: string; fee?: string; kyc?: string; proofUrl?: string };
