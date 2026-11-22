@@ -46,3 +46,15 @@ The app stores a signed, HTTP-only session cookie. It requests only OpenID, emai
 - Do not add game testing, game installation offers, Freecash, app-install rewards, or unrelated microtask platforms.
 - The five approved work streams are paid writing, AI music/audio production, paid music voting/judging, paid surveys/market research, and AI image/video production.
 - Payouts must be crypto-only to the user's wallet, with USDT preferred. Do not claim a platform qualifies until its crypto payout, fees, minimum withdrawal, and country eligibility have been verified.
+
+## Installed creative toolkit
+The current phone toolkit is:
+- Dreamina: AI image and video drafts.
+- Canva: layouts, ads, and product visuals.
+- CapCut: video editing, captions, and audio finishing.
+- ElevenLabs: AI voice/audio and music exploration.
+- ChatGPT: research, outlining, drafting, and editing articles.
+- Google Docs: formatting and preparing written deliverables.
+- Grammarly: English spelling, grammar, and clarity review.
+
+A free tier does not automatically grant unlimited generations or commercial-use rights. Before accepting paid work, verify the specific account's quota, regional availability, watermark rules, and license for every generated asset. Do not purchase subscriptions or credits without the user's explicit approval.
