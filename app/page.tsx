@@ -21,7 +21,7 @@ const tools = [
   { name: "Grammarly", note: "بررسی املا، دستور زبان و روانی متن انگلیسی؛ امکانات رایگان و پولی متفاوت‌اند.", status: "برای بازبینی نهایی متن انگلیسی", mark: "GRAMMARLY", url: "https://www.grammarly.com/" }
 ];
 
-type Opportunity = { id: string; title: string; platform: string; pay: string; status: string };
+type Opportunity = { id: string; title: string; platform: string; pay: string; status: string; stream?: string; country?: string; payout?: string; network?: string; minimum?: string; fee?: string; kyc?: string; proofUrl?: string };
 type Delivery = { id: string; title: string; client: string; due: string; status: string };
 type Income = { id: string; source: string; amount: number; currency: string; received: boolean; date: string };
 
@@ -60,7 +60,7 @@ export default function Home() {
     const form = new FormData(event.currentTarget);
     const title = String(form.get("title") || "").trim();
     if (!title) return;
-    setOpportunities(current => [{ id: crypto.randomUUID(), title, platform: String(form.get("platform") || "نامشخص"), pay: String(form.get("pay") || "نامشخص"), status: "جدید" }, ...current]);
+    setOpportunities(current => [{ id: crypto.randomUUID(), title, platform: String(form.get("platform") || "نامشخص"), pay: String(form.get("pay") || "نامشخص"), status: "نیازمند بررسی", stream: String(form.get("stream") || "نامشخص"), country: String(form.get("country") || "نامشخص"), payout: String(form.get("payout") || "نامشخص"), network: String(form.get("network") || "نامشخص"), minimum: String(form.get("minimum") || "نامشخص"), fee: String(form.get("fee") || "نامشخص"), kyc: String(form.get("kyc") || "نامشخص"), proofUrl: String(form.get("proofUrl") || "").trim() }, ...current]);
     event.currentTarget.reset();
   }
   function updateStatus(id: string, status: string) {
@@ -168,16 +168,24 @@ export default function Home() {
         </section>
 
         <section className="bottom-grid"><div className="panel" id="opportunities"><span className="eyebrow">OPPORTUNITY RADAR</span><h2>فرصت‌های درآمدی</h2><form onSubmit={addOpportunity} className="opportunity-form">
-              <input name="title" required placeholder="عنوان سفارش یا فرصت" aria-label="عنوان فرصت"/>
-              <input name="platform" placeholder="پلتفرم / کارفرما" aria-label="پلتفرم"/>
-              <input name="pay" placeholder="مبلغ و روش پرداخت" aria-label="مبلغ و روش پرداخت"/>
-              <button type="submit">+ ثبت فرصت</button>
+              <input name="title" required placeholder="عنوان فرصت / سفارش" aria-label="عنوان فرصت"/>
+              <input name="platform" placeholder="نام پلتفرم / کارفرما" aria-label="پلتفرم"/>
+              <input name="pay" placeholder="مبلغ و واحد پاداش" aria-label="مبلغ و پاداش"/>
+              <select name="stream" aria-label="مسیر درآمدی"><option value="نوشتن و مقاله">نوشتن و مقاله</option><option value="موسیقی و صدا">موسیقی و صدا</option><option value="رأی‌گیری آهنگ">رأی‌گیری آهنگ</option><option value="نظرسنجی">نظرسنجی و تحقیقات بازار</option><option value="عکس و ویدئو">عکس و ویدئو</option></select>
+              <input name="country" placeholder="کشورهای مجاز / محدودیت کشور" aria-label="کشورهای مجاز"/>
+              <select name="payout" aria-label="روش پرداخت"><option value="نامشخص">روش پرداخت نامشخص</option><option value="مستقیم به کیف پول">مستقیم به کیف پول</option><option value="فقط صرافی">فقط حساب صرافی</option><option value="غیررمزارزی">غیررمزارزی</option></select>
+              <input name="network" placeholder="شبکه برداشت (مثلاً TRC20)" aria-label="شبکه برداشت"/>
+              <input name="minimum" placeholder="حداقل برداشت" aria-label="حداقل برداشت"/>
+              <input name="fee" placeholder="کارمزد برداشت" aria-label="کارمزد"/>
+              <select name="kyc" aria-label="احراز هویت"><option value="نامشخص">وضعیت KYC نامشخص</option><option value="بدون KYC">بدون KYC</option><option value="نیازمند KYC">نیازمند KYC</option></select>
+              <input name="proofUrl" type="url" placeholder="لینک رسمی شرایط پرداخت / منبع" aria-label="لینک منبع رسمی"/>
+              <button type="submit">+ ثبت برای بررسی</button>
             </form>
             {opportunities.length === 0 ? <div className="empty-state"><span>⌕</span><strong>هنوز فرصتی ثبت نشده</strong><p>فرصت‌ها را دستی ثبت کن؛ این فهرست به‌معنی تأیید اعتبار یا پرداخت نیست و فقط در همین مرورگر ذخیره می‌شود.</p></div> :
               <div className="saved-opportunities">{opportunities.map(item => <article className="saved-opportunity" key={item.id}>
-                <div><strong>{item.title}</strong><p>{item.platform} · {item.pay}</p></div>
-                <select aria-label="وضعیت فرصت" value={item.status} onChange={e => updateStatus(item.id, e.target.value)}>
-                  <option>جدید</option><option>در حال بررسی</option><option>درخواست ارسال شد</option><option>پذیرفته شد</option><option>رد شد</option><option>تحویل شد</option><option>پرداخت شد</option>
+                <div><strong>{item.title}</strong><p>{item.platform} · {item.pay}</p><p className="opportunity-meta">{item.stream || "مسیر نامشخص"} · کشور: {item.country || "نامشخص"} · برداشت: {item.payout || "نامشخص"} · شبکه: {item.network || "نامشخص"}</p><p className="opportunity-meta">حداقل برداشت: {item.minimum || "نامشخص"} · کارمزد: {item.fee || "نامشخص"} · احراز هویت: {item.kyc || "نامشخص"}</p>{item.proofUrl ? <a href={item.proofUrl} target="_blank" rel="noreferrer">مشاهده منبع رسمی ↗</a> : <small>لینک منبع رسمی ثبت نشده</small>}</div>
+                <select aria-label="وضعیت بررسی فرصت" value={item.status} onChange={e => updateStatus(item.id, e.target.value)}>
+                  <option>نیازمند بررسی</option><option>در حال بررسی</option><option>رد شد</option><option>درخواست ارسال شد</option><option>پذیرفته شد</option><option>تحویل شد</option><option>پرداخت شد</option>
                 </select>
                 <button type="button" className="remove-opportunity" onClick={() => removeOpportunity(item.id)} aria-label="حذف فرصت">×</button>
               </article>)}</div>}</div><div className="panel" id="production"><span className="eyebrow">CREATION DESK</span><h2>میز تولید و پیگیری تحویل</h2>
