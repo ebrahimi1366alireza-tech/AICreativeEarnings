@@ -1,13 +1,23 @@
 # AI Creative Earnings
 
-A Persian RTL workspace for managing paid image/video creation opportunities, free AI tool quotas, production, quality review, delivery, and earnings.
+A Persian RTL workspace for finding and managing paid online work. This project is completely separate from AIRDROP AI.
 
-## Principles
+## Independent income streams
+1. Paid writing: articles, product descriptions, editing, and copywriting.
+2. AI music creation: commissioned music, sound effects, and audio assets.
+3. Music voting and judging: paid music polls, listening contests, and track-rating programs where real compensation and rules are verified.
+4. Paid surveys and market research: general surveys and product research, distinct from music voting.
+5. Paid microtasks: app/site testing, AI response evaluation, data labeling, and small online tasks.
+6. AI image and video creation: commissioned visuals, short videos, advertising assets, and content marketplace submissions.
+
+## Operating principles
+- Keep AI Creative Earnings separate from AIRDROP AI; do not mix airdrop tasks, wallets, balances, or reports into this workspace.
 - Start with zero-cost tools and free daily/monthly quotas.
-- Verify commercial-use rights, regional access, watermark rules, and payout eligibility before accepting work.
-- Never pay a registration fee or deposit to unlock a task.
+- Verify commercial-use rights, regional access, watermark rules, task eligibility, payout methods, fees, and minimum withdrawal before accepting work.
+- Never pay a registration fee, deposit, purchase, or subscription to unlock a task.
 - Never claim revenue until payment is actually received.
 - Human approval is required for account verification, contracts, and financial actions.
+- Do not use fake votes, fake reviews, bots, or duplicate accounts to manipulate contests or platforms.
 
 ## Development
 ```bash
@@ -16,13 +26,10 @@ npm run dev
 ```
 
 ## Current status
-Version 0.1.0 is a static dashboard foundation. Opportunity discovery, tool integrations, persistence, and payout tracking are not connected yet.
-
+The application has a static dashboard foundation, browser-local opportunity/delivery/income tracking, and a server-side Google OAuth authorization-code flow. The income hub now displays six separate work categories. Opportunity discovery, platform integrations, production APIs, durable cross-device storage, and payout tracking are not connected yet.
 
 ## Google OAuth setup
-
-The application includes a server-side Google OAuth authorization-code flow. To enable it:
-
+To enable Google sign-in:
 1. Create an OAuth 2.0 Web application client in Google Cloud Console.
 2. Add the deployed app's exact callback URL to Authorized redirect URIs:
    `https://YOUR-VERCEL-DOMAIN/api/auth/google/callback`
