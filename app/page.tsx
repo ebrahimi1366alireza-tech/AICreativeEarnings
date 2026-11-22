@@ -109,8 +109,8 @@ export default function Home() {
         <AccountConnections />
 
         <section className="panel income-hub" id="income-hub">
-          <div className="panel-head"><div><span className="eyebrow">MULTI-STREAM INCOME</span><h2>مرکز درآمد چندگانه · AI Income Hub</h2></div><span className="free-tag">شروع با هزینه صفر</span></div>
-          <p className="hub-intro">چهار مسیر تازه در کنار تولید تصویر و ویدئو؛ فرصت‌ها ابتدا از نظر اعتبار، کشور مجاز، زمان، حداقل برداشت و روش پرداخت بررسی می‌شوند.</p>
+          <div className="panel-head"><div><span className="eyebrow">MULTI-STREAM INCOME</span><h2>مرکز درآمد چندگانه · AI Income Hub</h2><p className="hub-intro">پروژه مستقل AI Creative Earnings؛ هیچ بخش ایردراپ یا تسک رمزارزی AIRDROP AI در این داشبورد ادغام نمی‌شود.</p></div><span className="free-tag">شروع با هزینه صفر</span></div>
+          <p className="hub-intro">شش مسیر مستقل درآمدی: نگارش متن، ساخت موسیقی، رأی‌گیری و داوری آهنگ، نظرسنجی عمومی، میکروتسک و تولید عکس/ویدئو. این برنامه کاملاً جدا از AIRDROP AI است؛ اطلاعات، کیف پول‌ها و گزارش‌های ایردراپ وارد این پروژه نمی‌شوند. هر فرصت پیش از شروع از نظر اعتبار، کشور مجاز، زمان، حداقل برداشت و روش پرداخت بررسی می‌شود.</p>
           <div className="income-module-grid">
             <article className="income-module">
               <div className="module-icon writing">✎</div><div className="module-kicker">01 · AI WRITING</div><h3>تولید متن و مقاله</h3>
@@ -127,23 +127,36 @@ export default function Home() {
               <a href="#opportunities">ثبت فرصت صوتی ←</a>
             </article>
             <article className="income-module">
-              <div className="module-icon survey">☷</div><div className="module-kicker">03 · PAID SURVEYS</div><h3>نظرسنجی و تحقیقات بازار</h3>
-              <p>شرکت در نظرسنجی‌های پولی، رأی‌گیری‌های معتبر، تست محصول و تحقیقات بازار.</p>
+              <div className="module-icon music">♫</div><div className="module-kicker">03 · MUSIC VOTING</div><h3>رأی‌گیری و داوری آهنگ</h3>
+              <p>شرکت در رأی‌گیری‌های موسیقی، انتخاب آثار، مسابقات شنیداری و داوری آهنگ؛ فقط در برنامه‌هایی که پاداش واقعی و قوانین روشن دارند.</p>
+              <ul><li>رأی‌گیری یا امتیازدهی به قطعات</li><li>مسابقات و چالش‌های انتخاب موسیقی</li><li>بررسی روش پرداخت و منع رأی جعلی</li></ul>
+              <span className="module-status">مرحله فعلی: نیازمند شناسایی پلتفرم‌های معتبر</span>
+              <a href="#opportunities">ثبت فرصت رأی‌گیری آهنگ ←</a>
+            <article className="income-module">
+              <div className="module-icon survey">☷</div><div className="module-kicker">04 · PAID SURVEYS</div><h3>نظرسنجی و تحقیقات بازار</h3>
+              <p>شرکت در نظرسنجی‌های عمومی پولی، تست محصول و تحقیقات بازار؛ جدا از رأی‌گیری‌های تخصصی موسیقی.</p>
               <ul><li>بررسی واجد شرایط بودن کشور</li><li>ثبت زمان صرف‌شده و پاداش</li><li>کنترل حداقل برداشت و کارمزد</li></ul>
               <span className="module-status">مرحله فعلی: نیازمند فهرست پلتفرم‌های معتبر</span>
               <a href="#opportunities">ثبت نظرسنجی ←</a>
             </article>
             <article className="income-module">
-              <div className="module-icon tasks">✓</div><div className="module-kicker">04 · PAID TASKS</div><h3>تسک و تست اپلیکیشن</h3>
+              <div className="module-icon tasks">✓</div><div className="module-kicker">05 · PAID TASKS</div><h3>تسک و تست اپلیکیشن</h3>
               <p>تست وب‌سایت و اپلیکیشن، ارزیابی پاسخ هوش مصنوعی و کارهای خرد آنلاین.</p>
               <ul><li>تست کاربردپذیری و گزارش باگ</li><li>ارزیابی و برچسب‌گذاری داده</li><li>ثبت دستمزد به‌ازای هر وظیفه</li></ul>
               <span className="module-status">مرحله فعلی: نیازمند بررسی دسترسی و پرداخت</span>
               <a href="#opportunities">ثبت تسک ←</a>
             </article>
+            <article className="income-module">
+              <div className="module-icon video">▧</div><div className="module-kicker">06 · AI VISUAL CONTENT</div><h3>ساخت عکس و ویدئو</h3>
+              <p>تولید تصویر، ویدئوی کوتاه، تبلیغات محصول، محتوای شبکه‌های اجتماعی و تحویل فایل به سفارش‌دهنده یا بازار فروش محتوا.</p>
+              <ul><li>تولید تصویر و طراحی تبلیغاتی</li><li>ساخت و تدوین ویدئوهای کوتاه</li><li>کنترل واترمارک و مجوز استفاده تجاری</li></ul>
+              <span className="module-status">مرحله فعلی: ابزارها فهرست شده‌اند؛ اتصال سفارش و تحویل در حال توسعه</span>
+              <a href="#production">رفتن به میز تولید ←</a>
+            </article>
           </div>
           <div className="income-manager" id="income-manager">
             <div><span className="eyebrow">INCOME MANAGER</span><h3>مدیریت یکپارچه درآمد</h3><p>درآمد هر مسیر جداگانه ثبت و فقط پس از دریافت واقعی به جمع کل اضافه می‌شود.</p></div>
-            <div className="income-manager-stats"><div><small>مسیرهای درآمدی</small><strong>۵</strong></div><div><small>درآمد تأییدشده</small><strong>$0</strong></div><div><small>هزینه ابزار</small><strong>$0</strong></div></div>
+            <div className="income-manager-stats"><div><small>مسیرهای درآمدی</small><strong>۶</strong></div><div><small>درآمد تأییدشده</small><strong>$0</strong></div><div><small>هزینه ابزار</small><strong>$0</strong></div></div>
           </div>
           <p className="hub-footnote">این بخش فعلاً رابط و نقشه اجرایی است؛ هنوز به پلتفرم‌های نظرسنجی، بازار سفارش متن/موسیقی یا شبکه‌های تسک متصل نشده. هیچ درآمدی تضمین‌شده نیست. ثبت‌نام، احراز هویت و تأییدهای مالی فقط با دخالت و تأیید خودت انجام می‌شود؛ هیچ هزینه یا سپرده‌ای برای بازکردن تسک پرداخت نمی‌کنیم.</p>
         </section>
