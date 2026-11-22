@@ -84,7 +84,7 @@ export default function Home() {
       </aside>
 
       <section className="main" id="overview">
-        <header className="topbar"><div><div className="eyebrow">WORKSPACE / OVERVIEW</div><h1>استودیوی درآمد خلاق</h1><p>از پیدا کردن سفارش تا آماده‌سازی خروجی، همه‌چیز در یک جا.</p></div><div className="top-actions"><span className="live-dot">● محیط آزمایشی</span><div className="date-chip">۲۲ نوامبر ۲۰۲۶</div></div></header>
+        <header className="topbar"><div><div className="eyebrow">WORKSPACE / OVERVIEW</div><h1>استودیوی درآمد خلاق</h1><p>از پیدا کردن سفارش تا آماده‌سازی خروجی، همه‌چیز در یک جا.</p></div><div className="top-actions"><span className="live-dot">● محیط آزمایشی</span><div className="date-chip">۲۳ نوامبر ۲۰۲۶</div></div></header>
 
         <section className="hero">
           <div className="hero-copy"><span className="pill">شروع بدون سرمایه</span><h2>اول سفارش معتبر،<br/><em>بعد تولید هوشمند.</em></h2><p>سیستم را طوری می‌سازیم که ابتدا فرصت‌های واقعی و قابل پرداخت را پیدا کند؛ بعد با ابزارهای رایگان یا دارای اعتبار روزانه، خروجی مناسب سفارش را آماده کنیم.</p><a className="hero-link" href="#workflow">مشاهده مسیر اجرا <span>←</span></a></div>
@@ -110,7 +110,7 @@ export default function Home() {
 
         <section className="panel income-hub" id="income-hub">
           <div className="panel-head"><div><span className="eyebrow">MULTI-STREAM INCOME</span><h2>مرکز درآمد چندگانه · AI Income Hub</h2><p className="hub-intro">پروژه مستقل AI Creative Earnings؛ هیچ بخش ایردراپ یا تسک رمزارزی AIRDROP AI در این داشبورد ادغام نمی‌شود.</p></div><span className="free-tag">شروع با هزینه صفر</span></div>
-          <p className="hub-intro">شش مسیر مستقل درآمدی: نگارش متن، ساخت موسیقی، رأی‌گیری و داوری آهنگ، نظرسنجی عمومی، میکروتسک و تولید عکس/ویدئو. این برنامه کاملاً جدا از AIRDROP AI است؛ اطلاعات، کیف پول‌ها و گزارش‌های ایردراپ وارد این پروژه نمی‌شوند. هر فرصت پیش از شروع از نظر اعتبار، کشور مجاز، زمان، حداقل برداشت و روش پرداخت بررسی می‌شود.</p>
+          <p className="hub-intro">پنج مسیر مستقل درآمدی: نگارش متن و مقاله، ساخت موسیقی، رأی‌گیری و داوری آهنگ، نظرسنجی و تحقیقات بازار، و تولید عکس و ویدئو. این برنامه کاملاً جدا از AIRDROP AI است؛ اطلاعات، کیف پول‌ها و گزارش‌های ایردراپ وارد این پروژه نمی‌شوند. هر فرصت پیش از شروع از نظر اعتبار، کشور مجاز، زمان، حداقل برداشت و روش پرداخت بررسی می‌شود.</p>
           <div className="crypto-only-policy"><strong>قانون برداشت: فقط رمزارز</strong><p>فقط فرصت‌هایی پذیرفته می‌شوند که برداشت مستقیم رمزارزی به کیف پول شخصی را پشتیبانی کنند. اولویت با USDT و شبکه کم‌کارمزدِ پشتیبانی‌شده است. PayPal، حواله بانکی و روش‌های فیات پذیرفته نیستند. روش برداشت، شبکه، کارمزد، حداقل برداشت و محدودیت کشور باید پیش از شروع تأیید شود.</p></div>
           <div className="income-module-grid">
             <article className="income-module">
@@ -142,13 +142,6 @@ export default function Home() {
               <a href="#opportunities">ثبت نظرسنجی ←</a>
             </article>
             <article className="income-module">
-              <div className="module-icon tasks">✓</div><div className="module-kicker">05 · PAID TASKS</div><h3>تسک و تست اپلیکیشن</h3>
-              <p>تست وب‌سایت و اپلیکیشن، ارزیابی پاسخ هوش مصنوعی و کارهای خرد آنلاین.</p>
-              <ul><li>تست کاربردپذیری و گزارش باگ</li><li>ارزیابی و برچسب‌گذاری داده</li><li>ثبت دستمزد به‌ازای هر وظیفه</li></ul>
-              <span className="module-status">مرحله فعلی: نیازمند بررسی دسترسی و پرداخت</span>
-              <a href="#opportunities">ثبت تسک ←</a>
-            </article>
-            <article className="income-module">
               <div className="module-icon video">▧</div><div className="module-kicker">06 · AI VISUAL CONTENT</div><h3>ساخت عکس و ویدئو</h3>
               <p>تولید تصویر، ویدئوی کوتاه، تبلیغات محصول، محتوای شبکه‌های اجتماعی و تحویل فایل به سفارش‌دهنده یا بازار فروش محتوا.</p>
               <ul><li>تولید تصویر و طراحی تبلیغاتی</li><li>ساخت و تدوین ویدئوهای کوتاه</li><li>کنترل واترمارک و مجوز استفاده تجاری</li></ul>
@@ -169,43 +162,7 @@ export default function Home() {
           <div className="panel-head"><div><span className="eyebrow">CRYPTO-ONLY OPPORTUNITIES</span><h2>فرصت‌های درآمدی با برداشت رمزارزی</h2></div><span className="free-tag">بدون پرداخت اولیه</span></div>
           <p className="hub-intro">فقط پلتفرم‌هایی در این فهرست می‌مانند که روش برداشت رمزارزی را اعلام کرده‌اند. «جهانی» به معنی دسترسی در همه کشورها نیست؛ محدودیت کشور، احراز هویت، موجودی تسک و شرایط هر حساب باید پیش از شروع بررسی شود.</p>
           <div className="lead-grid">
-            <article className="lead-card">
-              <div className="lead-top"><span className="lead-type">فریلنسینگ و سفارش حرفه‌ای</span><span className="lead-state review">اولویت اصلی</span></div>
-              <h3>LaborX</h3><p>بازار سفارش‌های طراحی، محتوا، برنامه‌نویسی و خدمات دیجیتال. پرداخت توافقی با USDT، USDC و رمزارزهای دیگر روی Ethereum و BNB Chain؛ کارمزد فریلنسر برای هر Job یا Gig تکمیل‌شده ۱۰٪ است. دریافت سفارش تضمین‌شده نیست.</p>
-              <div className="lead-meta"><span>هزینه ثبت‌نام: $0</span><span>کارمزد تکمیل: ۱۰٪</span></div>
-              <a href="https://laborx.com/" target="_blank" rel="noreferrer">ورود به LaborX ↗</a>
-              <a href="https://laborx.com/vacancies/cryptocurrency" target="_blank" rel="noreferrer">رمزارزها و کارمزد رسمی ↗</a>
-            </article>
-            <article className="lead-card">
-              <div className="lead-top"><span className="lead-type">میکروتسک و کارهای خرد</span><span className="lead-state review">آزمایش محدود</span></div>
-              <h3>Microworker.app</h3><p>پرداخت USDT یا USDC به کیف پول شخصی روی BNB Smart Chain، Arbitrum یا Polygon؛ حداقل برداشت ۵ دلار و آماده برداشت شدن درآمد ۳ روز پس از ثبت است. صفحه پرداخت‌ها تراکنش‌های بلاک‌چین را نشان می‌دهد، اما تعداد پرداخت‌های اعلام‌شده هنوز کم است. ایران در فهرست کشورهای ممنوع است.</p>
-              <div className="lead-meta"><span>حداقل برداشت: $5</span><span>کارمزد کاربر: صفر</span></div>
-              <a href="https://microworker.app/" target="_blank" rel="noreferrer">ورود به Microworker ↗</a>
-              <a href="https://microworker.app/payouts/" target="_blank" rel="noreferrer">رسیدهای پرداخت روی بلاک‌چین ↗</a>
-              <a href="https://microworker.app/eligibility/" target="_blank" rel="noreferrer">کشورهای مجاز و روش پرداخت ↗</a>
-            </article>
-            <article className="lead-card">
-              <div className="lead-top"><span className="lead-type">نظرسنجی، بازی و پیشنهادها</span><span className="lead-state review">درآمد خرد</span></div>
-              <h3>Cointiply</h3><p>پاداش تسک‌ها ابتدا به Coins داخلی ثبت می‌شود و هنگام برداشت به BTC، LTC، DOGE یا DASH تبدیل می‌شود. حداقل برداشت ۳۰٬۰۰۰ Coins برای LTC/DOGE/DASH و ۵۰٬۰۰۰ برای BTC است؛ معمولاً پردازش ۲۴ تا ۷۲ ساعت. پیشنهادهای نیازمند خرید را رد می‌کنیم.</p>
-              <div className="lead-meta"><span>ثبت‌نام: رایگان</span><span>حداقل: حدود $3 یا $5</span></div>
-              <a href="https://www.cointiply.com/" target="_blank" rel="noreferrer">ورود به Cointiply ↗</a>
-              <a href="https://support.cointiply.com/en/support/solutions/articles/36000206283-common-withdrawal-questions-answers" target="_blank" rel="noreferrer">حداقل برداشت و زمان پرداخت ↗</a>
-            </article>
-            <article className="lead-card">
-              <div className="lead-top"><span className="lead-type">بازی، نظرسنجی و تست محصول</span><span className="lead-state review">وابسته به کشور</span></div>
-              <h3>Freecash</h3><p>برداشت به کیف پول شخصی از طریق BTC، LTC یا DOGE. حداقل برداشت اول بین ۵ تا ۲۰ دلار بسته به منطقه است و روش‌های در دسترس به کشور حساب بستگی دارد. فقط تسک‌های رایگان و بدون خرید اجباری انتخاب می‌شوند.</p>
-              <div className="lead-meta"><span>ثبت‌نام: رایگان</span><span>حداقل برداشت اول: $5–$20</span></div>
-              <a href="https://freecash.com/" target="_blank" rel="noreferrer">ورود به Freecash ↗</a>
-              <a href="https://freecash.com/academy/en/cashout/free-crypto" target="_blank" rel="noreferrer">راهنمای رسمی برداشت رمزارز ↗</a>
-            </article>
-            <article className="lead-card">
-              <div className="lead-top"><span className="lead-type">میکروتسک و فروش فایل دیجیتال</span><span className="lead-state blocked">اعتبارسنجی بیشتر لازم است</span></div>
-              <h3>FreelanceTeck</h3><p>سایت USDT روی شبکه TRC20 را با حداقل برداشت ۵ دلار و بررسی دستی تا ۴۸ ساعت اعلام می‌کند. با این حال، پلتفرم امکان واریز وجه را هم دارد و شواهد مستقل کافی از حجم پرداخت‌ها نداریم؛ بنابراین هیچ پولی واریز نمی‌کنیم و فعلاً فقط در مرحله بررسی باقی می‌ماند.</p>
-              <div className="lead-meta"><span>برداشت اعلامی: USDT TRC20</span><span>اعتماد: پایین / آزمایشی</span></div>
-              <a href="https://www.freelanceteck.com/" target="_blank" rel="noreferrer">بررسی FreelanceTeck ↗</a>
-              <a href="https://www.freelanceteck.com/how-to-withdraw" target="_blank" rel="noreferrer">شرایط رسمی برداشت ↗</a>
-            </article>
-          </div>
+            </div>
           <p className="hub-footnote">قانون ثابت پروژه: PayPal، Payoneer، Wise، کارت هدیه و برداشت بانکی پذیرفته نیست. هیچ Deposit، خرید، اشتراک یا هزینه‌ای برای بازکردن تسک پرداخت نمی‌شود. ابتدا کشور واقعی و روش برداشت داخل حساب را بررسی می‌کنیم، سپس یک برداشت کوچک آزمایشی می‌گیریم. برای استفاده از Microworker از داخل ایران ثبت‌نام یا فعالیت نمی‌کنیم و محدودیت کشور را با VPN یا اطلاعات نادرست دور نمی‌زنیم.</p>
         </section>
 
