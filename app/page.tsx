@@ -111,6 +111,7 @@ export default function Home() {
         <section className="panel income-hub" id="income-hub">
           <div className="panel-head"><div><span className="eyebrow">MULTI-STREAM INCOME</span><h2>مرکز درآمد چندگانه · AI Income Hub</h2><p className="hub-intro">پروژه مستقل AI Creative Earnings؛ هیچ بخش ایردراپ یا تسک رمزارزی AIRDROP AI در این داشبورد ادغام نمی‌شود.</p></div><span className="free-tag">شروع با هزینه صفر</span></div>
           <p className="hub-intro">شش مسیر مستقل درآمدی: نگارش متن، ساخت موسیقی، رأی‌گیری و داوری آهنگ، نظرسنجی عمومی، میکروتسک و تولید عکس/ویدئو. این برنامه کاملاً جدا از AIRDROP AI است؛ اطلاعات، کیف پول‌ها و گزارش‌های ایردراپ وارد این پروژه نمی‌شوند. هر فرصت پیش از شروع از نظر اعتبار، کشور مجاز، زمان، حداقل برداشت و روش پرداخت بررسی می‌شود.</p>
+          <div className="crypto-only-policy"><strong>قانون برداشت: فقط رمزارز</strong><p>فقط فرصت‌هایی پذیرفته می‌شوند که برداشت مستقیم رمزارزی به کیف پول شخصی را پشتیبانی کنند. اولویت با USDT و شبکه کم‌کارمزدِ پشتیبانی‌شده است. PayPal، حواله بانکی و روش‌های فیات پذیرفته نیستند. روش برداشت، شبکه، کارمزد، حداقل برداشت و محدودیت کشور باید پیش از شروع تأیید شود.</p></div>
           <div className="income-module-grid">
             <article className="income-module">
               <div className="module-icon writing">✎</div><div className="module-kicker">01 · AI WRITING</div><h3>تولید متن و مقاله</h3>
@@ -132,6 +133,7 @@ export default function Home() {
               <ul><li>رأی‌گیری یا امتیازدهی به قطعات</li><li>مسابقات و چالش‌های انتخاب موسیقی</li><li>بررسی روش پرداخت و منع رأی جعلی</li></ul>
               <span className="module-status">مرحله فعلی: نیازمند شناسایی پلتفرم‌های معتبر</span>
               <a href="#opportunities">ثبت فرصت رأی‌گیری آهنگ ←</a>
+            </article>
             <article className="income-module">
               <div className="module-icon survey">☷</div><div className="module-kicker">04 · PAID SURVEYS</div><h3>نظرسنجی و تحقیقات بازار</h3>
               <p>شرکت در نظرسنجی‌های عمومی پولی، تست محصول و تحقیقات بازار؛ جدا از رأی‌گیری‌های تخصصی موسیقی.</p>
