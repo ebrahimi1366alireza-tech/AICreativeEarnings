@@ -12,12 +12,13 @@ const workflow = [
 ];
 
 const tools = [
-    { name: "Adobe Express", note: "ابزار طراحی و ویرایش با امکانات رایگان و قابلیت‌های پولی؛ سهمیه‌ها ممکن است تغییر کنند.", status: "پیش از سفارش، محدودیت حساب، واترمارک و مجوز تجاری هر دارایی را بررسی کن", mark: "ADOBE", url: "https://www.adobe.com/express/pricing" },
-  { name: "Canva Free", note: "امکانات طراحی رایگان در کنار قابلیت‌های هوش مصنوعی با محدودیت‌های متغیر.", status: "شرایط مجوز و استفاده تجاری هر عنصر و خروجی را پیش از تحویل بررسی کن", mark: "CANVA", url: "https://www.canva.com/pricing/" },
-  { name: "Dreamina", note: "ابزار تولید تصویر و ویدئو؛ دسترسی و اعتبار رایگان بسته به حساب و منطقه تغییر می‌کند.", status: "مجوز تجاری، واترمارک و دسترسی منطقه‌ای را پیش از تحویل مشتری تأیید کن", mark: "DREAMINA", url: "https://dreamina.capcut.com/" },
-  { name: "CapCut", note: "ویرایش پایه در کنار امکانات و قالب‌های پولی یا محدود به منطقه.", status: "برای هر موسیقی، قالب و دارایی استفاده‌شده، مجوز تجاری مستقل را کنترل کن", mark: "CAPCUT", url: "https://www.capcut.com/" },
-  { name: "Adobe Firefly Music & Audio", note: "قابلیت‌های تولید و ویرایش صوت؛ دسترسی رایگان و شرایط استفاده ممکن است تغییر کند.", status: "برای هر خروجی، شرایط همان قابلیت و مجوز استفاده تجاری را از منبع رسمی بررسی کن", mark: "FIRE AUDIO", url: "https://www.adobe.com/products/firefly/features/ai-music-generator.html" },
-  { name: "Google Flow", note: "ابزار ساخت ویدئو و تصویر؛ دسترسی، سهمیه و قابلیت‌ها به کشور و نوع حساب وابسته است.", status: "کشور پشتیبانی‌شده، سهمیه و شرایط استفاده تجاری را داخل حساب و راهنمای رسمی بررسی کن", mark: "FLOW", url: "https://labs.google/fx/tools/flow" }
+  { name: "Dreamina", note: "ساخت تصویر و ویدئو با هوش مصنوعی؛ اعتبار رایگان، دسترسی منطقه‌ای و مجوز تجاری را داخل حساب بررسی کن.", status: "برای نمونه‌کار عکس و ویدئو", mark: "DREAMINA", url: "https://dreamina.capcut.com/" },
+  { name: "Canva", note: "طراحی پوستر، تبلیغات، تصاویر محصول و محتوای شبکه‌های اجتماعی؛ امکانات AI رایگان محدود است.", status: "برای طراحی و آماده‌سازی فایل مشتری", mark: "CANVA", url: "https://www.canva.com/" },
+  { name: "CapCut", note: "تدوین ویدئو، زیرنویس و صداگذاری؛ برخی قابلیت‌ها و دارایی‌ها پولی یا منطقه‌ای هستند.", status: "برای تدوین و خروجی نهایی ویدئو", mark: "CAPCUT", url: "https://www.capcut.com/" },
+  { name: "ElevenLabs", note: "تولید صدا و موسیقی با هوش مصنوعی؛ سهمیه رایگان و مجوز استفاده تجاری به طرح و نوع خروجی بستگی دارد.", status: "پیش از سفارش پولی، مجوز تجاری را بررسی کن", mark: "ELEVENLABS", url: "https://elevenlabs.io/" },
+  { name: "ChatGPT", note: "کمک در تحقیق، طرح مقاله، نگارش، بازنویسی، ویرایش و کنترل کیفیت محتوا.", status: "دستیار اصلی مسیر مقاله و متن", mark: "CHATGPT", url: "https://chatgpt.com/" },
+  { name: "Google Docs", note: "نگارش، قالب‌بندی، بازبینی و آماده‌سازی نسخه نهایی برای تحویل به مشتری.", status: "برای تنظیم و تحویل مقاله", mark: "GOOGLE DOCS", url: "https://docs.google.com/" },
+  { name: "Grammarly", note: "بررسی املا، دستور زبان و روانی متن انگلیسی؛ امکانات رایگان و پولی متفاوت‌اند.", status: "برای بازبینی نهایی متن انگلیسی", mark: "GRAMMARLY", url: "https://www.grammarly.com/" }
 ];
 
 type Opportunity = { id: string; title: string; platform: string; pay: string; status: string };
@@ -88,7 +89,7 @@ export default function Home() {
         <header className="topbar"><div><div className="eyebrow">WORKSPACE / OVERVIEW</div><h1>استودیوی درآمد خلاق</h1><p>از پیدا کردن سفارش تا آماده‌سازی خروجی، همه‌چیز در یک جا.</p></div><div className="top-actions"><span className="live-dot">● محیط آزمایشی</span><div className="date-chip">۲۳ نوامبر ۲۰۲۶</div></div></header>
 
         <section className="hero">
-          <div className="hero-copy"><span className="pill">شروع بدون سرمایه</span><h2>اول سفارش معتبر،<br/><em>بعد تولید هوشمند.</em></h2><p>پنج مسیر درآمدی را مدیریت می‌کنیم؛ هر فرصت پیش از اقدام از نظر اعتبار، کشور مجاز و پرداخت مستقیم رمزارزی بررسی می‌شود.</p><a className="hero-link" href="#workflow">مشاهده مسیر اجرا <span>←</span></a></div>
+          <div className="hero-copy"><span className="pill">شروع بدون سرمایه</span><h2>اول سفارش معتبر،<br/><em>بعد تولید هوشمند.</em></h2><p>پنج مسیر درآمدی را مدیریت می‌کنیم؛ هر فرصت پیش از اقدام از نظر اعتبار، کشور مجاز و پرداخت مستقیم رمزارزی بررسی می‌شود. برای مقاله از ChatGPT و Google Docs استفاده می‌کنیم و متن انگلیسی را با Grammarly بازبینی می‌کنیم.</p><a className="hero-link" href="#workflow">مشاهده مسیر اجرا <span>←</span></a></div>
           <div className="hero-art"><div className="orbit orbit-one"></div><div className="orbit orbit-two"></div><div className="art-core">✳<small>AI</small></div><div className="float-card card-a">✦ تصویر</div><div className="float-card card-b">▶ ویدئو</div><div className="float-card card-c">↗ درآمد</div></div>
         </section>
 
@@ -105,7 +106,7 @@ export default function Home() {
           <div className="panel goal-panel" id="finance"><span className="eyebrow">WEEKLY TARGET</span><h2>هدف هفته اول</h2><div className="goal-value">50 USDT</div><p>هدف آزمایشی است، نه درآمد تضمین‌شده. درآمد فقط پس از دریافت واقعی ثبت می‌شود.</p><div className="progress-track"><span style={{ width: `${goalProgress}%` }}></span></div><div className="goal-foot"><span>درآمد ثبت‌شده</span><strong>{receivedUsdt.toFixed(2)} / 50 USDT</strong></div><div className="goal-note">هزینه شروع موردنظر: <b>0</b></div></div>
         </section>
 
-        <section className="panel tools-panel" id="tools"><div className="panel-head"><div><span className="eyebrow">FREE AI TOOLKIT</span><h2>مدیریت ابزارهای تولید</h2></div><span className="free-tag">اولویت با رایگان‌ها</span></div><div className="tool-grid">{tools.map((tool) => <article className="tool-card" key={tool.mark}><div className="tool-mark">{tool.mark}</div><div><strong>{tool.name}</strong><p>{tool.note}</p><small>{tool.status}</small><a href={tool.url} target="_blank" rel="noreferrer" style={{display:"inline-block",marginTop:7,color:"#b9a4ff",fontSize:10,textDecoration:"none"}}>بازکردن ابزار ↗</a></div></article>)}</div><p className="footnote">این ابزارها گزینه‌های تولید هستند و به معنی اتصال به بازار سفارش یا تضمین درآمد نیستند. سهمیه، دسترسی منطقه‌ای، واترمارک و مجوز تجاری را پیش از استفاده بررسی کن.</p></section>
+        <section className="panel tools-panel" id="tools"><div className="panel-head"><div><span className="eyebrow">INSTALLED CREATIVE TOOLKIT</span><h2>ابزارهای نصب‌شده روی گوشی</h2></div><span className="free-tag">اولویت با رایگان‌ها</span></div><div className="tool-grid">{tools.map((tool) => <article className="tool-card" key={tool.mark}><div className="tool-mark">{tool.mark}</div><div><strong>{tool.name}</strong><p>{tool.note}</p><small>{tool.status}</small><a href={tool.url} target="_blank" rel="noreferrer" style={{display:"inline-block",marginTop:7,color:"#b9a4ff",fontSize:10,textDecoration:"none"}}>بازکردن ابزار ↗</a></div></article>)}</div><p className="footnote">این هفت ابزار، جعبه‌ابزار فعلی پروژه‌اند و به معنی اتصال به بازار سفارش یا تضمین درآمد نیستند. سهمیه، دسترسی منطقه‌ای، واترمارک و مجوز تجاری را پیش از استفاده بررسی کن.</p></section>
 
         <AccountConnections />
 
