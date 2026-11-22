@@ -18,7 +18,7 @@ const tools = [
   { name: "ElevenLabs", note: "تولید صدا و موسیقی با هوش مصنوعی؛ سهمیه رایگان و مجوز استفاده تجاری به طرح و نوع خروجی بستگی دارد.", status: "پیش از سفارش پولی، مجوز تجاری را بررسی کن", mark: "ELEVENLABS", url: "https://elevenlabs.io/" },
   { name: "ChatGPT", note: "کمک در تحقیق، طرح مقاله، نگارش، بازنویسی، ویرایش و کنترل کیفیت محتوا.", status: "دستیار اصلی مسیر مقاله و متن", mark: "CHATGPT", url: "https://chatgpt.com/" },
   { name: "Google Docs", note: "نگارش، قالب‌بندی، بازبینی و آماده‌سازی نسخه نهایی برای تحویل به مشتری.", status: "برای تنظیم و تحویل مقاله", mark: "GOOGLE DOCS", url: "https://docs.google.com/" },
-  { name: "Grammarly", note: "بررسی املا، دستور زبان و روانی متن انگلیسی؛ امکانات رایگان و پولی متفاوت‌اند.", status: "برای بازبینی نهایی متن انگلیسی", mark: "GRAMMARLY", url: "https://www.grammarly.com/" }
+  { name: "Notion", note: "مدیریت اسناد و محتوای پروژه؛ بازبینی املا، دستور زبان و روانی متن انگلیسی را ChatGPT انجام می‌دهد.", status: "متصل به ChatGPT؛ جایگزین گردش‌کار Grammarly", mark: "NOTION", url: "https://www.notion.so/" }
 ];
 
 type Opportunity = { id: string; title: string; platform: string; pay: string; status: string; stream?: string; country?: string; payout?: string; network?: string; minimum?: string; fee?: string; kyc?: string; proofUrl?: string };
@@ -139,7 +139,7 @@ export default function Home() {
         <header className="topbar"><div><div className="eyebrow">WORKSPACE / OVERVIEW</div><h1>استودیوی درآمد خلاق</h1><p>از پیدا کردن سفارش تا آماده‌سازی خروجی، همه‌چیز در یک جا.</p></div><div className="top-actions"><span className="live-dot">● محیط آزمایشی</span><div className="date-chip">۲۳ نوامبر ۲۰۲۶</div></div></header>
 
         <section className="hero">
-          <div className="hero-copy"><span className="pill">شروع بدون سرمایه</span><h2>اول سفارش معتبر،<br/><em>بعد تولید هوشمند.</em></h2><p>پنج مسیر درآمدی را مدیریت می‌کنیم؛ هر فرصت پیش از اقدام از نظر اعتبار، کشور مجاز و پرداخت مستقیم رمزارزی بررسی می‌شود. برای مقاله از ChatGPT و Google Docs استفاده می‌کنیم و متن انگلیسی را با Grammarly بازبینی می‌کنیم.</p><a className="hero-link" href="#workflow">مشاهده مسیر اجرا <span>←</span></a></div>
+          <div className="hero-copy"><span className="pill">شروع بدون سرمایه</span><h2>اول سفارش معتبر،<br/><em>بعد تولید هوشمند.</em></h2><p>پنج مسیر درآمدی را مدیریت می‌کنیم؛ هر فرصت پیش از اقدام از نظر اعتبار، کشور مجاز و پرداخت مستقیم رمزارزی بررسی می‌شود. برای مقاله از ChatGPT و Google Docs استفاده می‌کنیم؛ مدیریت اسناد در Notion انجام می‌شود و بازبینی نگارش انگلیسی را ChatGPT انجام می‌دهد.</p><a className="hero-link" href="#workflow">مشاهده مسیر اجرا <span>←</span></a></div>
           <div className="hero-art"><div className="orbit orbit-one"></div><div className="orbit orbit-two"></div><div className="art-core">✳<small>AI</small></div><div className="float-card card-a">✦ تصویر</div><div className="float-card card-b">▶ ویدئو</div><div className="float-card card-c">↗ درآمد</div></div>
         </section>
 
