@@ -55,6 +55,6 @@ The current phone toolkit is:
 - ElevenLabs: AI voice/audio and music exploration.
 - ChatGPT: research, outlining, drafting, and editing articles.
 - Google Docs: formatting and preparing written deliverables.
-- Grammarly: English spelling, grammar, and clarity review.
+- Notion: connected workspace for project documents and content management; ChatGPT handles English spelling, grammar, sentence flow, and final proofreading.
 
 A free tier does not automatically grant unlimited generations or commercial-use rights. Before accepting paid work, verify the specific account's quota, regional availability, watermark rules, and license for every generated asset. Do not purchase subscriptions or credits without the user's explicit approval.
