@@ -11,9 +11,12 @@ const workflow = [
 ];
 
 const tools = [
-  { name: "ابزارهای تولید تصویر", note: "اعتبار رایگان روزانه یا ماهانه", status: "نیازمند بررسی سهمیه و مجوز تجاری", mark: "IMG" },
-  { name: "ابزارهای تولید ویدئو", note: "اعتبار رایگان محدود", status: "نیازمند بررسی دسترسی منطقه‌ای", mark: "VID" },
-  { name: "ابزارهای تدوین و ارتقای کیفیت", note: "نسخه رایگان یا متن‌باز", status: "در مرحله انتخاب", mark: "EDIT" }
+  { name: "Adobe Firefly", note: "پلن رایگان با تعداد محدودی تولید روزانه تصویر، ویدئو و صدا؛ سهمیه دقیق متغیر است.", status: "اولویت آزمایش · مجوز تجاری را برای مدل و خروجی انتخابی بررسی کن", mark: "FIREFLY", url: "https://firefly.adobe.com/" },
+  { name: "Adobe Express", note: "ویرایش پایه رایگان؛ تولید تصویر روزانه محدود و تولید ویدئوی ۵ ثانیه‌ای در پلن رایگان بسیار محدود است.", status: "برای بنر، کاتالوگ و مونتاژ تبلیغ؛ امکانات رایگان و پولی را جدا نگه دار", mark: "ADOBE", url: "https://www.adobe.com/express/pricing" },
+  { name: "Canva Free", note: "طراحی و ویرایش رایگان؛ سهمیه AI وابسته به قابلیت و پلن است و سهمیه روزانه ثابتی تضمین نشده.", status: "برای پست و بنر فروشگاه؛ از عناصر Pro بدون مجوز استفاده نکن", mark: "CANVA", url: "https://www.canva.com/pricing/" },
+  { name: "Dreamina", note: "اعتبار رایگان روزانه در بعضی مناطق؛ مقدار آن بر اساس کشور و حساب تغییر می‌کند.", status: "سهمیه را داخل حساب از منطقه خودمان بررسی کن؛ واترمارک و مجوز تجاری را کنترل کن", mark: "DREAMINA", url: "https://dreamina.capcut.com/" },
+  { name: "CapCut", note: "تدوین پایه رایگان؛ بعضی قابلیت‌های AI، قالب‌ها و خروجی‌ها ممکن است پولی یا منطقه‌ای باشند.", status: "برای تدوین نهایی ریلز و ویدئوی محصول؛ مجوز موسیقی و عناصر را کنترل کن", mark: "CAPCUT", url: "https://www.capcut.com/" },
+  { name: "Google Flow", note: "اعتبار روزانه برای برخی حساب‌ها و مناطق واجد شرایط؛ هزینه هر تولید و دسترسی متغیر است.", status: "برای تست تبدیل تصویر به ویدئو؛ قبل از برنامه‌ریزی سهمیه حساب را ببین", mark: "FLOW", url: "https://labs.google/fx/tools/flow" }
 ];
 
 type Opportunity = { id: string; title: string; platform: string; pay: string; status: string };
@@ -80,7 +83,7 @@ export default function Home() {
           <div className="panel goal-panel" id="finance"><span className="eyebrow">WEEKLY TARGET</span><h2>هدف هفته اول</h2><div className="goal-value">$50</div><p>هدف آزمایشی است، نه درآمد تضمین‌شده. درآمد فقط پس از دریافت واقعی ثبت می‌شود.</p><div className="progress-track"><span></span></div><div className="goal-foot"><span>درآمد ثبت‌شده</span><strong>$0 / $50</strong></div><div className="goal-note">هزینه شروع موردنظر: <b>$0</b></div></div>
         </section>
 
-        <section className="panel tools-panel" id="tools"><div className="panel-head"><div><span className="eyebrow">FREE AI TOOLKIT</span><h2>مدیریت ابزارهای تولید</h2></div><span className="free-tag">اولویت با رایگان‌ها</span></div><div className="tool-grid">{tools.map((tool) => <article className="tool-card" key={tool.mark}><div className="tool-mark">{tool.mark}</div><div><strong>{tool.name}</strong><p>{tool.note}</p><small>{tool.status}</small></div></article>)}</div><p className="footnote">سهمیه رایگان، محدودیت کشور، مجوز استفاده تجاری و امکان خروجی بدون واترمارک باید پیش از استفاده برای هر سفارش تأیید شود.</p></section>
+        <section className="panel tools-panel" id="tools"><div className="panel-head"><div><span className="eyebrow">FREE AI TOOLKIT</span><h2>مدیریت ابزارهای تولید</h2></div><span className="free-tag">اولویت با رایگان‌ها</span></div><div className="tool-grid">{tools.map((tool) => <article className="tool-card" key={tool.mark}><div className="tool-mark">{tool.mark}</div><div><strong>{tool.name}</strong><p>{tool.note}</p><small>{tool.status}</small><a href={tool.url} target="_blank" rel="noreferrer" style={{display:"inline-block",marginTop:7,color:"#b9a4ff",fontSize:10,textDecoration:"none"}}>بازکردن ابزار ↗</a></div></article>)}</div><p className="footnote">این فهرست برای سفارش‌های تولید محتوا و تبلیغات دراپ‌شیپینگ مشترک است. سهمیه روزانه تضمین‌شده نیست؛ منطقه، محدودیت خروجی، واترمارک و مجوز تجاری باید داخل حساب و شرایط رسمی هر ابزار کنترل شود.</p></section>
 
         <section className="bottom-grid"><div className="panel" id="opportunities"><span className="eyebrow">OPPORTUNITY RADAR</span><h2>فرصت‌های درآمدی</h2><form onSubmit={addOpportunity} className="opportunity-form">
               <input name="title" required placeholder="عنوان سفارش یا فرصت" aria-label="عنوان فرصت"/>
