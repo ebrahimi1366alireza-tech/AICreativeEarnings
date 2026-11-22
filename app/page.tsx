@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 const workflow = [
   { number: "۰۱", title: "کشف فرصت‌ها", detail: "پیدا کردن سفارش‌های واقعی و بررسی اعتبار کارفرما", state: "در صف راه‌اندازی" },
   { number: "۰۲", title: "بررسی شرایط", detail: "کنترل کشور مجاز، روش پرداخت، حق استفاده تجاری و زمان تحویل", state: "در صف راه‌اندازی" },
@@ -12,7 +16,35 @@ const tools = [
   { name: "ابزارهای تدوین و ارتقای کیفیت", note: "نسخه رایگان یا متن‌باز", status: "در مرحله انتخاب", mark: "EDIT" }
 ];
 
+type Opportunity = { id: string; title: string; platform: string; pay: string; status: string };
+
 export default function Home() {
+  const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("creativeops-opportunities-v1");
+      if (saved) setOpportunities(JSON.parse(saved) as Opportunity[]);
+    } catch { /* ignore invalid local data */ }
+    setLoaded(true);
+  }, []);
+  useEffect(() => {
+    if (loaded) localStorage.setItem("creativeops-opportunities-v1", JSON.stringify(opportunities));
+  }, [opportunities, loaded]);
+  function addOpportunity(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const title = String(form.get("title") || "").trim();
+    if (!title) return;
+    setOpportunities(current => [{ id: crypto.randomUUID(), title, platform: String(form.get("platform") || "نامشخص"), pay: String(form.get("pay") || "نامشخص"), status: "جدید" }, ...current]);
+    event.currentTarget.reset();
+  }
+  function updateStatus(id: string, status: string) {
+    setOpportunities(current => current.map(item => item.id === id ? { ...item, status } : item));
+  }
+  function removeOpportunity(id: string) {
+    setOpportunities(current => current.filter(item => item.id !== id));
+  }
   return (
     <main className="shell">
       <aside className="sidebar">
@@ -50,7 +82,20 @@ export default function Home() {
 
         <section className="panel tools-panel" id="tools"><div className="panel-head"><div><span className="eyebrow">FREE AI TOOLKIT</span><h2>مدیریت ابزارهای تولید</h2></div><span className="free-tag">اولویت با رایگان‌ها</span></div><div className="tool-grid">{tools.map((tool) => <article className="tool-card" key={tool.mark}><div className="tool-mark">{tool.mark}</div><div><strong>{tool.name}</strong><p>{tool.note}</p><small>{tool.status}</small></div></article>)}</div><p className="footnote">سهمیه رایگان، محدودیت کشور، مجوز استفاده تجاری و امکان خروجی بدون واترمارک باید پیش از استفاده برای هر سفارش تأیید شود.</p></section>
 
-        <section className="bottom-grid"><div className="panel" id="opportunities"><span className="eyebrow">OPPORTUNITY RADAR</span><h2>فرصت‌های درآمدی</h2><div className="empty-state"><span>⌕</span><strong>هنوز منبعی متصل نشده</strong><p>مرحله بعد، افزودن منابع معتبر و بررسی روش پرداخت هر کارفرماست.</p></div></div><div className="panel" id="production"><span className="eyebrow">CREATION DESK</span><h2>میز تولید محتوا</h2><div className="empty-state"><span>✧</span><strong>آماده اتصال ابزارها</strong><p>تولید فقط بر اساس سفارش و مجوز استفاده مشخص انجام می‌شود.</p></div></div></section>
+        <section className="bottom-grid"><div className="panel" id="opportunities"><span className="eyebrow">OPPORTUNITY RADAR</span><h2>فرصت‌های درآمدی</h2><form onSubmit={addOpportunity} className="opportunity-form">
+              <input name="title" required placeholder="عنوان سفارش یا فرصت" aria-label="عنوان فرصت"/>
+              <input name="platform" placeholder="پلتفرم / کارفرما" aria-label="پلتفرم"/>
+              <input name="pay" placeholder="مبلغ و روش پرداخت" aria-label="مبلغ و روش پرداخت"/>
+              <button type="submit">+ ثبت فرصت</button>
+            </form>
+            {opportunities.length === 0 ? <div className="empty-state"><span>⌕</span><strong>هنوز فرصتی ثبت نشده</strong><p>فرصت‌های واقعی را اینجا ثبت کن؛ اطلاعات در همین مرورگر ذخیره می‌شود.</p></div> :
+              <div className="saved-opportunities">{opportunities.map(item => <article className="saved-opportunity" key={item.id}>
+                <div><strong>{item.title}</strong><p>{item.platform} · {item.pay}</p></div>
+                <select aria-label="وضعیت فرصت" value={item.status} onChange={e => updateStatus(item.id, e.target.value)}>
+                  <option>جدید</option><option>در حال بررسی</option><option>درخواست ارسال شد</option><option>پذیرفته شد</option><option>رد شد</option><option>تحویل شد</option><option>پرداخت شد</option>
+                </select>
+                <button type="button" className="remove-opportunity" onClick={() => removeOpportunity(item.id)} aria-label="حذف فرصت">×</button>
+              </article>)}</div>}</div><div className="panel" id="production"><span className="eyebrow">CREATION DESK</span><h2>میز تولید محتوا</h2><div className="empty-state"><span>✧</span><strong>آماده اتصال ابزارها</strong><p>تولید فقط بر اساس سفارش و مجوز استفاده مشخص انجام می‌شود.</p></div></div></section>
 
         <footer id="deliveries"><span>CREATIVEOPS · نسخه ۰.۱.۰</span><span>ساخته‌شده برای گردش‌کار کم‌هزینه و شفاف</span></footer>
       </section>
