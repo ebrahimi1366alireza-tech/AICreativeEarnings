@@ -163,7 +163,7 @@ export default function Home() {
           <p className="hub-intro">فقط پلتفرم‌هایی در این فهرست می‌مانند که روش برداشت رمزارزی را اعلام کرده‌اند. «جهانی» به معنی دسترسی در همه کشورها نیست؛ محدودیت کشور، احراز هویت، موجودی تسک و شرایط هر حساب باید پیش از شروع بررسی شود.</p>
           <div className="lead-grid">
             </div>
-          <p className="hub-footnote">قانون ثابت پروژه: PayPal، Payoneer، Wise، کارت هدیه و برداشت بانکی پذیرفته نیست. هیچ Deposit، خرید، اشتراک یا هزینه‌ای برای بازکردن تسک پرداخت نمی‌شود. ابتدا کشور واقعی و روش برداشت داخل حساب را بررسی می‌کنیم، سپس یک برداشت کوچک آزمایشی می‌گیریم. برای استفاده از Microworker از داخل ایران ثبت‌نام یا فعالیت نمی‌کنیم و محدودیت کشور را با VPN یا اطلاعات نادرست دور نمی‌زنیم.</p>
+          <p className="hub-footnote">قانون ثابت پروژه: PayPal، Payoneer، Wise، کارت هدیه و برداشت بانکی پذیرفته نیست. هیچ Deposit، خرید، اشتراک یا هزینه‌ای برای بازکردن تسک پرداخت نمی‌شود. ابتدا کشور واقعی و روش برداشت داخل حساب را بررسی می‌کنیم، سپس یک برداشت کوچک آزمایشی می‌گیریم. هیچ محدودیت کشوری را با VPN یا اطلاعات نادرست دور نمی‌زنیم.</p>
         </section>
 
         <section className="bottom-grid"><div className="panel" id="opportunities"><span className="eyebrow">OPPORTUNITY RADAR</span><h2>فرصت‌های درآمدی</h2><form onSubmit={addOpportunity} className="opportunity-form">
