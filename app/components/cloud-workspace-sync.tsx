@@ -97,18 +97,22 @@ export default function CloudWorkspaceSync() {
     }
 
     window.addEventListener("creativeops-workspace-changed", scheduleSync);
+    window.addEventListener("creativeops-auth-changed", () => { void syncNow(); });
+    window.addEventListener("creativeops-cloud-sync-requested", () => { void syncNow(); });
     void syncNow();
     return () => {
       stopped = true;
       if (timer) clearTimeout(timer);
       window.removeEventListener("creativeops-workspace-changed", scheduleSync);
+      window.removeEventListener("creativeops-auth-changed", () => { void syncNow(); });
+      window.removeEventListener("creativeops-cloud-sync-requested", () => { void syncNow(); });
     };
   }, []);
 
   return (
     <div className="cloud-sync-note" role="status" aria-live="polite">
       <span>{status}</span>
-      <button type="button" onClick={() => window.dispatchEvent(new Event("creativeops-workspace-changed"))} disabled={busy}>
+      <button type="button" onClick={() => window.dispatchEvent(new Event("creativeops-cloud-sync-requested"))} disabled={busy}>
         {busy ? "در حال بررسی..." : "همگام‌سازی اکنون"}
       </button>
     </div>
