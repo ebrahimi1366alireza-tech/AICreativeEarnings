@@ -46,18 +46,18 @@ export default function CloudWorkspaceSync() {
     let timer: ReturnType<typeof setTimeout> | undefined;
     let stopped = false;
 
-    async function pushLocal() {
+    async function pushLocal(): Promise<boolean> {
       const authResponse = await fetch("/api/auth/status", { cache: "no-store" });
       const auth = await authResponse.json() as AuthStatus;
       if (!auth.connected || !auth.profile?.email) {
         setStatus("برای ذخیره ابری و همگام‌سازی بین دستگاه‌ها وارد حساب کاربری شو.");
-        return;
+        return false;
       }
       const email = auth.profile.email.toLowerCase();
       const owner = localStorage.getItem(OWNER_KEY);
       if (owner && owner !== email) {
         setStatus("این مرورگر قبلاً برای حساب دیگری استفاده شده است. برای جلوگیری از انتقال یا بازنویسی اطلاعات بین حساب‌ها، همگام‌سازی خودکار متوقف شد؛ ابتدا از اطلاعات محلی فایل پشتیبان بگیر.");
-        return;
+        return false;
       }
       const response = await fetch("/api/workspace/sync", {
         method: "PUT", headers: { "Content-Type": "application/json" },
@@ -65,6 +65,7 @@ export default function CloudWorkspaceSync() {
       });
       if (!response.ok) throw new Error("ذخیره ابری انجام نشد.");
       localStorage.setItem(OWNER_KEY, email);
+      return true;
     }
 
     async function syncNow() {
@@ -118,7 +119,7 @@ export default function CloudWorkspaceSync() {
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => {
         void pushLocal()
-          .then(() => setStatus("تغییرات در فضای ابری ذخیره شد."))
+          .then(saved => { if (saved) setStatus("تغییرات در فضای ابری ذخیره شد."); })
           .catch(() => setStatus("ذخیره ابری ناموفق بود؛ فایل پشتیبان محلی را نگه دار."));
       }, 900);
     }
