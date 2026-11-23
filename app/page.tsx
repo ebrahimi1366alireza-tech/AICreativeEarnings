@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import AccountConnections from "./components/account-connections";
 import CloudWorkspaceSync from "./components/cloud-workspace-sync";
+import OpportunityDiscovery from "./components/opportunity-discovery";
 
 const workflow = [
   { number: "۰۱", title: "کشف فرصت‌ها", detail: "پیدا کردن سفارش‌های واقعی و بررسی اعتبار کارفرما", state: "در صف راه‌اندازی" },
@@ -278,6 +279,8 @@ export default function Home() {
         </section>
 
 
+
+        <OpportunityDiscovery onAdd={(lead) => setOpportunities(current => [{ ...lead }, ...current])} />
 
         <section className="panel vetted-opportunities" id="verified-opportunities">
           <div className="panel-head"><div><span className="eyebrow">CRYPTO PAYMENT EVIDENCE</span><h2>پلتفرم‌های دارای مستندات پرداخت رمزارزی</h2></div><span className="free-tag">بدون سپرده اولیه</span></div>
