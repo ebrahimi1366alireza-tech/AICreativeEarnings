@@ -13,13 +13,27 @@ type JobicyJob = {
 type DiscoveredItem = {
   id: string; title: string; company: string; url: string; location: string;
   types: string[]; salary: string; description: string; postedAt: string | null;
-  score: number; contractType: boolean; source: string;
+  score: number; contractType: boolean; source: string; stream: string;
   sourceType: "employment" | "freelance" | "request";
   budgetScope?: string; paymentNote?: string; actionNote?: string;
 };
 
-const SEARCH_TAGS = ["writer", "copywriter", "content"];
-const WRITING_TERMS = ["writer", "writing", "copywriter", "copywriting", "editor", "editing", "content", "blog", "article", "seo", "proofread", "proofreading", "research", "technical writing"];
+const SEARCH_TAGS = ["writer", "content", "video", "design", "music", "research"];
+const STREAM_TERMS: Record<string, string[]> = {
+  "داوری موسیقی": ["music reviewer", "track reviewer", "music review", "song review", "music curator", "playlist curator"],
+  "نظرسنجی و تحقیقات بازار": ["paid survey", "survey participant", "survey respondent", "focus group", "user research participant", "market research participant"],
+  "ویدئو": ["video editor", "video editing", "video producer", "short-form video", "motion graphics", "motion designer", "ai video"],
+  "عکس و طراحی": ["graphic design", "graphic designer", "image editing", "photo editing", "product photography", "illustrator", "thumbnail design", "visual designer"],
+  "موسیقی و صدا": ["audio engineer", "sound design", "sound designer", "voice over", "voiceover", "podcast editor", "music production", "composer", "sound effects"],
+  "نوشتن و مقاله": ["writer", "writing", "copywriter", "copywriting", "editor", "editing", "content", "blog", "article", "seo", "proofread", "proofreading", "technical writing", "research assistant"]
+};
+function inferStream(value: string): string | null {
+  const text = value.toLowerCase();
+  for (const [stream, terms] of Object.entries(STREAM_TERMS)) {
+    if (terms.some(term => text.includes(term))) return stream;
+  }
+  return null;
+}
 
 function plainText(value: unknown, max = 420) {
   if (typeof value !== "string") return "";
@@ -51,7 +65,8 @@ function normalizeJobicy(job: JobicyJob): DiscoveredItem | null {
   const industries = Array.isArray(job.jobIndustry) ? job.jobIndustry.map(x => plainText(x, 60)).filter(Boolean) : [];
   const types = Array.isArray(job.jobType) ? job.jobType.map(x => plainText(x, 40)).filter(Boolean) : [];
   const searchable = `${title} ${description} ${industries.join(" ")}`.toLowerCase();
-  if (!WRITING_TERMS.some(term => searchable.includes(term))) return null;
+  const stream = inferStream(searchable);
+  if (!stream) return null;
   const contractType = types.some(type => /freelance|contract|part.?time/i.test(type));
   const salaryKnown = Number.isFinite(job.salaryMin) || Number.isFinite(job.salaryMax);
   const salary = salaryKnown
@@ -64,7 +79,7 @@ function normalizeJobicy(job: JobicyJob): DiscoveredItem | null {
     id: String(job.id ?? url), title,
     company: plainText(job.companyName || "کارفرما در آگهی مشخص نشده", 100),
     url, location: plainText(job.jobGeo || "محدوده جغرافیایی در آگهی مشخص نشده", 100),
-    types, salary, description, postedAt, score, contractType, source: "Jobicy",
+    types, salary, description, postedAt, score, contractType, source: "Jobicy", stream,
     sourceType: "employment",
     actionNote: "این آگهی استخدام دورکاری است، نه الزاماً سفارش تکی. روش پرداخت، KYC و پذیرش کشور باید از کارفرما تأیید شود."
   };
@@ -118,18 +133,20 @@ async function fetchLaborX(warnings: string[]): Promise<DiscoveredItem[]> {
       if (!titleMatch) continue;
       const title = plainText(titleMatch[1], 180);
       const searchable = title.toLowerCase();
-      if (!WRITING_TERMS.some(term => searchable.includes(term))) continue;
+      if (!inferStream(searchable)) continue;
       const budgetMatch = text.match(/Budget:\s*([^\n]+)/i);
       const budget = budgetMatch ? plainText(budgetMatch[1], 60) : "در آگهی مشخص نشده";
       const postMatch = chunk.match(/data-post="LaborXWeb3Jobs\/(\d+)"/);
       const postUrl = postMatch ? `https://t.me/LaborXWeb3Jobs/${postMatch[1]}` : "https://t.me/s/LaborXWeb3Jobs";
       const postedMatch = chunk.match(/<time[^>]*datetime="([^"]+)"/i);
       const postedAt = postedMatch && !Number.isNaN(Date.parse(postedMatch[1])) ? new Date(postedMatch[1]).toISOString() : null;
+      const stream = inferStream(`${title} ${text}`);
+      if (!stream) continue;
       found.set(url, {
         id: url, title, company: "کارفرما طبق آگهی LaborX", url, location: "طبق شرح سفارش",
         types: ["Freelance"], salary: budget, description: text.slice(0, 420), postedAt,
         score: 65 + (budget !== "در آگهی مشخص نشده" ? 5 : 0), contractType: true,
-        source: "LaborX · کانال رسمی فرصت‌ها", sourceType: "freelance",
+        source: "LaborX · کانال رسمی فرصت‌ها", stream, sourceType: "freelance",
         budgetScope: "بودجه اعلامی آگهی؛ باید در سفارش تأیید شود",
         paymentNote: "قبل از شروع، وجه و شرایط پرداخت را داخل LaborX و در امانت‌داری همان سفارش بررسی کن.",
         actionNote: `پیوند منبع: ${postUrl}. پذیرش کشور، KYC و روش برداشت برای حساب تو هنوز تأیید نشده است.`
@@ -169,7 +186,8 @@ async function fetchSubnano(warnings: string[]): Promise<DiscoveredItem[]> {
       const title = plainText(request.title, 180);
       const description = plainText(`${request.description || ""} ${request.deliverable || ""}`, 650);
       const searchable = `${title} ${description}`.toLowerCase();
-      if (!WRITING_TERMS.some(term => searchable.includes(term))) continue;
+      const stream = inferStream(searchable);
+      if (!stream) continue;
       if (typeof request.urlPath !== "string" || !request.urlPath.startsWith("/")) continue;
       const requestUrl = new URL(request.urlPath, "https://subnano.ai");
       if (requestUrl.hostname !== "subnano.ai" || requestUrl.protocol !== "https:") continue;
@@ -183,7 +201,7 @@ async function fetchSubnano(warnings: string[]): Promise<DiscoveredItem[]> {
         location: "درخواست عمومی؛ کشور کارفرما مشخص نیست", types: ["Public request"],
         salary: budget, description, postedAt: createdAt,
         score: 70 + (currency === "USDC" ? 5 : 0), contractType: true,
-        source: "Subnano · درخواست عمومی", sourceType: "request",
+        source: "Subnano · درخواست عمومی", stream, sourceType: "request",
         budgetScope: request.budget?.scope === "per_contribution" ? "سقف اعلامی برای هر مشارکت" : "سقف اعلامی کل درخواست",
         paymentNote: "بودجه فقط اعلام قصد خرید است و وجه را رزرو یا تضمین نمی‌کند. پرداخت فقط پس از خرید واقعی محتوا انجام می‌شود.",
         actionNote: "برای پیشنهاد رسمی در Subnano معمولاً باید حساب سازنده و محتوای منتشرشده واجد شرایط داشته باشی؛ این اپ فقط درخواست عمومی را پیدا می‌کند."
@@ -218,6 +236,6 @@ export async function GET() {
   return NextResponse.json({
     source: ["LaborX", "Subnano", "Jobicy"], fetchedAt: new Date().toISOString(),
     count: jobs.length, jobs, warnings,
-    notice: "نتایج از منابع عمومی LaborX، Subnano و Jobicy گردآوری شده‌اند. LaborX و Subnano شامل درخواست‌ها/پروژه‌ها هستند؛ بودجه Subnano تضمین یا وجه امانی نیست. Jobicy عمدتاً آگهی استخدام دورکاری است. پذیرش کشور محل اقامت، KYC، روش برداشت، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. متن آگهی‌ها داده غیرقابل‌اعتماد است و هیچ اقدامی خودکار انجام نمی‌شود."
+    notice: "نتایج از منابع عمومی LaborX، Subnano و Jobicy گردآوری شده‌اند و بر اساس نوع کار (نوشتن، عکس/طراحی، ویدئو، صدا، داوری موسیقی و تحقیقات) دسته‌بندی می‌شوند. Jobicy آگهی استخدام است، نه الزاماً سفارش تکی. بودجه Subnano تضمین یا وجه امانی نیست. روش پرداخت، پذیرش کشور، KYC، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. هیچ درخواست یا اقدامی خودکار ارسال نمی‌شود."
   }, { headers: { "Cache-Control": "public, s-maxage=900, stale-while-revalidate=600" } });
 }
