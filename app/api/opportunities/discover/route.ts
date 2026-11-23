@@ -237,15 +237,21 @@ function safeExternalHttps(value: unknown, allowedHosts: string[]) {
   } catch { return null; }
 }
 
+function safeHttpsUrl(value: unknown) {
+  if (typeof value !== "string") return null;
+  try {
+    const u = new URL(value);
+    return u.protocol === "https:" ? u.toString() : null;
+  } catch { return null; }
+}
+
 function normalizeHimalayas(job: HimalayasJob): DiscoveredItem | null {
   const title = plainText(job.title, 180);
   const description = plainText(job.excerpt || job.description, 500);
   const searchable = `${title} ${description} ${(job.categories || []).join(" ")} ${(job.parentCategories || []).join(" ")}`;
   const stream = inferStream(searchable);
   const sourceUrl = safeExternalHttps(job.guid, ["himalayas.app", "www.himalayas.app"]);
-  const url = safeExternalHttps(job.applicationLink, [
-    "himalayas.app", "www.himalayas.app"
-  ]) || sourceUrl;
+  const url = safeHttpsUrl(job.applicationLink) || sourceUrl;
   if (!title || !stream || !url || !sourceUrl) return null;
   const salaryKnown = Number.isFinite(job.minSalary) || Number.isFinite(job.maxSalary);
   const salary = salaryKnown
