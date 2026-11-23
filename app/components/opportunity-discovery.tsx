@@ -22,6 +22,12 @@ export type DiscoveryLead = {
   paymentAsset: string;
   score: number;
   decision: string;
+  writingType?: string;
+  contentLanguage?: string;
+  wordCount?: string;
+  deadline?: string;
+  seoRequired?: string;
+  commercialRights?: string;
 };
 
 type Props = { onAdd: (lead: DiscoveryLead) => void };
@@ -106,6 +112,12 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
   const [deposit, setDeposit] = useState("هنوز بررسی نشده");
   const [escrow, setEscrow] = useState("نامشخص");
   const [proofUrl, setProofUrl] = useState("");
+  const [writingType, setWritingType] = useState("مقاله وبلاگی و آموزشی");
+  const [contentLanguage, setContentLanguage] = useState("انگلیسی");
+  const [wordCount, setWordCount] = useState("");
+  const [deadline, setDeadline] = useState("");
+  const [seoRequired, setSeoRequired] = useState("نامشخص");
+  const [commercialRights, setCommercialRights] = useState("باید از کارفرما تأیید شود");
   const assessment = useMemo(() => scoreLead({ sourceUrl: proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, fee, kyc, stream }), [proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, fee, kyc, stream]);
 
   function submit(event: React.FormEvent<HTMLFormElement>) {
@@ -130,13 +142,16 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
       countryCheck,
       paymentAsset,
       score: assessment.score,
-      decision: assessment.decision
+      decision: assessment.decision,
+      ...(stream === "نوشتن و مقاله" ? { writingType, contentLanguage, wordCount: wordCount.trim() || "نامشخص", deadline: deadline.trim() || "نامشخص", seoRequired, commercialRights } : {})
     });
     setTitle("");
     setPay("");
     setProofUrl("");
     setNetwork("");
     setMinimum("");
+    setWordCount("");
+    setDeadline("");
   }
 
   return (
@@ -172,6 +187,21 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         <select value={fee} onChange={e => setFee(e.target.value)} aria-label="کارمزد"><option>نامشخص</option><option>۰ تا ۱۰٪</option><option>بیشتر از ۱۰٪</option></select>
         <input value={minimum} onChange={e => setMinimum(e.target.value)} placeholder="حداقل برداشت" aria-label="حداقل برداشت"/>
         <select value={kyc} onChange={e => setKyc(e.target.value)} aria-label="احراز هویت"><option>نامشخص</option><option>بدون KYC</option><option>نیازمند KYC</option></select>
+        {stream === "نوشتن و مقاله" && (
+          <div className="writing-order-fields">
+            <div className="writing-fields-heading"><strong>مشخصات اختصاصی سفارش متن و مقاله</strong><small>این اطلاعات برای تخمین زمان، قیمت و آماده‌سازی تحویل ثبت می‌شوند.</small></div>
+            <select value={writingType} onChange={e => setWritingType(e.target.value)} aria-label="نوع محتوای نوشتاری">
+              <option>مقاله وبلاگی و آموزشی</option><option>مقاله تخصصی و پژوهشی</option><option>محتوای سئو و کلمات کلیدی</option><option>توضیحات محصول و فروشگاهی</option><option>صفحه فرود و متن تبلیغاتی</option><option>بازنویسی و ویرایش</option><option>خلاصه‌سازی و تحقیق</option><option>ترجمه و بومی‌سازی</option>
+            </select>
+            <select value={contentLanguage} onChange={e => setContentLanguage(e.target.value)} aria-label="زبان محتوا">
+              <option>انگلیسی</option><option>فارسی</option><option>ترکی</option><option>عربی</option><option>آلمانی</option><option>سایر زبان‌ها</option>
+            </select>
+            <input value={wordCount} onChange={e => setWordCount(e.target.value)} placeholder="تعداد کلمات یا حجم محتوا" aria-label="تعداد کلمات"/>
+            <input value={deadline} onChange={e => setDeadline(e.target.value)} placeholder="مهلت تحویل و منطقه زمانی" aria-label="مهلت تحویل"/>
+            <select value={seoRequired} onChange={e => setSeoRequired(e.target.value)} aria-label="نیاز سئو"><option>نامشخص</option><option>سئو و کلمات کلیدی لازم است</option><option>بدون نیاز سئو</option></select>
+            <select value={commercialRights} onChange={e => setCommercialRights(e.target.value)} aria-label="حقوق تجاری محتوا"><option>باید از کارفرما تأیید شود</option><option>حقوق تجاری و مالکیت مشخص است</option><option>استفاده تجاری ممنوع است</option></select>
+          </div>
+        )}
         <input value={proofUrl} onChange={e => setProofUrl(e.target.value)} type="url" required placeholder="لینک مستقیم همان سفارش یا منبع رسمی" aria-label="لینک مستقیم سفارش"/>
         <button type="submit">ثبت در رادار فرصت‌ها</button>
       </form>
