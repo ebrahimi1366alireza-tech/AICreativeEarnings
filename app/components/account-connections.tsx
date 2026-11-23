@@ -20,7 +20,8 @@ export default function AccountConnections() {
     try {
       const response = await fetch("/api/auth/status", { cache: "no-store" });
       setAuth(await response.json() as AuthStatus);
-    } catch { setAuth({ connected: false, profile: null }); }
+      window.dispatchEvent(new Event("creativeops-auth-changed"));
+    } catch { setAuth({ connected: false, profile: null }); window.dispatchEvent(new Event("creativeops-auth-changed")); }
     finally { setChecking(false); }
   }
 
