@@ -11,7 +11,7 @@ type JobicyJob = {
 };
 
 type DiscoveredItem = {
-  id: string; title: string; company: string; url: string; location: string;
+  id: string; title: string; company: string; url: string; sourceUrl?: string; location: string;
   types: string[]; salary: string; description: string; postedAt: string | null;
   score: number; contractType: boolean; source: string; stream: string;
   sourceType: "employment" | "freelance" | "request";
@@ -242,10 +242,11 @@ function normalizeHimalayas(job: HimalayasJob): DiscoveredItem | null {
   const description = plainText(job.excerpt || job.description, 500);
   const searchable = `${title} ${description} ${(job.categories || []).join(" ")} ${(job.parentCategories || []).join(" ")}`;
   const stream = inferStream(searchable);
+  const sourceUrl = safeExternalHttps(job.guid, ["himalayas.app", "www.himalayas.app"]);
   const url = safeExternalHttps(job.applicationLink, [
     "himalayas.app", "www.himalayas.app"
-  ]) || safeExternalHttps(job.guid, ["himalayas.app", "www.himalayas.app"]);
-  if (!title || !stream || !url) return null;
+  ]) || sourceUrl;
+  if (!title || !stream || !url || !sourceUrl) return null;
   const salaryKnown = Number.isFinite(job.minSalary) || Number.isFinite(job.maxSalary);
   const salary = salaryKnown
     ? `${job.minSalary ?? "?"}–${job.maxSalary ?? "?"} ${plainText(job.currency || "", 8)} / ${plainText(job.salaryPeriod || "سالانه", 20)}`
@@ -258,7 +259,7 @@ function normalizeHimalayas(job: HimalayasJob): DiscoveredItem | null {
   return {
     id: String(job.guid || url), title,
     company: plainText(job.companyName || "کارفرما مشخص نشده", 100),
-    url, location: restrictions, types: [plainText(job.employmentType || "Remote", 40)],
+    url, sourceUrl, location: restrictions, types: [plainText(job.employmentType || "Remote", 40)],
     salary, description, postedAt,
     score: 68 + (salaryKnown ? 8 : 0) + (contractType ? 5 : 0) + (description ? 5 : 0),
     contractType, source: "Himalayas", stream, sourceType: "employment",
@@ -308,7 +309,9 @@ function normalizeRemoteOk(raw: RemoteOkJob): DiscoveredItem | null {
   const applyUrl = safeExternalHttps(raw.apply_url, ["remoteok.com", "www.remoteok.com"]) || url;
   return {
     id: String(raw.id || url), title, company: plainText(raw.company || "کارفرما مشخص نشده", 100),
-    url: applyUrl, location: plainText(raw.location || "Remote؛ محدودیت کشور بررسی شود", 100),
+    url: safeExternalHttps(raw.url, ["remoteok.com", "www.remoteok.com"]) || applyUrl,
+    sourceUrl: safeExternalHttps(raw.url, ["remoteok.com", "www.remoteok.com"]) || applyUrl,
+    location: plainText(raw.location || "Remote؛ محدودیت کشور بررسی شود", 100),
     types: tags.slice(0, 6), salary, description, postedAt,
     score: 62 + (salaryKnown ? 10 : 0) + (description.length > 100 ? 8 : 0),
     contractType: false, source: "Remote OK", stream, sourceType: "employment",
