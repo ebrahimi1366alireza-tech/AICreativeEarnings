@@ -1,24 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readSession } from "@/lib/google-session";
+import { getSupabaseUser, setSupabaseSessionCookies, supabaseAuthRequest, type SupabaseSession } from "@/lib/supabase-auth";
 
 export const runtime = "nodejs";
 
 export async function GET(request: NextRequest) {
-  const configured = Boolean(
-    process.env.GOOGLE_CLIENT_ID &&
-    process.env.GOOGLE_CLIENT_SECRET &&
-    process.env.GOOGLE_REDIRECT_URI &&
-    process.env.SESSION_SECRET &&
-    process.env.SESSION_SECRET.length >= 32
-  );
-  try {
-    const profile = readSession(request.cookies.get("creativeops_google_session")?.value);
-    return NextResponse.json({
-      connected: Boolean(profile),
-      profile: profile ? { email: profile.email, name: profile.name, picture: profile.picture } : null,
-      configured
-    });
-  } catch {
-    return NextResponse.json({ connected: false, profile: null, configured });
+  const access = request.cookies.get("creativeops_supabase_access")?.value;
+  const refresh = request.cookies.get("creativeops_supabase_refresh")?.value;
+  let user = await getSupabaseUser(access);
+  let session: SupabaseSession | null = null;
+
+  if (!user && refresh) {
+    const renewed = await supabaseAuthRequest("token?grant_type=refresh_token", { refresh_token: refresh }).catch(() => null);
+    if (renewed?.ok && renewed.data?.access_token) {
+      session = renewed.data as SupabaseSession;
+      user = await getSupabaseUser(session.access_token);
+    }
   }
+
+  const response = NextResponse.json({
+    connected: Boolean(user),
+    profile: user ? { email: user.email, name: user.name } : null,
+    emailAuthConfigured: Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)
+  }, { headers: { "Cache-Control": "no-store" } });
+
+  if (session) setSupabaseSessionCookies(response, session);
+  if (!user && refresh && !session) {
+    response.cookies.set("creativeops_supabase_access", "", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: 0 });
+    response.cookies.set("creativeops_supabase_refresh", "", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: 0 });
+  }
+  return response;
 }
