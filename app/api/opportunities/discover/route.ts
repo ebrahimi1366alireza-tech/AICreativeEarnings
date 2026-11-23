@@ -24,15 +24,15 @@ const WRITING_TERMS = ["writer", "writing", "copywriter", "copywriting", "editor
 function plainText(value: unknown, max = 420) {
   if (typeof value !== "string") return "";
   return value
-    .replace(/<script[\\s\\S]*?<\\/script>/gi, " ")
-    .replace(/<style[\\s\\S]*?<\\/style>/gi, " ")
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
     .replace(/<[^>]*>/g, " ")
     .replace(/&nbsp;|&#160;/gi, " ")
     .replace(/&amp;/gi, "&").replace(/&quot;/gi, '"')
     .replace(/&#39;|&apos;/gi, "'").replace(/&lt;/gi, "<").replace(/&gt;/gi, ">")
-    .replace(/&#(\\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
     .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
-    .replace(/\\s+/g, " ").trim().slice(0, max);
+    .replace(/\s+/g, " ").trim().slice(0, max);
 }
 
 function safeJobUrl(value: unknown, host: string, pathPrefix: string) {
@@ -110,18 +110,18 @@ async function fetchLaborX(warnings: string[]): Promise<DiscoveredItem[]> {
     const chunks = html.split(/<div class="tgme_widget_message_wrap/).slice(1);
     const found = new Map<string, DiscoveredItem>();
     for (const chunk of chunks) {
-      const jobMatch = chunk.match(/https:\\/\\/laborx\\.com\\/jobs\\/[a-z0-9-]+/i) || chunk.match(/https:\/\/laborx\.com\/jobs\/[a-z0-9-]+/i);
+      const jobMatch = chunk.match(/https:\/\/laborx\.com\/jobs\/[a-z0-9-]+/i);
       const url = safeJobUrl(jobMatch?.[0]?.replace(/&amp;/g, "&"), "laborx.com", "/jobs/");
       if (!url) continue;
       const text = plainText(chunk, 5000);
-      const titleMatch = text.match(/Freelance Opportunity:\\s*([^\\n]+)/i) || text.match(/Job Title:\\s*([^\\n]+)/i);
+      const titleMatch = text.match(/Freelance Opportunity:\s*([^\n]+)/i) || text.match(/Job Title:\s*([^\n]+)/i);
       if (!titleMatch) continue;
       const title = plainText(titleMatch[1], 180);
       const searchable = title.toLowerCase();
       if (!WRITING_TERMS.some(term => searchable.includes(term))) continue;
-      const budgetMatch = text.match(/Budget:\\s*([^\\n]+)/i);
+      const budgetMatch = text.match(/Budget:\s*([^\n]+)/i);
       const budget = budgetMatch ? plainText(budgetMatch[1], 60) : "در آگهی مشخص نشده";
-      const postMatch = chunk.match(/data-post="LaborXWeb3Jobs\\/(\\d+)"/);
+      const postMatch = chunk.match(/data-post="LaborXWeb3Jobs\/(\d+)"/);
       const postUrl = postMatch ? `https://t.me/LaborXWeb3Jobs/${postMatch[1]}` : "https://t.me/s/LaborXWeb3Jobs";
       const postedMatch = chunk.match(/<time[^>]*datetime="([^"]+)"/i);
       const postedAt = postedMatch && !Number.isNaN(Date.parse(postedMatch[1])) ? new Date(postedMatch[1]).toISOString() : null;
