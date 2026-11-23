@@ -20,3 +20,5 @@ footer{display:flex;justify-content:space-between;color:#657187;font-size:9px;pa
 @media(max-width:850px){.income-form{grid-template-columns:1fr 1fr}.income-form button{min-height:38px}.income-form .received-check{grid-column:span 2}}
 
 .crypto-only-policy{margin:14px 0;padding:14px 16px;border:1px solid #385347;border-radius:10px;background:#14251f}.crypto-only-policy strong{font-size:12px;color:#8ee0b9}.crypto-only-policy p{font-size:10px;color:#b4c6bd;line-height:2;margin:6px 0 0}.lead-grid .empty-state{grid-column:1/-1}
+
+.connection-body form{display:grid;gap:8px}.connection-body form button,.connection-body>button{border:0;border-radius:8px;padding:9px 12px;background:#7656d9;color:white;font:inherit;font-size:10px;cursor:pointer}.connection-body button:disabled{opacity:.6}.connection-body .text-action{display:block;background:transparent;color:#c4b1ff;padding:7px 0}.connection-unavailable{display:block;color:#e7c77d;font-size:10px;line-height:1.8}.connection-body small{display:block;margin-top:8px}.connection-actions{display:block;color:#c5b4ff;font-size:11px;line-height:1.8}.connection-card{min-width:0}.connection-body a{margin:6px 8px 0 0}
