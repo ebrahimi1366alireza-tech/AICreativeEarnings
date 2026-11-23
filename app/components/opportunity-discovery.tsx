@@ -32,6 +32,12 @@ export type DiscoveryLead = {
 
 type Props = { onAdd: (lead: DiscoveryLead) => void };
 type LiveWritingJob = { id: string; title: string; company: string; url: string; location: string; types: string[]; salary: string; description: string; postedAt: string | null; score: number; contractType: boolean; source: string };
+type DiscoveredOpportunity = LiveWritingJob & {
+  sourceType?: "employment" | "freelance" | "request";
+  budgetScope?: string;
+  paymentNote?: string;
+  actionNote?: string;
+};
 
 const sources = [
   {
@@ -131,7 +137,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
   const [deadline, setDeadline] = useState("");
   const [seoRequired, setSeoRequired] = useState("نامشخص");
   const [commercialRights, setCommercialRights] = useState("باید از کارفرما تأیید شود");
-  const [liveJobs, setLiveJobs] = useState<LiveWritingJob[]>([]);
+  const [liveJobs, setLiveJobs] = useState<DiscoveredOpportunity[]>([]);
   const [liveLoading, setLiveLoading] = useState(false);
   const [liveError, setLiveError] = useState("");
   const [liveNotice, setLiveNotice] = useState("");
@@ -152,7 +158,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
       if (!response.ok) throw new Error(payload?.error || "دریافت آگهی‌ها ناموفق بود.");
       setLiveJobs(Array.isArray(payload.jobs) ? payload.jobs : []);
       setLiveFetchedAt(payload.fetchedAt || new Date().toISOString());
-      setLiveNotice(payload.notice || "اطلاعات از منبع عمومی دریافت شد.");
+      setLiveNotice(payload.notice || "اطلاعات از منابع عمومی دریافت شد.");
       if (payload.warnings?.length) setLiveError(payload.warnings.join(" "));
     } catch (error) {
       setLiveError(error instanceof Error ? error.message : "خطای نامشخص در دریافت آگهی‌ها.");
@@ -267,13 +273,13 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
           <div><span className="eyebrow">LIVE PUBLIC LISTINGS</span><h3>جست‌وجوی زنده آگهی‌های نوشتاری</h3></div>
           <button type="button" onClick={discoverWritingJobs} disabled={liveLoading}>{liveLoading ? "در حال جست‌وجو..." : "جست‌وجوی آگهی‌های جدید"}</button>
         </div>
-        <p className="hub-intro">جست‌وجو از API عمومی Jobicy برای writer، content writing، copywriter و SEO writer انجام می‌شود. این‌ها عمدتاً آگهی‌های دورکاری هستند و ممکن است استخدامی باشند، نه سفارش تکی مقاله.</p>
+        <p className="hub-intro">جست‌وجوی چندمنبعی: پروژه‌های فریلنسری LaborX، درخواست‌های عمومی محتوایی Subnano و آگهی‌های استخدام دورکاری Jobicy. نتایج بر اساس نوع فرصت تفکیک می‌شوند؛ بودجه یا امتیاز بالا به معنی تضمین پرداخت نیست.</p>
         {liveFetchedAt && <small>آخرین دریافت: {new Date(liveFetchedAt).toLocaleString("fa-IR")}</small>}
         {liveError && <p role="alert" className="discovery-assessment">{liveError}</p>}
         {liveNotice && <p className="discovery-assessment">{liveNotice}</p>}
         {liveJobs.length > 0 && <div className="lead-grid">
           {liveJobs.map(job => <article className="saved-opportunity" key={job.url}>
-            <div><strong>{job.title}</strong><p>{job.company} · {job.location}</p><p>{job.description || "توضیحات در صفحه اصلی آگهی"}</p><p className="opportunity-meta">حقوق اعلام‌شده: {job.salary} · نوع قرارداد: {job.types.join("، ") || "نامشخص"} · تطابق نوشتاری: {job.score}/100</p>{job.postedAt && <small>تاریخ انتشار: {new Date(job.postedAt).toLocaleDateString("fa-IR")}</small>}<p><a href={job.url} target="_blank" rel="noreferrer">مشاهده آگهی اصلی ↗</a></p></div>
+            <div><strong>{job.title}</strong><p>{job.company} · {job.location}</p><p>{job.description || "توضیحات در صفحه اصلی آگهی"}</p><p className="opportunity-meta">بودجه/حقوق اعلام‌شده: {job.salary} · نوع: {job.sourceType === "freelance" ? "پروژه فریلنسری" : job.sourceType === "request" ? "درخواست عمومی" : "استخدام دورکاری"} · تطابق نوشتاری: {job.score}/100</p>{job.budgetScope && <small>دامنه بودجه: {job.budgetScope}</small>}{job.postedAt && <small>تاریخ انتشار: {new Date(job.postedAt).toLocaleDateString("fa-IR")}</small>}{job.paymentNote && <p>{job.paymentNote}</p>}{job.actionNote && <p>{job.actionNote}</p>}<p><a href={job.url} target="_blank" rel="noreferrer">مشاهده سفارش یا آگهی اصلی ↗</a></p></div>
             <button type="button" onClick={() => addLiveJob(job)}>افزودن به فرصت‌ها</button>
           </article>)}
         </div>}
