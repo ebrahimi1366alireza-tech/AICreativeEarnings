@@ -68,3 +68,12 @@ A free tier does not automatically grant unlimited generations or commercial-use
 - Do not treat any lead as verified income until country eligibility, identity requirements, commercial rights, payout destination, and a small successful test payout have been checked.
 
 - LaborX official reference: https://laborx.com/ (crypto freelance marketplace; 10% standard freelancer fee and supported USDT networks are documented on its site).
+
+
+## Account authentication and Gmail connection
+- Email/password signup and sign-in are handled by Supabase Auth through server-side routes. Supabase access and refresh tokens are stored in HTTP-only cookies; passwords are never stored by this app.
+- Google sign-in uses a separate Google OAuth authorization-code flow and a signed HTTP-only session cookie.
+- Gmail mailbox access is a separate, optional consent flow requesting only `gmail.readonly`. Refresh tokens are encrypted with AES-256-GCM before being stored in an HTTP-only cookie. The app currently reads up to 10 recent message metadata/snippets; it does not send, delete, or modify email.
+- Google sign-in and Gmail access require a Google OAuth Web Client configured with the exact redirect URI `https://ai-creative-earnings.vercel.app/api/auth/google/callback`, and the Vercel variables `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI`, and a random `SESSION_SECRET` of at least 32 characters. In Google Cloud, enable Gmail API and add the Gmail read-only scope to the OAuth consent configuration; if the app is in Testing, add the user's Gmail account as a test user.
+- Keep the Gmail OAuth consent separate from sign-in. Do not request mailbox scopes merely to identify a user.
+- This app's current Google sign-in uses a custom OAuth session and is not yet linked to the same Supabase user identity as email/password accounts. Cross-provider account linking and durable cross-device dashboard synchronization remain future work.
