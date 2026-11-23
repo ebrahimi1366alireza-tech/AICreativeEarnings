@@ -45,6 +45,9 @@ export default function CloudWorkspaceSync() {
     let stopped = false;
 
     async function pushLocal() {
+      const authResponse = await fetch("/api/auth/status", { cache: "no-store" });
+      const auth = await authResponse.json();
+      if (!auth.connected) { setStatus("برای ذخیره ابری و همگام‌سازی بین دستگاه‌ها وارد حساب کاربری شو."); return; }
       const response = await fetch("/api/workspace/sync", {
         method: "PUT", headers: { "Content-Type": "application/json" },
         body: JSON.stringify(readLocal())
