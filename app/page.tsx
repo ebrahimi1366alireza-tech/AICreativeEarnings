@@ -45,8 +45,20 @@ export default function Home() {
   useEffect(() => {
     try {
       const saved = localStorage.getItem("creativeops-opportunities-v1");
-      if (saved) setOpportunities(JSON.parse(saved) as Opportunity[]);
-      else setOpportunities(INITIAL_OPPORTUNITIES);
+      const seededMarker = localStorage.getItem("creativeops-initial-leads-seeded-v1");
+      if (saved) {
+        const existing = JSON.parse(saved) as Opportunity[];
+        if (!seededMarker) {
+          const existingIds = new Set(existing.map(item => item.id));
+          setOpportunities([...existing, ...INITIAL_OPPORTUNITIES.filter(item => !existingIds.has(item.id))]);
+          localStorage.setItem("creativeops-initial-leads-seeded-v1", "1");
+        } else {
+          setOpportunities(existing);
+        }
+      } else {
+        setOpportunities(INITIAL_OPPORTUNITIES);
+        localStorage.setItem("creativeops-initial-leads-seeded-v1", "1");
+      }
       const savedDeliveries = localStorage.getItem("creativeops-deliveries-v1");
       if (savedDeliveries) setDeliveries(JSON.parse(savedDeliveries) as Delivery[]);
       const savedIncome = localStorage.getItem("creativeops-income-v1");
@@ -97,8 +109,8 @@ export default function Home() {
     setDeliveries(rows => [{ id: crypto.randomUUID(), title, client: String(form.get("client") || "نامشخص"), due: String(form.get("due") || ""), status: "در حال آماده‌سازی" }, ...rows]); event.currentTarget.reset();
   }
   function addIncome(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault(); const form = new FormData(event.currentTarget); const source = String(form.get("incomeSource") || "").trim(); const amount = Number(form.get("amount")); if (!source || !Number.isFinite(amount) || amount <= 0) return;
-    setIncome(rows => [{ id: crypto.randomUUID(), source, amount, currency: "USDT", received: form.get("received") === "on", date: new Date().toISOString().slice(0,10) }, ...rows]); event.currentTarget.reset();
+    event.preventDefault(); const form = new FormData(event.currentTarget); const source = String(form.get("incomeSource") || "").trim(); const amount = Number(form.get("amount")); const currency = String(form.get("currency") || "USDT"); if (!source || !Number.isFinite(amount) || amount <= 0 || !["USDT", "USDC", "XNO"].includes(currency)) return;
+    setIncome(rows => [{ id: crypto.randomUUID(), source, amount, currency, received: form.get("received") === "on", date: new Date().toISOString().slice(0,10) }, ...rows]); event.currentTarget.reset();
   }
   function addOpportunity(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -296,7 +308,7 @@ export default function Home() {
           {deliveries.length === 0 ? <div className="empty-state"><span>✧</span><strong>هنوز سفارش تولیدی ثبت نشده</strong><p>سفارش پذیرفته‌شده را دستی ثبت و تا تحویل پیگیری کن؛ اطلاعات فقط در همین مرورگر ذخیره می‌شود.</p></div> : <div className="saved-opportunities">{deliveries.map(item => <article className="saved-opportunity" key={item.id}><div><strong>{item.title}</strong><p>{item.client}{item.due ? " · مهلت: "+item.due : ""}</p></div><select aria-label="وضعیت تحویل" value={item.status} onChange={e => setDeliveries(rows => rows.map(row => row.id === item.id ? {...row,status:e.target.value} : row))}><option>در حال آماده‌سازی</option><option>در انتظار بازبینی</option><option>آماده تحویل</option><option>تحویل شد</option><option>لغو شد</option></select><button type="button" className="remove-opportunity" onClick={() => setDeliveries(rows => rows.filter(row => row.id !== item.id))} aria-label="حذف سفارش">×</button></article>)}</div>}
         </div></section>
         <section className="panel income-log"><div className="panel-head"><div><span className="eyebrow">PAYMENT TRACKER</span><h2>ثبت درآمد و پرداخت‌ها</h2></div><span className="free-tag">ثبت دستی و شفاف</span></div><p className="hub-intro">فقط پرداخت رمزارزی که واقعاً به کیف پول رسیده باشد ثبت می‌شود. پرداخت فیات در این دفتر پذیرفته نیست. اطلاعات این دفتر فقط در همین مرورگر و دستگاه ذخیره می‌شود.</p>
-          <form className="income-form" onSubmit={addIncome}><input name="incomeSource" required placeholder="منبع درآمد / سفارش" aria-label="منبع درآمد"/><input name="amount" type="number" min="0.01" step="0.01" required placeholder="مبلغ" aria-label="مبلغ"/><select name="currency" aria-label="واحد پول"><option value="USDT">USDT</option></select><label className="received-check"><input name="received" type="checkbox"/> واقعاً دریافت شده</label><button type="submit">+ ثبت درآمد</button></form>
+          <form className="income-form" onSubmit={addIncome}><input name="incomeSource" required placeholder="منبع درآمد / سفارش" aria-label="منبع درآمد"/><input name="amount" type="number" min="0.01" step="0.01" required placeholder="مبلغ" aria-label="مبلغ"/><select name="currency" aria-label="واحد پول"><option value="USDT">USDT</option><option value="USDC">USDC</option><option value="XNO">Nano (XNO)</option></select><label className="received-check"><input name="received" type="checkbox"/> واقعاً دریافت شده</label><button type="submit">+ ثبت درآمد</button></form>
           {income.length === 0 ? <div className="empty-state"><span>₮</span><strong>هنوز پرداختی ثبت نشده</strong><p>درآمد واقعی را پس از دریافت ثبت کن.</p></div> : <div className="saved-opportunities">{income.map(item => <article className="saved-opportunity" key={item.id}><div><strong>{item.source}</strong><p>{item.date} · {item.amount.toFixed(2)} {item.currency}</p></div><label className="received-check"><input type="checkbox" checked={item.received} onChange={e => setIncome(rows => rows.map(row => row.id === item.id ? {...row,received:e.target.checked} : row))}/>{item.received ? "دریافت شده" : "در انتظار دریافت"}</label><button type="button" className="remove-opportunity" onClick={() => setIncome(rows => rows.filter(row => row.id !== item.id))} aria-label="حذف درآمد">×</button></article>)}</div>}
         </section>
 
