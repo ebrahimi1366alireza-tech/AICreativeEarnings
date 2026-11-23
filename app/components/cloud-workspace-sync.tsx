@@ -105,8 +105,10 @@ export default function CloudWorkspaceSync() {
           localStorage.setItem(OWNER_KEY, email);
           setStatus("اطلاعات این حساب با فضای ابری همگام است.");
         } else {
-          await pushLocal();
-          setStatus("اطلاعات این دستگاه در فضای ابری ذخیره شد.");
+          const saved = await pushLocal();
+          if (saved) {
+            setStatus("اطلاعات این دستگاه در فضای ابری ذخیره شد.");
+          }
         }
       } catch (error) {
         setStatus(error instanceof Error ? error.message : "خطا در همگام‌سازی.");
