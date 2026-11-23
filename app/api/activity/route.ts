@@ -16,12 +16,24 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  if (!isSignedIn(request) && !isIngestAuthorized(request)) {
-    return NextResponse.json({ error: "اجازه ثبت رویداد وجود ندارد." }, { status: 401 });
+  // Event ingestion is server-to-server only. A dashboard login must not be
+  // sufficient to forge assistant/system activity in the shared event log.
+  if (!isIngestAuthorized(request)) {
+    return NextResponse.json({ error: "ثبت رویداد فقط از مسیر امن سرویس مجاز است." }, { status: 401 });
   }
   if (!hasActivityStore()) return NextResponse.json({ error: "پایگاه داده فعالیت هنوز تنظیم نشده است." }, { status: 503 });
+  if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
+    return NextResponse.json({ error: "نوع محتوای درخواست باید JSON باشد." }, { status: 415 });
+  }
+  const contentLength = Number(request.headers.get("content-length") ?? 0);
+  if (contentLength > 16_384) {
+    return NextResponse.json({ error: "حجم درخواست بیش از حد مجاز است." }, { status: 413 });
+  }
   try {
     const body = await request.json() as Record<string, unknown>;
+    if (!body || typeof body !== "object" || Array.isArray(body)) {
+      return NextResponse.json({ error: "ساختار رویداد معتبر نیست." }, { status: 400 });
+    }
     const allowedActors = ["assistant", "user", "system"];
     const allowedStatuses = ["running", "completed", "needs_action", "failed"];
     const actor = allowedActors.includes(String(body.actor)) ? String(body.actor) : "assistant";
@@ -35,6 +47,9 @@ export async function POST(request: NextRequest) {
     if (!title) return NextResponse.json({ error: "عنوان فعالیت الزامی است." }, { status: 400 });
     if (actionUrl && !/^https:\/\//i.test(actionUrl)) return NextResponse.json({ error: "لینک اقدام باید HTTPS باشد." }, { status: 400 });
     const metadata = body.metadata && typeof body.metadata === "object" && !Array.isArray(body.metadata) ? body.metadata as Record<string, unknown> : {};
+    if (JSON.stringify(metadata).length > 8_000) {
+      return NextResponse.json({ error: "اطلاعات تکمیلی رویداد بیش از حد مجاز است." }, { status: 413 });
+    }
     const event = await insertActivity({
       actor: actor as "assistant" | "user" | "system",
       category,
