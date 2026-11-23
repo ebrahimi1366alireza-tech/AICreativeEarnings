@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import AccountConnections from "./components/account-connections";
+import CloudWorkspaceSync from "./components/cloud-workspace-sync";
 
 const workflow = [
   { number: "۰۱", title: "کشف فرصت‌ها", detail: "پیدا کردن سفارش‌های واقعی و بررسی اعتبار کارفرما", state: "در صف راه‌اندازی" },
@@ -67,9 +68,9 @@ export default function Home() {
     setLoaded(true);
   }, []);
   useEffect(() => {
-    if (loaded) localStorage.setItem("creativeops-opportunities-v1", JSON.stringify(opportunities));
+    if (loaded) { localStorage.setItem("creativeops-opportunities-v1", JSON.stringify(opportunities)); window.dispatchEvent(new Event("creativeops-workspace-changed")); }
   }, [opportunities, loaded]);
-  useEffect(() => { if (loaded) { localStorage.setItem("creativeops-deliveries-v1", JSON.stringify(deliveries)); localStorage.setItem("creativeops-income-v1", JSON.stringify(income)); } }, [deliveries, income, loaded]);
+  useEffect(() => { if (loaded) { localStorage.setItem("creativeops-deliveries-v1", JSON.stringify(deliveries)); localStorage.setItem("creativeops-income-v1", JSON.stringify(income)); window.dispatchEvent(new Event("creativeops-workspace-changed")); } }, [deliveries, income, loaded]);
   useEffect(() => {
     if (!loaded) return;
     const savedWallet = localStorage.getItem("creativeops-wallet-v1");
@@ -92,6 +93,7 @@ export default function Home() {
       return;
     }
     localStorage.setItem("creativeops-wallet-v1", JSON.stringify({ address, network: walletNetwork }));
+    window.dispatchEvent(new Event("creativeops-workspace-changed"));
     setWalletAddress(address);
     setWalletNotice("آدرس در همین مرورگر ذخیره شد. این کار به معنی تأیید AML یا انجام تراکنش نیست.");
   }
@@ -176,6 +178,7 @@ export default function Home() {
         setWalletAddress(restoredWallet.address);
         setWalletNetwork(restoredWallet.network);
         localStorage.setItem("creativeops-wallet-v1", JSON.stringify(restoredWallet));
+        window.dispatchEvent(new Event("creativeops-workspace-changed"));
       }
       setBackupNotice("اطلاعات فایل پشتیبان با موفقیت در این دستگاه بازیابی شد.");
     } catch {
@@ -224,6 +227,7 @@ export default function Home() {
         <section className="panel tools-panel" id="tools"><div className="panel-head"><div><span className="eyebrow">PROJECT CREATIVE TOOLKIT</span><h2>ابزارهای پروژه و دسترسی‌ها</h2></div><span className="free-tag">اولویت با رایگان‌ها</span></div><div className="tool-grid">{tools.map((tool) => <article className="tool-card" key={tool.mark}><div className="tool-mark">{tool.mark}</div><div><strong>{tool.name}</strong><p>{tool.note}</p><small>{tool.status}</small><a href={tool.url} target="_blank" rel="noreferrer" style={{display:"inline-block",marginTop:7,color:"#b9a4ff",fontSize:10,textDecoration:"none"}}>بازکردن ابزار ↗</a></div></article>)}</div><p className="footnote">این ابزارها جعبه‌ابزار فعلی پروژه‌اند؛ Krea از طریق اتصال ChatGPT در دسترس است و بقیه ابزارها بر اساس دسترسی حساب کاربر استفاده می‌شوند. این فهرست به معنی اتصال به بازار سفارش یا تضمین درآمد نیست. سهمیه، دسترسی منطقه‌ای، واترمارک و مجوز تجاری را پیش از استفاده بررسی کن.</p></section>
 
         <AccountConnections />
+        <CloudWorkspaceSync />
 
         <section className="panel income-hub" id="income-hub">
           <div className="panel-head"><div><span className="eyebrow">MULTI-STREAM INCOME</span><h2>مرکز درآمد چندگانه · AI Income Hub</h2><p className="hub-intro">پروژه مستقل AI Creative Earnings؛ هیچ بخش ایردراپ یا تسک رمزارزی AIRDROP AI در این داشبورد ادغام نمی‌شود.</p></div><span className="free-tag">شروع با هزینه صفر</span></div>
