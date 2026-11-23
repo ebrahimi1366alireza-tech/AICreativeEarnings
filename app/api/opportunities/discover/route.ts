@@ -214,12 +214,136 @@ async function fetchSubnano(warnings: string[]): Promise<DiscoveredItem[]> {
   }
 }
 
+
+type HimalayasJob = {
+  title?: string; excerpt?: string; companyName?: string; employmentType?: string;
+  locationRestrictions?: string[]; timezoneRestrictions?: string[];
+  categories?: string[]; parentCategories?: string[];
+  minSalary?: number | null; maxSalary?: number | null; salaryPeriod?: string;
+  currency?: string; description?: string; pubDate?: number; expiryDate?: number;
+  applicationLink?: string; guid?: string;
+};
+type RemoteOkJob = {
+  id?: string | number; position?: string; company?: string; url?: string;
+  apply_url?: string; description?: string; tags?: string[]; location?: string;
+  date?: string; salary_min?: number; salary_max?: number;
+};
+
+function safeExternalHttps(value: unknown, allowedHosts: string[]) {
+  if (typeof value !== "string") return null;
+  try {
+    const u = new URL(value);
+    return u.protocol === "https:" && allowedHosts.includes(u.hostname.toLowerCase()) ? u.toString() : null;
+  } catch { return null; }
+}
+
+function normalizeHimalayas(job: HimalayasJob): DiscoveredItem | null {
+  const title = plainText(job.title, 180);
+  const description = plainText(job.excerpt || job.description, 500);
+  const searchable = `${title} ${description} ${(job.categories || []).join(" ")} ${(job.parentCategories || []).join(" ")}`;
+  const stream = inferStream(searchable);
+  const url = safeExternalHttps(job.applicationLink, [
+    "himalayas.app", "www.himalayas.app"
+  ]) || safeExternalHttps(job.guid, ["himalayas.app", "www.himalayas.app"]);
+  if (!title || !stream || !url) return null;
+  const salaryKnown = Number.isFinite(job.minSalary) || Number.isFinite(job.maxSalary);
+  const salary = salaryKnown
+    ? `${job.minSalary ?? "?"}–${job.maxSalary ?? "?"} ${plainText(job.currency || "", 8)} / ${plainText(job.salaryPeriod || "سالانه", 20)}`
+    : "در آگهی مشخص نشده";
+  const postedAt = job.pubDate && Number.isFinite(job.pubDate)
+    ? new Date(job.pubDate * 1000).toISOString() : null;
+  const restrictions = Array.isArray(job.locationRestrictions) && job.locationRestrictions.length
+    ? job.locationRestrictions.join(", ") : "بدون محدودیت کشوری اعلام‌شده";
+  const contractType = /contractor|part.?time|temporary/i.test(job.employmentType || "");
+  return {
+    id: String(job.guid || url), title,
+    company: plainText(job.companyName || "کارفرما مشخص نشده", 100),
+    url, location: restrictions, types: [plainText(job.employmentType || "Remote", 40)],
+    salary, description, postedAt,
+    score: 68 + (salaryKnown ? 8 : 0) + (contractType ? 5 : 0) + (description ? 5 : 0),
+    contractType, source: "Himalayas", stream, sourceType: "employment",
+    actionNote: "منبع: Himalayas. لینک درخواست از فید رسمی حفظ شده است. محدودیت کشور، شرایط قرارداد، روش پرداخت و وضعیت باز بودن آگهی را پیش از اقدام بررسی کن."
+  };
+}
+
+async function fetchHimalayas(warnings: string[]): Promise<DiscoveredItem[]> {
+  const queries = ["video editor", "graphic designer", "audio editor", "music", "content writer", "market research"];
+  const found = new Map<string, DiscoveredItem>();
+  for (let i = 0; i < queries.length; i++) {
+    if (i > 0) await new Promise(resolve => setTimeout(resolve, 350));
+    try {
+      const url = new URL("https://himalayas.app/jobs/api/search");
+      url.searchParams.set("q", queries[i]);
+      url.searchParams.set("sort", "recent");
+      url.searchParams.set("page", "1");
+      const response = await fetch(url.toString(), {
+        headers: { Accept: "application/json", "User-Agent": "AICreativeEarnings/1.0 (+https://himalayas.app/docs/remote-jobs-api)" },
+        next: { revalidate: 3600 }, signal: AbortSignal.timeout(12000)
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const payload = await response.json();
+      const jobs = Array.isArray(payload?.jobs) ? payload.jobs : Array.isArray(payload) ? payload : [];
+      for (const raw of jobs as HimalayasJob[]) {
+        const item = normalizeHimalayas(raw);
+        if (item && (!found.has(item.url) || item.score > (found.get(item.url)?.score ?? 0))) found.set(item.url, item);
+      }
+    } catch {
+      warnings.push(`جست‌وجوی Himalayas برای «${queries[i]}» دریافت نشد.`);
+    }
+  }
+  return [...found.values()];
+}
+
+function normalizeRemoteOk(raw: RemoteOkJob): DiscoveredItem | null {
+  const title = plainText(raw.position, 180);
+  const description = plainText(raw.description, 500);
+  const tags = Array.isArray(raw.tags) ? raw.tags.map(x => plainText(x, 40)).filter(Boolean) : [];
+  const stream = inferStream(`${title} ${description} ${tags.join(" ")}`);
+  const url = safeExternalHttps(raw.url, ["remoteok.com", "www.remoteok.com"]);
+  if (!title || !stream || !url || /lorem ipsum|your job description here|no results were found/i.test(description)) return null;
+  const postedAt = raw.date && !Number.isNaN(Date.parse(raw.date)) ? new Date(raw.date).toISOString() : null;
+  if (postedAt && Date.now() - Date.parse(postedAt) > 45 * 86400000) return null;
+  const salaryKnown = (Number(raw.salary_min) > 0 || Number(raw.salary_max) > 0);
+  const salary = salaryKnown ? `${raw.salary_min || "?"}–${raw.salary_max || "?"} USD` : "در آگهی مشخص نشده";
+  const applyUrl = safeExternalHttps(raw.apply_url, ["remoteok.com", "www.remoteok.com"]) || url;
+  return {
+    id: String(raw.id || url), title, company: plainText(raw.company || "کارفرما مشخص نشده", 100),
+    url: applyUrl, location: plainText(raw.location || "Remote؛ محدودیت کشور بررسی شود", 100),
+    types: tags.slice(0, 6), salary, description, postedAt,
+    score: 62 + (salaryKnown ? 10 : 0) + (description.length > 100 ? 8 : 0),
+    contractType: false, source: "Remote OK", stream, sourceType: "employment",
+    actionNote: "منبع: Remote OK. این فید عمومی ممکن است آگهی‌های کم‌کیفیت هم داشته باشد؛ اعتبار کارفرما، کشور مجاز و روش پرداخت را بررسی کن."
+  };
+}
+
+async function fetchRemoteOk(warnings: string[]): Promise<DiscoveredItem[]> {
+  try {
+    const response = await fetch("https://remoteok.com/api", {
+      headers: { Accept: "application/json", "User-Agent": "AICreativeEarnings/1.0 (job discovery; https://remoteok.com/faq)" },
+      next: { revalidate: 3600 }, signal: AbortSignal.timeout(15000)
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const payload = await response.json();
+    if (!Array.isArray(payload)) throw new Error("Unexpected feed format");
+    const items = new Map<string, DiscoveredItem>();
+    for (const raw of payload.slice(1) as RemoteOkJob[]) {
+      const item = normalizeRemoteOk(raw);
+      if (item && !items.has(item.url)) items.set(item.url, item);
+    }
+    return [...items.values()];
+  } catch {
+    warnings.push("فید عمومی Remote OK موقتاً دریافت نشد.");
+    return [];
+  }
+}
+
 export async function GET() {
   const warnings: string[] = [];
-  const [jobicy, laborx, subnano] = await Promise.all([
-    fetchJobicy(warnings), fetchLaborX(warnings), fetchSubnano(warnings)
+  const [jobicy, laborx, subnano, himalayas, remoteOk] = await Promise.all([
+    fetchJobicy(warnings), fetchLaborX(warnings), fetchSubnano(warnings),
+    fetchHimalayas(warnings), fetchRemoteOk(warnings)
   ]);
-  const all = [...laborx, ...subnano, ...jobicy];
+  const all = [...laborx, ...subnano, ...jobicy, ...himalayas, ...remoteOk];
   const unique = new Map<string, DiscoveredItem>();
   for (const item of all) {
     if (!unique.has(item.url)) unique.set(item.url, item);
@@ -234,8 +358,8 @@ export async function GET() {
     return NextResponse.json({ error: "منابع عمومی فعلاً در دسترس نیستند.", jobs: [], warnings }, { status: 502, headers: { "Cache-Control": "no-store" } });
   }
   return NextResponse.json({
-    source: ["LaborX", "Subnano", "Jobicy"], fetchedAt: new Date().toISOString(),
+    source: ["LaborX", "Subnano", "Jobicy", "Himalayas", "Remote OK"], fetchedAt: new Date().toISOString(),
     count: jobs.length, jobs, warnings,
-    notice: "نتایج از منابع عمومی LaborX، Subnano و Jobicy گردآوری شده‌اند و بر اساس نوع کار (نوشتن، عکس/طراحی، ویدئو، صدا، داوری موسیقی و تحقیقات) دسته‌بندی می‌شوند. Jobicy آگهی استخدام است، نه الزاماً سفارش تکی. بودجه Subnano تضمین یا وجه امانی نیست. روش پرداخت، پذیرش کشور، KYC، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. هیچ درخواست یا اقدامی خودکار ارسال نمی‌شود."
+    notice: "نتایج از منابع عمومی LaborX، Subnano، Jobicy، Himalayas و Remote OK گردآوری شده‌اند. Himalayas و Remote OK فید آگهی استخدام دورکاری‌اند، نه الزاماً سفارش تکی؛ برای Himalayas لینک و انتساب منبع حفظ می‌شود و برای Remote OK نیز لینک منبع نمایش داده می‌شود. بودجه Subnano تضمین یا وجه امانی نیست. روش پرداخت، پذیرش کشور، KYC، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. هیچ درخواست یا اقدامی خودکار ارسال نمی‌شود."
   }, { headers: { "Cache-Control": "public, s-maxage=900, stale-while-revalidate=600" } });
 }
