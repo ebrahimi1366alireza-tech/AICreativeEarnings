@@ -28,6 +28,7 @@ type Income = { id: string; source: string; amount: number; currency: string; re
 
 const DEFAULT_WALLET_ADDRESS = "0x9f53b26aec605212f239c33e1017c5d2d188eb4c";
 const INITIAL_OPPORTUNITIES: Opportunity[] = [
+  { id: "laborx-2026", title: "سفارش‌های فریلنسری نوشتن و طراحی با پرداخت رمزارزی", platform: "LaborX", pay: "مبلغ توافقی در قرارداد و سفارش", status: "نیازمند بررسی", stream: "نوشتن و مقاله / عکس و ویدئو", country: "پلتفرم ادعای دسترسی جهانی دارد؛ محدودیت‌های قانونی و کشور محل اقامت باید پیش از ثبت‌نام تأیید شود", payout: "پرداخت رمزارزی از طریق قرارداد و امانت‌داری پلتفرم؛ مقصد برداشت باید در حساب بررسی شود", network: "USDT روی Ethereum یا BNB Chain", minimum: "نامشخص؛ پیش از پذیرش سفارش بررسی شود", fee: "۱۰٪ کارمزد فریلنسر برای هر سفارش؛ Premium اجباری نیست", kyc: "نامشخص؛ شرایط احراز هویت بررسی شود", proofUrl: "https://laborx.com/" },
   { id: "subnano-2026", title: "فروش مقاله و محتوای دیجیتال", platform: "Subnano", pay: "فروش تکی؛ وابسته به خریدار", status: "نیازمند بررسی", stream: "نوشتن و مقاله", country: "پذیرش حساب از کشور محل اقامت باید تأیید شود", payout: "مستقیم به کیف پول", network: "USDC روی Base", minimum: "بدون حداقل موجودی برای برداشت", fee: "15% برای USDC؛ 7.5% برای Nano", kyc: "ورود با ایمیل یا کیف پول؛ KYC نامشخص", proofUrl: "https://subnano.ai/faq" }
 ];
 
