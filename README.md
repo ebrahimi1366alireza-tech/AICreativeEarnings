@@ -23,6 +23,10 @@ These are categories, not verified earning opportunities. A lead stays unverifie
 - Do not add game testing, game installation offers, Freecash, app-install rewards, or unrelated microtask platforms.
 - Never store passwords, Google credentials, private keys, or wallet recovery phrases in the app or repository.
 
+## AI-assisted remote work services
+
+The opportunity workspace now includes a capability catalogue for services the assistant can help execute: writing and editing, research and virtual-assistant reports, AI-assisted images/design, video scripts and supported editing workflows, audio/voice preparation, and programming/debugging. Actual generation depends on connected tools, available quotas, account access, and commercial-use rights. Human approval remains required for account access, identity checks, contracts, final submissions, and financial actions. No paid tool usage or generation is allowed without explicit cost approval.
+
 ## Current application features
 
 - Persian right-to-left dashboard with the five approved income streams.
