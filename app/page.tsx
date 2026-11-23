@@ -28,7 +28,7 @@ type Income = { id: string; source: string; amount: number; currency: string; re
 
 const DEFAULT_WALLET_ADDRESS = "0x9f53b26aec605212f239c33e1017c5d2d188eb4c";
 const INITIAL_OPPORTUNITIES: Opportunity[] = [
-  { id: "subnano-2026", title: "فروش مقاله و محتوای دیجیتال", platform: "Subnano", pay: "فروش تکی؛ وابسته به خریدار", status: "نیازمند بررسی", stream: "نوشتن و مقاله", country: "پذیرش حساب از کشور محل اقامت باید تأیید شود", payout: "مستقیم به کیف پول", network: "USDC روی Base", minimum: "بدون حداقل موجودی؛ حداقل قیمت پست متنی 0.10 USDC", fee: "15% برای USDC؛ 7.5% برای Nano", kyc: "ورود با ایمیل یا کیف پول؛ KYC نامشخص", proofUrl: "https://subnano.ai/faq" }
+  { id: "subnano-2026", title: "فروش مقاله و محتوای دیجیتال", platform: "Subnano", pay: "فروش تکی؛ وابسته به خریدار", status: "نیازمند بررسی", stream: "نوشتن و مقاله", country: "پذیرش حساب از کشور محل اقامت باید تأیید شود", payout: "مستقیم به کیف پول", network: "USDC روی Base", minimum: "بدون حداقل موجودی برای برداشت", fee: "15% برای USDC؛ 7.5% برای Nano", kyc: "ورود با ایمیل یا کیف پول؛ KYC نامشخص", proofUrl: "https://subnano.ai/faq" }
 ];
 
 export default function Home() {
