@@ -1,0 +1,21 @@
+{
+  "name": "AI Creative Earnings - Cloud Workspace",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+  "remoteUser": "node",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "AI Creative Earnings",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "postCreateCommand": "npm install -g @opencode/cli",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  }
+}
