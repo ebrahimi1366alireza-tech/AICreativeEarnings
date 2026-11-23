@@ -96,16 +96,18 @@ export default function CloudWorkspaceSync() {
       timer = setTimeout(() => { void pushLocal().then(() => setStatus("تغییرات در فضای ابری ذخیره شد.")).catch(() => setStatus("ذخیره ابری ناموفق بود؛ فایل پشتیبان محلی را نگه دار.")); }, 900);
     }
 
+    const handleAuthChanged = () => { void syncNow(); };
+    const handleManualSync = () => { void syncNow(); };
     window.addEventListener("creativeops-workspace-changed", scheduleSync);
-    window.addEventListener("creativeops-auth-changed", () => { void syncNow(); });
-    window.addEventListener("creativeops-cloud-sync-requested", () => { void syncNow(); });
+    window.addEventListener("creativeops-auth-changed", handleAuthChanged);
+    window.addEventListener("creativeops-cloud-sync-requested", handleManualSync);
     void syncNow();
     return () => {
       stopped = true;
       if (timer) clearTimeout(timer);
       window.removeEventListener("creativeops-workspace-changed", scheduleSync);
-      window.removeEventListener("creativeops-auth-changed", () => { void syncNow(); });
-      window.removeEventListener("creativeops-cloud-sync-requested", () => { void syncNow(); });
+      window.removeEventListener("creativeops-auth-changed", handleAuthChanged);
+      window.removeEventListener("creativeops-cloud-sync-requested", handleManualSync);
     };
   }, []);
 
