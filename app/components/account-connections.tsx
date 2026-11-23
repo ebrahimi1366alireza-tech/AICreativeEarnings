@@ -57,13 +57,15 @@ export default function AccountConnections() {
           <div className="connection-icon">G</div>
           <div className="connection-body">
             <strong>حساب Google / Gmail</strong>
-            <p>{auth.connected ? `متصل: ${auth.profile?.email || ""}` : "برای اتصال، با همان حساب Gmail قدیمی وارد Google شو."}</p>
+            <p>{auth.connected ? `متصل: ${auth.profile?.email || ""}` : auth.configured === false ? "اتصال Google هنوز از سمت سرور پیکربندی نشده است." : "برای اتصال، با همان حساب Gmail قدیمی وارد Google شو."}</p>
             {auth.connected ? (
               <button type="button" onClick={logout}>قطع اتصال Google</button>
-            ) : (
+            ) : auth.configured ? (
               <a href="/api/auth/google">اتصال امن با Google ↗</a>
+            ) : (
+              <span className="connection-unavailable">اتصال پس از تنظیم امن متغیرهای سرور فعال می‌شود.</span>
             )}
-            <small>{checking ? "در حال بررسی وضعیت اتصال..." : auth.connected ? "ورود OAuth فعال است." : "اگر تنظیمات OAuth سرور کامل نباشد، صفحه راهنما نمایش داده می‌شود."}</small>
+            <small>{checking ? "در حال بررسی وضعیت اتصال..." : auth.connected ? "ورود OAuth فعال است." : auth.configured ? "آماده ورود با Gmail قبلی." : "نیازمند تنظیم OAuth در Vercel؛ هیچ رمز یا کدی را اینجا وارد نکن."}</small>
           </div>
         </div>
         <div className="connection-card">
