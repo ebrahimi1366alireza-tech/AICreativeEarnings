@@ -3,19 +3,15 @@
   "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
   "remoteUser": "node",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-  "forwardPorts": [3000],
+  "forwardPorts": [3000, 4096],
   "portsAttributes": {
-    "3000": {
-      "label": "AI Creative Earnings",
-      "onAutoForward": "openBrowser"
-    }
+    "3000": { "label": "AI Creative Earnings", "onAutoForward": "openBrowser", "visibility": "private" },
+    "4096": { "label": "OpenCode Web", "onAutoForward": "notify", "visibility": "private" }
   },
-  "postCreateCommand": "npm install -g @opencode/cli",
+  "postCreateCommand": "npm install --global @opencode/cli",
   "customizations": {
     "vscode": {
-      "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash"
-      }
+      "settings": { "terminal.integrated.defaultProfile.linux": "bash" }
     }
   }
 }
