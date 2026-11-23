@@ -28,7 +28,8 @@ type Opportunity = { id: string; title: string; platform: string; pay: string; s
 type Delivery = { id: string; title: string; client: string; due: string; status: string };
 type Income = { id: string; source: string; amount: number; currency: string; received: boolean; date: string };
 
-const DEFAULT_WALLET_ADDRESS = "0x9f53b26aec605212f239c33e1017c5d2d188eb4c";
+const DEFAULT_WALLET_ADDRESS = "";
+const LEGACY_PLACEHOLDER_WALLET_ADDRESS = "0x9f53b26aec605212f239c33e1017c5d2d188eb4c";
 const INITIAL_OPPORTUNITIES: Opportunity[] = [
   { id: "laborx-2026", title: "سفارش‌های فریلنسری نوشتن و طراحی با پرداخت رمزارزی", platform: "LaborX", pay: "مبلغ توافقی در قرارداد و سفارش", status: "نیازمند بررسی", stream: "نوشتن و مقاله / عکس و ویدئو", country: "پذیرش کشور محل اقامت و محدودیت‌های قانونی باید پیش از ثبت‌نام بررسی شود؛ ادعای جهانی بودن جای بررسی حساب را نمی‌گیرد", payout: "پرداخت رمزارزی از مسیر قرارداد و امانت‌داری پلتفرم؛ مقصد و شرایط برداشت داخل حساب تأیید شود", network: "Ethereum و BNB Chain؛ از جمله USDT و USDC", minimum: "در منبع رسمی بررسی‌شده مشخص نشده", fee: "۱۰٪ کارمزد فریلنسر برای هر سفارش؛ Premium برای نرخ پایه اجباری نیست", kyc: "در منبع رسمی بررسی‌شده مشخص نشده", proofUrl: "https://laborx.com/vacancies/crypto" },
   { id: "subnano-2026", title: "فروش مقاله و محتوای دیجیتال", platform: "Subnano", pay: "فروش تکی؛ درآمد فقط با خرید واقعی محتوا یا انعام", status: "نیازمند بررسی", stream: "نوشتن و مقاله / فایل و محتوای دیجیتال", country: "دسترسی و شرایط پذیرش کشور محل اقامت هنوز باید در زمان ساخت حساب بررسی شود", payout: "سهم سازنده پس از تأیید هر پرداخت به‌صورت خودکار ارسال می‌شود؛ موجودی برای برداشت تجمیع نمی‌شود", network: "Nano (XNO) یا USDC بومی روی Base", minimum: "حداقل موجودی/نوبت برداشت ندارد؛ فروش به‌ازای هر پرداخت", fee: "۷.۵٪ فروش Nano؛ ۱۵٪ فروش USDC", kyc: "ورود با ایمیل یا کیف پول؛ الزام KYC در FAQ مشخص نشده", proofUrl: "https://subnano.ai/faq" }
@@ -78,25 +79,30 @@ export default function Home() {
     if (savedWallet) {
       try {
         const parsed = JSON.parse(savedWallet) as { address?: unknown; network?: unknown };
-        if (typeof parsed.address === "string") setWalletAddress(parsed.address);
+        const storedAddress = typeof parsed.address === "string" ? parsed.address : "";
+        if (storedAddress === LEGACY_PLACEHOLDER_WALLET_ADDRESS) {
+          setWalletAddress("");
+          localStorage.setItem("creativeops-wallet-v1", JSON.stringify({ address: "", network: typeof parsed.network === "string" ? parsed.network : "EVM - انتخاب شبکه هنگام برداشت" }));
+        } else {
+          setWalletAddress(storedAddress);
+        }
         if (typeof parsed.network === "string") setWalletNetwork(parsed.network);
       } catch { /* ignore invalid wallet data */ }
     } else {
       localStorage.setItem("creativeops-wallet-v1", JSON.stringify({ address: DEFAULT_WALLET_ADDRESS, network: "EVM - انتخاب شبکه هنگام برداشت" }));
-      setWalletNotice("آدرس عمومی منتخب در این مرورگر ذخیره شد؛ این کار به معنی تأیید AML یا انجام تراکنش نیست.");
     }
   }, [loaded]);
   function saveWallet(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const address = walletAddress.trim();
-    if (!/^0x[a-fA-F0-9]{40}$/.test(address)) {
+    if (address && !/^0x[a-fA-F0-9]{40}$/.test(address)) {
       setWalletNotice("آدرس واردشده معتبر نیست؛ آدرس EVM باید با 0x شروع شود و ۴۰ رقم هگزادسیمال داشته باشد.");
       return;
     }
     localStorage.setItem("creativeops-wallet-v1", JSON.stringify({ address, network: walletNetwork }));
     window.dispatchEvent(new Event("creativeops-workspace-changed"));
     setWalletAddress(address);
-    setWalletNotice("آدرس در همین مرورگر ذخیره شد. این کار به معنی تأیید AML یا انجام تراکنش نیست.");
+    setWalletNotice(address ? "آدرس عمومی در همین مرورگر ذخیره شد. این کار به معنی تأیید AML یا انجام تراکنش نیست." : "آدرس کیف پول از این دستگاه پاک شد.");
   }
   async function copyWallet() {
     if (!walletAddress) return;
@@ -165,7 +171,7 @@ export default function Home() {
       const validOpportunities = Array.isArray(data.opportunities) && data.opportunities.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
       const validDeliveries = Array.isArray(data.deliveries) && data.deliveries.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
       const validIncome = Array.isArray(data.income) && data.income.every(item => isRecord(item) && typeof item.id === "string" && typeof item.source === "string" && typeof item.amount === "number" && Number.isFinite(item.amount) && typeof item.received === "boolean");
-      const validWallet = data.wallet === undefined || (isRecord(data.wallet) && typeof data.wallet.address === "string" && /^0x[a-fA-F0-9]{40}$/.test(data.wallet.address) && typeof data.wallet.network === "string");
+      const validWallet = data.wallet === undefined || (isRecord(data.wallet) && typeof data.wallet.address === "string" && (data.wallet.address === "" || /^0x[a-fA-F0-9]{40}$/.test(data.wallet.address)) && typeof data.wallet.network === "string");
       if (data.app !== "AI Creative Earnings" || data.schemaVersion !== 1 || !validOpportunities || !validDeliveries || !validIncome || !validWallet) throw new Error("invalid");
       if (!window.confirm("اطلاعات فعلی جایگزین اطلاعات داخل فایل پشتیبان شود؟ قبل از ادامه، از داده‌های فعلی خروجی بگیر.")) {
         event.target.value = "";
