@@ -31,8 +31,8 @@ export type DiscoveryLead = {
 };
 
 type Props = { onAdd: (lead: DiscoveryLead) => void };
-type LiveWritingJob = { id: string; title: string; company: string; url: string; location: string; types: string[]; salary: string; description: string; postedAt: string | null; score: number; contractType: boolean; source: string };
-type DiscoveredOpportunity = LiveWritingJob & {
+type LiveOpportunity = { id: string; title: string; company: string; url: string; location: string; types: string[]; salary: string; description: string; postedAt: string | null; score: number; contractType: boolean; source: string; stream?: string };
+type DiscoveredOpportunity = LiveOpportunity & {
   sourceType?: "employment" | "freelance" | "request";
   budgetScope?: string;
   paymentNote?: string;
@@ -150,7 +150,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
 
   const assessment = useMemo(() => scoreLead({ sourceUrl: proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, fee, kyc, stream }), [proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, fee, kyc, stream]);
 
-  async function discoverWritingJobs() {
+  async function discoverOpportunities() {
     setLiveLoading(true); setLiveError(""); setLiveNotice("");
     try {
       const response = await fetch("/api/opportunities/discover", { cache: "no-store" });
@@ -182,17 +182,17 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
     );
   }
 
-  function addLiveJob(job: LiveWritingJob) {
+  function addLiveJob(job: LiveOpportunity) {
     onAdd({
       id: crypto.randomUUID(), title: job.title, platform: job.source, pay: job.salary,
-      status: "نیازمند بررسی", stream: "نوشتن و مقاله",
+      status: "نیازمند بررسی", stream: job.stream || "نامشخص",
       country: `محدوده آگهی: ${job.location}. پذیرش کشور محل اقامت هنوز تأیید نشده است.`,
       payout: "روش پرداخت باید در آگهی و قرارداد بررسی شود", network: "نامشخص",
       minimum: "نامشخص", fee: "نامشخص", kyc: "نامشخص", proofUrl: job.url,
       deposit: "هنوز بررسی نشده", escrow: "نامشخص", countryCheck: "هنوز بررسی نشده",
       paymentAsset: "نامشخص", score: job.score,
-      decision: job.contractType ? "تطابق نوشتاری و نوع قرارداد، نیازمند بررسی شرایط" : "آگهی نوشتاری دورکاری، نوع استخدام باید بررسی شود",
-      writingType: "آگهی نوشتاری دورکاری", contentLanguage: "طبق آگهی اصلی",
+      decision: job.contractType ? "تطابق موضوعی و نوع قرارداد، نیازمند بررسی شرایط" : "آگهی دورکاری؛ نوع استخدام باید بررسی شود",
+      ...(job.stream === "نوشتن و مقاله" ? { writingType: "آگهی نوشتاری دورکاری", contentLanguage: "طبق آگهی اصلی" } : {}),
       wordCount: "در آگهی مشخص نشده", deadline: "طبق آگهی اصلی",
       seoRequired: "طبق آگهی اصلی", commercialRights: "باید در قرارداد بررسی شود"
     });
@@ -270,16 +270,16 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
       </section>
       <div className="live-discovery-block">
         <div className="panel-head discovery-form-head">
-          <div><span className="eyebrow">LIVE PUBLIC LISTINGS</span><h3>جست‌وجوی زنده آگهی‌های نوشتاری</h3></div>
-          <button type="button" onClick={discoverWritingJobs} disabled={liveLoading}>{liveLoading ? "در حال جست‌وجو..." : "جست‌وجوی آگهی‌های جدید"}</button>
+          <div><span className="eyebrow">LIVE PUBLIC LISTINGS</span><h3>جست‌وجوی زنده فرصت‌های درآمدی</h3></div>
+          <button type="button" onClick={discoverOpportunities} disabled={liveLoading}>{liveLoading ? "در حال جست‌وجو..." : "جست‌وجوی فرصت‌های جدید"}</button>
         </div>
-        <p className="hub-intro">جست‌وجوی چندمنبعی: پروژه‌های فریلنسری LaborX، درخواست‌های عمومی محتوایی Subnano و آگهی‌های استخدام دورکاری Jobicy. نتایج بر اساس نوع فرصت تفکیک می‌شوند؛ بودجه یا امتیاز بالا به معنی تضمین پرداخت نیست.</p>
+        <p className="hub-intro">جست‌وجوی چندمنبعی برای نوشتن، عکس و طراحی، ویدئو، موسیقی و صدا، داوری موسیقی و تحقیقات بازار. منابع فعلی: پروژه‌های LaborX، درخواست‌های عمومی Subnano و آگهی‌های دورکاری Jobicy. بودجه یا امتیاز بالا به معنی تضمین پرداخت نیست.</p>
         {liveFetchedAt && <small>آخرین دریافت: {new Date(liveFetchedAt).toLocaleString("fa-IR")}</small>}
         {liveError && <p role="alert" className="discovery-assessment">{liveError}</p>}
         {liveNotice && <p className="discovery-assessment">{liveNotice}</p>}
         {liveJobs.length > 0 && <div className="lead-grid">
           {liveJobs.map(job => <article className="saved-opportunity" key={job.url}>
-            <div><strong>{job.title}</strong><p>{job.company} · {job.location}</p><p>{job.description || "توضیحات در صفحه اصلی آگهی"}</p><p className="opportunity-meta">بودجه/حقوق اعلام‌شده: {job.salary} · نوع: {job.sourceType === "freelance" ? "پروژه فریلنسری" : job.sourceType === "request" ? "درخواست عمومی" : "استخدام دورکاری"} · تطابق نوشتاری: {job.score}/100</p>{job.budgetScope && <small>دامنه بودجه: {job.budgetScope}</small>}{job.postedAt && <small>تاریخ انتشار: {new Date(job.postedAt).toLocaleDateString("fa-IR")}</small>}{job.paymentNote && <p>{job.paymentNote}</p>}{job.actionNote && <p>{job.actionNote}</p>}<p><a href={job.url} target="_blank" rel="noreferrer">مشاهده سفارش یا آگهی اصلی ↗</a></p></div>
+            <div><strong>{job.title}</strong><p>{job.company} · {job.location}</p><p>{job.description || "توضیحات در صفحه اصلی آگهی"}</p><p className="opportunity-meta">بودجه/حقوق اعلام‌شده: {job.salary} · نوع: {job.sourceType === "freelance" ? "پروژه فریلنسری" : job.sourceType === "request" ? "درخواست عمومی" : "استخدام دورکاری"} · امتیاز تطابق موضوعی: {job.score}/100</p>{job.budgetScope && <small>دامنه بودجه: {job.budgetScope}</small>}{job.postedAt && <small>تاریخ انتشار: {new Date(job.postedAt).toLocaleDateString("fa-IR")}</small>}{job.paymentNote && <p>{job.paymentNote}</p>}{job.actionNote && <p>{job.actionNote}</p>}<p><a href={job.url} target="_blank" rel="noreferrer">مشاهده سفارش یا آگهی اصلی ↗</a></p></div>
             <button type="button" onClick={() => addLiveJob(job)}>افزودن به فرصت‌ها</button>
           </article>)}
         </div>}
