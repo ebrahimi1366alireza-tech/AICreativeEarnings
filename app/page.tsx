@@ -24,7 +24,7 @@ const tools = [
   { name: "Notion", note: "مدیریت اسناد و محتوای پروژه؛ بازبینی املا، دستور زبان و روانی متن انگلیسی را ChatGPT انجام می‌دهد.", status: "متصل به ChatGPT؛ مدیریت اسناد و بازبینی نگارش", mark: "NOTION", url: "https://www.notion.so/" }
 ];
 
-type Opportunity = { id: string; title: string; platform: string; pay: string; status: string; stream?: string; country?: string; payout?: string; network?: string; minimum?: string; fee?: string; kyc?: string; proofUrl?: string };
+type Opportunity = { id: string; title: string; platform: string; pay: string; status: string; stream?: string; country?: string; payout?: string; network?: string; minimum?: string; fee?: string; kyc?: string; proofUrl?: string; writingType?: string; contentLanguage?: string; wordCount?: string; deadline?: string; seoRequired?: string; commercialRights?: string };
 type Delivery = { id: string; title: string; client: string; due: string; status: string };
 type Income = { id: string; source: string; amount: number; currency: string; received: boolean; date: string };
 
@@ -308,7 +308,7 @@ export default function Home() {
             </form>
             {opportunities.length === 0 ? <div className="empty-state"><span>⌕</span><strong>هنوز فرصتی ثبت نشده</strong><p>فرصت‌ها را دستی ثبت کن؛ این فهرست به‌معنی تأیید اعتبار یا پرداخت نیست و فقط در همین مرورگر ذخیره می‌شود.</p></div> :
               <div className="saved-opportunities">{opportunities.map(item => <article className="saved-opportunity" key={item.id}>
-                <div><strong>{item.title}</strong><p>{item.platform} · {item.pay}</p><p className="opportunity-meta">{item.stream || "مسیر نامشخص"} · کشور: {item.country || "نامشخص"} · برداشت: {item.payout || "نامشخص"} · شبکه: {item.network || "نامشخص"}</p><p className="opportunity-meta">حداقل برداشت: {item.minimum || "نامشخص"} · کارمزد: {item.fee || "نامشخص"} · احراز هویت: {item.kyc || "نامشخص"}</p>{item.proofUrl ? <a href={item.proofUrl} target="_blank" rel="noreferrer">مشاهده منبع رسمی ↗</a> : <small>لینک منبع رسمی ثبت نشده</small>}</div>
+                <div><strong>{item.title}</strong><p>{item.platform} · {item.pay}</p><p className="opportunity-meta">{item.stream || "مسیر نامشخص"} · کشور: {item.country || "نامشخص"} · برداشت: {item.payout || "نامشخص"} · شبکه: {item.network || "نامشخص"}</p><p className="opportunity-meta">حداقل برداشت: {item.minimum || "نامشخص"} · کارمزد: {item.fee || "نامشخص"} · احراز هویت: {item.kyc || "نامشخص"}</p>{item.stream === "نوشتن و مقاله" && <p className="opportunity-meta">نوع متن: {item.writingType || "نامشخص"} · زبان: {item.contentLanguage || "نامشخص"} · حجم: {item.wordCount || "نامشخص"} · مهلت: {item.deadline || "نامشخص"} · سئو: {item.seoRequired || "نامشخص"} · حقوق تجاری: {item.commercialRights || "نامشخص"}</p>}{item.proofUrl ? <a href={item.proofUrl} target="_blank" rel="noreferrer">مشاهده منبع رسمی ↗</a> : <small>لینک منبع رسمی ثبت نشده</small>}</div>
                 <select aria-label="وضعیت بررسی فرصت" value={item.status} onChange={e => updateStatus(item.id, e.target.value)}>
                   <option>نیازمند بررسی</option><option>در حال بررسی</option><option>رد شد</option><option>درخواست ارسال شد</option><option>پذیرفته شد</option><option>تحویل شد</option><option>پرداخت شد</option>
                 </select>
