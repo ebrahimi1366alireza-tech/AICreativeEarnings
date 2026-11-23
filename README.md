@@ -25,22 +25,21 @@ npm run dev
 ```
 
 ## Current status
-The application has a dashboard foundation, browser-local opportunity/delivery/income tracking, a preloaded EVM payout destination, wallet-inclusive JSON backup/restore, and a server-side Google OAuth authorization-code flow. Google sign-in currently verifies an account session only; it does not sync dashboard data or connect Gmail services. The income hub now displays five configured work streams: paid writing, AI music production, paid music voting/judging, paid surveys/market research, and AI image/video production. These are categories, not verified earning opportunities. Automatic opportunity discovery, marketplace integrations, production APIs inside the app, durable cross-device storage, and on-chain payout verification are not connected yet. Subnano is listed only as a review lead for selling paid posts: it supports creator payouts in USDC on Base or Nano, takes 15% on USDC sales and 7.5% on Nano sales, and pays each sale individually; country access and audience demand still need manual validation. LaborX is listed as a review lead for freelance writing/design work with crypto escrow and USDT support on Ethereum and BNB Chain; the published freelancer fee is 10%, Premium is not required to apply, and country/KYC/withdrawal requirements still need account-level verification. Entries are manual records and must not be treated as verified jobs or confirmed blockchain receipts. Opportunity records now include income stream, eligible countries, payout route, network, minimum withdrawal, fees, KYC requirement, and an official evidence URL. Their status defaults to `needs review`; entering these fields does not independently verify a platform or make it eligible.
+The application includes a Persian RTL dashboard, five work-stream categories, browser-local opportunity/delivery/income tracking, a public EVM payout destination, JSON backup/restore, and email/password authentication through Supabase Auth. Passwords are handled by Supabase and are never stored by this app.
 
-## Google OAuth setup
-To enable Google sign-in:
-1. Create an OAuth 2.0 Web application client in Google Cloud Console.
-2. Add the deployed app's exact callback URL to Authorized redirect URIs:
-   `https://YOUR-VERCEL-DOMAIN/api/auth/google/callback`
-3. Add these variables to the Vercel project (Production and Preview as appropriate):
-   - `GOOGLE_CLIENT_ID`
-   - `GOOGLE_CLIENT_SECRET` (secret)
-   - `GOOGLE_REDIRECT_URI` (the exact callback URL above)
-   - `SESSION_SECRET` (a random secret of at least 32 characters)
-4. Redeploy after adding the variables.
+Authenticated workspace sync is being added through a dedicated `workspace_state` row per account. The table uses Row Level Security and restricts each user to their own row. The sync API derives the owner from the verified Supabase session; clients cannot choose another owner's ID. On first sign-in, existing cloud data is restored when present; otherwise the current browser workspace is uploaded. Keep JSON backups as an additional safety measure.
 
-The app stores a signed, HTTP-only session cookie. It requests only OpenID, email, and basic profile scopes. It does not request Gmail mailbox access. Never commit OAuth secrets to GitHub or paste them into chat.
+The five income streams are categories, not verified earning opportunities: paid writing, AI music/audio production, paid music voting/judging, paid surveys/market research, and AI image/video production. Automatic marketplace discovery, production APIs inside the app, and on-chain payout verification are not connected yet. Opportunity records default to `needs review`; manually entering details does not verify a platform or make it eligible.
 
+Subnano and LaborX are review-only leads. Before accepting work, verify country eligibility, identity requirements, commercial rights, payout destination, fees, minimum withdrawal, and a small successful test payout. Never treat a lead as verified income until payment is actually received.
+
+## Account authentication
+- The app uses email/password signup and sign-in through Supabase Auth.
+- Passwords are handled by Supabase and are never stored by this app.
+- Supabase access and refresh tokens are stored in HTTP-only cookies. The app refreshes expired access sessions server-side.
+- Google sign-in and Gmail mailbox integration are intentionally excluded from the current account flow.
+- Workspace records are being synchronized to Supabase per authenticated account; JSON backup/restore remains available as a fallback.
+- Never commit secrets or paste passwords, private keys, or recovery phrases into GitHub or chat.
 
 ## Explicit exclusions
 - Do not add game testing, game installation offers, Freecash, app-install rewards, or unrelated microtask platforms.
