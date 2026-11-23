@@ -205,6 +205,22 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         <span className="free-tag">منابع رایگان</span>
       </div>
       <p className="hub-intro">منابع رسمی را باز کن، سفارش واقعی را پیدا کن و لینک همان آگهی را وارد کن. موتور بر اساس پرداخت رمزارزی، کشور، سپرده، کارمزد و امانت‌داری امتیاز اولیه می‌دهد. امتیاز بالا به معنی تضمین درآمد یا تأیید قطعی نیست.</p>
+      <section className="live-discovery-block" aria-label="AI-assisted remote work">
+        <div className="panel-head discovery-form-head">
+          <div><span className="eyebrow">AI-ASSISTED REMOTE WORK</span><h3>میز کار دورکاری قابل انجام با هوش مصنوعی</h3></div>
+          <span className="free-tag">قابل آماده‌سازی و تحویل</span>
+        </div>
+        <p className="hub-intro">این‌ها خدماتی هستند که دستیار هوش مصنوعی می‌تواند بخش اصلی‌شان را انجام دهد؛ هر سفارش باید با شرح کار و استاندارد مشتری تطبیق داده شود و قبل از ارسال نهایی بازبینی انسانی شود.</p>
+        <div className="lead-grid">
+          <article className="saved-opportunity"><div><strong>نوشتن و تولید محتوای متنی</strong><p>مقاله و پست وبلاگ، محتوای آموزشی و پژوهشی، متن سئو، توضیحات محصول، صفحه فرود، متن تبلیغاتی، بازنویسی، ویرایش و خلاصه‌سازی.</p><small>قابلیت اجرا: تحقیق، پیش‌نویس، ویرایش و قالب‌بندی</small></div></article>
+          <article className="saved-opportunity"><div><strong>تحقیق اینترنتی و دستیار مجازی</strong><p>جمع‌آوری اطلاعات و منابع، مقایسه رقبا و محصولات، ساخت گزارش، مرتب‌سازی داده‌ها، تهیه جدول و مستندسازی.</p><small>قابلیت اجرا: تحقیق و تحویل گزارش مستند</small></div></article>
+          <article className="saved-opportunity"><div><strong>تصویر و طراحی تبلیغاتی با AI</strong><p>ایده‌پردازی، ساخت تصویر محصول و شبکه اجتماعی، پوستر و بنر، اصلاح تصویر و آماده‌سازی خروجی در ابزارهای متصل و مجاز.</p><small>قابلیت اجرا: بسته به ابزار، سهمیه رایگان و حقوق تجاری</small></div></article>
+          <article className="saved-opportunity"><div><strong>سناریو و ویدئوی کوتاه</strong><p>سناریو، استوری‌بورد، متن گویندگی، کپشن، زیرنویس، برنامه تدوین و تولید یا ویرایش ویدئو با ابزارهای در دسترس.</p><small>قابلیت اجرا: تولید نهایی به دسترسی ابزار و محدودیت حساب بستگی دارد</small></div></article>
+          <article className="saved-opportunity"><div><strong>صدا و محتوای صوتی</strong><p>متن گویندگی، اسکریپت پادکست، ایده موسیقی، افکت صوتی و پاک‌سازی یا آماده‌سازی صدا با ابزارهای پشتیبانی‌شده.</p><small>قابلیت اجرا: حقوق تجاری و هزینه تولید باید بررسی شود</small></div></article>
+          <article className="saved-opportunity"><div><strong>برنامه‌نویسی و کارهای فنی</strong><p>نوشتن و اصلاح کد، رفع خطا، ساخت صفحات و ابزارهای ساده، مستندسازی و اجرای آزمون‌های نرم‌افزاری.</p><small>قابلیت اجرا: نیازمند دسترسی مجاز به مخزن و محیط اجرا</small></div></article>
+        </div>
+        <p className="hub-footnote">محدودیت‌ها: ثبت‌نام و احراز هویت، مصاحبه زنده، تماس تلفنی، تصمیم حقوقی، پذیرش قرارداد، ارسال نهایی از حساب کاربر و دریافت پول به تأیید و اقدام تو نیاز دارند. ترجمه فقط برای زبانی پذیرفته می‌شود که کیفیت آن قابل بررسی باشد. هیچ ابزار پولی یا تولید دارای هزینه بدون تأیید قبلی استفاده نمی‌شود.</p>
+      </section>
       <div className="live-discovery-block">
         <div className="panel-head discovery-form-head">
           <div><span className="eyebrow">LIVE PUBLIC LISTINGS</span><h3>جست‌وجوی زنده آگهی‌های نوشتاری</h3></div>
