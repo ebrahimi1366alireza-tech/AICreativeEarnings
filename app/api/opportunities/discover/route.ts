@@ -20,7 +20,7 @@ type JobicyJob = {
   salaryPeriod?: string;
 };
 
-const SEARCH_TAGS = ["writer", "content writing", "copywriter", "SEO writer"];
+const SEARCH_TAGS = ["writer", "copywriter", "content"];
 
 function plainText(value: unknown, max = 420) {
   if (typeof value !== "string") return "";
@@ -82,19 +82,27 @@ function normalize(job: JobicyJob) {
 }
 
 export async function GET() {
-  const results = await Promise.allSettled(SEARCH_TAGS.map(async tag => {
-    const url = new URL("https://jobicy.com/api/v2/remote-jobs");
-    url.searchParams.set("count", "100");
-    url.searchParams.set("tag", tag);
-    const response = await fetch(url.toString(), {
-      headers: { Accept: "application/json" },
-      next: { revalidate: 3600 },
-      signal: AbortSignal.timeout(12000)
-    });
-    if (!response.ok) throw new Error(`Jobicy returned HTTP ${response.status}`);
-    const payload = await response.json();
-    return Array.isArray(payload?.jobs) ? payload.jobs as JobicyJob[] : [];
-  }));
+  const results: PromiseSettledResult<JobicyJob[]>[] = [];
+  for (let index = 0; index < SEARCH_TAGS.length; index++) {
+    if (index > 0) await new Promise(resolve => setTimeout(resolve, 1100));
+    const tag = SEARCH_TAGS[index];
+    try {
+      const url = new URL("https://jobicy.com/api/jobs");
+      url.searchParams.set("count", "100");
+      url.searchParams.set("tag", tag);
+      const response = await fetch(url.toString(), {
+        headers: { Accept: "application/json" },
+        next: { revalidate: 3600 },
+        signal: AbortSignal.timeout(12000)
+      });
+      if (!response.ok) throw new Error(`Jobicy returned HTTP ${response.status}`);
+      const payload = await response.json();
+      if (payload?.success === false) throw new Error(payload.error || "Jobicy API request failed");
+      results.push({ status: "fulfilled", value: Array.isArray(payload?.jobs) ? payload.jobs as JobicyJob[] : [] });
+    } catch (error) {
+      results.push({ status: "rejected", reason: error });
+    }
+  }
 
   const byUrl = new Map<string, NonNullable<ReturnType<typeof normalize>>>();
   const warnings: string[] = [];
@@ -127,6 +135,6 @@ export async function GET() {
     count: jobs.length,
     jobs,
     warnings,
-    notice: "این‌ها آگهی‌های دورکاری نوشتاری‌اند، نه الزاماً سفارش تکی مقاله. روش پرداخت، پذیرش کشور، KYC و حقوق استفاده تجاری در API تأیید نمی‌شود و باید در صفحه اصلی هر آگهی بررسی شود."
+    notice: "این‌ها آگهی‌های دورکاری نوشتاری‌اند، نه الزاماً سفارش تکی مقاله. API عمومی Jobicy فقط آگهی‌های ۷ روز اخیر را با حدود ۳ ساعت تأخیر نشان می‌دهد. روش پرداخت، پذیرش کشور، KYC و حقوق استفاده تجاری باید در صفحه اصلی هر آگهی بررسی شود."
   }, { headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=1800" } });
 }
