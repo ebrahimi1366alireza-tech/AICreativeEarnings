@@ -205,6 +205,18 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         <span className="free-tag">منابع رایگان</span>
       </div>
       <p className="hub-intro">منابع رسمی را باز کن، سفارش واقعی را پیدا کن و لینک همان آگهی را وارد کن. موتور بر اساس پرداخت رمزارزی، کشور، سپرده، کارمزد و امانت‌داری امتیاز اولیه می‌دهد. امتیاز بالا به معنی تضمین درآمد یا تأیید قطعی نیست.</p>
+      <section className="live-discovery-block" aria-label="weekly income target and work priorities">
+        <div className="panel-head discovery-form-head">
+          <div><span className="eyebrow">WEEKLY EARNING PLAN</span><h3>هدف اولیه درآمد هفتگی</h3></div>
+          <span className="free-tag">هدف برنامه‌ریزی، نه درآمد تضمینی</span>
+        </div>
+        <div className="lead-grid">
+          <article className="saved-opportunity"><div><strong>۵۰ دلار در هفته</strong><p>هدف اولیه برای اعتبارسنجی بازار و گرفتن اولین سفارش‌های پرداخت‌شده؛ معادل تقریبی ۲۰۰ تا ۲۱۷ دلار در ماه.</p></div></article>
+          <article className="saved-opportunity"><div><strong>۷۰٪ تمرکز اصلی</strong><p>مقاله‌نویسی، تولید محتوا، ویرایش و تحقیق اینترنتی؛ کارهایی که دستیار می‌تواند بخش عمده‌شان را مستقیماً آماده کند.</p></div></article>
+          <article className="saved-opportunity"><div><strong>۳۰٪ تمرکز مکمل</strong><p>تصویر، ویدئو و صدا؛ فقط وقتی ابزار قابل‌دسترسی، مجوز تجاری و هزینه تولید روشن باشد.</p></div></article>
+        </div>
+        <p className="hub-footnote">تقسیم هدف آزمایشی: ۲۰ دلار متن و مقاله، ۱۰ دلار تصویر، ۱۰ دلار تحقیق و گزارش، ۱۰ دلار ویدئو یا صدا. این اعداد سهمیه هدف‌اند، نه سفارش موجود یا درآمد ثبت‌شده. فرصت‌ها بر اساس امکان انجام توسط AI، بودجه واقعی، کشور مجاز، روش پرداخت و هزینه ورود رتبه‌بندی می‌شوند.</p>
+      </section>
       <section className="live-discovery-block" aria-label="AI-assisted remote work">
         <div className="panel-head discovery-form-head">
           <div><span className="eyebrow">AI-ASSISTED REMOTE WORK</span><h3>میز کار دورکاری قابل انجام با هوش مصنوعی</h3></div>
