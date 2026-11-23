@@ -21,17 +21,17 @@ Open the forwarded port 3000 preview.
 
 ## OpenCode
 
-OpenCode CLI is installed by the dev-container setup:
+OpenCode CLI v2 is installed by the dev-container setup:
 
 ```bash
 opencode
 ```
 
-OpenCode is an agent interface, not a free model by itself. It needs a supported model provider and valid credentials. Do not paste API keys into chat, source files, commits, or screenshots. Configure provider credentials only in the Codespace's secure environment or the provider's supported authentication flow. No paid provider or API usage is authorized by this setup.
+OpenCode is an agent interface, not a guarantee of unlimited free inference. Use its currently offered free models only when they are explicitly marked free in the model picker. Other providers may require paid credentials. Do not paste API keys into chat, source files, commits, or screenshots. No paid provider or API usage is authorized by this setup.
 
 ## Cost guardrails
 
-GitHub Free currently includes a monthly Codespaces allowance for personal accounts (120 core-hours and 15 GB-month storage). Stop the Codespace when finished. Check GitHub billing before creating more environments. Do not add a payment method or spending budget just to continue.
+GitHub Free personal accounts currently include 120 core-hours and 15 GB-month Codespaces storage. Compute is multiplied by the selected machine size. Stop the Codespace when finished and check https://github.com/settings/billing. If the free quota is exhausted without a payment method, GitHub blocks further billable Codespaces use; do not add a payment method or spending budget just to continue.
 
 ## Android builds
 
