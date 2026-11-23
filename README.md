@@ -68,3 +68,7 @@ A free tier does not automatically grant unlimited generations or commercial-use
 - Do not treat any lead as verified income until country eligibility, identity requirements, commercial rights, payout destination, and a small successful test payout have been checked.
 
 - LaborX official reference: https://laborx.com/ (crypto freelance marketplace; 10% standard freelancer fee and supported USDT networks are documented on its site).
+
+
+## Live activity monitor (new)
+The dashboard now has a live activity panel that refreshes every five seconds and reads events from a private Supabase table through server-side API routes. It requires the existing Google sign-in session to view events; this is not Gmail access. Setup instructions and the SQL schema are in `docs/activity-monitor-setup.md`. Required Vercel variables: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `ACTIVITY_INGEST_SECRET`. The service-role key and ingest secret must remain server-side and must never be placed in client code. The monitor is intentionally honest when storage is not configured and does not invent activity. Existing ChatGPT actions are not automatically streamed: a trusted automation/worker must explicitly POST each real event to `/api/activity` using the server-side ingest secret.
