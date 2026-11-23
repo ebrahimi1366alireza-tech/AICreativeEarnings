@@ -35,6 +35,12 @@ type LiveWritingJob = { id: string; title: string; company: string; url: string;
 
 const sources = [
   {
+    name: "Jobicy · API عمومی آگهی‌های دورکاری",
+    detail: "فهرست عمومی و رایگان آگهی‌های نوشتاری و دورکاری؛ نیاز به API Key ندارد. آگهی‌ها را با لینک منبع Jobicy نمایش می‌دهیم و شرایط هر موقعیت باید جداگانه بررسی شود.",
+    url: "https://jobicy.com/jobs-rss-feed",
+    tag: "جست‌وجوی زنده آگهی‌ها"
+  },
+  {
     name: "LaborX · سفارش‌های فریلنسری رمزارزی",
     detail: "آگهی‌های کاری و پروژه‌ای با پرداخت رمزارزی. پیش از قبول، قرارداد و قفل‌شدن وجه در امانت‌داری را داخل همان سفارش بررسی کن.",
     url: "https://laborx.com/vacancies/crypto",
