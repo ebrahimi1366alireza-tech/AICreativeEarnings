@@ -31,6 +31,7 @@ export type DiscoveryLead = {
 };
 
 type Props = { onAdd: (lead: DiscoveryLead) => void };
+type LiveWritingJob = { id: string; title: string; company: string; url: string; location: string; types: string[]; salary: string; description: string; postedAt: string | null; score: number; contractType: boolean; source: string };
 
 const sources = [
   {
@@ -118,7 +119,44 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
   const [deadline, setDeadline] = useState("");
   const [seoRequired, setSeoRequired] = useState("نامشخص");
   const [commercialRights, setCommercialRights] = useState("باید از کارفرما تأیید شود");
+  const [liveJobs, setLiveJobs] = useState<LiveWritingJob[]>([]);
+  const [liveLoading, setLiveLoading] = useState(false);
+  const [liveError, setLiveError] = useState("");
+  const [liveNotice, setLiveNotice] = useState("");
+  const [liveFetchedAt, setLiveFetchedAt] = useState("");
   const assessment = useMemo(() => scoreLead({ sourceUrl: proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, fee, kyc, stream }), [proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, fee, kyc, stream]);
+
+  async function discoverWritingJobs() {
+    setLiveLoading(true); setLiveError(""); setLiveNotice("");
+    try {
+      const response = await fetch("/api/opportunities/discover", { cache: "no-store" });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload?.error || "دریافت آگهی‌ها ناموفق بود.");
+      setLiveJobs(Array.isArray(payload.jobs) ? payload.jobs : []);
+      setLiveFetchedAt(payload.fetchedAt || new Date().toISOString());
+      setLiveNotice(payload.notice || "اطلاعات از منبع عمومی دریافت شد.");
+      if (payload.warnings?.length) setLiveError(payload.warnings.join(" "));
+    } catch (error) {
+      setLiveError(error instanceof Error ? error.message : "خطای نامشخص در دریافت آگهی‌ها.");
+    } finally { setLiveLoading(false); }
+  }
+
+  function addLiveJob(job: LiveWritingJob) {
+    onAdd({
+      id: crypto.randomUUID(), title: job.title, platform: job.source, pay: job.salary,
+      status: "نیازمند بررسی", stream: "نوشتن و مقاله",
+      country: `محدوده آگهی: ${job.location}. پذیرش کشور محل اقامت هنوز تأیید نشده است.`,
+      payout: "روش پرداخت باید در آگهی و قرارداد بررسی شود", network: "نامشخص",
+      minimum: "نامشخص", fee: "نامشخص", kyc: "نامشخص", proofUrl: job.url,
+      deposit: "هنوز بررسی نشده", escrow: "نامشخص", countryCheck: "هنوز بررسی نشده",
+      paymentAsset: "نامشخص", score: job.score,
+      decision: job.contractType ? "تطابق نوشتاری و نوع قرارداد، نیازمند بررسی شرایط" : "آگهی نوشتاری دورکاری، نوع استخدام باید بررسی شود",
+      writingType: "آگهی نوشتاری دورکاری", contentLanguage: "طبق آگهی اصلی",
+      wordCount: "در آگهی مشخص نشده", deadline: "طبق آگهی اصلی",
+      seoRequired: "طبق آگهی اصلی", commercialRights: "باید در قرارداد بررسی شود"
+    });
+    setLiveNotice("آگهی به فهرست فرصت‌ها اضافه شد؛ هنوز کشور، پرداخت و شرایط قرارداد تأیید نشده‌اند.");
+  }
 
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -161,6 +199,22 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         <span className="free-tag">منابع رایگان</span>
       </div>
       <p className="hub-intro">منابع رسمی را باز کن، سفارش واقعی را پیدا کن و لینک همان آگهی را وارد کن. موتور بر اساس پرداخت رمزارزی، کشور، سپرده، کارمزد و امانت‌داری امتیاز اولیه می‌دهد. امتیاز بالا به معنی تضمین درآمد یا تأیید قطعی نیست.</p>
+      <div className="live-discovery-block">
+        <div className="panel-head discovery-form-head">
+          <div><span className="eyebrow">LIVE PUBLIC LISTINGS</span><h3>جست‌وجوی زنده آگهی‌های نوشتاری</h3></div>
+          <button type="button" onClick={discoverWritingJobs} disabled={liveLoading}>{liveLoading ? "در حال جست‌وجو..." : "جست‌وجوی آگهی‌های جدید"}</button>
+        </div>
+        <p className="hub-intro">جست‌وجو از API عمومی Jobicy برای writer، content writing، copywriter و SEO writer انجام می‌شود. این‌ها عمدتاً آگهی‌های دورکاری هستند و ممکن است استخدامی باشند، نه سفارش تکی مقاله.</p>
+        {liveFetchedAt && <small>آخرین دریافت: {new Date(liveFetchedAt).toLocaleString("fa-IR")}</small>}
+        {liveError && <p role="alert" className="discovery-assessment">{liveError}</p>}
+        {liveNotice && <p className="discovery-assessment">{liveNotice}</p>}
+        {liveJobs.length > 0 && <div className="lead-grid">
+          {liveJobs.map(job => <article className="saved-opportunity" key={job.url}>
+            <div><strong>{job.title}</strong><p>{job.company} · {job.location}</p><p>{job.description || "توضیحات در صفحه اصلی آگهی"}</p><p className="opportunity-meta">حقوق اعلام‌شده: {job.salary} · نوع قرارداد: {job.types.join("، ") || "نامشخص"} · تطابق نوشتاری: {job.score}/100</p>{job.postedAt && <small>تاریخ انتشار: {new Date(job.postedAt).toLocaleDateString("fa-IR")}</small>}<p><a href={job.url} target="_blank" rel="noreferrer">مشاهده آگهی اصلی ↗</a></p></div>
+            <button type="button" onClick={() => addLiveJob(job)}>افزودن به فرصت‌ها</button>
+          </article>)}
+        </div>}
+      </div>
       <div className="lead-grid">
         {sources.map(source => (
           <article className="saved-opportunity" key={source.name}>
