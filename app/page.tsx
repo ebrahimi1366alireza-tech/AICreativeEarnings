@@ -155,14 +155,39 @@ export default function Home() {
     const file = event.target.files?.[0];
     if (!file) return;
     try {
+      if (file.size > 2 * 1024 * 1024) throw new Error("too-large");
       const parsed: unknown = JSON.parse(await file.text());
-      if (!parsed || typeof parsed !== "object") throw new Error("invalid");
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw new Error("invalid");
       const data = parsed as { app?: unknown; schemaVersion?: unknown; opportunities?: unknown; deliveries?: unknown; income?: unknown; wallet?: unknown };
       const isRecord = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === "object" && !Array.isArray(value);
-      const validOpportunities = Array.isArray(data.opportunities) && data.opportunities.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
-      const validDeliveries = Array.isArray(data.deliveries) && data.deliveries.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
-      const validIncome = Array.isArray(data.income) && data.income.every(item => isRecord(item) && typeof item.id === "string" && typeof item.source === "string" && typeof item.amount === "number" && Number.isFinite(item.amount) && typeof item.received === "boolean");
-      const validWallet = data.wallet === undefined || (isRecord(data.wallet) && typeof data.wallet.address === "string" && /^0x[a-fA-F0-9]{40}$/.test(data.wallet.address) && typeof data.wallet.network === "string");
+      const isOptionalString = (value: unknown) => value === undefined || typeof value === "string";
+      const validOpportunities = Array.isArray(data.opportunities) && data.opportunities.length <= 1000 && data.opportunities.every(item =>
+        isRecord(item) &&
+        typeof item.id === "string" && typeof item.title === "string" &&
+        typeof item.platform === "string" && typeof item.pay === "string" &&
+        typeof item.status === "string" &&
+        ["stream", "country", "payout", "network", "minimum", "fee", "kyc", "proofUrl"].every(key => isOptionalString(item[key]))
+      );
+      const validDeliveries = Array.isArray(data.deliveries) && data.deliveries.length <= 1000 && data.deliveries.every(item =>
+        isRecord(item) &&
+        typeof item.id === "string" && typeof item.title === "string" &&
+        typeof item.client === "string" && typeof item.due === "string" &&
+        typeof item.status === "string"
+      );
+      const validIncome = Array.isArray(data.income) && data.income.length <= 1000 && data.income.every(item =>
+        isRecord(item) &&
+        typeof item.id === "string" && typeof item.source === "string" &&
+        typeof item.amount === "number" && Number.isFinite(item.amount) && item.amount > 0 &&
+        ["USDT", "USDC", "XNO"].includes(String(item.currency)) &&
+        typeof item.received === "boolean" && typeof item.date === "string"
+      );
+      const validWallet = data.wallet === undefined || (
+        isRecord(data.wallet) &&
+        typeof data.wallet.address === "string" &&
+        /^0x[a-fA-F0-9]{40}$/.test(data.wallet.address) &&
+        typeof data.wallet.network === "string" &&
+        data.wallet.network.length <= 80
+      );
       if (data.app !== "AI Creative Earnings" || data.schemaVersion !== 1 || !validOpportunities || !validDeliveries || !validIncome || !validWallet) throw new Error("invalid");
       if (!window.confirm("اطلاعات فعلی جایگزین اطلاعات داخل فایل پشتیبان شود؟ قبل از ادامه، از داده‌های فعلی خروجی بگیر.")) {
         event.target.value = "";
@@ -178,8 +203,10 @@ export default function Home() {
         localStorage.setItem("creativeops-wallet-v1", JSON.stringify(restoredWallet));
       }
       setBackupNotice("اطلاعات فایل پشتیبان با موفقیت در این دستگاه بازیابی شد.");
-    } catch {
-      setBackupNotice("فایل معتبر نیست یا با نسخه پشتیبان این برنامه سازگار نیست.");
+    } catch (error) {
+      setBackupNotice(error instanceof Error && error.message === "too-large"
+        ? "حجم فایل پشتیبان بیش از ۲ مگابایت است؛ فایل کوچک‌تر انتخاب کن."
+        : "فایل معتبر نیست یا با نسخه پشتیبان این برنامه سازگار نیست.");
     } finally {
       event.target.value = "";
     }
