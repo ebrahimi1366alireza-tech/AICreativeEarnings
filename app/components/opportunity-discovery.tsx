@@ -41,6 +41,24 @@ const sources = [
     tag: "جست‌وجوی زنده آگهی‌ها"
   },
   {
+    name: "LaborX · سفارش‌های پروژه‌ای نوشتن",
+    detail: "فهرست پروژه‌های فریلنسری نوشتن و ترجمه با بودجه‌های مشخص. قبل از پیشنهاد، تازه‌بودن آگهی، شرایط کشور، نوع پرداخت و وجود وجه در امانت را بررسی کن.",
+    url: "https://laborx.com/jobs/writing",
+    tag: "پروژه‌های نوشتن"
+  },
+  {
+    name: "LaborX · سفارش‌های تولید محتوا",
+    detail: "آگهی‌های پروژه‌ای تولید محتوا و مقاله. بعضی آگهی‌ها قدیمی یا نامرتبط‌اند؛ تاریخ انتشار و شرح کامل سفارش را بازبینی کن.",
+    url: "https://laborx.com/jobs/content-writing",
+    tag: "مقاله و محتوای وب"
+  },
+  {
+    name: "LaborX · گیگ‌های تحقیق و نگارش",
+    detail: "بازار خدمات آماده در تحقیق، نگارش، بازنویسی و مقاله. این صفحه خدمات فروشندگان را نشان می‌دهد، نه لزوماً سفارش خریداری‌شده.",
+    url: "https://laborx.com/gigs/research-writing",
+    tag: "تحقیق و نگارش"
+  },
+  {
     name: "LaborX · سفارش‌های فریلنسری رمزارزی",
     detail: "آگهی‌های کاری و پروژه‌ای با پرداخت رمزارزی. پیش از قبول، قرارداد و قفل‌شدن وجه در امانت‌داری را داخل همان سفارش بررسی کن.",
     url: "https://laborx.com/vacancies/crypto",
@@ -130,6 +148,12 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
   const [liveError, setLiveError] = useState("");
   const [liveNotice, setLiveNotice] = useState("");
   const [liveFetchedAt, setLiveFetchedAt] = useState("");
+  const [proposalTitle, setProposalTitle] = useState("");
+  const [proposalBrief, setProposalBrief] = useState("");
+  const [proposalBudget, setProposalBudget] = useState("");
+  const [proposalDeadline, setProposalDeadline] = useState("");
+  const [proposalText, setProposalText] = useState("");
+
   const assessment = useMemo(() => scoreLead({ sourceUrl: proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, fee, kyc, stream }), [proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, fee, kyc, stream]);
 
   async function discoverWritingJobs() {
@@ -145,6 +169,23 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
     } catch (error) {
       setLiveError(error instanceof Error ? error.message : "خطای نامشخص در دریافت آگهی‌ها.");
     } finally { setLiveLoading(false); }
+  }
+
+  function buildProposal() {
+    const titleText = proposalTitle.trim() || "your content project";
+    const briefText = proposalBrief.trim();
+    const budgetText = proposalBudget.trim();
+    const deadlineText = proposalDeadline.trim();
+    const briefLine = briefText
+      ? `Based on your brief, I would first confirm the target audience, search intent, tone, and required sources, then prepare a clear outline before drafting.\n\nProject brief: ${briefText}\n\n`
+      : "I would be happy to review the full brief and confirm the scope, audience, tone, and deliverables before starting.\n\n";
+    const terms = [
+      budgetText ? `Proposed budget: ${budgetText}` : "",
+      deadlineText ? `Target deadline: ${deadlineText}` : ""
+    ].filter(Boolean).join(" | ");
+    setProposalText(
+      `Hello,\n\nI’m interested in helping with ${titleText}. My workflow combines structured research, an organized outline, AI-assisted drafting where appropriate, and careful human review for clarity, consistency, and originality. I can prepare the agreed deliverable and make revisions based on your feedback.\n\n${briefLine}Before I begin, I’d confirm the final word count, source requirements, formatting, revision rounds, and usage rights so the scope is clear for both sides.\n\n${terms ? terms + "\n\n" : ""}If the scope matches your needs, I can review the complete instructions and confirm a realistic delivery plan.\n\nBest regards`
+    );
   }
 
   function addLiveJob(job: LiveWritingJob) {
@@ -249,6 +290,24 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
           </article>)}
         </div>}
       </div>
+      <section className="live-discovery-block" aria-label="proposal drafting assistant">
+        <div className="panel-head discovery-form-head">
+          <div><span className="eyebrow">PROPOSAL WORKBENCH</span><h3>آماده‌سازی پیشنهاد برای کارفرما</h3></div>
+          <span className="free-tag">پیش‌نویس، بدون ارسال خودکار</span>
+        </div>
+        <p className="hub-intro">شرح سفارش را وارد کن تا یک پیشنهاد اولیه انگلیسی آماده شود. متن را قبل از ارسال بررسی کن و هیچ سابقه، نمونه‌کار یا مهارتی را که واقعاً نداری ادعا نکن.</p>
+        <div className="opportunity-form">
+          <input value={proposalTitle} onChange={e => setProposalTitle(e.target.value)} placeholder="عنوان دقیق پروژه" aria-label="عنوان پروژه برای پیشنهاد"/>
+          <input value={proposalBudget} onChange={e => setProposalBudget(e.target.value)} placeholder="بودجه پیشنهادی (اختیاری)" aria-label="بودجه پیشنهادی"/>
+          <input value={proposalDeadline} onChange={e => setProposalDeadline(e.target.value)} placeholder="زمان تحویل پیشنهادی (اختیاری)" aria-label="زمان تحویل"/>
+          <textarea value={proposalBrief} onChange={e => setProposalBrief(e.target.value)} rows={4} placeholder="شرح سفارش، تعداد کلمات، موضوع، مخاطب و شرایط کارفرما..." aria-label="شرح سفارش برای پیشنهاد"/>
+          <button type="button" onClick={buildProposal} disabled={!proposalTitle.trim() && !proposalBrief.trim()}>ساخت پیش‌نویس پیشنهاد</button>
+        </div>
+        {proposalText && <div className="writing-order-fields">
+          <textarea value={proposalText} onChange={e => setProposalText(e.target.value)} rows={14} aria-label="متن پیشنهاد آماده‌شده"/>
+          <button type="button" onClick={() => navigator.clipboard?.writeText(proposalText)}>کپی متن پیشنهاد</button>
+        </div>}
+      </section>
       <div className="lead-grid">
         {sources.map(source => (
           <article className="saved-opportunity" key={source.name}>
