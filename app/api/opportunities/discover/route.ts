@@ -73,7 +73,7 @@ function normalizeJobicy(job: JobicyJob): DiscoveredItem | null {
     ? [job.salaryMin, job.salaryMax].filter(value => Number.isFinite(value)).join("–") + ` ${plainText(job.salaryCurrency || "", 12)}${job.salaryPeriod ? ` / ${plainText(job.salaryPeriod, 24)}` : ""}`
     : "در آگهی مشخص نشده";
   const postedAt = job.pubDate && !Number.isNaN(Date.parse(job.pubDate)) ? new Date(job.pubDate).toISOString() : null;
-  const score = (WRITING_TERMS.some(term => title.toLowerCase().includes(term)) ? 45 : 25)
+  const score = (inferStream(title) ? 45 : 25)
     + (contractType ? 25 : 0) + (salaryKnown ? 10 : 0) + (description ? 10 : 0);
   return {
     id: String(job.id ?? url), title,
