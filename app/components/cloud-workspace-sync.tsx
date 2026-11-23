@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+type AuthStatus = { connected: boolean; profile: { email: string; name?: string } | null };
 type Workspace = {
   opportunities: unknown[];
   deliveries: unknown[];
@@ -9,6 +10,7 @@ type Workspace = {
   wallet: { address: string; network: string };
 };
 
+const OWNER_KEY = "creativeops-cloud-owner-v1";
 const KEYS = {
   opportunities: "creativeops-opportunities-v1",
   deliveries: "creativeops-deliveries-v1",
@@ -46,13 +48,23 @@ export default function CloudWorkspaceSync() {
 
     async function pushLocal() {
       const authResponse = await fetch("/api/auth/status", { cache: "no-store" });
-      const auth = await authResponse.json();
-      if (!auth.connected) { setStatus("برای ذخیره ابری و همگام‌سازی بین دستگاه‌ها وارد حساب کاربری شو."); return; }
+      const auth = await authResponse.json() as AuthStatus;
+      if (!auth.connected || !auth.profile?.email) {
+        setStatus("برای ذخیره ابری و همگام‌سازی بین دستگاه‌ها وارد حساب کاربری شو.");
+        return;
+      }
+      const email = auth.profile.email.toLowerCase();
+      const owner = localStorage.getItem(OWNER_KEY);
+      if (owner && owner !== email) {
+        setStatus("این مرورگر قبلاً برای حساب دیگری استفاده شده است. برای جلوگیری از انتقال یا بازنویسی اطلاعات بین حساب‌ها، همگام‌سازی خودکار متوقف شد؛ ابتدا از اطلاعات محلی فایل پشتیبان بگیر.");
+        return;
+      }
       const response = await fetch("/api/workspace/sync", {
         method: "PUT", headers: { "Content-Type": "application/json" },
         body: JSON.stringify(readLocal())
       });
       if (!response.ok) throw new Error("ذخیره ابری انجام نشد.");
+      localStorage.setItem(OWNER_KEY, email);
     }
 
     async function syncNow() {
@@ -60,9 +72,15 @@ export default function CloudWorkspaceSync() {
       setBusy(true);
       try {
         const authResponse = await fetch("/api/auth/status", { cache: "no-store" });
-        const auth = await authResponse.json();
-        if (!auth.connected) {
+        const auth = await authResponse.json() as AuthStatus;
+        if (!auth.connected || !auth.profile?.email) {
           setStatus("برای همگام‌سازی بین دستگاه‌ها وارد حساب کاربری شو.");
+          return;
+        }
+        const email = auth.profile.email.toLowerCase();
+        const owner = localStorage.getItem(OWNER_KEY);
+        if (owner && owner !== email) {
+          setStatus("این مرورگر قبلاً برای حساب دیگری استفاده شده است. برای جلوگیری از انتقال یا بازنویسی اطلاعات، همگام‌سازی متوقف شد؛ ابتدا از اطلاعات حساب قبلی پشتیبان بگیر و فضای محلی را جداگانه مدیریت کن.");
           return;
         }
         const response = await fetch("/api/workspace/sync", { cache: "no-store" });
@@ -78,10 +96,12 @@ export default function CloudWorkspaceSync() {
           if (localStorage.getItem("creativeops-cloud-version-v1") !== marker) {
             writeLocal(data!);
             localStorage.setItem("creativeops-cloud-version-v1", marker);
+            localStorage.setItem(OWNER_KEY, email);
             setStatus("اطلاعات حساب از فضای ابری بازیابی شد.");
             window.location.reload();
             return;
           }
+          localStorage.setItem(OWNER_KEY, email);
           setStatus("اطلاعات این حساب با فضای ابری همگام است.");
         } else {
           await pushLocal();
@@ -96,7 +116,11 @@ export default function CloudWorkspaceSync() {
 
     function scheduleSync() {
       if (timer) clearTimeout(timer);
-      timer = setTimeout(() => { void pushLocal().then(() => setStatus("تغییرات در فضای ابری ذخیره شد.")).catch(() => setStatus("ذخیره ابری ناموفق بود؛ فایل پشتیبان محلی را نگه دار.")); }, 900);
+      timer = setTimeout(() => {
+        void pushLocal()
+          .then(() => setStatus("تغییرات در فضای ابری ذخیره شد."))
+          .catch(() => setStatus("ذخیره ابری ناموفق بود؛ فایل پشتیبان محلی را نگه دار."));
+      }, 900);
     }
 
     const handleAuthChanged = () => { void syncNow(); };
