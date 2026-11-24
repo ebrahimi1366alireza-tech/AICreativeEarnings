@@ -94,8 +94,8 @@ function scoreLead(input: {
   if (input.countryCheck === "مجاز بودن کشور تأیید شده") score += 15;
   else if (input.countryCheck === "کشور مسدود است") hardReject.push("کشور محل اقامت پذیرفته نمی‌شود");
   else score -= 8;
-  if (input.deposit === "بدون سپرده و خرید اجباری") score += 20;
-  else if (input.deposit === "سپرده یا خرید اجباری دارد") hardReject.push("سپرده یا خرید اجباری ممنوع است");
+  if (input.deposit === "بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری") score += 20;
+  else if (["سپرده یا خرید اجباری دارد", "هزینه ثبت‌نام یا اشتراک اجباری دارد"].includes(input.deposit)) hardReject.push("هزینه ورود، اشتراک اجباری، سپرده یا خرید اجباری با شرط پروژه سازگار نیست");
   else score -= 10;
   if (input.escrow === "وجه در امانت قفل شده") score += 15;
   if (input.fee === "۰ تا ۱۰٪") score += 10;
@@ -108,10 +108,10 @@ function scoreLead(input: {
   const complianceVerified = input.kyc === "بدون KYC"
     && input.countryCheck === "مجاز بودن کشور تأیید شده"
     && input.payout === "کیف پول مستقیم"
-    && input.deposit === "بدون سپرده و خرید اجباری"
+    && input.deposit === "بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری"
     && input.paymentAsset !== "نامشخص"
     && input.fee !== "نامشخص";
-  if (!complianceVerified) return { score: Math.min(score, 44), decision: "نیازمند بررسی", reason: "تا وقتی KYC، کشور مجاز، پرداخت مستقیم رمزارزی، کارمزد و نبود سپرده مستند نشوند، این فرصت واجد شرایط نیست." };
+  if (!complianceVerified) return { score: Math.min(score, 44), decision: "نیازمند بررسی", reason: "تا وقتی KYC، کشور مجاز، پرداخت مستقیم رمزارزی، کارمزد و نبود هزینه ثبت‌نام/اشتراک/سپرده مستند نشوند، این فرصت واجد شرایط نیست." };
   if (score >= 70) return { score, decision: "واجد شرایط اولیه", reason: "شرایط پایه ثبت شده؛ قرارداد، حداقل برداشت و پرداخت نهایی را پیش از شروع دوباره بررسی کن." };
   if (score >= 45) return { score, decision: "نیازمند بررسی", reason: "شواهد تکمیلی پرداخت یا شرایط قرارداد کافی نیست." };
   return { score, decision: "اولویت پایین", reason: "شواهد پرداخت، کشور یا هزینه‌ها کافی نیست." };
@@ -325,7 +325,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         <select value={payout} onChange={e => setPayout(e.target.value)} aria-label="روش پرداخت"><option>نامشخص</option><option>کیف پول مستقیم</option><option>رمزارز از طریق قرارداد</option><option>فیات یا کارت هدیه</option></select>
         <select value={paymentAsset} onChange={e => setPaymentAsset(e.target.value)} aria-label="ارز پرداخت"><option>نامشخص</option><option>USDT</option><option>USDC</option><option>XNO</option><option>سایر رمزارزها</option></select>
         <input value={network} onChange={e => setNetwork(e.target.value)} placeholder="شبکه دقیق پرداخت" aria-label="شبکه"/>
-        <select value={deposit} onChange={e => setDeposit(e.target.value)} aria-label="سپرده و هزینه ورود"><option>هنوز بررسی نشده</option><option>بدون سپرده و خرید اجباری</option><option>سپرده یا خرید اجباری دارد</option></select>
+        <select value={deposit} onChange={e => setDeposit(e.target.value)} aria-label="هزینه ورود، اشتراک و سپرده"><option>هنوز بررسی نشده</option><option>بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری</option><option>هزینه ثبت‌نام یا اشتراک اجباری دارد</option><option>سپرده یا خرید اجباری دارد</option></select>
         <select value={escrow} onChange={e => setEscrow(e.target.value)} aria-label="وضعیت امانت‌داری"><option>نامشخص</option><option>وجه در امانت قفل شده</option><option>بدون امانت‌داری</option></select>
         <select value={fee} onChange={e => setFee(e.target.value)} aria-label="کارمزد"><option>نامشخص</option><option>۰ تا ۱۰٪</option><option>بیشتر از ۱۰٪</option></select>
         <input value={minimum} onChange={e => setMinimum(e.target.value)} placeholder="حداقل برداشت" aria-label="حداقل برداشت"/>
@@ -351,7 +351,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
       <div className="discovery-assessment" role="status">
         <strong>امتیاز فعلی: {assessment.score}/100 · {assessment.decision}</strong>
         <p>{assessment.reason}</p>
-        <small>رد خودکار در صورت پرداخت غیررمزارزی، کشور مسدود یا سپرده/خرید اجباری. هنوز اتصال خودکار به API بازارها فعال نیست؛ این نسخه منابع رسمی و ارزیابی اولیه را یک‌جا می‌کند.</small>
+        <small>رد خودکار در صورت KYC اجباری، پرداخت غیررمزارزی، کشور مسدود یا هر هزینه ورود/اشتراک/سپرده اجباری. کشف زنده فقط از منابع عمومی انجام می‌شود؛ شرایط هر سفارش باید دستی و با سند رسمی تأیید شود.</small>
       </div>
     </section>
   );
