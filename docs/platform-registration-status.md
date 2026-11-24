@@ -88,3 +88,16 @@ Research-only status: none of these accounts has been registered or claimed. No 
 - [x] Scribble بررسی شد؛ در صفحه bountyها 0 live و 129 total دیده شد؛ فعلاً فقط watchlist. payout/KYC/country support نامشخص.
 - [x] GIMI بررسی شد؛ signup و submission اولیه رایگان، حداقل برداشت $10، fee برداشت 5%، payout با bank/PayPal/USDC، و احتمال درخواست tax ID یا ID از payment partner. AI content ممکن است مگر campaign brief منع کند؛ برند مالک محتوای approved می‌شود. قبل از ارسال هر محتوا، campaign و حقوق آن بررسی شود.
 - [x] معیار کاربر: احراز انسان بودن، selfie، face match و liveness/video قابل قبول است؛ ID/passport، proof of address، tax ID و country restrictions جداگانه بررسی شود.
+
+
+## پنج منبع جدید بررسی‌شده — 2026-11-24
+
+| منبع | Research saved | Account created | Applied/submitted | Escrow / prize funding verified | Payout tested | Next action |
+|---|---:|---:|---:|---|---:|---|
+| Superteam KriptoK Creator Challenge | Yes | No | No | Prize pool shown as 200 USDC; individual payout not tested | No | Recheck live deadline, full rules and eligibility before making content. |
+| Kyzzen | Yes | No | No | Per-bounty prize listing only; funding/payout not independently tested | No | Open only currently live bounties and verify each sponsor, deadline, country and payout. |
+| Dealwork.ai | Yes | No | No | Escrow is platform-claimed; funding for a specific task not verified | No | Inspect image/video/research jobs; do not start until the exact task escrow is funded and worker payout route is confirmed. |
+| Bountycaster | Yes | No | No | Not verified; live listing content did not render in research snapshot | No | Watchlist; revisit beginner-friendly and funded bounty filters. |
+| AI Film Contests | Yes | No | No | Contest-specific; no general escrow | No | Only free-entry contests with confirmed country eligibility, prize payment and rights terms. |
+
+No account was created, no content was submitted, no wallet was connected, and no legal terms, payment, or transaction was authorized during this research pass.
