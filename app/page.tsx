@@ -137,6 +137,10 @@ export default function Home() {
   }
 
   const [backupNotice, setBackupNotice] = useState("");
+  const [hasPreImportBackup, setHasPreImportBackup] = useState(false);
+  useEffect(() => {
+    setHasPreImportBackup(Boolean(localStorage.getItem("creativeops-pre-import-backup-v1")));
+  }, []);
 
   function exportBackup() {
     const backup = {
@@ -160,6 +164,20 @@ export default function Home() {
     setBackupNotice("فایل پشتیبان ساخته شد. آن را در جای امن نگه دار.");
   }
 
+  function downloadPreImportBackup() {
+    const raw = localStorage.getItem("creativeops-pre-import-backup-v1");
+    if (!raw) return;
+    const blob = new Blob([raw], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `ai-creative-earnings-before-import-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
   async function importBackup(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -177,6 +195,18 @@ export default function Home() {
         event.target.value = "";
         return;
       }
+      const currentBackup = {
+        app: "AI Creative Earnings",
+        schemaVersion: 1,
+        exportedAt: new Date().toISOString(),
+        backupReason: "automatic-before-import",
+        opportunities,
+        deliveries,
+        income,
+        wallet: { address: walletAddress, network: walletNetwork }
+      };
+      localStorage.setItem("creativeops-pre-import-backup-v1", JSON.stringify(currentBackup, null, 2));
+      setHasPreImportBackup(true);
       setOpportunities(data.opportunities as Opportunity[]);
       setDeliveries(data.deliveries as Delivery[]);
       setIncome(data.income as Income[]);
@@ -348,6 +378,7 @@ export default function Home() {
           <p className="hub-intro">از فرصت‌ها، سفارش‌های تولید و درآمدهای ثبت‌شده یک فایل پشتیبان JSON بساز. برای انتقال اطلاعات به گوشی یا مرورگر دیگر، فایل را همان‌جا بازیابی کن. این قابلیت جایگزین فضای ابری نیست و اطلاعات را خودکار همگام‌سازی نمی‌کند.</p>
           <div className="backup-actions">
             <button type="button" onClick={exportBackup}>دانلود فایل پشتیبان</button>
+            {hasPreImportBackup && <button type="button" onClick={downloadPreImportBackup}>دانلود نسخه خودکار قبل از بازیابی</button>}
             <label className="backup-import">بازیابی از فایل پشتیبان
               <input type="file" accept="application/json,.json" onChange={importBackup}/>
             </label>
