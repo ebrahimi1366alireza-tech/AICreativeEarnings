@@ -66,3 +66,18 @@ This is the operational checklist paired with [earning-platforms.md](./earning-p
 - MusedIn: jobs reportedly not escrowed; defer.
 - Artisan: requires Orbio inference and CREDIT spend; not zero-cost; defer.
 
+
+
+## Seven user-supplied platforms reviewed — 2026-11-24
+
+| Platform | Research saved | Account created | Applied | Escrow / payment check | Payout tested | Next action |
+|---|---:|---:|---:|---|---:|---|
+| Microworker.app | Yes | No | No | Public payout transactions exist; $5 min, 3-day hold | No | Excluded for Iran-based use by official Terms. |
+| Anoworks | Yes | No | No | TRX payouts with public transaction links; 5 TRX minimum; terms state 10% fee | No | Inspect live worker tasks and country/payout verification before signup. |
+| CryptoTask | Yes | No | No | Escrow advertised; verify funding on each project | No | Manual/AI only with explicit written permission; no automated means without permission. |
+| LaborX | Yes | No | No | Not re-tested; previous review found verification/payout limitations | No | Low priority; only revisit for a specific eligible gig. |
+| HireForHumans | Yes | No | No | Platform says every job is funded in Polygon smart-contract escrow; dispute requires bond | No | Inspect live job board, verify contract/funding, avoid bonds. |
+| Stacker News | Yes | No | No | Community zaps/rewards, not job escrow | No | Optional low-stakes sats experiment; no paid boosts/territory. |
+| Microlancer.io | Yes | No | No | Standard escrow available; non-escrow P2P also offered | No | Only accepted escrow-backed offers; visible task values are mostly tiny. |
+
+Research-only status: none of these accounts has been registered or claimed. No wallet was connected and no user authorization, legal acceptance, application or payment was made.
