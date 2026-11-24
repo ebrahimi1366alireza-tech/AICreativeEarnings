@@ -11,6 +11,7 @@ type Workspace = {
 };
 
 const OWNER_KEY = "creativeops-cloud-owner-v1";
+const RESTORE_BACKUP_KEY = "creativeops-cloud-restore-backup-v1";
 const KEYS = {
   opportunities: "creativeops-opportunities-v1",
   deliveries: "creativeops-deliveries-v1",
@@ -41,10 +42,26 @@ function writeLocal(data: Workspace) {
 export default function CloudWorkspaceSync() {
   const [status, setStatus] = useState("همگام‌سازی ابری پس از ورود فعال می‌شود.");
   const [busy, setBusy] = useState(false);
+  const [hasRestoreBackup, setHasRestoreBackup] = useState(false);
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined;
     let stopped = false;
+    setHasRestoreBackup(Boolean(localStorage.getItem(RESTORE_BACKUP_KEY)));
+
+    function preserveLocalBeforeRestore(email: string) {
+      const local = readLocal();
+      const hasLocal = local.opportunities.length > 0 || local.deliveries.length > 0 || local.income.length > 0 || Boolean(local.wallet.address);
+      if (!hasLocal) return;
+      localStorage.setItem(RESTORE_BACKUP_KEY, JSON.stringify({
+        app: "AI Creative Earnings",
+        schemaVersion: 1,
+        exportedAt: new Date().toISOString(),
+        account: email,
+        ...local
+      }));
+      setHasRestoreBackup(true);
+    }
 
     async function pushLocal(): Promise<boolean> {
       const authResponse = await fetch("/api/auth/status", { cache: "no-store" });
@@ -95,6 +112,7 @@ export default function CloudWorkspaceSync() {
         if (hasRemote) {
           const marker = remote.updatedAt || "remote";
           if (localStorage.getItem("creativeops-cloud-version-v1") !== marker) {
+            preserveLocalBeforeRestore(email);
             writeLocal(data!);
             localStorage.setItem("creativeops-cloud-version-v1", marker);
             localStorage.setItem(OWNER_KEY, email);
@@ -141,12 +159,29 @@ export default function CloudWorkspaceSync() {
     };
   }, []);
 
+  function downloadRestoreBackup() {
+    const raw = localStorage.getItem(RESTORE_BACKUP_KEY);
+    if (!raw) return;
+    const blob = new Blob([raw], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `ai-creative-earnings-before-cloud-restore-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
   return (
     <div className="cloud-sync-note" role="status" aria-live="polite">
       <span>{status}</span>
-      <button type="button" onClick={() => window.dispatchEvent(new Event("creativeops-cloud-sync-requested"))} disabled={busy}>
-        {busy ? "در حال بررسی..." : "همگام‌سازی اکنون"}
-      </button>
+      <div className="cloud-sync-actions">
+        {hasRestoreBackup && <button type="button" onClick={downloadRestoreBackup}>دانلود پشتیبان اطلاعات قبلی این دستگاه</button>}
+        <button type="button" onClick={() => window.dispatchEvent(new Event("creativeops-cloud-sync-requested"))} disabled={busy}>
+          {busy ? "در حال بررسی..." : "همگام‌سازی اکنون"}
+        </button>
+      </div>
     </div>
   );
 }
