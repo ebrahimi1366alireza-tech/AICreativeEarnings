@@ -50,3 +50,38 @@ Purpose: keep a durable shortlist of marketplaces and payout routes for paid AI-
 
 ## Research provenance
 This document consolidates findings from prior research in this ChatGPT project through 2026-11-24. Some figures and task counts are snapshots. Revisit official pages and terms before acting. A platform's claim that it does not collect ID at signup does not prove that withdrawals are KYC-free or that the service accepts every country.
+
+
+## New research pass — 2026-11-24
+
+### Newly discovered candidates
+
+| Candidate | Link | Current evidence | Requirements / costs | Decision |
+|---|---|---|---|---|
+| OpenJobs | https://openjobs.bot/ ; jobs: https://openjobs.bot/jobs ; skill: https://openjobs.bot/skill.md | Official site snapshot: 11 open jobs, 188 agent profiles; jobs page showed 11 open software-maintenance issues, each rewarding 50 WAGE. Homepage reported 155 completed jobs and 14,986 total volume, but these are platform counters, not independently audited payout totals. | Solana keypair, one signed onboarding request, owner email magic-link confirmation. Official skill says paid jobs may pay WAGE or USDC and rewards are escrowed at posting. No signup fee listed. All currently visible jobs were coding/maintenance tasks and denominated in WAGE, not USDC. | Conditional / low priority for this project. Could fit coding-agent work, but not image/video production; token liquidity/value and withdrawal requirements need verification. Never generate or expose a wallet private key without a separate secure, user-approved setup. |
+| First Dollar | https://app.firstdollar.money/bounties ; terms: https://app.firstdollar.money/terms | Public campaign directory shows many completed campaigns, including UGC video, creator content, design and development; USDC on Base is a common payout rail. | Applying creates an embedded wallet via Privy. Terms explicitly allow identity verification (legal name, DOB, address, government ID) where required by law/payment partners; sanctions screening applies. Sponsors' terms govern unless platform administers payout. | Conditional. Relevant creative campaign marketplace, but payout KYC and country eligibility are not guaranteed. Do not spend time creating content until a currently live campaign, its funded budget, eligibility and payout checks are confirmed. |
+| Higgsfield Talent Contest | https://higgsfield.ai/contests/talent-contest?tab=rules | Official rules effective Nov 12, 2026: $1,000,000 cash pool across 20 awards; free entry; deadline Nov 26, 2026 at 19:00 UTC. | 3–7 minute original film. All AI video/image generation must happen inside Higgsfield contest project; external AI assets require a qualifying Higgsfield edit. Submitted projects become public, including prompts and generation history. Winners undergo identity, residence, sanctions and tax verification; payment in USD by bank transfer or another supported method. Sanctioned persons and residents of embargoed territories cannot participate/receive prizes. | Conditional creative contest, not steady paid work. Potentially relevant, but do not invest effort until the user's legal eligibility and supported payout method are confirmed. No paid subscription required. |
+| ContentRewards creator campaign (make.fun) | https://contentrewards.com/c/campaigns/6441e520-ad18-4f7f-83bf-01139f38c63a | Campaign page showed $2 per 1,000 verified views on TikTok, Instagram, YouTube and X; $1 minimum and $100 maximum payout per platform; $504 of $2,000 budget used and 16 creators listed at scrape time. | Requires original 20–45 second promotional clip and public posting; brief asks for human voice or face, captions, clear make.fun logo and CTA. Detailed creator requirements and payout/KYC terms are hidden until joining. | Experimental only. Requires user's own public social account and active posting; payment rail, KYC and country eligibility are not yet known. Do not promise earnings. |
+| Video Marketplace | https://dev.vidodata.com/ | Free-to-join creator portal for short video recording tasks; accepted submissions are said to pay to a wallet. | Work requires the user to record real video on their phone/laptop; no task rates, payout token/network, KYC or country coverage were publicly disclosed. | Not suitable for assistant-only production. Keep only as a human-recording side option if user wants to do the physical recording. |
+
+### New platform/task checks and exclusions
+
+- **make.fun (https://make.fun/):** official payout ledger snapshot on 2026-11-24 reported $21,491.20 USDC total paid, 1,476 accounts paid, median payout $3, and $15,601.97 USDC in escrow across 184 bounties that day. This is meaningful payment evidence, but make.fun itself states a bounty is a contest, not wages, and most entrants win nothing. Its current creative/video bounty “Bring the humans” showed a $500 funded USDC escrow split across 20 winners ($14–$100 each), but required a public TikTok account, Node.js 22.18+, a public GitHub repo with a Node program, AI-agent transcripts and view-based ranking; 1,585 agents were listed. It is not a simple paid video commission and is highly competitive. Continue checking for low-entry image/video tasks with low entrant counts and funded escrow.
+- **BountyBook (https://api.bountybook.ai):** do not prioritize. Independent recent checks reported the public domain parked/down, many open jobs unfunded, and failed payout attempts; one older payout record is not enough to make it safe.
+- **AgentBounties / Agentizable:** do not prioritize until claimable work is actually available. Recent check showed 0 claimable tasks despite funded-looking issues; prior snapshots also showed claim fees/bonds or verification blockers.
+- **Claw Earn:** exclude from zero-capital path. Its published flow requires worker stake/collateral and the human-flow minimum task is 9 USDC; recent snapshots showed no open tasks.
+- **dealwork.ai:** do not prioritize until a task's escrow is verifiably funded. Independent audit snapshots found many open jobs but zero funded.
+- **MusedIn:** not prioritized because available audit reports describe jobs as not escrowed and payout dependent on poster after completion.
+- **AgentPact:** do not confuse the older Base-USDC gig marketplace with the newer agentpact.io product. Recent payout checks did not find reliable current settlement evidence for the older marketplace.
+- **Artisan (https://artisan.ac/):** paid jobs are funded in USDG on Robinhood Chain and 95% goes to the agent, but agents must run on Orbio and pay inference costs in Orbio CREDIT. Not a zero-cost starting route; do not prioritize unless a genuinely free inference allowance is verified.
+
+### Practical next ranking
+1. Taskmarket — inspect current no-stake, funded USDC jobs first.
+2. MoltJobs — only if the specific task has a funded escrow; current public board snapshot showed 7 independent customer-posted jobs, but inspected $80 and $5 research jobs had no deposit recorded and required a verified Google account.
+3. Getly — digital-product sales route, after payout eligibility review.
+4. make.fun — selective free-entry creative/image contests only; assess entrant count, funded escrow and prize odds per bounty.
+5. First Dollar — only after confirming live campaigns and whether payout verification is possible.
+6. Higgsfield — free contest opportunity only if sanctions/KYC/payment eligibility is confirmed.
+7. OpenJobs — low priority because currently visible tasks are software issues paid in WAGE, not creative jobs.
+8. ContentRewards — experimental; social posting and payout conditions still need confirmation.
+
