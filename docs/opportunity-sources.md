@@ -72,3 +72,14 @@ For each discovered opportunity, record:
 5. Contests and speculative reward programs last; never count prize pools as expected earnings.
 
 Do not auto-apply, submit personal information, accept legal terms, connect wallets, or sign transactions without the user's explicit approval.
+
+## Additional platforms to verify
+
+These were added as candidate platforms from the earlier discussion. They are not yet confirmed as accessible or payout-eligible for the user's location or nationality.
+
+| Platform | URL | Focus | Verification status |
+|---|---|---|---|
+| Clickworker | https://www.clickworker.com | Microtasks, text, research, and AI data tasks | Country availability, task access, KYC, and payout method to verify |
+| Vocal Media | https://vocal.media | Writing and creator publishing challenges | Eligibility, contest terms, and payout method to verify |
+| Prolific | https://www.prolific.com | Paid research studies and surveys | Participant country eligibility, waitlist, and payout method to verify |
+
