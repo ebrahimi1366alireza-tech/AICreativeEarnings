@@ -17,7 +17,9 @@ const STREAM_TERMS: Record<string, string[]> = {
   "ویدئو": ["video editor", "video editing", "video producer", "short-form video", "motion graphics", "motion designer", "ai video", "reels editor", "tiktok video"],
   "عکس و طراحی": ["graphic design", "graphic designer", "image editing", "photo editing", "product photography", "illustrator", "thumbnail design", "visual designer", "ai image", "ai art", "social media design", "banner design", "poster design"],
   "نوشتن و مقاله": ["article writing", "content writing", "blog writing", "copywriting", "technical writing", "seo writing", "proofreading", "editing", "translation", "research writing"],
-  "تولید آهنگ با هوش مصنوعی": ["music production", "song production", "ai music", "music composition", "soundtrack", "jingle", "audio production", "songwriting", "music generation"]
+  "تولید آهنگ با هوش مصنوعی": ["music production", "song production", "ai music", "music composition", "soundtrack", "jingle", "audio production", "songwriting", "music generation"],
+  "رأی‌گیری و داوری موسیقی": ["music review", "song review", "music reviewer", "rate music", "rate songs", "music judging", "judge music", "song rating", "music feedback", "track feedback", "listen and review music", "playlist review"],
+  "نظرسنجی و تحقیقات بازار": ["paid survey", "online survey", "survey response", "survey participant", "market research", "consumer research", "questionnaire", "polling", "paid poll", "user research", "research participant"]
 };
 function inferStream(value: string): string | null {
   const text = value.toLowerCase();
@@ -70,8 +72,10 @@ async function fetchLaborX(warnings: string[]): Promise<DiscoveredItem[]> {
         || text.match(/Job Title:\s*(.+?)(?=💰|Budget:|🤝|With:|LaborX New job on LaborX\.com|\d+\s+views|$)/i);
       if (!titleMatch) continue;
       const title = plainText(titleMatch[1], 180);
-      const searchable = title.toLowerCase();
-      if (!inferStream(searchable)) continue;
+      // Match the title and full post together: LaborX titles can be generic
+      // while the description contains the actual image/video deliverable.
+      const stream = inferStream(`${title} ${text}`);
+      if (!stream) continue;
       const budgetMatch = text.match(/Budget:\s*(.+?)(?=🤝|With:|LaborX New job on LaborX\.com|Job Title:|\d+\s+views|$)/i);
       const budget = budgetMatch ? plainText(budgetMatch[1], 60) : "در آگهی مشخص نشده";
       const companyMatch = text.match(/With:\s*(.+?)(?=LaborX New job on LaborX\.com|Job Title:|\d+\s+views|$)/i);
@@ -80,8 +84,6 @@ async function fetchLaborX(warnings: string[]): Promise<DiscoveredItem[]> {
       const postUrl = postMatch ? `https://t.me/LaborXWeb3Jobs/${postMatch[1]}` : "https://t.me/s/LaborXWeb3Jobs";
       const postedMatch = chunk.match(/<time[^>]*datetime="([^"]+)"/i);
       const postedAt = postedMatch && !Number.isNaN(Date.parse(postedMatch[1])) ? new Date(postedMatch[1]).toISOString() : null;
-      const stream = inferStream(`${title} ${text}`);
-      if (!stream) continue;
       found.set(url, {
         id: url, title, company, url, location: "طبق شرح سفارش",
         types: ["Freelance"], salary: budget, description: `سفارش فریلنسری «${title}» در LaborX از طرف ${company}. بودجه اعلامی: ${budget}.`, postedAt,
@@ -177,6 +179,6 @@ export async function GET() {
   return NextResponse.json({
     source: ["LaborX", "Subnano"], fetchedAt: new Date().toISOString(),
     count: jobs.length, jobs, warnings,
-    notice: "نتایج زنده LaborX و Subnano سفارش‌های فریلنسری مرتبط با تصویر و طراحی، ویدئو، نویسندگی و مقاله، و تولید موسیقی را هدف می‌گیرند. رأی‌گیری/داوری موسیقی و نظرسنجی پولی فعلاً از این دو فید قابل کشف نیستند و باید جداگانه ثبت شوند. بودجه Subnano تضمین یا وجه امانی نیست. روش پرداخت، پذیرش کشور، KYC، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. هیچ درخواست یا اقدامی خودکار ارسال نمی‌شود."
+    notice: "نتایج زنده LaborX و Subnano می‌توانند سفارش‌های مرتبط با تصویر و طراحی، ویدئو، نویسندگی و مقاله، تولید آهنگ با هوش مصنوعی، رأی‌گیری/داوری موسیقی و نظرسنجی/تحقیقات بازار را نمایش دهند؛ البته فقط مواردی که در متن آگهی با این دسته‌ها تطبیق داشته باشند. این دو منبع، جایگزین فید اختصاصی نظرسنجی یا داوری موسیقی نیستند. بودجه Subnano تضمین یا وجه امانی نیست. روش پرداخت، پذیرش کشور، KYC، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. هیچ درخواست یا اقدامی خودکار ارسال نمی‌شود."
   }, { headers: { "Cache-Control": "public, s-maxage=900, stale-while-revalidate=600" } });
 }
