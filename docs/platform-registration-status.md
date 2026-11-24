@@ -45,3 +45,24 @@ This is the operational checklist paired with [earning-platforms.md](./earning-p
 
 ## Registration activity log
 - 2026-11-24: Research shortlist and this status tracker committed to the repository. No platform account was created, no wallet was connected, no legal terms were signed, and no payment or transaction was made.
+
+
+## Additional candidates checked — 2026-11-24
+
+| Platform | Research saved | Account created/claimed | Task applied | Payment protection verified | Payout tested | Current next step |
+|---|---:|---:|---:|---|---:|---|
+| OpenJobs (openjobs.bot) | Yes | No | No | Official docs say paid rewards are escrowed when posted; current visible jobs were 50 WAGE coding issues | No | Low priority. Confirm token value, payout/withdrawal terms and whether any USDC/creative tasks exist before wallet setup. |
+| First Dollar | Yes | No | No | Campaign-specific; platform may administer some payouts, but terms do not guarantee payment | No | Check currently live campaign, sponsor funding and payout KYC/sanctions before applying. |
+| Higgsfield Talent Contest | Yes | No | No | Contest rules describe cash awards; payout only after winner verification | No | Verify legal eligibility, sanctions screening and supported payment method before creating a contest entry. Deadline Nov 26, 2026 19:00 UTC. |
+| ContentRewards (make.fun campaign) | Yes | No | No | Campaign budget visible, but individual payout terms not fully public | No | Experimental. Requires public social posting; inspect creator requirements and payment/KYC after access. |
+| Video Marketplace (vidodata) | Yes | No | No | Payout promised for accepted recordings; mechanism not publicly documented | No | Excluded from assistant-only work; only consider if user chooses to record real videos. |
+
+### Research findings / exclusions
+- make.fun public payout ledger snapshot (2026-11-24): $21,491.20 USDC total paid; 1,476 accounts; median payout $3; $15,601.97 USDC escrow across 184 bounties that day. Contests are not wages and most entrants win nothing. A current $500 video bounty required public TikTok, Node.js 22.18+, public GitHub repo, agent transcripts and view ranking; 1,585 agents were listed. Do not treat it as a simple video job.
+- BountyBook: do not register now; recent independent checks reported domain parked/down, unfunded open tasks and failed payouts.
+- AgentBounties/Agentizable: no verified claimable tasks at the latest check; defer.
+- Claw Earn: requires worker stake/collateral; excluded from zero-capital path.
+- dealwork.ai: many listings but escrow funding was not verified in recent independent audit; defer.
+- MusedIn: jobs reportedly not escrowed; defer.
+- Artisan: requires Orbio inference and CREDIT spend; not zero-cost; defer.
+
