@@ -64,7 +64,7 @@ function normalizeJobicy(job: JobicyJob): DiscoveredItem | null {
   const description = plainText(job.jobExcerpt || job.jobDescription, 420);
   const industries = Array.isArray(job.jobIndustry) ? job.jobIndustry.map(x => plainText(x, 60)).filter(Boolean) : [];
   const types = Array.isArray(job.jobType) ? job.jobType.map(x => plainText(x, 40)).filter(Boolean) : [];
-  const searchable = `${title} ${description} ${industries.join(" ")}`.toLowerCase();
+  const searchable = `${title} ${industries.join(" ")}`.toLowerCase();
   const stream = inferStream(searchable);
   if (!stream) return null;
   const contractType = types.some(type => /freelance|contract|part.?time/i.test(type));
@@ -131,15 +131,15 @@ async function fetchLaborX(warnings: string[]): Promise<DiscoveredItem[]> {
       const text = plainText(chunk, 5000);
       // Telegram widget text is flattened to one line by plainText(), so stop each
       // field at the next known label instead of consuming the rest of the post.
-      const titleMatch = text.match(/Freelance Opportunity:\s*(.+?)(?=\s+💰\s*Budget:|\s+Budget:|\s+🤝\s*With:|\s+LaborX New job on LaborX\.com|\s+Job Title:|$)/i)
-        || text.match(/Job Title:\s*(.+?)(?=\s+\d+\s+views|\s+💰\s*Budget:|\s+Budget:|$)/i);
+      const titleMatch = text.match(/Freelance Opportunity:\s*(.+?)(?=💰|Budget:|🤝|With:|LaborX New job on LaborX\.com|Job Title:|\d+\s+views|$)/i)
+        || text.match(/Job Title:\s*(.+?)(?=💰|Budget:|🤝|With:|LaborX New job on LaborX\.com|\d+\s+views|$)/i);
       if (!titleMatch) continue;
       const title = plainText(titleMatch[1], 180);
       const searchable = title.toLowerCase();
       if (!inferStream(searchable)) continue;
-      const budgetMatch = text.match(/Budget:\s*(.+?)(?=\s+🤝\s*With:|\s+With:|\s+LaborX New job on LaborX\.com|$)/i);
+      const budgetMatch = text.match(/Budget:\s*(.+?)(?=🤝|With:|LaborX New job on LaborX\.com|Job Title:|\d+\s+views|$)/i);
       const budget = budgetMatch ? plainText(budgetMatch[1], 60) : "در آگهی مشخص نشده";
-      const companyMatch = text.match(/With:\s*(.+?)(?=\s+LaborX New job on LaborX\.com|\s+Job Title:|$)/i);
+      const companyMatch = text.match(/With:\s*(.+?)(?=LaborX New job on LaborX\.com|Job Title:|\d+\s+views|$)/i);
       const company = companyMatch ? plainText(companyMatch[1], 100) : "کارفرما طبق آگهی LaborX";
       const postMatch = chunk.match(/data-post="LaborXWeb3Jobs\/(\d+)"/);
       const postUrl = postMatch ? `https://t.me/LaborXWeb3Jobs/${postMatch[1]}` : "https://t.me/s/LaborXWeb3Jobs";
@@ -149,7 +149,7 @@ async function fetchLaborX(warnings: string[]): Promise<DiscoveredItem[]> {
       if (!stream) continue;
       found.set(url, {
         id: url, title, company, url, location: "طبق شرح سفارش",
-        types: ["Freelance"], salary: budget, description: `سفارش فریلنسری در LaborX. بودجه اعلامی: ${budget}.`, postedAt,
+        types: ["Freelance"], salary: budget, description: `سفارش فریلنسری «${title}» در LaborX از طرف ${company}. بودجه اعلامی: ${budget}.`, postedAt,
         score: 65 + (budget !== "در آگهی مشخص نشده" ? 5 : 0), contractType: true,
         source: "LaborX · کانال رسمی فرصت‌ها", stream, sourceType: "freelance",
         budgetScope: "بودجه اعلامی آگهی؛ باید در سفارش تأیید شود",
@@ -253,7 +253,7 @@ function safeHttpsUrl(value: unknown) {
 function normalizeHimalayas(job: HimalayasJob): DiscoveredItem | null {
   const title = plainText(job.title, 180);
   const description = plainText(job.excerpt || job.description, 500);
-  const searchable = `${title} ${description} ${(job.categories || []).join(" ")} ${(job.parentCategories || []).join(" ")}`;
+  const searchable = `${title} ${(job.categories || []).join(" ")} ${(job.parentCategories || []).join(" ")}`;
   const stream = inferStream(searchable);
   const sourceUrl = safeExternalHttps(job.guid, ["himalayas.app", "www.himalayas.app"]);
   const url = safeHttpsUrl(job.applicationLink) || sourceUrl;
@@ -310,7 +310,7 @@ function normalizeRemoteOk(raw: RemoteOkJob): DiscoveredItem | null {
   const title = plainText(raw.position, 180);
   const description = plainText(raw.description, 500);
   const tags = Array.isArray(raw.tags) ? raw.tags.map(x => plainText(x, 40)).filter(Boolean) : [];
-  const stream = inferStream(`${title} ${description} ${tags.join(" ")}`);
+  const stream = inferStream(`${title} ${tags.join(" ")}`);
   const url = safeExternalHttps(raw.url, ["remoteok.com", "www.remoteok.com"]);
   if (!title || !stream || !url || /lorem ipsum|your job description here|no results were found/i.test(description)) return null;
   const postedAt = raw.date && !Number.isNaN(Date.parse(raw.date)) ? new Date(raw.date).toISOString() : null;
