@@ -79,6 +79,8 @@ function scoreLead(input: {
   deposit: string;
   escrow: string;
   paymentAsset: string;
+  network: string;
+  minimum: string;
   fee: string;
   kyc: string;
   stream: string;
@@ -110,8 +112,11 @@ function scoreLead(input: {
     && input.payout === "کیف پول مستقیم"
     && input.deposit === "بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری"
     && input.paymentAsset !== "نامشخص"
+    && input.paymentAsset !== "سایر رمزارزها"
+    && Boolean(input.network.trim())
+    && Boolean(input.minimum.trim())
     && input.fee !== "نامشخص";
-  if (!complianceVerified) return { score: Math.min(score, 44), decision: "نیازمند بررسی", reason: "تا وقتی KYC، کشور مجاز، پرداخت مستقیم رمزارزی، کارمزد و نبود هزینه ثبت‌نام/اشتراک/سپرده مستند نشوند، این فرصت واجد شرایط نیست." };
+  if (!complianceVerified) return { score: Math.min(score, 44), decision: "نیازمند بررسی", reason: "تا وقتی KYC، کشور مجاز، ارز و شبکه دقیق، حداقل برداشت، پرداخت مستقیم رمزارزی، کارمزد و نبود هزینه ثبت‌نام/اشتراک/سپرده مستند نشوند، این فرصت واجد شرایط نیست." };
   if (score >= 70) return { score, decision: "واجد شرایط اولیه", reason: "شرایط پایه ثبت شده؛ قرارداد، حداقل برداشت و پرداخت نهایی را پیش از شروع دوباره بررسی کن." };
   if (score >= 45) return { score, decision: "نیازمند بررسی", reason: "شواهد تکمیلی پرداخت یا شرایط قرارداد کافی نیست." };
   return { score, decision: "اولویت پایین", reason: "شواهد پرداخت، کشور یا هزینه‌ها کافی نیست." };
@@ -150,7 +155,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
   const [proposalDeadline, setProposalDeadline] = useState("");
   const [proposalText, setProposalText] = useState("");
 
-  const assessment = useMemo(() => scoreLead({ sourceUrl: proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, fee, kyc, stream }), [proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, fee, kyc, stream]);
+  const assessment = useMemo(() => scoreLead({ sourceUrl: proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, network, minimum, fee, kyc, stream }), [proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, network, minimum, fee, kyc, stream]);
 
   async function discoverOpportunities() {
     setLiveLoading(true); setLiveError(""); setLiveNotice("");
@@ -327,7 +332,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         <input value={network} onChange={e => setNetwork(e.target.value)} placeholder="شبکه دقیق پرداخت" aria-label="شبکه"/>
         <select value={deposit} onChange={e => setDeposit(e.target.value)} aria-label="هزینه ورود، اشتراک و سپرده"><option>هنوز بررسی نشده</option><option>بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری</option><option>هزینه ثبت‌نام یا اشتراک اجباری دارد</option><option>سپرده یا خرید اجباری دارد</option></select>
         <select value={escrow} onChange={e => setEscrow(e.target.value)} aria-label="وضعیت امانت‌داری"><option>نامشخص</option><option>وجه در امانت قفل شده</option><option>بدون امانت‌داری</option></select>
-        <select value={fee} onChange={e => setFee(e.target.value)} aria-label="کارمزد"><option>نامشخص</option><option>۰ تا ۱۰٪</option><option>بیشتر از ۱۰٪</option></select>
+        <select value={fee} onChange={e => setFee(e.target.value)} aria-label="کارمزد پلتفرم و برداشت"><option>نامشخص</option><option>۰ تا ۱۰٪</option><option>بیشتر از ۱۰٪</option></select>
         <input value={minimum} onChange={e => setMinimum(e.target.value)} placeholder="حداقل برداشت" aria-label="حداقل برداشت"/>
         <select value={kyc} onChange={e => setKyc(e.target.value)} aria-label="احراز هویت"><option>نامشخص</option><option>بدون KYC</option><option>نیازمند KYC</option></select>
         {stream === "نوشتن و مقاله" && (
