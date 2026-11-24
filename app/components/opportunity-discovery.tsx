@@ -280,7 +280,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
           <div><span className="eyebrow">LIVE PUBLIC LISTINGS</span><h3>جست‌وجوی زنده فرصت‌های درآمدی</h3></div>
           <button type="button" onClick={discoverOpportunities} disabled={liveLoading}>{liveLoading ? "در حال جست‌وجو..." : "جست‌وجوی فرصت‌های جدید"}</button>
         </div>
-        <p className="hub-intro">جست‌وجوی سفارش‌های پروژه‌ای تصویر، طراحی و ویدئوی AI در بازارهای جهانی، با اولویت بررسی امکان همکاری از امارات، قطر و عمان. منابع زنده فعلی فقط LaborX و Subnano هستند؛ آگهی استخدامی حذف شده است. هیچ نتیجه‌ای تا زمان تأیید مستندِ «بدون KYC»، کشور مجاز، پرداخت مستقیم رمزارزی، نبود سپرده و کارمزد، واجد شرایط محسوب نمی‌شود.</p>
+        <p className="hub-intro">جست‌وجوی جهانی سفارش‌های پروژه‌ای تصویر، طراحی و ویدئوی AI بدون محدودیت به کشور خاص. منابع زنده فعلی فقط LaborX و Subnano هستند؛ آگهی استخدامی حذف شده است. هیچ نتیجه‌ای تا زمان تأیید مستندِ «بدون KYC»، کشور مجاز، پرداخت مستقیم رمزارزی، نبود سپرده و کارمزد، واجد شرایط محسوب نمی‌شود.</p>
         {liveFetchedAt && <small>آخرین دریافت: {new Date(liveFetchedAt).toLocaleString("fa-IR")}</small>}
         {liveError && <p role="alert" className="discovery-assessment">{liveError}</p>}
         {liveNotice && <p className="discovery-assessment">{liveNotice}</p>}
