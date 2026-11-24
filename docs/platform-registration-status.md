@@ -101,3 +101,18 @@ Research-only status: none of these accounts has been registered or claimed. No 
 | AI Film Contests | Yes | No | No | Contest-specific; no general escrow | No | Only free-entry contests with confirmed country eligibility, prize payment and rights terms. |
 
 No account was created, no content was submitted, no wallet was connected, and no legal terms, payment, or transaction was authorized during this research pass.
+
+
+## Seven additional platforms reviewed — 2026-11-24
+
+| Platform | Research saved | Account created/claimed | Applied | Payment / escrow assessment | Payout tested | Next action |
+|---|---:|---:|---:|---|---:|---|
+| Gibwork | Yes | No | No | Solana escrow described; employer acceptance required; fees and eligibility need per-task verification | No | First priority: find live creative/video/content/testing briefs; confirm user country eligibility and funded escrow before work. |
+| Monero.jobs | Yes | No | No | Direct XMR payment; no escrow identified; counterparty risk elevated | No | First priority: shortlist suitable writing/translation/research/creative jobs and request staged payment terms. |
+| PeakD | Yes | No | No | Hive community rewards/tips; variable and not guaranteed | No | Optional creator channel for Persian food/cooking content; verify account and payout mechanics. |
+| 3Speak | Yes | No | No | HIVE/HBD creator and viewer rewards described; actual eligibility/thresholds/earnings untested | No | Optional video channel; verify current reward and withdrawal rules before investing production time. |
+| TaskOn | Yes | No | No | Campaign-specific; points/NFTs may not be cash; some claims/mints incur gas or cost | No | Side channel only; accept strictly free tasks with explicit liquid payout and country eligibility. |
+| QuestN | Yes | No | No | Current site reachability and payment status unverified | No | Recheck official site and current campaigns; no wallet connection until verified. |
+| Monero Bounties | Yes | No | No | Bounty-specific; board appears mainly technical; older notices restrict translation/research intake | No | Low priority; check for currently open nontechnical bounty before spending time. |
+
+Research-only status: no accounts were created, no applications submitted, no wallets connected, and no legal terms, payments, or transactions were authorized for these seven platforms.
