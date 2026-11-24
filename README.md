@@ -48,14 +48,18 @@ The opportunity workspace now includes a capability catalogue for services the a
 - Core Supabase tables: `profiles`, `opportunities`, `production_orders`, `assets`, `earnings`, and `workspace_state`. RLS is enabled on all six tables.
 - The latest production deployment completed successfully. A user account has not yet been registered, so end-to-end signup, login, and cross-device sync still require a real account test.
 
-## Not connected yet
+## Live discovery and current limitations
 
-- Automatic discovery and verification of live marketplace opportunities.
-- Direct production integrations with image, video, music, or writing marketplaces.
-- Automatic payout confirmation or on-chain payment verification.
-- Automated client application, contract acceptance, or financial actions.
+- A server-side public-feed discovery endpoint currently reads LaborX public job posts, Subnano public requests, Jobicy, Himalayas, and Remote OK. It deduplicates and ranks topical matches and returns source links.
+- The discovery feed is global; it is not restricted to the user's separate chef-job-search countries.
+- LaborX, Himalayas, Jobicy, and Remote OK may return employment listings rather than one-off creative orders. Subnano requests are public budgets, not escrowed funds or guaranteed purchases.
+- Every discovered lead is unverified by default. A high topical score is not an eligibility or payment score. Do not mark a platform or lead eligible until no-KYC status, the user's country eligibility, direct wallet payout, supported asset/network, all fees, minimum withdrawal, and no-deposit/no-purchase conditions are documented from official sources.
+- Subnano's current FAQ documents Nano and USDC on Base creator payouts, with a 7.5% Nano sale fee and 15% USDC sale fee. The FAQ does not itself establish that KYC is never required or that every country is eligible, so Subnano remains review-only until those points are confirmed.
+- LaborX listings can be found publicly, but this project has not established a no-KYC guarantee or universal country eligibility for LaborX. Keep it review-only.
+- No marketplace account, client application, contract, content submission, or financial action is automated. Human approval is required.
+- No automatic payout confirmation or on-chain payment verification is implemented.
 
-Do not present any of these as implemented until they are built and tested.
+Do not present a public listing as a verified paid order or a review-only platform as KYC-free.
 
 ## Creative toolkit
 
