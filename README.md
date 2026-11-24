@@ -2,15 +2,14 @@
 
 A Persian RTL workspace for discovering, reviewing, producing, delivering, and tracking paid creative work. This project is completely separate from AIRDROP AI.
 
-## Approved income streams
+## Target paid services
 
-1. Paid writing: articles, product descriptions, editing, and copywriting.
-2. AI music and audio: commissioned music, sound effects, and audio assets.
-3. Paid music voting and judging: legitimate listening contests and track-rating programs with verified rules and compensation.
-4. Paid surveys and market research.
-5. AI image and video production: commissioned visuals, short videos, advertising assets, and marketplace submissions.
+1. AI product images, image editing, and visual assets.
+2. Advertising graphics, banners, posters, thumbnails, and social-media post/story designs.
+3. Short-form promotional videos, reels, product clips, and basic motion graphics.
+4. Bundled visual campaigns combining consistent images, graphics, and short videos.
 
-These are categories, not verified earning opportunities. A lead stays unverified until country eligibility, identity requirements, commercial rights, payout method, fees, minimum withdrawal, and a successful test payout are checked.
+The current discovery focus is global AI-assisted image, design, and short-video orders. These categories are not verified earning opportunities. A lead stays unverified until no-KYC status, country eligibility, commercial rights, direct crypto payout, exact asset/network, fees, minimum withdrawal, and zero mandatory entry costs are documented.
 
 ## Operating rules
 
@@ -25,11 +24,11 @@ These are categories, not verified earning opportunities. A lead stays unverifie
 
 ## AI-assisted remote work services
 
-The opportunity workspace now includes a capability catalogue for services the assistant can help execute: writing and editing, research and virtual-assistant reports, AI-assisted images/design, video scripts and supported editing workflows, audio/voice preparation, and programming/debugging. Actual generation depends on connected tools, available quotas, account access, and commercial-use rights. Human approval remains required for account access, identity checks, contracts, final submissions, and financial actions. No paid tool usage or generation is allowed without explicit cost approval.
+The opportunity workspace now includes a capability catalogue for AI-assisted product imagery, advertising/social graphics, short-video editing, motion-graphics preparation, and visual asset resizing or cleanup. Actual generation depends on connected tools, available quotas, account access, and commercial-use rights. Human approval remains required for account access, identity checks, contracts, final submissions, and financial actions. No paid tool usage or generation is allowed without explicit cost approval.
 
 ## Current application features
 
-- Persian right-to-left dashboard with the five approved income streams.
+- Persian right-to-left dashboard focused on AI image, design, and short-video services.
 - Opportunity radar with manual lead entry, source links, and review statuses.
 - Production-order and delivery tracking.
 - Income ledger that distinguishes pending from actually received payments.
