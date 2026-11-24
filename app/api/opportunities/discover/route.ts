@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
-export const revalidate = 1800;
+export const dynamic = "force-dynamic";
+export const revalidate = 900;
 
 type DiscoveredItem = {
   id: string; title: string; company: string; url: string; sourceUrl?: string; location: string;
@@ -170,7 +171,7 @@ export async function GET() {
     || (Date.parse(b.postedAt || "") || 0) - (Date.parse(a.postedAt || "") || 0)
   ).slice(0, 100);
 
-  if (!jobs.length && warnings.length >= 3) {
+  if (!jobs.length && warnings.length >= 2) {
     return NextResponse.json({ error: "منابع عمومی فعلاً در دسترس نیستند.", jobs: [], warnings }, { status: 502, headers: { "Cache-Control": "no-store" } });
   }
   return NextResponse.json({
