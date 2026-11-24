@@ -41,12 +41,6 @@ type DiscoveredOpportunity = LiveOpportunity & {
 
 const sources = [
   {
-    name: "Jobicy · API عمومی آگهی‌های دورکاری",
-    detail: "فهرست عمومی و رایگان آگهی‌های نوشتاری و دورکاری؛ نیاز به API Key ندارد. آگهی‌ها را با لینک منبع Jobicy نمایش می‌دهیم و شرایط هر موقعیت باید جداگانه بررسی شود.",
-    url: "https://jobicy.com/jobs-rss-feed",
-    tag: "جست‌وجوی زنده آگهی‌ها"
-  },
-  {
     name: "LaborX · کانال رسمی اطلاع‌رسانی فرصت‌ها",
     detail: "کانال اطلاع‌رسانی LaborX که آگهی‌های پروژه‌ای مانند Article Writing و Content Writing را بازنشر می‌کند. بودجه‌های درج‌شده فقط ادعای آگهی‌اند؛ صفحه پروژه، هویت کارفرما، کشور مجاز، روش پرداخت و امانت‌داری را جداگانه بررسی کن.",
     url: "https://t.me/s/laborxWeb3Jobs",
@@ -281,7 +275,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
           <div><span className="eyebrow">LIVE PUBLIC LISTINGS</span><h3>جست‌وجوی زنده فرصت‌های درآمدی</h3></div>
           <button type="button" onClick={discoverOpportunities} disabled={liveLoading}>{liveLoading ? "در حال جست‌وجو..." : "جست‌وجوی فرصت‌های جدید"}</button>
         </div>
-        <p className="hub-intro">جست‌وجوی جهانی و بدون محدودیت به امارات، قطر یا عمان برای نوشتن، عکس و طراحی، ویدئو، موسیقی و صدا و تحقیقات بازار. منابع فعلی: LaborX، Subnano، Jobicy، Himalayas و Remote OK. هیچ نتیجه‌ای تا زمان تأیید مستندِ «بدون KYC»، کشور مجاز، پرداخت مستقیم رمزارزی، نبود سپرده و کارمزد، واجد شرایط محسوب نمی‌شود؛ آگهی‌های استخدامی نیز لزوماً سفارش تکی نیستند.</p>
+        <p className="hub-intro">جست‌وجوی جهانی سفارش‌های پروژه‌ای و درخواست‌های تولید محتوا، بدون محدودیت به امارات، قطر یا عمان. منابع زنده فعلی فقط LaborX و Subnano هستند؛ آگهی استخدامی حذف شده است. هیچ نتیجه‌ای تا زمان تأیید مستندِ «بدون KYC»، کشور مجاز، پرداخت مستقیم رمزارزی، نبود سپرده و کارمزد، واجد شرایط محسوب نمی‌شود.</p>
         {liveFetchedAt && <small>آخرین دریافت: {new Date(liveFetchedAt).toLocaleString("fa-IR")}</small>}
         {liveError && <p role="alert" className="discovery-assessment">{liveError}</p>}
         {liveNotice && <p className="discovery-assessment">{liveNotice}</p>}
