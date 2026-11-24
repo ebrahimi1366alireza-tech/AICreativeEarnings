@@ -110,3 +110,34 @@ This document consolidates findings from prior research in this ChatGPT project 
 7. Microworker.app — excluded for Iran-based use by its own Terms.
 
 No account was created, no application was submitted, no wallet was connected, no legal terms were accepted, and no transaction was made during this research pass.
+
+## بررسی چهار پلتفرم ارسالی کاربر — ۲۴ نوامبر ۲۰۲۶
+
+### Superteam Earn — https://superteam.fun/earn/bounties
+- بازار bountyهای Web3/Solana؛ دسته‌های Content و Design ویدئو، مقاله، انیمیشن و پست اجتماعی دارد.
+- Raenest Global Bounty: https://superteam.fun/earn/listing/the-raenest-global-bounty-writing-video-and-animation
+  - جایزه کل 13,000 USDC؛ پنج جایزه اصلی مجموعاً 6,400 USDC و 20 جایزه قرعه‌کشی هرکدام 330 USDC.
+  - مهلت ارسال 13 دسامبر 2026؛ اعلام برندگان تا 21 دسامبر 2026.
+  - فقط یک track از Writing / Video / Animation. ویدئو و انیمیشن باید در X, TikTok, Instagram و YouTube منتشر شوند. نیازمند ساخت حساب Raenest با referral code community، استفاده واقعی از یکی از قابلیت‌های Raenest، شاهد استفاده و لینک referral شخصی است. نیمی از ارزیابی به جذب و فعال‌سازی referral وابسته است.
+  - محدودیت مهم: با اینکه bounty «Global» است، شرایط رسمی Raenest Personal Account فعلاً فقط legal residents کشورهای US, Nigeria, Kenya, Ghana, Uganda, South Africa, Egypt و UK را eligible اعلام می‌کند. کاربر فعلاً در ارمنستان است و پاسپورت ایرانی دارد؛ ارمنستان در فهرست نیست و Raenest card prohibited list نیز ایران را برای cardholders منع می‌کند. تا وقتی Raenest کتبی تأیید نکند وضعیت کاربر واجد شرایط است، برای این bounty ثبت‌نام/تولید محتوا را شروع نکنیم.
+  - Raenest KYC هویت و مدرک دولتی می‌خواهد؛ face/liveness به‌تنهایی مسئله نیست، اما eligibility و پذیرش مدرک/اقامت مهم است.
+- اولویت: بازار bounty مناسب، اما این bounty خاص فعلاً مشروط/احتمالاً غیرقابل‌استفاده به علت شرط حساب Raenest.
+
+### Scribble — https://scribble.network/creators
+- کمپین‌های محتوای Web3/Tech: X thread، YouTube، Instagram، Reddit، Medium/Substack، meme و short video.
+- ادعای پلتفرم: بیش از 500,000 دلار پاداش، بیش از 800 کمپین و پرداخت پس از انتخاب برند؛ معمولاً ظرف 7 روز پس از پایان review؛ بدون حداقل follower و بدون exclusivity.
+- صفحه live bounty هنگام بررسی عدد 0 Live و 129 total نشان داد؛ موارد فهرست‌شده منقضی بودند. فعلاً درآمد فعال برای شروع ندارد.
+- payout rail، KYC و امکان دریافت در ارمنستان/با پاسپورت ایرانی از صفحات عمومی تأیید نشد.
+- اولویت: watchlist؛ تا ظاهرشدن bounty فعال و روشن‌شدن payout/KYC ثبت‌نام را جلو نبریم.
+
+### GIMI — https://www.gimi.co/creators
+- پلتفرم creator campaign با محتوای AI-generated، animation، cinematic AI، meme، clipping، walkthrough و face UGC؛ AI content ممکن است، اما هر campaign brief حاکم است.
+- ثبت‌نام و ارسال اولیه رایگان؛ برای ارسال بیش از یک بار به همان campaign یا boost ممکن است هزینه بگیرد.
+- پرداخت پس از تأیید برند، بر اساس approval / milestone / CPM / leaderboard؛ روش‌های payout شامل bank transfer، PayPal و USDC از طریق payment partners. حداقل برداشت فعلی 10 دلار و fee برداشت 5%.
+- Terms می‌گوید ممکن است payment partner برای پرداخت، tax ID یا مدارک هویتی بخواهد. برای کمپین‌های approved، مالکیت محتوای تأییدشده به برند منتقل می‌شود؛ قبل از ارسال باید brief و حقوق استفاده/انحصار بررسی شود.
+- نمونه داشبورد و creator stats در سایت نمایش داده شده، اما اینها به‌تنهایی اثبات برداشت واقعی کاربر نیستند. کشور/مدارک لازم برای پرداخت به ارمنستان هنوز تأیید نشده.
+- اولویت: ارزش بررسی و تست ثبت‌نام رایگان؛ قبل از تولید محتوا، کمپین فعال، payout method در دسترس و حقوق مالکیت را بررسی کن. هیچ boost یا پرداختی انجام نشود.
+
+### معیار به‌روزشده احراز هویت
+- احراز انسان بودن، selfie، face match و liveness/video check برای کاربر قابل قبول است و به‌تنهایی دلیل حذف پلتفرم نیست.
+- KYC با پاسپورت/مدرک دولتی، proof of address، tax ID و محدودیت کشور به‌صورت جداگانه بررسی شود. هیچ مدرک یا داده بیومتریک بدون تأیید صریح کاربر ارسال نشود.
