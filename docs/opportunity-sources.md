@@ -83,3 +83,26 @@ These were added as candidate platforms from the earlier discussion. They are no
 | Vocal Media | https://vocal.media | Writing and creator publishing challenges | Eligibility, contest terms, and payout method to verify |
 | Prolific | https://www.prolific.com | Paid research studies and surveys | Participant country eligibility, waitlist, and payout method to verify |
 
+
+## Additional creator, freelance, and Web3 task platforms — reviewed 2026-11-24
+
+| Platform | URL | Primary use | Initial fit / priority |
+|---|---|---|---|
+| Gibwork | https://gib.work | Solana bounty marketplace: content, social promotion, video, design, research, testing, development | High: prioritize funded, nontechnical creative briefs; verify country eligibility and exact escrow before work. |
+| Monero.jobs | https://monero.jobs | Freelance marketplace with direct XMR payments | High: inspect writing, translation, research, and creative tasks; no escrow means higher counterparty risk. |
+| PeakD | https://peakd.com | Hive social publishing for articles, photos, and communities | Medium: possible long-term food/cooking content channel; rewards depend on community votes/tips, not guaranteed. |
+| 3Speak | https://3speak.tv | Hive-based video publishing and viewer rewards | Medium: test only as a no-upfront-cost creator channel; video rewards and ad share are variable. |
+| TaskOn | https://taskon.xyz | Web3 quests, campaigns, points, NFTs, and sponsor rewards | Low / side channel: prioritize only campaigns with explicit liquid payout; points/EXP are not cash income. |
+| QuestN | https://questn.com | Web3 quest/campaign platform | Unverified: research snapshot failed DNS resolution; recheck site availability before any interaction. |
+| Monero Bounties | https://bounties.monero.social | Community bounties, mainly Monero ecosystem development | Low: mostly technical; older notice says translation/research bounty intake was paused, so confirm a live eligible listing first. |
+
+### Initial due-diligence notes
+- **Gibwork:** Solana bounty marketplace. Example listings observed during review included USDC rewards for promotion, product demos, testing, and design; examples are not guaranteed available or accessible. Employer-funded escrow is described, but release depends on employer acceptance and the platform does not guarantee approval. Terms include geographic/sanctions restrictions; confirm eligibility for the user's nationality and current residence before signup. Check platform fees per task.
+- **Monero.jobs:** Direct XMR payment between client and freelancer; the site advertises no KYC and no platform fee, but no escrow was identified. Treat client reliability and staged payment terms as essential. Listing counts are volatile and must be rechecked live.
+- **PeakD:** Hive-based social publishing. Potential rewards include Hive community rewards and tips; earnings depend on audience/community response and are not guaranteed. A relevant content angle is Persian cooking and food photography/video.
+- **3Speak:** Hive-based video platform. Its published creator information describes HIVE/HBD rewards, ad revenue sharing, and viewer/curation rewards; eligibility, current payout rules, thresholds, and actual earnings must be checked in-account. Do not treat viewer rewards as predictable income.
+- **TaskOn:** Campaign rewards can be tokens, NFTs, points/EXP, whitelist access, or prizes. Some campaigns may be free, while claims/mints can require gas or purchases. KYC and country restrictions can be campaign-specific. Points and speculative airdrops are not confirmed income.
+- **QuestN:** The review session could not resolve the domain and did not find reliable current official evidence. No wallet connection or registration until the service is independently reachable and verified.
+- **Monero Bounties:** Community bounty board appears weighted toward software/development. A site notice indicated translation/research bounty intake had been paused since March 2024 and established-project bounty submissions require prior approval since March 2025; verify current rules and open listings.
+
+These are research leads only. No account was created, no application submitted, no wallet connected, and no legal acceptance or transaction made. Check current country eligibility, sanctions terms, KYC, fees, escrow funding, AI-use rules, payout thresholds, and net reward before applying. Never pay to unlock a task or withdraw earnings.
