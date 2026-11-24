@@ -129,13 +129,18 @@ async function fetchLaborX(warnings: string[]): Promise<DiscoveredItem[]> {
       const url = safeJobUrl(jobMatch?.[0]?.replace(/&amp;/g, "&"), "laborx.com", "/jobs/");
       if (!url) continue;
       const text = plainText(chunk, 5000);
-      const titleMatch = text.match(/Freelance Opportunity:\s*([^\n]+)/i) || text.match(/Job Title:\s*([^\n]+)/i);
+      // Telegram widget text is flattened to one line by plainText(), so stop each
+      // field at the next known label instead of consuming the rest of the post.
+      const titleMatch = text.match(/Freelance Opportunity:\s*(.+?)(?=\s+💰\s*Budget:|\s+Budget:|\s+🤝\s*With:|\s+LaborX New job on LaborX\.com|\s+Job Title:|$)/i)
+        || text.match(/Job Title:\s*(.+?)(?=\s+\d+\s+views|\s+💰\s*Budget:|\s+Budget:|$)/i);
       if (!titleMatch) continue;
       const title = plainText(titleMatch[1], 180);
       const searchable = title.toLowerCase();
       if (!inferStream(searchable)) continue;
-      const budgetMatch = text.match(/Budget:\s*([^\n]+)/i);
+      const budgetMatch = text.match(/Budget:\s*(.+?)(?=\s+🤝\s*With:|\s+With:|\s+LaborX New job on LaborX\.com|$)/i);
       const budget = budgetMatch ? plainText(budgetMatch[1], 60) : "در آگهی مشخص نشده";
+      const companyMatch = text.match(/With:\s*(.+?)(?=\s+LaborX New job on LaborX\.com|\s+Job Title:|$)/i);
+      const company = companyMatch ? plainText(companyMatch[1], 100) : "کارفرما طبق آگهی LaborX";
       const postMatch = chunk.match(/data-post="LaborXWeb3Jobs\/(\d+)"/);
       const postUrl = postMatch ? `https://t.me/LaborXWeb3Jobs/${postMatch[1]}` : "https://t.me/s/LaborXWeb3Jobs";
       const postedMatch = chunk.match(/<time[^>]*datetime="([^"]+)"/i);
@@ -143,8 +148,8 @@ async function fetchLaborX(warnings: string[]): Promise<DiscoveredItem[]> {
       const stream = inferStream(`${title} ${text}`);
       if (!stream) continue;
       found.set(url, {
-        id: url, title, company: "کارفرما طبق آگهی LaborX", url, location: "طبق شرح سفارش",
-        types: ["Freelance"], salary: budget, description: text.slice(0, 420), postedAt,
+        id: url, title, company, url, location: "طبق شرح سفارش",
+        types: ["Freelance"], salary: budget, description: `سفارش فریلنسری در LaborX. بودجه اعلامی: ${budget}.`, postedAt,
         score: 65 + (budget !== "در آگهی مشخص نشده" ? 5 : 0), contractType: true,
         source: "LaborX · کانال رسمی فرصت‌ها", stream, sourceType: "freelance",
         budgetScope: "بودجه اعلامی آگهی؛ باید در سفارش تأیید شود",
