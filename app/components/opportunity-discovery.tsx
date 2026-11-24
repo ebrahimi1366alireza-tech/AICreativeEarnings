@@ -246,7 +246,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         <div><span className="eyebrow">OPPORTUNITY DISCOVERY ENGINE · MVP</span><h2>موتور پیدا کردن و ارزیابی سفارش</h2></div>
         <span className="free-tag">منابع رایگان</span>
       </div>
-      <p className="hub-intro">سفارش‌های پروژه‌ای تولید تصویر، طراحی گرافیکی و ویدئوی کوتاه با کمک هوش مصنوعی را از فیدهای عمومی جهانی پیدا و ارزیابی کن یا موردی را دستی ثبت کن. امتیاز موضوعی فقط میزان تطابق کار با مهارت‌ها را نشان می‌دهد و تأیید پرداخت نیست. تا وقتی نبود KYC، پذیرش کشور، پرداخت مستقیم به کیف پول، نبود سپرده و همه کارمزدها از منبع رسمی تأیید نشده‌اند، هیچ موردی واجد شرایط نیست.</p>
+      <p className="hub-intro">فرصت‌های درآمدی تصویر و طراحی، ویدئو، نویسندگی و مقاله، تولید موسیقی با AI، داوری موسیقی و نظرسنجی پولی را در مسیرهای جداگانه ثبت و ارزیابی کن. جست‌وجوی خودکار فعلی فقط آگهی‌های فریلنسری منابع متصل را پوشش می‌دهد؛ رأی‌گیری و نظرسنجی تا اتصال منبع معتبر باید دستی ثبت شوند. امتیاز موضوعی فقط میزان تطابق کار با مهارت‌ها را نشان می‌دهد و تأیید پرداخت نیست. تا وقتی نبود KYC، پذیرش کشور، پرداخت مستقیم به کیف پول، نبود سپرده و همه کارمزدها از منبع رسمی تأیید نشده‌اند، هیچ موردی واجد شرایط نیست.</p>
       <section className="live-discovery-block" aria-label="weekly income target and work priorities">
         <div className="panel-head discovery-form-head">
           <div><span className="eyebrow">WEEKLY EARNING PLAN</span><h3>هدف اولیه درآمد هفتگی</h3></div>
@@ -272,6 +272,10 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
           <article className="saved-opportunity"><div><strong>ویدئو و محتوای کوتاه</strong><p>ویدئوی تبلیغاتی کوتاه، ریلز، کلیپ محصول، تدوین، زیرنویس و موشن‌گرافیک با ابزارهای در دسترس.</p><small>قابلیت اجرا: تولید نهایی به دسترسی ابزار و محدودیت حساب بستگی دارد</small></div></article>
           <article className="saved-opportunity"><div><strong>بسته‌های محتوای بصری</strong><p>ترکیب تصویر، طراحی و ویدئو برای کمپین محصول یا صفحه شبکه اجتماعی، با خروجی‌های هماهنگ و آماده انتشار.</p><small>قابلیت اجرا: حقوق تجاری و هزینه تولید باید بررسی شود</small></div></article>
           <article className="saved-opportunity"><div><strong>ویرایش و آماده‌سازی خروجی</strong><p>حذف پس‌زمینه، اصلاح نور و رنگ، تغییر اندازه و نسبت تصویر و آماده‌سازی فایل برای وب و شبکه‌های اجتماعی.</p><small>خروجی: فایل نهایی مطابق مشخصات فنی مشتری</small></div></article>
+          <article className="saved-opportunity"><div><strong>نویسندگی، مقاله و تولید محتوا</strong><p>مقاله وبلاگی و تخصصی، تحقیق، ترجمه، ویرایش، متن تبلیغاتی و محتوای سئو.</p><small>خروجی: متن مستند و بازبینی‌شده مطابق سفارش مشتری</small></div></article>
+          <article className="saved-opportunity"><div><strong>تولید آهنگ و موسیقی با هوش مصنوعی</strong><p>ساخت موسیقی و آهنگ، تنظیم ایده و سبک، تولید نسخه‌های آزمایشی و آماده‌سازی خروجی صوتی.</p><small>پیش از فروش یا تحویل، مجوز تجاری ابزار و حقوق نمونه‌ها بررسی می‌شود.</small></div></article>
+          <article className="saved-opportunity"><div><strong>رأی‌گیری و داوری موسیقی</strong><p>یافتن فرصت‌های واقعی داوری، امتیازدهی یا رأی‌دادن به آثار موسیقی، با بررسی شرایط شرکت و پاداش.</p><small>رأی‌گیری رایگان یا تمرینی را درآمد محسوب نمی‌کنیم.</small></div></article>
+          <article className="saved-opportunity"><div><strong>نظرسنجی‌های پولی</strong><p>بررسی نظرسنجی‌ها و مطالعات کاربری دارای پاداش، با کنترل کشور مجاز، روش برداشت و حداقل پرداخت.</p><small>تا زمان تأیید پرداخت و واجدشرایط‌بودن کشور، درآمد تضمین‌شده نیست.</small></div></article>
         </div>
         <p className="hub-footnote">محدودیت‌ها: ثبت‌نام و احراز هویت، مصاحبه زنده، تماس تلفنی، تصمیم حقوقی، پذیرش قرارداد، ارسال نهایی از حساب کاربر و دریافت پول به تأیید و اقدام تو نیاز دارند. هیچ ابزار پولی یا تولید دارای هزینه بدون تأیید قبلی استفاده نمی‌شود؛ ارسال نهایی فقط پس از بازبینی و تأیید تو انجام می‌شود.</p>
       </section>
@@ -280,7 +284,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
           <div><span className="eyebrow">LIVE PUBLIC LISTINGS</span><h3>جست‌وجوی زنده فرصت‌های درآمدی</h3></div>
           <button type="button" onClick={discoverOpportunities} disabled={liveLoading}>{liveLoading ? "در حال جست‌وجو..." : "جست‌وجوی فرصت‌های جدید"}</button>
         </div>
-        <p className="hub-intro">جست‌وجوی جهانی سفارش‌های پروژه‌ای تصویر، طراحی و ویدئوی AI بدون محدودیت به کشور خاص. منابع زنده فعلی فقط LaborX و Subnano هستند؛ آگهی استخدامی حذف شده است. هیچ نتیجه‌ای تا زمان تأیید مستندِ «بدون KYC»، کشور مجاز، پرداخت مستقیم رمزارزی، نبود سپرده و کارمزد، واجد شرایط محسوب نمی‌شود.</p>
+        <p className="hub-intro">جست‌وجوی زنده فعلی LaborX و Subnano سفارش‌های فریلنسری مرتبط با تصویر، طراحی، ویدئو، نویسندگی و تولید موسیقی را بررسی می‌کند. رأی‌گیری و نظرسنجی پولی هنوز منبع زنده متصل ندارند و فقط به‌صورت دستی ثبت می‌شوند. هیچ نتیجه‌ای تا زمان تأیید مستندِ «بدون KYC»، کشور مجاز، پرداخت مستقیم رمزارزی، نبود سپرده و کارمزد، واجد شرایط محسوب نمی‌شود.</p>
         {liveFetchedAt && <small>آخرین دریافت: {new Date(liveFetchedAt).toLocaleString("fa-IR")}</small>}
         {liveError && <p role="alert" className="discovery-assessment">{liveError}</p>}
         {liveNotice && <p className="discovery-assessment">{liveNotice}</p>}
@@ -301,7 +305,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
           <input value={proposalTitle} onChange={e => setProposalTitle(e.target.value)} placeholder="عنوان دقیق پروژه" aria-label="عنوان پروژه برای پیشنهاد"/>
           <input value={proposalBudget} onChange={e => setProposalBudget(e.target.value)} placeholder="بودجه پیشنهادی (اختیاری)" aria-label="بودجه پیشنهادی"/>
           <input value={proposalDeadline} onChange={e => setProposalDeadline(e.target.value)} placeholder="زمان تحویل پیشنهادی (اختیاری)" aria-label="زمان تحویل"/>
-          <textarea value={proposalBrief} onChange={e => setProposalBrief(e.target.value)} rows={4} placeholder="شرح سفارش تصویر یا ویدئو، سبک بصری، ابعاد، پلتفرم انتشار و شرایط کارفرما..." aria-label="شرح سفارش برای پیشنهاد"/>
+          <textarea value={proposalBrief} onChange={e => setProposalBrief(e.target.value)} rows={4} placeholder="شرح سفارش، نوع خروجی، سبک یا موضوع، شرایط کارفرما و زمان تحویل..." aria-label="شرح سفارش برای پیشنهاد"/>
           <button type="button" onClick={buildProposal} disabled={!proposalTitle.trim() && !proposalBrief.trim()}>ساخت پیش‌نویس پیشنهاد</button>
         </div>
         {proposalText && <div className="writing-order-fields">
@@ -323,7 +327,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
       <form className="opportunity-form" onSubmit={submit}>
         <input value={title} onChange={e => setTitle(e.target.value)} required placeholder="عنوان دقیق سفارش" aria-label="عنوان دقیق سفارش"/>
         <select value={platform} onChange={e => setPlatform(e.target.value)} aria-label="منبع آگهی"><option>LaborX</option><option>Subnano</option><option>سایر منابع رسمی</option></select>
-        <select value={stream} onChange={e => setStream(e.target.value)} aria-label="نوع کار"><option>عکس و طراحی</option><option>ویدئو</option><option>نامشخص</option></select>
+        <select value={stream} onChange={e => setStream(e.target.value)} aria-label="نوع کار"><option>عکس و طراحی</option><option>ویدئو</option><option>نوشتن و مقاله</option><option>تولید آهنگ با هوش مصنوعی</option><option>رأی‌گیری و داوری موسیقی</option><option>نظرسنجی پولی</option><option>نامشخص</option></select>
         <input value={pay} onChange={e => setPay(e.target.value)} placeholder="بودجه و واحد پرداخت" aria-label="بودجه"/>
         <input value={country} onChange={e => setCountry(e.target.value)} placeholder="کشورهای مجاز یا محدودیت‌ها" aria-label="محدودیت کشور"/>
         <select value={countryCheck} onChange={e => setCountryCheck(e.target.value)} aria-label="بررسی کشور"><option>هنوز بررسی نشده</option><option>مجاز بودن کشور تأیید شده</option><option>کشور مسدود است</option></select>
