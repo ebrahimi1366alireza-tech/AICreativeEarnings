@@ -35,6 +35,7 @@ const INITIAL_OPPORTUNITIES: Opportunity[] = [
 export default function Home() {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [loaded, setLoaded] = useState(false);
+  const [todayLabel, setTodayLabel] = useState("");
   const [deliveries, setDeliveries] = useState<Delivery[]>([]);
   const [income, setIncome] = useState<Income[]>([]);
   const [walletAddress, setWalletAddress] = useState(DEFAULT_WALLET_ADDRESS);
@@ -43,6 +44,7 @@ export default function Home() {
   const receivedUsdt = income.filter(item => item.received && item.currency === "USDT").reduce((sum, item) => sum + item.amount, 0);
   const goalProgress = Math.min(100, Math.max(0, receivedUsdt / 50 * 100));
   useEffect(() => {
+    setTodayLabel(new Intl.DateTimeFormat("fa-IR", { day: "numeric", month: "long", year: "numeric" }).format(new Date()));
     try {
       const saved = localStorage.getItem("creativeops-opportunities-v1");
       const seededMarker = localStorage.getItem("creativeops-initial-leads-seeded-v1");
@@ -238,7 +240,7 @@ export default function Home() {
       </aside>
 
       <section className="main" id="overview">
-        <header className="topbar"><div><div className="eyebrow">WORKSPACE / OVERVIEW</div><h1>استودیوی درآمد خلاق</h1><p>از پیدا کردن سفارش تا آماده‌سازی خروجی، همه‌چیز در یک جا.</p></div><div className="top-actions"><span className="live-dot">● محیط آزمایشی</span><div className="date-chip">۲۳ نوامبر ۲۰۲۶</div></div></header>
+        <header className="topbar"><div><div className="eyebrow">WORKSPACE / OVERVIEW</div><h1>استودیوی درآمد خلاق</h1><p>از پیدا کردن سفارش تا آماده‌سازی خروجی، همه‌چیز در یک جا.</p></div><div className="top-actions"><span className="live-dot">● محیط آزمایشی</span><div className="date-chip">{todayLabel || "—"}</div></div></header>
 
         <section className="hero">
           <div className="hero-copy"><span className="pill">شروع بدون سرمایه</span><h2>اول سفارش معتبر،<br/><em>بعد تولید هوشمند.</em></h2><p>روی سفارش‌های جهانی تولید تصویر محصول، طراحی تبلیغاتی و ویدئوی کوتاه با کمک هوش مصنوعی تمرکز می‌کنیم. هر آگهی تا زمان تأیید KYC، کشور مجاز، پرداخت مستقیم رمزارزی و هزینه‌های ورود فقط یک سرنخ بررسی‌نشده است.</p><a className="hero-link" href="#workflow">مشاهده مسیر اجرا <span>←</span></a></div>
