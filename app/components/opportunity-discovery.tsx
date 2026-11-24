@@ -120,7 +120,7 @@ function scoreLead(input: {
 export default function OpportunityDiscovery({ onAdd }: Props) {
   const [title, setTitle] = useState("");
   const [platform, setPlatform] = useState("LaborX");
-  const [stream, setStream] = useState("نوشتن و مقاله");
+  const [stream, setStream] = useState("عکس و طراحی");
   const [pay, setPay] = useState("");
   const [country, setCountry] = useState("نامشخص");
   const [countryCheck, setCountryCheck] = useState("هنوز بررسی نشده");
@@ -241,7 +241,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         <div><span className="eyebrow">OPPORTUNITY DISCOVERY ENGINE · MVP</span><h2>موتور پیدا کردن و ارزیابی سفارش</h2></div>
         <span className="free-tag">منابع رایگان</span>
       </div>
-      <p className="hub-intro">فرصت‌ها را از فیدهای عمومی جهانی به‌صورت زنده دریافت کن یا موردی را دستی ثبت کن. امتیاز موضوعی فقط میزان تطابق کار با مهارت‌ها را نشان می‌دهد و تأیید پرداخت نیست. تا وقتی نبود KYC، پذیرش کشور، پرداخت مستقیم به کیف پول، نبود سپرده و همه کارمزدها از منبع رسمی تأیید نشده‌اند، هیچ موردی واجد شرایط نیست.</p>
+      <p className="hub-intro">سفارش‌های پروژه‌ای تولید تصویر، طراحی گرافیکی و ویدئوی کوتاه با کمک هوش مصنوعی را از فیدهای عمومی جهانی پیدا و ارزیابی کن یا موردی را دستی ثبت کن. امتیاز موضوعی فقط میزان تطابق کار با مهارت‌ها را نشان می‌دهد و تأیید پرداخت نیست. تا وقتی نبود KYC، پذیرش کشور، پرداخت مستقیم به کیف پول، نبود سپرده و همه کارمزدها از منبع رسمی تأیید نشده‌اند، هیچ موردی واجد شرایط نیست.</p>
       <section className="live-discovery-block" aria-label="weekly income target and work priorities">
         <div className="panel-head discovery-form-head">
           <div><span className="eyebrow">WEEKLY EARNING PLAN</span><h3>هدف اولیه درآمد هفتگی</h3></div>
@@ -249,10 +249,10 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         </div>
         <div className="lead-grid">
           <article className="saved-opportunity"><div><strong>۵۰ دلار در هفته</strong><p>هدف اولیه برای اعتبارسنجی بازار و گرفتن اولین سفارش‌های پرداخت‌شده؛ معادل تقریبی ۲۰۰ تا ۲۱۷ دلار در ماه.</p></div></article>
-          <article className="saved-opportunity"><div><strong>۷۰٪ تمرکز اصلی</strong><p>مقاله‌نویسی، تولید محتوا، ویرایش و تحقیق اینترنتی؛ کارهایی که دستیار می‌تواند بخش عمده‌شان را مستقیماً آماده کند.</p></div></article>
-          <article className="saved-opportunity"><div><strong>۳۰٪ تمرکز مکمل</strong><p>تصویر، ویدئو و صدا؛ فقط وقتی ابزار قابل‌دسترسی، مجوز تجاری و هزینه تولید روشن باشد.</p></div></article>
+          <article className="saved-opportunity"><div><strong>۷۰٪ تمرکز اصلی</strong><p>تولید تصویر محصول، طراحی تبلیغاتی و محتوای بصری شبکه‌های اجتماعی با کمک AI.</p></div></article>
+          <article className="saved-opportunity"><div><strong>۳۰٪ تمرکز مکمل</strong><p>ساخت و تدوین ویدئوهای کوتاه و موشن‌گرافیک، فقط با ابزار قابل‌دسترسی و هزینه و مجوز تجاری روشن.</p></div></article>
         </div>
-        <p className="hub-footnote">تقسیم هدف آزمایشی: ۲۰ دلار متن و مقاله، ۱۰ دلار تصویر، ۱۰ دلار تحقیق و گزارش، ۱۰ دلار ویدئو یا صدا. این اعداد سهمیه هدف‌اند، نه سفارش موجود یا درآمد ثبت‌شده. فرصت‌ها بر اساس امکان انجام توسط AI، بودجه واقعی، کشور مجاز، روش پرداخت و هزینه ورود رتبه‌بندی می‌شوند.</p>
+        <p className="hub-footnote">تقسیم هدف آزمایشی: ۲۰ دلار طراحی و تصویر محصول، ۱۵ دلار محتوای بصری شبکه‌های اجتماعی و ۱۵ دلار ویدئوهای کوتاه. این اعداد سهمیه هدف‌اند، نه سفارش موجود یا درآمد ثبت‌شده. فرصت‌ها بر اساس امکان انجام توسط AI، بودجه واقعی، کشور مجاز، روش پرداخت و هزینه ورود رتبه‌بندی می‌شوند.</p>
       </section>
       <section className="live-discovery-block" aria-label="AI-assisted remote work">
         <div className="panel-head discovery-form-head">
@@ -261,12 +261,12 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         </div>
         <p className="hub-intro">این‌ها خدماتی هستند که دستیار هوش مصنوعی می‌تواند بخش اصلی‌شان را انجام دهد؛ هر سفارش باید با شرح کار و استاندارد مشتری تطبیق داده شود و قبل از ارسال نهایی بازبینی انسانی شود.</p>
         <div className="lead-grid">
-          <article className="saved-opportunity"><div><strong>نوشتن و تولید محتوای متنی</strong><p>مقاله و پست وبلاگ، محتوای آموزشی و پژوهشی، متن سئو، توضیحات محصول، صفحه فرود، متن تبلیغاتی، بازنویسی، ویرایش و خلاصه‌سازی.</p><small>قابلیت اجرا: تحقیق، پیش‌نویس، ویرایش و قالب‌بندی</small></div></article>
-          <article className="saved-opportunity"><div><strong>تحقیق اینترنتی و دستیار مجازی</strong><p>جمع‌آوری اطلاعات و منابع، مقایسه رقبا و محصولات، ساخت گزارش، مرتب‌سازی داده‌ها، تهیه جدول و مستندسازی.</p><small>قابلیت اجرا: تحقیق و تحویل گزارش مستند</small></div></article>
+          <article className="saved-opportunity"><div><strong>نوشتن و تولید محتوای متنی</strong><p>تصویر محصول، بنر و پوستر تبلیغاتی، کاور، thumbnail، پست و استوری شبکه‌های اجتماعی و اصلاح تصویر.</p><small>قابلیت اجرا: تحقیق، پیش‌نویس، ویرایش و قالب‌بندی</small></div></article>
+          <article className="saved-opportunity"><div><strong>طراحی گرافیکی و هویت بصری</strong><p>طراحی تبلیغاتی، قالب پست و استوری، بنر فروش، کاور و تصاویر کمپین با کمک AI.</p><small>قابلیت اجرا: تحقیق و تحویل گزارش مستند</small></div></article>
           <article className="saved-opportunity"><div><strong>تصویر و طراحی تبلیغاتی با AI</strong><p>ایده‌پردازی، ساخت تصویر محصول و شبکه اجتماعی، پوستر و بنر، اصلاح تصویر و آماده‌سازی خروجی در ابزارهای متصل و مجاز.</p><small>قابلیت اجرا: بسته به ابزار، سهمیه رایگان و حقوق تجاری</small></div></article>
-          <article className="saved-opportunity"><div><strong>سناریو و ویدئوی کوتاه</strong><p>سناریو، استوری‌بورد، متن گویندگی، کپشن، زیرنویس، برنامه تدوین و تولید یا ویرایش ویدئو با ابزارهای در دسترس.</p><small>قابلیت اجرا: تولید نهایی به دسترسی ابزار و محدودیت حساب بستگی دارد</small></div></article>
-          <article className="saved-opportunity"><div><strong>صدا و محتوای صوتی</strong><p>متن گویندگی، اسکریپت پادکست، ایده موسیقی، افکت صوتی و پاک‌سازی یا آماده‌سازی صدا با ابزارهای پشتیبانی‌شده.</p><small>قابلیت اجرا: حقوق تجاری و هزینه تولید باید بررسی شود</small></div></article>
-          <article className="saved-opportunity"><div><strong>برنامه‌نویسی و کارهای فنی</strong><p>نوشتن و اصلاح کد، رفع خطا، ساخت صفحات و ابزارهای ساده، مستندسازی و اجرای آزمون‌های نرم‌افزاری.</p><small>قابلیت اجرا: نیازمند دسترسی مجاز به مخزن و محیط اجرا</small></div></article>
+          <article className="saved-opportunity"><div><strong>ویدئو و محتوای کوتاه</strong><p>ویدئوی تبلیغاتی کوتاه، ریلز، کلیپ محصول، تدوین، زیرنویس و موشن‌گرافیک با ابزارهای در دسترس.</p><small>قابلیت اجرا: تولید نهایی به دسترسی ابزار و محدودیت حساب بستگی دارد</small></div></article>
+          <article className="saved-opportunity"><div><strong>بسته‌های محتوای بصری</strong><p>ترکیب تصویر، طراحی و ویدئو برای کمپین محصول یا صفحه شبکه اجتماعی، با خروجی‌های هماهنگ و آماده انتشار.</p><small>قابلیت اجرا: حقوق تجاری و هزینه تولید باید بررسی شود</small></div></article>
+          <article className="saved-opportunity"><div><strong>ویرایش و آماده‌سازی خروجی</strong><p>حذف پس‌زمینه، اصلاح نور و رنگ، تغییر اندازه و نسبت تصویر، آماده‌سازی فایل برای وب و شبکه‌های اجتماعی.</p><small>قابلیت اجرا: نیازمند دسترسی مجاز به مخزن و محیط اجرا</small></div></article>
         </div>
         <p className="hub-footnote">محدودیت‌ها: ثبت‌نام و احراز هویت، مصاحبه زنده، تماس تلفنی، تصمیم حقوقی، پذیرش قرارداد، ارسال نهایی از حساب کاربر و دریافت پول به تأیید و اقدام تو نیاز دارند. ترجمه فقط برای زبانی پذیرفته می‌شود که کیفیت آن قابل بررسی باشد. هیچ ابزار پولی یا تولید دارای هزینه بدون تأیید قبلی استفاده نمی‌شود.</p>
       </section>
@@ -275,7 +275,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
           <div><span className="eyebrow">LIVE PUBLIC LISTINGS</span><h3>جست‌وجوی زنده فرصت‌های درآمدی</h3></div>
           <button type="button" onClick={discoverOpportunities} disabled={liveLoading}>{liveLoading ? "در حال جست‌وجو..." : "جست‌وجوی فرصت‌های جدید"}</button>
         </div>
-        <p className="hub-intro">جست‌وجوی جهانی سفارش‌های پروژه‌ای و درخواست‌های تولید محتوا، بدون محدودیت به امارات، قطر یا عمان. منابع زنده فعلی فقط LaborX و Subnano هستند؛ آگهی استخدامی حذف شده است. هیچ نتیجه‌ای تا زمان تأیید مستندِ «بدون KYC»، کشور مجاز، پرداخت مستقیم رمزارزی، نبود سپرده و کارمزد، واجد شرایط محسوب نمی‌شود.</p>
+        <p className="hub-intro">جست‌وجوی سفارش‌های پروژه‌ای تصویر، طراحی و ویدئوی AI در بازارهای جهانی، با اولویت بررسی امکان همکاری از امارات، قطر و عمان. منابع زنده فعلی فقط LaborX و Subnano هستند؛ آگهی استخدامی حذف شده است. هیچ نتیجه‌ای تا زمان تأیید مستندِ «بدون KYC»، کشور مجاز، پرداخت مستقیم رمزارزی، نبود سپرده و کارمزد، واجد شرایط محسوب نمی‌شود.</p>
         {liveFetchedAt && <small>آخرین دریافت: {new Date(liveFetchedAt).toLocaleString("fa-IR")}</small>}
         {liveError && <p role="alert" className="discovery-assessment">{liveError}</p>}
         {liveNotice && <p className="discovery-assessment">{liveNotice}</p>}
@@ -296,7 +296,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
           <input value={proposalTitle} onChange={e => setProposalTitle(e.target.value)} placeholder="عنوان دقیق پروژه" aria-label="عنوان پروژه برای پیشنهاد"/>
           <input value={proposalBudget} onChange={e => setProposalBudget(e.target.value)} placeholder="بودجه پیشنهادی (اختیاری)" aria-label="بودجه پیشنهادی"/>
           <input value={proposalDeadline} onChange={e => setProposalDeadline(e.target.value)} placeholder="زمان تحویل پیشنهادی (اختیاری)" aria-label="زمان تحویل"/>
-          <textarea value={proposalBrief} onChange={e => setProposalBrief(e.target.value)} rows={4} placeholder="شرح سفارش، تعداد کلمات، موضوع، مخاطب و شرایط کارفرما..." aria-label="شرح سفارش برای پیشنهاد"/>
+          <textarea value={proposalBrief} onChange={e => setProposalBrief(e.target.value)} rows={4} placeholder="شرح سفارش تصویر یا ویدئو، سبک بصری، ابعاد، پلتفرم انتشار و شرایط کارفرما..." aria-label="شرح سفارش برای پیشنهاد"/>
           <button type="button" onClick={buildProposal} disabled={!proposalTitle.trim() && !proposalBrief.trim()}>ساخت پیش‌نویس پیشنهاد</button>
         </div>
         {proposalText && <div className="writing-order-fields">
@@ -318,7 +318,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
       <form className="opportunity-form" onSubmit={submit}>
         <input value={title} onChange={e => setTitle(e.target.value)} required placeholder="عنوان دقیق سفارش" aria-label="عنوان دقیق سفارش"/>
         <select value={platform} onChange={e => setPlatform(e.target.value)} aria-label="منبع آگهی"><option>LaborX</option><option>Subnano</option><option>سایر منابع رسمی</option></select>
-        <select value={stream} onChange={e => setStream(e.target.value)} aria-label="نوع کار"><option>نوشتن و مقاله</option><option>موسیقی و صدا</option><option>رأی‌گیری آهنگ</option><option>نظرسنجی و تحقیقات بازار</option><option>عکس و ویدئو</option><option>نامشخص</option></select>
+        <select value={stream} onChange={e => setStream(e.target.value)} aria-label="نوع کار"><option>عکس و طراحی</option><option>ویدئو</option><option>نامشخص</option></select>
         <input value={pay} onChange={e => setPay(e.target.value)} placeholder="بودجه و واحد پرداخت" aria-label="بودجه"/>
         <input value={country} onChange={e => setCountry(e.target.value)} placeholder="کشورهای مجاز یا محدودیت‌ها" aria-label="محدودیت کشور"/>
         <select value={countryCheck} onChange={e => setCountryCheck(e.target.value)} aria-label="بررسی کشور"><option>هنوز بررسی نشده</option><option>مجاز بودن کشور تأیید شده</option><option>کشور مسدود است</option></select>
