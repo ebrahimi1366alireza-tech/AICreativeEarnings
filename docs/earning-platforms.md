@@ -159,3 +159,10 @@ No account was created, no application was submitted, no wallet was connected, n
 - هیچ entry fee، subscription، deposit، bond، stake یا paid boost پرداخت نشود.
 - مسابقه و bounty درآمد تضمینی نیستند؛ تعداد شرکت‌کننده، شانس برد، deadline، حقوق استفاده از محتوا و مجوز AI باید قبل از تولید بررسی شوند.
 - هیچ حسابی ساخته نشده، اپلیکیشنی ارسال نشده، کیف پولی متصل نشده و پرداخت/امضایی انجام نشده است.
+
+### Monero.Jobs — reaffirmed priority
+- User reaffirmed that Monero.Jobs is an approved candidate and it must remain in the main shortlist; do not downgrade it merely because it lacks escrow.
+- Official listing is https://monero.jobs/paid-in-xmr. The platform advertises direct XMR payment to a wallet and does not require a platform account for browsing/applying to listings; verify each employer's requirements independently.
+- No platform escrow was identified. This is a payment-risk warning, not a reason to remove the platform. Prefer written scope, milestones, and partial upfront payment before delivering final files.
+- Keep it active for searching relevant AI-assisted writing, design, video, animation, and other digital-work listings. Verify the live listing, client credibility, payment amount, and terms before starting.
+- User accepts human-presence checks (selfie/face/liveness); government ID, country restrictions, and any paid checks remain separate checks.
