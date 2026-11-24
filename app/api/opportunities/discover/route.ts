@@ -70,8 +70,10 @@ async function fetchLaborX(warnings: string[]): Promise<DiscoveredItem[]> {
         || text.match(/Job Title:\s*(.+?)(?=💰|Budget:|🤝|With:|LaborX New job on LaborX\.com|\d+\s+views|$)/i);
       if (!titleMatch) continue;
       const title = plainText(titleMatch[1], 180);
-      const searchable = title.toLowerCase();
-      if (!inferStream(searchable)) continue;
+      // Some LaborX posts have generic titles while the creative service appears
+      // only in the body. Match the full post to avoid silently dropping those briefs.
+      const stream = inferStream(`${title} ${text}`);
+      if (!stream) continue;
       const budgetMatch = text.match(/Budget:\s*(.+?)(?=🤝|With:|LaborX New job on LaborX\.com|Job Title:|\d+\s+views|$)/i);
       const budget = budgetMatch ? plainText(budgetMatch[1], 60) : "در آگهی مشخص نشده";
       const companyMatch = text.match(/With:\s*(.+?)(?=LaborX New job on LaborX\.com|Job Title:|\d+\s+views|$)/i);
@@ -80,8 +82,6 @@ async function fetchLaborX(warnings: string[]): Promise<DiscoveredItem[]> {
       const postUrl = postMatch ? `https://t.me/LaborXWeb3Jobs/${postMatch[1]}` : "https://t.me/s/LaborXWeb3Jobs";
       const postedMatch = chunk.match(/<time[^>]*datetime="([^"]+)"/i);
       const postedAt = postedMatch && !Number.isNaN(Date.parse(postedMatch[1])) ? new Date(postedMatch[1]).toISOString() : null;
-      const stream = inferStream(`${title} ${text}`);
-      if (!stream) continue;
       found.set(url, {
         id: url, title, company, url, location: "طبق شرح سفارش",
         types: ["Freelance"], salary: budget, description: `سفارش فریلنسری «${title}» در LaborX از طرف ${company}. بودجه اعلامی: ${budget}.`, postedAt,
