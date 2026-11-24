@@ -82,3 +82,9 @@ This is the operational checklist paired with [earning-platforms.md](./earning-p
 | Microlancer.io | Yes | No | No | Standard escrow available; non-escrow P2P also offered | No | Only accepted escrow-backed offers; visible task values are mostly tiny. |
 
 Research-only status: none of these accounts has been registered or claimed. No wallet was connected and no user authorization, legal acceptance, application or payment was made.
+
+## چهار پلتفرم جدید — وضعیت ۲۴ نوامبر ۲۰۲۶
+- [x] Superteam Earn بررسی شد؛ Raenest bounty دارای جایزه 13,000 USDC و deadline 13 Dec 2026 است، اما نیازمند حساب Raenest است. شرایط رسمی Raenest personal account فقط ساکنان قانونی 8 کشور را می‌پذیرد و Armenia در فهرست نیست؛ فعلاً قبل از تأیید کتبی eligibility هیچ اقدام/تولیدی انجام نشود.
+- [x] Scribble بررسی شد؛ در صفحه bountyها 0 live و 129 total دیده شد؛ فعلاً فقط watchlist. payout/KYC/country support نامشخص.
+- [x] GIMI بررسی شد؛ signup و submission اولیه رایگان، حداقل برداشت $10، fee برداشت 5%، payout با bank/PayPal/USDC، و احتمال درخواست tax ID یا ID از payment partner. AI content ممکن است مگر campaign brief منع کند؛ برند مالک محتوای approved می‌شود. قبل از ارسال هر محتوا، campaign و حقوق آن بررسی شود.
+- [x] معیار کاربر: احراز انسان بودن، selfie، face match و liveness/video قابل قبول است؛ ID/passport، proof of address، tax ID و country restrictions جداگانه بررسی شود.
