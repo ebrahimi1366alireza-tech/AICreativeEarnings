@@ -106,13 +106,21 @@ function scoreLead(input: {
   if (input.escrow === "وجه در امانت قفل شده") score += 15;
   if (input.fee === "۰ تا ۱۰٪") score += 10;
   else if (input.fee === "بیشتر از ۱۰٪") score += 4;
-  if (input.kyc !== "نامشخص") score += 5;
+  if (input.kyc === "نیازمند KYC") hardReject.push("احراز هویت اجباری با شرط پروژه سازگار نیست");
+  if (input.kyc !== "بدون KYC") score -= 25;
   if (input.stream !== "نامشخص") score += 5;
   score = Math.max(0, Math.min(100, score));
   if (hardReject.length) return { score: 0, decision: "رد خودکار", reason: hardReject.join("؛ ") };
-  if (score >= 70) return { score, decision: "اولویت بالا", reason: "برای بررسی نهایی قرارداد و حساب مناسب است" };
-  if (score >= 45) return { score, decision: "نیازمند بررسی", reason: "چند شرط مهم هنوز تأیید نشده است" };
-  return { score, decision: "اولویت پایین", reason: "شواهد پرداخت، کشور یا هزینه‌ها کافی نیست" };
+  const complianceVerified = input.kyc === "بدون KYC"
+    && input.countryCheck === "مجاز بودن کشور تأیید شده"
+    && input.payout === "کیف پول مستقیم"
+    && input.deposit === "بدون سپرده و خرید اجباری"
+    && input.paymentAsset !== "نامشخص"
+    && input.fee !== "نامشخص";
+  if (!complianceVerified) return { score: Math.min(score, 44), decision: "نیازمند بررسی", reason: "تا وقتی KYC، کشور مجاز، پرداخت مستقیم رمزارزی، کارمزد و نبود سپرده مستند نشوند، این فرصت واجد شرایط نیست." };
+  if (score >= 70) return { score, decision: "واجد شرایط اولیه", reason: "شرایط پایه ثبت شده؛ قرارداد، حداقل برداشت و پرداخت نهایی را پیش از شروع دوباره بررسی کن." };
+  if (score >= 45) return { score, decision: "نیازمند بررسی", reason: "شواهد تکمیلی پرداخت یا شرایط قرارداد کافی نیست." };
+  return { score, decision: "اولویت پایین", reason: "شواهد پرداخت، کشور یا هزینه‌ها کافی نیست." };
 }
 
 export default function OpportunityDiscovery({ onAdd }: Props) {
@@ -273,13 +281,13 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
           <div><span className="eyebrow">LIVE PUBLIC LISTINGS</span><h3>جست‌وجوی زنده فرصت‌های درآمدی</h3></div>
           <button type="button" onClick={discoverOpportunities} disabled={liveLoading}>{liveLoading ? "در حال جست‌وجو..." : "جست‌وجوی فرصت‌های جدید"}</button>
         </div>
-        <p className="hub-intro">جست‌وجوی چندمنبعی برای نوشتن، عکس و طراحی، ویدئو، موسیقی و صدا، داوری موسیقی و تحقیقات بازار. منابع فعلی: LaborX، Subnano، Jobicy، Himalayas و Remote OK. برخی منابع آگهی استخدام‌اند، نه سفارش تکی. بودجه یا امتیاز بالا به معنی تضمین پرداخت نیست.</p>
+        <p className="hub-intro">جست‌وجوی جهانی و بدون محدودیت به امارات، قطر یا عمان برای نوشتن، عکس و طراحی، ویدئو، موسیقی و صدا و تحقیقات بازار. منابع فعلی: LaborX، Subnano، Jobicy، Himalayas و Remote OK. هیچ نتیجه‌ای تا زمان تأیید مستندِ «بدون KYC»، کشور مجاز، پرداخت مستقیم رمزارزی، نبود سپرده و کارمزد، واجد شرایط محسوب نمی‌شود؛ آگهی‌های استخدامی نیز لزوماً سفارش تکی نیستند.</p>
         {liveFetchedAt && <small>آخرین دریافت: {new Date(liveFetchedAt).toLocaleString("fa-IR")}</small>}
         {liveError && <p role="alert" className="discovery-assessment">{liveError}</p>}
         {liveNotice && <p className="discovery-assessment">{liveNotice}</p>}
         {liveJobs.length > 0 && <div className="lead-grid">
           {liveJobs.map(job => <article className="saved-opportunity" key={job.url}>
-            <div><strong>{job.title}</strong><p>{job.company} · {job.location}</p><p>{job.description || "توضیحات در صفحه اصلی آگهی"}</p><p className="opportunity-meta">بودجه/حقوق اعلام‌شده: {job.salary} · نوع: {job.sourceType === "freelance" ? "پروژه فریلنسری" : job.sourceType === "request" ? "درخواست عمومی" : "استخدام دورکاری"} · امتیاز تطابق موضوعی: {job.score}/100</p>{job.budgetScope && <small>دامنه بودجه: {job.budgetScope}</small>}{job.postedAt && <small>تاریخ انتشار: {new Date(job.postedAt).toLocaleDateString("fa-IR")}</small>}{job.paymentNote && <p>{job.paymentNote}</p>}{job.actionNote && <p>{job.actionNote}</p>}<p><a href={job.url} target="_blank" rel="noreferrer">مشاهده صفحه اقدام یا آگهی ↗</a>{job.sourceUrl && job.sourceUrl !== job.url && <> · <a href={job.sourceUrl} target="_blank" rel="noreferrer">منبع اصلی {job.source} ↗</a></>}</p></div>
+            <div><strong>{job.title}</strong><p>{job.company} · {job.location}</p><p>{job.description || "توضیحات در صفحه اصلی آگهی"}</p><p className="opportunity-meta">بودجه/حقوق اعلام‌شده: {job.salary} · نوع: {job.sourceType === "freelance" ? "پروژه فریلنسری" : job.sourceType === "request" ? "درخواست عمومی" : "استخدام دورکاری"} · امتیاز تطابق موضوعی: {job.score}/100</p><p className="discovery-assessment">وضعیت انطباق: <strong>تأییدنشده، فعلاً واجد شرایط نیست</strong> · وضعیت KYC، کشور مجاز، روش برداشت، کارمزد و سپرده باید از منبع رسمی بررسی شوند.</p>{job.budgetScope && <small>دامنه بودجه: {job.budgetScope}</small>}{job.postedAt && <small>تاریخ انتشار: {new Date(job.postedAt).toLocaleDateString("fa-IR")}</small>}{job.paymentNote && <p>{job.paymentNote}</p>}{job.actionNote && <p>{job.actionNote}</p>}<p><a href={job.url} target="_blank" rel="noreferrer">مشاهده صفحه اقدام یا آگهی ↗</a>{job.sourceUrl && job.sourceUrl !== job.url && <> · <a href={job.sourceUrl} target="_blank" rel="noreferrer">منبع اصلی {job.source} ↗</a></>}</p></div>
             <button type="button" onClick={() => addLiveJob(job)}>افزودن به فرصت‌ها</button>
           </article>)}
         </div>}
