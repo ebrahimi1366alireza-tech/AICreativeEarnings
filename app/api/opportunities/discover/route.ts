@@ -3,13 +3,6 @@ import { NextResponse } from "next/server";
 export const runtime = "nodejs";
 export const revalidate = 1800;
 
-type JobicyJob = {
-  id?: number | string; url?: string; jobTitle?: string; companyName?: string;
-  jobIndustry?: string[]; jobType?: string[]; jobGeo?: string; jobExcerpt?: string;
-  jobDescription?: string; pubDate?: string; salaryMin?: number; salaryMax?: number;
-  salaryCurrency?: string; salaryPeriod?: string;
-};
-
 type DiscoveredItem = {
   id: string; title: string; company: string; url: string; sourceUrl?: string; location: string;
   types: string[]; salary: string; description: string; postedAt: string | null;
@@ -18,14 +11,10 @@ type DiscoveredItem = {
   budgetScope?: string; paymentNote?: string; actionNote?: string;
 };
 
-const SEARCH_TAGS = ["writer", "content", "video", "design", "music", "research"];
+const SEARCH_TAGS = ["ai video", "video editing", "graphic design", "image editing", "product photography"];
 const STREAM_TERMS: Record<string, string[]> = {
-  "داوری موسیقی": ["music reviewer", "track reviewer", "music review", "song review", "music curator", "playlist curator"],
-  "نظرسنجی و تحقیقات بازار": ["paid survey", "survey participant", "survey respondent", "focus group", "user research participant", "market research participant"],
-  "ویدئو": ["video editor", "video editing", "video producer", "short-form video", "motion graphics", "motion designer", "ai video"],
-  "عکس و طراحی": ["graphic design", "graphic designer", "image editing", "photo editing", "product photography", "illustrator", "thumbnail design", "visual designer"],
-  "موسیقی و صدا": ["audio engineer", "sound design", "sound designer", "voice over", "voiceover", "podcast editor", "music production", "composer", "sound effects"],
-  "نوشتن و مقاله": ["writer", "writing", "copywriter", "copywriting", "editor", "editing", "content", "blog", "article", "seo", "proofread", "proofreading", "technical writing", "research assistant"]
+  "ویدئو": ["video editor", "video editing", "video producer", "short-form video", "motion graphics", "motion designer", "ai video", "reels editor", "tiktok video"],
+  "عکس و طراحی": ["graphic design", "graphic designer", "image editing", "photo editing", "product photography", "illustrator", "thumbnail design", "visual designer", "ai image", "ai art", "social media design", "banner design", "poster design"]
 };
 function inferStream(value: string): string | null {
   const text = value.toLowerCase();
@@ -55,63 +44,6 @@ function safeJobUrl(value: unknown, host: string, pathPrefix: string) {
     const url = new URL(value);
     return url.protocol === "https:" && url.hostname === host && url.pathname.startsWith(pathPrefix) ? url.toString() : null;
   } catch { return null; }
-}
-
-function normalizeJobicy(job: JobicyJob): DiscoveredItem | null {
-  const url = safeJobUrl(job.url, "jobicy.com", "/");
-  if (!url || !job.jobTitle) return null;
-  const title = plainText(job.jobTitle, 180);
-  const description = plainText(job.jobExcerpt || job.jobDescription, 420);
-  const industries = Array.isArray(job.jobIndustry) ? job.jobIndustry.map(x => plainText(x, 60)).filter(Boolean) : [];
-  const types = Array.isArray(job.jobType) ? job.jobType.map(x => plainText(x, 40)).filter(Boolean) : [];
-  const searchable = `${title} ${industries.join(" ")}`.toLowerCase();
-  const stream = inferStream(searchable);
-  if (!stream) return null;
-  const contractType = types.some(type => /freelance|contract|part.?time/i.test(type));
-  const salaryKnown = Number.isFinite(job.salaryMin) || Number.isFinite(job.salaryMax);
-  const salary = salaryKnown
-    ? [job.salaryMin, job.salaryMax].filter(value => Number.isFinite(value)).join("–") + ` ${plainText(job.salaryCurrency || "", 12)}${job.salaryPeriod ? ` / ${plainText(job.salaryPeriod, 24)}` : ""}`
-    : "در آگهی مشخص نشده";
-  const postedAt = job.pubDate && !Number.isNaN(Date.parse(job.pubDate)) ? new Date(job.pubDate).toISOString() : null;
-  const score = (inferStream(title) ? 45 : 25)
-    + (contractType ? 25 : 0) + (salaryKnown ? 10 : 0) + (description ? 10 : 0);
-  return {
-    id: String(job.id ?? url), title,
-    company: plainText(job.companyName || "کارفرما در آگهی مشخص نشده", 100),
-    url, location: plainText(job.jobGeo || "محدوده جغرافیایی در آگهی مشخص نشده", 100),
-    types, salary, description, postedAt, score, contractType, source: "Jobicy", stream,
-    sourceType: "employment",
-    actionNote: "این آگهی استخدام دورکاری است، نه الزاماً سفارش تکی. روش پرداخت، KYC و پذیرش کشور باید از کارفرما تأیید شود."
-  };
-}
-
-async function fetchJobicy(warnings: string[]): Promise<DiscoveredItem[]> {
-  const results: PromiseSettledResult<JobicyJob[]>[] = [];
-  for (let index = 0; index < SEARCH_TAGS.length; index++) {
-    if (index > 0) await new Promise(resolve => setTimeout(resolve, 1100));
-    try {
-      const url = new URL("https://jobicy.com/api/jobs");
-      url.searchParams.set("count", "100");
-      url.searchParams.set("tag", SEARCH_TAGS[index]);
-      const response = await fetch(url.toString(), { headers: { Accept: "application/json" }, next: { revalidate: 1800 }, signal: AbortSignal.timeout(12000) });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const payload = await response.json();
-      if (payload?.success === false) throw new Error("API request failed");
-      results.push({ status: "fulfilled", value: Array.isArray(payload?.jobs) ? payload.jobs as JobicyJob[] : [] });
-    } catch {
-      warnings.push(`جست‌وجوی Jobicy با برچسب «${SEARCH_TAGS[index]}» پاسخ نداد.`);
-      results.push({ status: "rejected", reason: "upstream unavailable" });
-    }
-  }
-  const items = new Map<string, DiscoveredItem>();
-  for (const result of results) {
-    if (result.status !== "fulfilled") continue;
-    for (const raw of result.value) {
-      const item = normalizeJobicy(raw);
-      if (item && (!items.has(item.url) || item.score > (items.get(item.url)?.score ?? 0))) items.set(item.url, item);
-    }
-  }
-  return [...items.values()];
 }
 
 async function fetchLaborX(warnings: string[]): Promise<DiscoveredItem[]> {
@@ -242,6 +174,6 @@ export async function GET() {
   return NextResponse.json({
     source: ["LaborX", "Subnano"], fetchedAt: new Date().toISOString(),
     count: jobs.length, jobs, warnings,
-    notice: "نتایج فقط از درخواست‌های پروژه‌ای و سفارش‌های تولید محتوا در LaborX و Subnano گردآوری شده‌اند؛ آگهی استخدام و فرصت شغلی استخدامی نمایش داده نمی‌شود. بودجه Subnano تضمین یا وجه امانی نیست. روش پرداخت، پذیرش کشور، KYC، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. هیچ درخواست یا اقدامی خودکار ارسال نمی‌شود."
+    notice: "نتایج فقط سفارش‌های پروژه‌ای مرتبط با تولید تصویر، طراحی گرافیکی و ویدئوی کوتاه با کمک AI را هدف می‌گیرند. آگهی استخدام، نویسندگی عمومی، نظرسنجی و کارهای نامرتبط نمایش داده نمی‌شوند. بودجه Subnano تضمین یا وجه امانی نیست. روش پرداخت، پذیرش کشور، KYC، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. هیچ درخواست یا اقدامی خودکار ارسال نمی‌شود."
   }, { headers: { "Cache-Control": "public, s-maxage=900, stale-while-revalidate=600" } });
 }
