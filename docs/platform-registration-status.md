@@ -11,6 +11,7 @@ This is the operational checklist paired with [earning-platforms.md](./earning-p
 - [x] Do not connect Gmail for now. User will provide project inputs manually; the existing Gmail can be used later only if requested.
 - [x] No mandatory fees, subscriptions, deposits, bonds, stakes, or payments without explicit approval.
 - [x] User handles OTP, identity checks, and any wallet signature that must be personally authorized.
+- [x] Human-presence checks, selfie/face match, and liveness/video verification are acceptable; these alone are not disqualifying. Government ID/passport, address/tax documents, and paid verification remain separate checks requiring review and explicit approval.
 - [x] Never request/store seed phrase or private key.
 - [ ] Revenue platform accounts connected and tested.
 - [ ] At least one funded, eligible paid task completed and payout verified.
