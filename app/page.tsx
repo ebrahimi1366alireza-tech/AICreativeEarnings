@@ -8,7 +8,7 @@ import OpportunityDiscovery from "./components/opportunity-discovery";
 const workflow = [
   { number: "۰۱", title: "کشف فرصت‌ها", detail: "جست‌وجوی زنده در فیدهای عمومی جهانی؛ آگهی‌ها هنوز سفارش تأییدشده نیستند", state: "فعال · بررسی اولیه" },
   { number: "۰۲", title: "بررسی شرایط", detail: "تأیید دستی KYC، کشور مجاز، پرداخت مستقیم رمزارزی، کارمزد و نبود سپرده", state: "نیازمند بررسی هر فرصت" },
-  { number: "۰۳", title: "تولید محتوا", detail: "آماده‌سازی متن، تحقیق، طرح و سناریو با ابزارهای رایگان و مجاز", state: "آماده اجرا با تأیید ابزار" },
+  { number: "۰۳", title: "تولید محتوای بصری", detail: "ساخت تصویر محصول، طراحی تبلیغاتی و تدوین ویدئوی کوتاه با ابزارهای رایگان و مجاز", state: "آماده اجرا با تأیید ابزار" },
   { number: "۰۴", title: "کنترل کیفیت", detail: "بازبینی محتوا، حقوق تجاری، قالب و تطبیق با شرح سفارش", state: "آماده بازبینی" },
   { number: "۰۵", title: "تحویل و درآمد", detail: "ثبت تحویل و درآمد واقعی پس از پرداخت؛ ارسال و دریافت خودکار فعال نیست", state: "ثبت دستی · پرداخت تأییدنشده" }
 ];
@@ -18,10 +18,7 @@ const tools = [
   { name: "Krea", note: "تولید و ویرایش تصویر و ویدئو؛ سهمیه رایگان، دسترسی منطقه‌ای و مجوز تجاری به طرح و مدل انتخابی بستگی دارد و باید داخل حساب بررسی شود. API جدا از وب‌اپ است و ممکن است هزینه داشته باشد.", status: "ابزار متصل به ChatGPT؛ سهمیه و مجوز هر خروجی باید بررسی شود", mark: "KREA", url: "https://www.krea.ai/" },
   { name: "Canva", note: "طراحی پوستر، تبلیغات، تصاویر محصول و محتوای شبکه‌های اجتماعی؛ امکانات AI رایگان محدود است.", status: "برای طراحی و آماده‌سازی فایل مشتری", mark: "CANVA", url: "https://www.canva.com/" },
   { name: "CapCut", note: "تدوین ویدئو، زیرنویس و صداگذاری؛ برخی قابلیت‌ها و دارایی‌ها پولی یا منطقه‌ای هستند.", status: "برای تدوین و خروجی نهایی ویدئو", mark: "CAPCUT", url: "https://www.capcut.com/" },
-  { name: "ElevenLabs", note: "تولید صدا و موسیقی با هوش مصنوعی؛ سهمیه رایگان و مجوز استفاده تجاری به طرح و نوع خروجی بستگی دارد.", status: "پیش از سفارش پولی، مجوز تجاری را بررسی کن", mark: "ELEVENLABS", url: "https://elevenlabs.io/" },
-  { name: "ChatGPT", note: "کمک در تحقیق، طرح مقاله، نگارش، بازنویسی، ویرایش و کنترل کیفیت محتوا.", status: "دستیار اصلی مسیر مقاله و متن", mark: "CHATGPT", url: "https://chatgpt.com/" },
-  { name: "Google Docs", note: "نگارش، قالب‌بندی، بازبینی و آماده‌سازی نسخه نهایی برای تحویل به مشتری.", status: "برای تنظیم و تحویل مقاله", mark: "GOOGLE DOCS", url: "https://docs.google.com/" },
-  { name: "Notion", note: "مدیریت اسناد و محتوای پروژه؛ بازبینی املا، دستور زبان و روانی متن انگلیسی را ChatGPT انجام می‌دهد.", status: "متصل به ChatGPT؛ مدیریت اسناد و بازبینی نگارش", mark: "NOTION", url: "https://www.notion.so/" }
+  { name: "ChatGPT", note: "کمک در ایده‌پردازی، نوشتن پرامپت، طراحی بریف، کنترل کیفیت و آماده‌سازی اصلاحات.", status: "دستیار اصلی آماده‌سازی و بازبینی خروجی بصری", mark: "CHATGPT", url: "https://chatgpt.com/" }
 ];
 
 type Opportunity = { id: string; title: string; platform: string; pay: string; status: string; stream?: string; country?: string; payout?: string; network?: string; minimum?: string; fee?: string; kyc?: string; proofUrl?: string; writingType?: string; contentLanguage?: string; wordCount?: string; deadline?: string; seoRequired?: string; commercialRights?: string };
@@ -244,7 +241,7 @@ export default function Home() {
         <header className="topbar"><div><div className="eyebrow">WORKSPACE / OVERVIEW</div><h1>استودیوی درآمد خلاق</h1><p>از پیدا کردن سفارش تا آماده‌سازی خروجی، همه‌چیز در یک جا.</p></div><div className="top-actions"><span className="live-dot">● محیط آزمایشی</span><div className="date-chip">۲۳ نوامبر ۲۰۲۶</div></div></header>
 
         <section className="hero">
-          <div className="hero-copy"><span className="pill">شروع بدون سرمایه</span><h2>اول سفارش معتبر،<br/><em>بعد تولید هوشمند.</em></h2><p>پنج مسیر درآمدی را مدیریت می‌کنیم؛ هر فرصت پیش از اقدام از نظر اعتبار، کشور مجاز و پرداخت مستقیم رمزارزی بررسی می‌شود. برای مقاله از ChatGPT و Google Docs استفاده می‌کنیم؛ مدیریت اسناد در Notion انجام می‌شود و بازبینی نگارش انگلیسی را ChatGPT انجام می‌دهد.</p><a className="hero-link" href="#workflow">مشاهده مسیر اجرا <span>←</span></a></div>
+          <div className="hero-copy"><span className="pill">شروع بدون سرمایه</span><h2>اول سفارش معتبر،<br/><em>بعد تولید هوشمند.</em></h2><p>روی سفارش‌های جهانی تولید تصویر محصول، طراحی تبلیغاتی و ویدئوی کوتاه با کمک هوش مصنوعی تمرکز می‌کنیم. هر آگهی تا زمان تأیید KYC، کشور مجاز، پرداخت مستقیم رمزارزی و هزینه‌های ورود فقط یک سرنخ بررسی‌نشده است.</p><a className="hero-link" href="#workflow">مشاهده مسیر اجرا <span>←</span></a></div>
           <div className="hero-art"><div className="orbit orbit-one"></div><div className="orbit orbit-two"></div><div className="art-core">✳<small>AI</small></div><div className="float-card card-a">✦ تصویر</div><div className="float-card card-b">▶ ویدئو</div><div className="float-card card-c">↗ درآمد</div></div>
         </section>
 
