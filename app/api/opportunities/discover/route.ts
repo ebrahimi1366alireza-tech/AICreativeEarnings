@@ -15,7 +15,10 @@ type DiscoveredItem = {
 const SEARCH_TAGS = ["ai video", "video editing", "graphic design", "image editing", "product photography"];
 const STREAM_TERMS: Record<string, string[]> = {
   "ویدئو": ["video editor", "video editing", "video producer", "short-form video", "motion graphics", "motion designer", "ai video", "reels editor", "tiktok video"],
-  "عکس و طراحی": ["graphic design", "graphic designer", "image editing", "photo editing", "product photography", "illustrator", "thumbnail design", "visual designer", "ai image", "ai art", "social media design", "banner design", "poster design"]
+  "عکس و طراحی": ["graphic design", "graphic designer", "image editing", "photo editing", "product photography", "illustrator", "thumbnail design", "visual designer", "ai image", "ai art", "social media design", "banner design", "poster design"],
+  "نوشتن و مقاله": ["article writing", "content writing", "blog writing", "copywriting", "technical writing", "seo writing", "proofreading", "editing", "translation", "research writing"],
+  "تولید آهنگ با هوش مصنوعی": ["music production", "song production", "ai music", "music composition", "soundtrack", "jingle", "audio production", "songwriting", "music generation"],
+  "نظرسنجی و تحقیقات بازار": ["paid survey", "online survey", "survey response", "survey participant", "market research", "consumer research", "questionnaire", "polling", "paid poll", "user research", "research participant"]
 };
 function inferStream(value: string): string | null {
   const text = value.toLowerCase();
@@ -175,6 +178,6 @@ export async function GET() {
   return NextResponse.json({
     source: ["LaborX", "Subnano"], fetchedAt: new Date().toISOString(),
     count: jobs.length, jobs, warnings,
-    notice: "نتایج زنده LaborX و Subnano فقط سفارش‌های مرتبط با تصویر، طراحی و ویدئو را هدف می‌گیرند. بودجه Subnano تضمین یا وجه امانی نیست. روش پرداخت، پذیرش کشور، KYC، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. هیچ درخواست یا اقدامی خودکار ارسال نمی‌شود."
+    notice: "نتایج زنده LaborX و Subnano می‌توانند سفارش‌های مرتبط با تصویر و طراحی، ویدئو، نویسندگی و مقاله، تولید آهنگ با هوش مصنوعی و نظرسنجی/تحقیقات بازار را نمایش دهند؛ البته فقط مواردی که در متن آگهی با این دسته‌ها تطبیق داشته باشند. بودجه Subnano تضمین یا وجه امانی نیست. روش پرداخت، پذیرش کشور، KYC، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. هیچ درخواست یا اقدامی خودکار ارسال نمی‌شود."
   }, { headers: { "Cache-Control": "public, s-maxage=900, stale-while-revalidate=600" } });
 }
