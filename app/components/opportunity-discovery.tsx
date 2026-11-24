@@ -247,7 +247,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         <div><span className="eyebrow">OPPORTUNITY DISCOVERY ENGINE · MVP</span><h2>موتور پیدا کردن و ارزیابی سفارش</h2></div>
         <span className="free-tag">منابع رایگان</span>
       </div>
-      <p className="hub-intro">منابع رسمی را باز کن، سفارش واقعی را پیدا کن و لینک همان آگهی را وارد کن. موتور بر اساس پرداخت رمزارزی، کشور، سپرده، کارمزد و امانت‌داری امتیاز اولیه می‌دهد. امتیاز بالا به معنی تضمین درآمد یا تأیید قطعی نیست.</p>
+      <p className="hub-intro">فرصت‌ها را از فیدهای عمومی جهانی به‌صورت زنده دریافت کن یا موردی را دستی ثبت کن. امتیاز موضوعی فقط میزان تطابق کار با مهارت‌ها را نشان می‌دهد و تأیید پرداخت نیست. تا وقتی نبود KYC، پذیرش کشور، پرداخت مستقیم به کیف پول، نبود سپرده و همه کارمزدها از منبع رسمی تأیید نشده‌اند، هیچ موردی واجد شرایط نیست.</p>
       <section className="live-discovery-block" aria-label="weekly income target and work priorities">
         <div className="panel-head discovery-form-head">
           <div><span className="eyebrow">WEEKLY EARNING PLAN</span><h3>هدف اولیه درآمد هفتگی</h3></div>
