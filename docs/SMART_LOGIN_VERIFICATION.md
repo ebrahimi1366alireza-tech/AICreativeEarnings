@@ -24,11 +24,11 @@ Body:
 - kind: email_code, human_verification, identity_check, or unknown
 - platform: short provider name
 
-The endpoint stores a 15-minute request and returns a request ID. It rejects non-HTTPS URLs, local/private IP hosts, localhost, .local, .internal, embedded URL credentials, and nonstandard ports. The pairing token is never stored in plaintext. Revoke and re-pair the device if the token is exposed.
+The endpoint stores a 15-minute request and returns a request ID. It rejects non-HTTPS URLs, local/private IP hosts, localhost, .local, .internal, embedded URL credentials, nonstandard ports, and query parameters that look like one-time codes or credentials. URL fragments are removed. If a provider uses a one-time magic link in its URL, the adapter deliberately refuses to forward it; pause and ask the user to complete verification through a non-secret provider page instead. The pairing token is never stored in plaintext. Revoke and re-pair the device if the token is exposed.
 
 ## Playwright adapter
 
-The repository includes `scripts/verification-checkpoint.ts`, a provider-agnostic adapter for an external Playwright worker. It reads only the page title and visible body text to classify a likely checkpoint, then forwards the current HTTPS URL, checkpoint kind, and platform label. It does not forward page text, OTP values, passwords, identity data, or images.
+The repository includes `scripts/verification-checkpoint.ts`, a provider-agnostic adapter for an external Playwright worker. It reads only the page title and visible body text to classify a likely checkpoint, then forwards the sanitized HTTPS URL, checkpoint kind, and platform label. Credential-like query parameters cause a hard stop rather than being copied to the phone. It does not forward page text, OTP values, passwords, identity data, or images.
 
 Example integration in the external worker:
 
