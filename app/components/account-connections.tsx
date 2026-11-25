@@ -14,6 +14,8 @@ export default function AccountConnections() {
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
+  const [recoveryMode, setRecoveryMode] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
 
   async function refreshAuth() {
     setChecking(true);
@@ -34,6 +36,33 @@ export default function AccountConnections() {
       }
     } catch { /* ignore invalid local data */ }
     void refreshAuth();
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("auth") !== "recovery") return;
+    const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const accessToken = hash.get("access_token") || "";
+    const refreshToken = hash.get("refresh_token") || "";
+    const tokenType = hash.get("type") || "";
+    const expiresIn = Number(hash.get("expires_in") || 3600);
+    window.history.replaceState({}, document.title, window.location.pathname);
+    if (!accessToken || !refreshToken || tokenType !== "recovery") {
+      setNotice("لینک بازیابی ناقص یا منقضی شده است؛ یک لینک تازه درخواست کن.");
+      return;
+    }
+    setBusy(true);
+    void fetch("/api/auth/email/recovery-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ access_token: accessToken, refresh_token: refreshToken, expires_in: expiresIn, type: tokenType })
+    }).then(async response => {
+      const data = await response.json() as { error?: string; message?: string };
+      if (!response.ok) throw new Error(data.error || "تأیید لینک بازیابی ناموفق بود.");
+      setRecoveryMode(true);
+      setNotice(data.message || "رمز جدید را وارد کن.");
+    }).catch(error => setNotice(error instanceof Error ? error.message : "تأیید لینک بازیابی ناموفق بود."))
+      .finally(() => setBusy(false));
   }, []);
 
   async function submitEmail(event: React.FormEvent<HTMLFormElement>) {
@@ -67,6 +96,30 @@ export default function AccountConnections() {
     } finally { setBusy(false); }
   }
 
+  async function submitRecoveryPassword(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setBusy(true);
+    setNotice("");
+    try {
+      const response = await fetch("/api/auth/email/password", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: newPassword })
+      });
+      const data = await response.json() as { error?: string; message?: string };
+      if (!response.ok) throw new Error(data.error || "تغییر رمز انجام نشد.");
+      setRecoveryMode(false);
+      setNewPassword("");
+      setPassword("");
+      setNotice(data.message || "رمز عبور تغییر کرد؛ اکنون با رمز جدید وارد شو.");
+      await fetch("/api/auth/logout", { method: "POST" });
+      await refreshAuth();
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "خطای نامشخص در تغییر رمز.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" });
     await refreshAuth();
@@ -92,7 +145,12 @@ export default function AccountConnections() {
           <div className="connection-icon">✉</div>
           <div className="connection-body">
             <strong>ورود با ایمیل و رمز عبور</strong>
-            {auth.connected ? <>
+            {recoveryMode ? <>
+              <form onSubmit={submitRecoveryPassword}>
+                <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="رمز عبور جدید (حداقل ۸ نویسه)" autoComplete="new-password" minLength={8} maxLength={128} required />
+                <button type="submit" disabled={busy || newPassword.length < 8}>{busy ? "در حال ذخیره..." : "ثبت رمز جدید"}</button>
+              </form>
+            </> : auth.connected ? <>
               <p>وارد شده‌ای: {auth.profile?.email}</p>
               <button type="button" onClick={logout}>خروج از حساب</button>
             </> : <>
