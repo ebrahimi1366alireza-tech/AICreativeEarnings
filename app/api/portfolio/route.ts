@@ -32,7 +32,7 @@ function signedUrl(base: string, value: string) {
   return `${base}/storage/v1${value.startsWith("/") ? value : `/${value}`}`;
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const ctx = await context(request);
   if ("response" in ctx) return ctx.response;
   const response = await fetch(`${ctx.base}/storage/v1/object/list/${BUCKET}`, {
@@ -73,8 +73,8 @@ export async function POST(request: NextRequest) {
   const extension = MIME_EXTENSIONS[file.type];
   if (!extension) return NextResponse.json({ error: "فقط تصویر JPG، PNG، WebP یا GIF مجاز است." }, { status: 415 });
   if (file.size > MAX_FILE_SIZE) return NextResponse.json({ error: "حجم هر تصویر باید حداکثر ۱.۵ مگابایت باشد." }, { status: 413 });
-  const safeTitle = encodeURIComponent(title).replace(/%2F/gi, "%252F");
-  const safeCategory = encodeURIComponent(category).replace(/%2F/gi, "%252F");
+  const safeTitle = encodeURIComponent(title).replace(/_/g, "%5F").replace(/%2F/gi, "%252F");
+  const safeCategory = encodeURIComponent(category).replace(/_/g, "%5F").replace(/%2F/gi, "%252F");
   const name = `${randomUUID()}__${safeTitle}__${safeCategory}.${extension}`;
   const path = `${ctx.user.id}/${name}`;
   const response = await fetch(`${ctx.base}/storage/v1/object/${BUCKET}/${path.split("/").map(encodeURIComponent).join("/")}`, {
