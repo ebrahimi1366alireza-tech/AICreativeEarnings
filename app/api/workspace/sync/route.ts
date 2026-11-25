@@ -49,12 +49,25 @@ export async function PUT(request: NextRequest) {
       (data.kycBankCountry !== undefined && typeof data.kycBankCountry !== "string")) {
     return NextResponse.json({ error: "ساختار اطلاعات فضای کاری کامل نیست." }, { status: 400 });
   }
-  const response = await fetch(`${base}/rest/v1/workspace_state?on_conflict=owner_id`, {
-    method: "POST",
-    headers: { ...supabaseHeaders(user.access), Prefer: "resolution=merge-duplicates,return=minimal" },
-    body: JSON.stringify({ owner_id: user.id, data, updated_at: new Date().toISOString() }),
-    cache: "no-store"
-  });
+  const expectedUpdatedAt = typeof data.expectedUpdatedAt === "string" ? data.expectedUpdatedAt : null;
+  delete data.expectedUpdatedAt;
+  const updatedAt = new Date().toISOString();
+  const headers = { ...supabaseHeaders(user.access), Prefer: "return=representation" };
+  const endpoint = `${base}/rest/v1/workspace_state`;
+  const response = expectedUpdatedAt
+    ? await fetch(`${endpoint}?owner_id=eq.${encodeURIComponent(user.id)}&updated_at=eq.${encodeURIComponent(expectedUpdatedAt)}`, {
+        method: "PATCH", headers,
+        body: JSON.stringify({ data, updated_at: updatedAt }), cache: "no-store"
+      })
+    : await fetch(`${endpoint}?on_conflict=owner_id`, {
+        method: "POST",
+        headers: { ...headers, Prefer: "resolution=ignore-duplicates,return=representation" },
+        body: JSON.stringify({ owner_id: user.id, data, updated_at: updatedAt }), cache: "no-store"
+      });
   if (!response.ok) return NextResponse.json({ error: "ذخیره اطلاعات ابری ناموفق بود." }, { status: 502 });
-  return NextResponse.json({ saved: true, updatedAt: new Date().toISOString() });
+  const rows = await response.json().catch(() => []);
+  if (!Array.isArray(rows) || rows.length === 0) {
+    return NextResponse.json({ error: "نسخه فضای ابری تغییر کرده است؛ برای جلوگیری از بازنویسی اطلاعات جدید، همگام‌سازی متوقف شد. ابتدا همگام‌سازی دستی را اجرا کن." }, { status: 409 });
+  }
+  return NextResponse.json({ saved: true, updatedAt: rows[0]?.updated_at ?? updatedAt });
 }
