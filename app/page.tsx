@@ -45,7 +45,7 @@ export default function Home() {
   const [walletNetwork, setWalletNetwork] = useState("انتخاب شبکه هنگام برداشت");
   const [walletNotice, setWalletNotice] = useState("");
   const receivedByAsset = income.filter(item => item.received).reduce<Record<string, number>>((totals, item) => {
-    const asset = item.currency.trim().toUpperCase();
+    const asset = String(item.currency || "").trim().toUpperCase();
     if (asset) totals[asset] = (totals[asset] || 0) + item.amount;
     return totals;
   }, {});
@@ -196,7 +196,7 @@ export default function Home() {
       const isRecord = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === "object" && !Array.isArray(value);
       const validOpportunities = Array.isArray(data.opportunities) && data.opportunities.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
       const validDeliveries = Array.isArray(data.deliveries) && data.deliveries.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
-      const validIncome = Array.isArray(data.income) && data.income.every(item => isRecord(item) && typeof item.id === "string" && typeof item.source === "string" && typeof item.amount === "number" && Number.isFinite(item.amount) && typeof item.received === "boolean");
+      const validIncome = Array.isArray(data.income) && data.income.every(item => isRecord(item) && typeof item.id === "string" && typeof item.source === "string" && typeof item.amount === "number" && Number.isFinite(item.amount) && item.amount > 0 && typeof item.currency === "string" && /^[A-Z0-9._-]{1,15}$/i.test(item.currency) && typeof item.received === "boolean");
       const validWallet = data.wallet === undefined || (isRecord(data.wallet) && typeof data.wallet.address === "string" && (data.wallet.address === "" || (data.wallet.address.length >= 8 && data.wallet.address.length <= 256 && !/\s/.test(data.wallet.address))) && typeof data.wallet.network === "string");
       if (data.app !== "AI Creative Earnings" || data.schemaVersion !== 1 || !validOpportunities || !validDeliveries || !validIncome || !validWallet) throw new Error("invalid");
       if (!window.confirm("اطلاعات فعلی جایگزین اطلاعات داخل فایل پشتیبان شود؟ قبل از ادامه، از داده‌های فعلی خروجی بگیر.")) {
@@ -264,7 +264,7 @@ export default function Home() {
           <article className="stat-card"><span className="stat-icon purple">⌕</span><span className="stat-label">فرصت‌های ثبت‌شده</span><strong>{opportunities.length}</strong><small>فرصت‌های ذخیره‌شده در این مرورگر</small></article>
           <article className="stat-card"><span className="stat-icon blue">▧</span><span className="stat-label">سفارش‌های تولید ثبت‌شده</span><strong>{deliveries.length}</strong><small>سفارش‌های ثبت‌شده برای تولید</small></article>
           <article className="stat-card"><span className="stat-icon green">⇧</span><span className="stat-label">تحویل‌های موفق</span><strong>{deliveries.filter(item => item.status === "تحویل شد").length}</strong><small>تحویل‌های ثبت‌شده</small></article>
-          <article className="stat-card"><span className="stat-icon amber">₿</span><span className="stat-label">دارایی‌های دریافت‌شده</span><strong>{receivedAssetCount}</strong><small>{Object.entries(receivedByAsset).map(([asset, amount]) => `${amount.toFixed(4)} ${asset}`).join(" · ") || "هنوز پرداختی دریافت نشده"}</small></article>
+          <article className="stat-card"><span className="stat-icon amber">₿</span><span className="stat-label">دارایی‌های دریافت‌شده</span><strong>{receivedAssetCount}</strong><small>{Object.entries(receivedByAsset).map(([asset, amount]) => `${amount.toFixed(8)} ${asset}`).join(" · ") || "هنوز پرداختی دریافت نشده"}</small></article>
         </section>
 
         <section className="content-grid" id="workflow">
