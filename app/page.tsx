@@ -5,6 +5,7 @@ import AccountConnections from "./components/account-connections";
 import CloudWorkspaceSync from "./components/cloud-workspace-sync";
 import OpportunityDiscovery from "./components/opportunity-discovery";
 import KycPaymentIntelligence from "./components/kyc-payment-intelligence";
+import PortfolioGallery from "./components/portfolio-gallery";
 
 const workflow = [
   { number: "۰۱", title: "کشف فرصت‌ها", detail: "جست‌وجوی زنده در فیدهای عمومی جهانی؛ آگهی‌ها هنوز سفارش تأییدشده نیستند", state: "فعال · بررسی اولیه" },
@@ -360,7 +361,8 @@ export default function Home() {
                   <option>نیازمند بررسی</option><option>در حال بررسی</option><option>رد شد</option><option>درخواست ارسال شد</option><option>پذیرفته شد</option><option>تحویل شد</option><option>پرداخت شد</option>
                 </select>
                 <button type="button" className="remove-opportunity" onClick={() => removeOpportunity(item.id)} aria-label="حذف فرصت">×</button>
-              </article>)}</div>}</div><div className="panel" id="production"><span className="eyebrow">CREATION DESK</span><h2>میز تولید و پیگیری تحویل</h2>
+              </article>)}</div>}</div><PortfolioGallery />
+          <div className="panel" id="production"><span className="eyebrow">CREATION DESK</span><h2>میز تولید و پیگیری تحویل</h2>
           <form className="opportunity-form" onSubmit={addDelivery}><input name="deliveryTitle" required placeholder="عنوان سفارش / نوع محتوا" aria-label="عنوان سفارش"/><input name="client" placeholder="مشتری یا پلتفرم" aria-label="مشتری"/><input name="due" type="date" aria-label="مهلت تحویل"/><button type="submit">+ ثبت سفارش تولید</button></form>
           {deliveries.length === 0 ? <div className="empty-state"><span>✧</span><strong>هنوز سفارش تولیدی ثبت نشده</strong><p>سفارش پذیرفته‌شده را دستی ثبت و تا تحویل پیگیری کن؛ اطلاعات فقط در همین مرورگر ذخیره می‌شود.</p></div> : <div className="saved-opportunities">{deliveries.map(item => <article className="saved-opportunity" key={item.id}><div><strong>{item.title}</strong><p>{item.client}{item.due ? " · مهلت: "+item.due : ""}</p></div><select aria-label="وضعیت تحویل" value={item.status} onChange={e => setDeliveries(rows => rows.map(row => row.id === item.id ? {...row,status:e.target.value} : row))}><option>در حال آماده‌سازی</option><option>در انتظار بازبینی</option><option>آماده تحویل</option><option>تحویل شد</option><option>لغو شد</option></select><button type="button" className="remove-opportunity" onClick={() => setDeliveries(rows => rows.filter(row => row.id !== item.id))} aria-label="حذف سفارش">×</button></article>)}</div>}
         </div></section>
