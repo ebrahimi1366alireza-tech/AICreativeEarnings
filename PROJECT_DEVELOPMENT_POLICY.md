@@ -31,3 +31,11 @@ This file records cross-project decisions and must be consulted when starting, c
 - This policy is shared project guidance, not proof that tools are installed or services are connected.
 - When creating a new repository, add this file before implementation begins.
 - Update this file when the user explicitly changes a cross-project decision, and propagate the update to every active project repository.
+
+
+## Income platforms and opportunity research
+- For AI Creative Earnings and any future income-oriented project, consult the repository's `docs/INCOME_PLATFORMS_CATALOG.md` before selecting tasks, services, or monetization channels.
+- Reuse the catalog automatically as a starting point; do not make the user repeat platform names or prior constraints.
+- Treat listed platforms as research leads, not verified earning guarantees. Before recommending or automating a platform, re-check official country eligibility, identity/KYC rules, payout methods, fees, minimum withdrawal, and whether upfront payment/deposit is required.
+- Prefer opportunities with no mandatory deposit, no paid subscription, transparent task requirements, and a payout route the user can actually access.
+- Keep the catalog current: add newly vetted sources and record blocked, unavailable, or unsuitable platforms with the reason.
