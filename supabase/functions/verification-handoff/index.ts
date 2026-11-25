@@ -18,6 +18,9 @@ function validUrl(raw: unknown): string | null {
     const u = new URL(raw);
     const h = u.hostname.toLowerCase();
     if (u.protocol !== "https:" || u.username || u.password || (u.port && u.port !== "443")) return null;
+    const sensitiveQueryKeys = /^(access_token|refresh_token|token|token_hash|code|otp|password|secret|api_key|key|signature|sig|jwt|ticket)$/i;
+    if ([...u.searchParams.keys()].some(key => sensitiveQueryKeys.test(key))) return null;
+    u.hash = "";
     if (!h || h === "localhost" || h.endsWith(".local") || h.endsWith(".internal")) return null;
     if (h.includes(":") || /^(\d{1,3}\.){3}\d{1,3}$/.test(h)) return null;
     if (/^(127\.|10\.|192\.168\.|169\.254\.)/.test(h) || /^172\.(1[6-9]|2\d|3[01])\./.test(h)) return null;
