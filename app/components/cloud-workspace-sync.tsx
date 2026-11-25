@@ -65,7 +65,7 @@ export default function CloudWorkspaceSync() {
     let restoringRemote = false;
     setHasRestoreBackup(Boolean(localStorage.getItem(RESTORE_BACKUP_KEY)));
 
-    function preserveLocalBeforeRestore(email: string) {
+    function preserveLocalBeforeRestore(targetAccount: string): boolean {
       const local = readLocal();
       const hasLocal = local.opportunities.length > 0 ||
         local.deliveries.length > 0 ||
@@ -77,15 +77,22 @@ export default function CloudWorkspaceSync() {
         local.kycResidence !== "AM" ||
         local.kycCitizenship !== "IR" ||
         local.kycBankCountry !== "AM";
-      if (!hasLocal) return;
-      localStorage.setItem(RESTORE_BACKUP_KEY, JSON.stringify({
-        app: "AI Creative Earnings",
-        schemaVersion: 1,
-        exportedAt: new Date().toISOString(),
-        account: email,
-        ...local
-      }));
-      setHasRestoreBackup(true);
+      if (!hasLocal) return true;
+      try {
+        localStorage.setItem(RESTORE_BACKUP_KEY, JSON.stringify({
+          app: "AI Creative Earnings",
+          schemaVersion: 1,
+          exportedAt: new Date().toISOString(),
+          sourceAccount: localStorage.getItem(OWNER_KEY) || "این دستگاه، حساب قبلی مشخص نیست",
+          targetAccount,
+          ...local
+        }));
+        setHasRestoreBackup(true);
+        return true;
+      } catch {
+        setHasRestoreBackup(true);
+        return false;
+      }
     }
 
     async function pushLocal(): Promise<boolean> {
@@ -123,7 +130,9 @@ export default function CloudWorkspaceSync() {
         const email = auth.profile.email.toLowerCase();
         const owner = localStorage.getItem(OWNER_KEY);
         if (owner && owner !== email) {
-          setStatus("این مرورگر قبلاً برای حساب دیگری استفاده شده است. برای جلوگیری از انتقال یا بازنویسی اطلاعات، همگام‌سازی متوقف شد؛ ابتدا از اطلاعات حساب قبلی پشتیبان بگیر و فضای محلی را جداگانه مدیریت کن.");
+          preserveLocalBeforeRestore(email);
+          setHasRestoreBackup(true);
+          setStatus("این مرورگر قبلاً برای حساب دیگری استفاده شده است. همگام‌سازی متوقف شد؛ پیش از هر تغییر، از دکمه دانلود پشتیبان اطلاعات همین دستگاه را ذخیره کن.");
           return;
         }
         const response = await fetch("/api/workspace/sync", { cache: "no-store" });
@@ -145,7 +154,12 @@ export default function CloudWorkspaceSync() {
         if (hasRemote) {
           const marker = remote.updatedAt || "remote";
           if (localStorage.getItem("creativeops-cloud-version-v1") !== marker) {
-            preserveLocalBeforeRestore(email);
+            const backupReady = preserveLocalBeforeRestore(email);
+            if (!backupReady) {
+              setStatus("فضای مرورگر برای ساخت پشتیبان خودکار کافی نیست. بازیابی ابری متوقف شد تا اطلاعات محلی بازنویسی نشود؛ از دکمه دانلود پشتیبان استفاده کن.");
+              setHasRestoreBackup(true);
+              return;
+            }
             writeLocal(data!);
             localStorage.setItem("creativeops-cloud-version-v1", marker);
             localStorage.setItem(OWNER_KEY, email);
@@ -204,8 +218,13 @@ export default function CloudWorkspaceSync() {
   }, []);
 
   function downloadRestoreBackup() {
-    const raw = localStorage.getItem(RESTORE_BACKUP_KEY);
-    if (!raw) return;
+    const raw = localStorage.getItem(RESTORE_BACKUP_KEY) || JSON.stringify({
+      app: "AI Creative Earnings",
+      schemaVersion: 1,
+      exportedAt: new Date().toISOString(),
+      sourceAccount: localStorage.getItem(OWNER_KEY) || "این دستگاه، حساب قبلی مشخص نیست",
+      ...readLocal()
+    }, null, 2);
     const blob = new Blob([raw], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
