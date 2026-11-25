@@ -51,6 +51,22 @@ export default function AccountConnections() {
     finally { setBusy(false); }
   }
 
+  async function requestPasswordReset() {
+    if (!email.trim()) { setNotice("ابتدا ایمیل حساب را وارد کن."); return; }
+    setBusy(true); setNotice("");
+    try {
+      const response = await fetch("/api/auth/email/recover", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+      });
+      const data = await response.json() as { error?: string; message?: string };
+      if (!response.ok) throw new Error(data.error || "درخواست بازیابی ارسال نشد.");
+      setNotice(data.message || "اگر حسابی با این ایمیل وجود داشته باشد، لینک بازیابی ارسال می‌شود.");
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "خطای نامشخص");
+    } finally { setBusy(false); }
+  }
+
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" });
     await refreshAuth();
@@ -86,6 +102,7 @@ export default function AccountConnections() {
                 <button type="submit" disabled={busy}>{busy ? "در حال انجام..." : mode === "login" ? "ورود" : "ساخت حساب"}</button>
               </form>
               <button type="button" className="text-action" onClick={() => { setMode(mode === "login" ? "signup" : "login"); setNotice(""); }}>{mode === "login" ? "ساخت حساب جدید" : "قبلاً حساب ساخته‌ام، ورود"}</button>
+              {mode === "login" && <button type="button" className="text-action" onClick={requestPasswordReset} disabled={busy}>فراموشی رمز عبور / ارسال لینک بازیابی</button>}
             </>}
             <small>{checking ? "در حال بررسی وضعیت حساب..." : auth.emailAuthConfigured ? "ورود ایمیلی فعال است." : "تنظیمات Supabase در سرور کامل نیست."}</small>
           </div>
