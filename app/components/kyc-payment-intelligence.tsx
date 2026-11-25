@@ -9,6 +9,7 @@ type KycRecord = {
   kyc: "none" | "id" | "address" | "selfie" | "unknown";
   iranianPassport: "accepted" | "rejected" | "unknown";
   countryAccess: "allowed" | "blocked" | "unknown";
+  countryAccessByResidence?: Record<string, "allowed" | "blocked" | "unknown">;
   payout: "direct-crypto" | "platform-wallet" | "fiat" | "unknown";
   cost: "free" | "fee" | "deposit" | "unknown";
   asset: string;
@@ -52,9 +53,10 @@ const labels = {
 
 type Filter = "all" | "ready" | "review" | "blocked";
 
-function readiness(item: KycRecord) {
-  if (item.iranianPassport === "rejected" || item.countryAccess === "blocked" || item.payout === "fiat" || item.cost === "fee" || item.cost === "deposit") return "blocked";
-  if (item.kyc === "none" && item.iranianPassport === "accepted" && item.countryAccess === "allowed" &&
+function readiness(item: KycRecord, residence: string) {
+  const countryAccess = item.countryAccessByResidence?.[residence] ?? item.countryAccess;
+  if (item.iranianPassport === "rejected" || countryAccess === "blocked" || item.payout === "fiat" || item.cost === "fee" || item.cost === "deposit") return "blocked";
+  if (item.kyc === "none" && item.iranianPassport === "accepted" && countryAccess === "allowed" &&
       item.payout === "direct-crypto" && item.cost === "free" && item.asset.trim() &&
       item.network.trim() && item.minimum.trim() && item.fee.trim() && item.evidenceUrl.startsWith("https://")) return "ready";
   return "review";
@@ -97,15 +99,24 @@ export default function KycPaymentIntelligence() {
       localStorage.setItem("creativeops-kyc-residence-v2",residence);
       localStorage.setItem("creativeops-kyc-citizenship-v1",citizenship);
       localStorage.setItem("creativeops-kyc-bank-country-v1",bankCountry);
+      window.dispatchEvent(new Event("creativeops-workspace-changed"));
     }
   },[records,residence,citizenship,bankCountry,loaded]);
 
-  const counts = useMemo(() => records.reduce((a,r) => { a[readiness(r)]++; return a; },{ready:0,review:0,blocked:0}),[records]);
-  const visible = records.filter(r => filter === "all" || readiness(r) === filter);
+  const counts = useMemo(() => records.reduce((a,r) => { a[readiness(r,residence)]++; return a; },{ready:0,review:0,blocked:0}),[records,residence]);
+  const visible = records.filter(r => filter === "all" || readiness(r,residence) === filter);
 
   function update(id:string, patch:Partial<KycRecord>) {
     setRecords(current => current.map(r => r.id === id ? {...r,...patch,checkedAt:new Date().toISOString().slice(0,10)} : r));
   }
+  function updateResidenceAccess(id:string, value:KycRecord["countryAccess"]) {
+    setRecords(current => current.map(r => r.id === id ? {
+      ...r,
+      countryAccessByResidence: { ...(r.countryAccessByResidence || {}), [residence]: value },
+      checkedAt: new Date().toISOString().slice(0,10)
+    } : r));
+  }
+
   function addRecord(event:React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const name = newName.trim();
@@ -153,7 +164,8 @@ export default function KycPaymentIntelligence() {
       </div>
       <div className="kpi-list">
         {visible.map(item => {
-          const state = readiness(item);
+          const state = readiness(item,residence);
+          const residenceAccess = item.countryAccessByResidence?.[residence] ?? item.countryAccess;
           return <article className="kpi-card" key={item.id}>
             <div className="kpi-card-head"><div><strong>{item.platform}</strong><a href={item.url} target="_blank" rel="noreferrer">سایت رسمی ↗</a></div>
               <span className={"kpi-state "+state}>{state==="ready"?"واجد شرایط مستند":state==="blocked"?"نامناسب / مسدود":"نیازمند بررسی"}</span>
@@ -161,7 +173,7 @@ export default function KycPaymentIntelligence() {
             <div className="kpi-fields">
               <label>KYC<select value={item.kyc} onChange={e=>update(item.id,{kyc:e.target.value as KycRecord["kyc"]})}>{Object.entries(labels.kyc).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>پاسپورت ایرانی<select value={item.iranianPassport} onChange={e=>update(item.id,{iranianPassport:e.target.value as KycRecord["iranianPassport"]})}>{Object.entries(labels.iranianPassport).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
-              <label>دسترسی {countryName(residence)}<select value={item.countryAccess} onChange={e=>update(item.id,{countryAccess:e.target.value as KycRecord["countryAccess"]})}>{Object.entries(labels.countryAccess).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
+              <label>دسترسی {countryName(residence)}<select value={residenceAccess} onChange={e=>updateResidenceAccess(item.id,e.target.value as KycRecord["countryAccess"])}>{Object.entries(labels.countryAccess).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>روش برداشت<select value={item.payout} onChange={e=>update(item.id,{payout:e.target.value as KycRecord["payout"]})}>{Object.entries(labels.payout).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>هزینه ورود<select value={item.cost} onChange={e=>update(item.id,{cost:e.target.value as KycRecord["cost"]})}>{Object.entries(labels.cost).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>ارز پرداخت<input value={item.asset} onChange={e=>update(item.id,{asset:e.target.value})} placeholder="مثلاً USDT"/></label>
