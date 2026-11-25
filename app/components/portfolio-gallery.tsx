@@ -76,7 +76,7 @@ export default function PortfolioGallery() {
       return;
     }
     if (items.length >= MAX_ITEMS) {
-      setNotice("گالری به سقف ۳۰ تصویر رسیده است. ابتدا یک مورد را حذف کن.");
+      setNotice("گالری به سقف ۲۰ تصویر رسیده است. ابتدا یک مورد را حذف کن.");
       return;
     }
     const reader = new FileReader();
