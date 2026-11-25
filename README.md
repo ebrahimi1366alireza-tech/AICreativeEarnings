@@ -2,6 +2,13 @@
 
 A Persian RTL workspace for discovering, reviewing, producing, delivering, and tracking paid creative work. This project is completely separate from AIRDROP AI.
 
+
+## Product focus: create commercial content to sell
+
+AI Creative Earnings is designed to help each user discover real buyers and paid creative briefs, produce commercial assets (product visuals, advertising graphics, short videos, copy, and other digital deliverables), quality-check them, and deliver them for payment. It is **not** an Instagram page-management tool. Instagram or other social-account connection is not required for the core workflow, and users do not need to install ChatGPT. Each user works in their own account and workspace.
+
+The current app includes a commercial production-brief builder. It prepares a structured brief/prompt from the product, buyer, market, sales channel, and deliverable. This is a first workflow scaffold, **not yet an in-app AI image/video generator**. Actual model integration, provider credentials, per-user usage limits/cost controls, and marketplace delivery integrations remain to be implemented. See [commercial content sales product direction](docs/commercial-content-sales-product-direction.md).
+
 ## Six income streams
 
 1. Paid writing and text services: articles, product copy, editing, and related client work.
