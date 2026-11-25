@@ -32,6 +32,26 @@ function signedUrl(base: string, value: string) {
   return `${base}/storage/v1${value.startsWith("/") ? value : `/${value}`}`;
 }
 
+function decodePart(value: string | undefined, fallback: string) {
+  if (!value) return fallback;
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return fallback;
+  }
+}
+
+function matchesImageSignature(bytes: Uint8Array, mime: string) {
+  if (mime === "image/jpeg") return bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+  if (mime === "image/png") return bytes.length >= 8 && [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a].every((value, index) => bytes[index] === value);
+  if (mime === "image/gif") {
+    const signature = String.fromCharCode(...bytes.slice(0, 6));
+    return signature === "GIF87a" || signature === "GIF89a";
+  }
+  if (mime === "image/webp") return bytes.length >= 12 && String.fromCharCode(...bytes.slice(0, 4)) === "RIFF" && String.fromCharCode(...bytes.slice(8, 12)) === "WEBP";
+  return false;
+}
+
 export async function GET(request: NextRequest) {
   const ctx = await context(request);
   if ("response" in ctx) return ctx.response;
@@ -54,9 +74,9 @@ export async function GET(request: NextRequest) {
     if (!signed.ok) return null;
     const data = await signed.json() as { signedURL?: string };
     const [id, titlePart, categoryPart] = file.name!.split("__");
-    const extension = titlePart?.split(".").pop() || "";
-    const title = titlePart ? decodeURIComponent(titlePart) : "نمونه‌کار";
-    const category = categoryPart ? decodeURIComponent(categoryPart.replace(/\.[^.]+$/, "")) : "سایر";
+    const extension = categoryPart?.split(".").pop() || "";
+    const title = decodePart(titlePart, "نمونه‌کار");
+    const category = decodePart(categoryPart?.replace(/\.[^.]+$/, ""), "سایر");
     return { id, title, category, path, image: data.signedURL ? signedUrl(ctx.base, data.signedURL) : "", createdAt: file.created_at || new Date().toISOString(), size: file.metadata?.size || 0, extension };
   }));
   return NextResponse.json({ items: items.filter(Boolean) }, { headers: { "Cache-Control": "no-store" } });
@@ -73,6 +93,10 @@ export async function POST(request: NextRequest) {
   const extension = MIME_EXTENSIONS[file.type];
   if (!extension) return NextResponse.json({ error: "فقط تصویر JPG، PNG، WebP یا GIF مجاز است." }, { status: 415 });
   if (file.size > MAX_FILE_SIZE) return NextResponse.json({ error: "حجم هر تصویر باید حداکثر ۱.۵ مگابایت باشد." }, { status: 413 });
+  const fileBuffer = await file.arrayBuffer();
+  if (!matchesImageSignature(new Uint8Array(fileBuffer), file.type)) {
+    return NextResponse.json({ error: "محتوای فایل با فرمت اعلام‌شده تصویر مطابقت ندارد." }, { status: 415 });
+  }
   const safeTitle = encodeURIComponent(title).replace(/_/g, "%5F").replace(/%2F/gi, "%252F");
   const safeCategory = encodeURIComponent(category).replace(/_/g, "%5F").replace(/%2F/gi, "%252F");
   const name = `${randomUUID()}__${safeTitle}__${safeCategory}.${extension}`;
@@ -80,7 +104,7 @@ export async function POST(request: NextRequest) {
   const response = await fetch(`${ctx.base}/storage/v1/object/${BUCKET}/${path.split("/").map(encodeURIComponent).join("/")}`, {
     method: "POST",
     headers: { ...headers(ctx), "Content-Type": file.type, "x-upsert": "false" },
-    body: await file.arrayBuffer(),
+    body: fileBuffer,
     cache: "no-store"
   });
   if (!response.ok) return NextResponse.json({ error: "بارگذاری امن تصویر در فضای ابری انجام نشد." }, { status: 502 });
