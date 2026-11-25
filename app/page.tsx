@@ -240,6 +240,8 @@ export default function Home() {
         <a className="nav-item" href="#tools"><span>◈</span> ابزارهای هوش مصنوعی</a>
         <a className="nav-item" href="#accounts"><span>◎</span> اتصال حساب‌ها</a>
         <a className="nav-item" href="#kyc-intelligence"><span>◇</span> احراز هویت و برداشت</a>
+        <a className="nav-item" href="#smart-login-verification"><span>↗</span> تأیید ورود روی گوشی</a>
+        <a className="nav-item" href="#portfolio"><span>▧</span> گالری نمونه‌کارها</a>
         <a className="nav-item" href="#deliveries"><span>⇧</span> تحویل‌ها</a>
         <a className="nav-item" href="#finance"><span>＄</span> درآمدها</a>
         <div className="sidebar-bottom"><div className="avatar">AI</div><div><strong>مدیریت پروژه</strong><small>نسخه آزمایشی شخصی</small></div></div>
