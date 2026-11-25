@@ -94,10 +94,8 @@ const seed: KycRecord[] = [
   ["Ko-fi","https://ko-fi.com/"],
   ["Shutterstock Contributor","https://submit.shutterstock.com/"],
   ["BeatStars","https://www.beatstars.com/"],
-  ["TryBounty","https://trybounty.xyz/"],
   ["MusedIn","https://musedin.com/"],
-  ["AgentPact","https://agentpact.io/"],
-  ["AgentBounties","https://agentbounties.com/"]
+  ["AgentPact","https://agentpact.io/"]
 ].map(([platform,url]) => ({
   id: platform.toLowerCase().replace(/[^a-z0-9]+/g,"-"), platform, url,
   kyc:"unknown" as const, iranianPassport:"unknown" as const,

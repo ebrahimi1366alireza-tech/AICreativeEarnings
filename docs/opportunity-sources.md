@@ -8,6 +8,7 @@ These sources are discovery targets, not guaranteed income. Prioritize work with
 ## Creator campaigns, video, writing, and animation
 
 | Paragraph (successor to Mirror) | https://paragraph.com/ | Onchain publishing, post coins and writer coins; variable/speculative creator monetization, not fixed-paid work. Mirror's standalone service was wound down and migrated here (official notice: https://paragraph.com/@blog/bringing-the-best-of-mirror-to-paragraph). Iranian-passport, Armenia/no-residence, KYC and direct payout eligibility remain unverified. |
+| MusedIn | https://musedin.com/jobs | AI-agent job network. Some jobs advertise USDC on Base; ordinary budgeted jobs are paid directly by the poster and are not escrowed by MusedIn, with a 10% worker fee; x402 tasks have a separate escrow flow. Paid demand and country/KYC eligibility remain unverified. |
 
 | Platform / listing | URL | Focus |
 |---|---|---|

@@ -234,3 +234,16 @@ No account, KYC submission, wallet connection, application, legal acceptance or 
 Paragraph's Terms of Use (effective 2026-07-28) say blockchain transactions are subject to network fees and digital assets may lose value; payment features are subject to provider eligibility. The Terms also allow paid plans/usage charges for some services, so do not buy a plan or credits. Public content and connected wallet activity carry privacy and on-chain visibility considerations: https://paragraph.com/terms-of-use
 
 **Eligibility for this user remains UNKNOWN:** no official evidence found in this pass confirming acceptance of an Iranian passport, access from Armenia without a residence permit, withdrawal/KYC treatment for an Iranian national, or a guaranteed direct payout path. Do not mark eligible. If investigated later, use only free publishing, no paid AI credits, and no wallet connection or signature until separately approved. Writer coins should be classified as speculative/variable creator monetization, not predictable income.
+
+
+## MusedIn — refreshed official terms review (2026-11-26)
+
+Official terms updated 2026-11-09: https://musedin.com/terms. MusedIn is an AI-agent job network, not a conventional human freelance platform. An operator runs a muse (agent identity/key); account keys/tokens are not recoverable by the service. The operator must be 18+.
+
+- Job posts are free without a budget. Budgeted jobs have a 10% worker-side fee (minimum $0.05); the budget is paid by the poster directly to each worker. MusedIn generally does **not** custody or escrow those funds. Lightning payouts carry a separate 5% fee.
+- Exception: x402 tasks are held by MusedIn's agent wallet until delivery is re-checked; the terms describe a 10% platform share and a 90% worker/reviewer split, with a refund if no taker or failed re-check conditions apply.
+- Current public jobs snapshot (2026-11-26) showed 19 open jobs but only four entries in the paid section, which were closed/older; many open listings were free, unpaid, in-game rewards, or required recruiting/agent operations. Do not equate the total job count with paid demand.
+- Some visible work may require agent/API setup and technical skills; a human cannot automatically complete physical or identity-bound tasks. Do not use paid verification ($1 USDG/USDC), paid promotion, or paid private teams.
+- Eligibility remains UNKNOWN for Iranian passport acceptance, Armenia physical-presence access without a residence permit, and any identity/sanctions screening. Do not mark eligible. Use only clearly funded paid work with a written deliverable and payment terms; no upfront payment or wallet allowance/permit signature without explicit approval.
+
+Official details: https://musedin.com/hire-agents and https://musedin.com/jobs.
