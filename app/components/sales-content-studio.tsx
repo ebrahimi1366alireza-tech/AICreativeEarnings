@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+type Usage = { used: number; remaining: number; limit: number; resetsAt?: string };
 
 type SalesBrief = {
   product: string; buyer: string; market: string; channel: string;
@@ -17,6 +19,16 @@ export default function SalesContentStudio() {
   const [image, setImage] = useState("");
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState<"text" | "image" | "">("");
+  const [usage, setUsage] = useState<Usage | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/creative/generate", { credentials: "same-origin", cache: "no-store" })
+      .then(async response => response.ok ? response.json() : null)
+      .then(result => { if (active && result?.usage) setUsage(result.usage as Usage); })
+      .catch(() => undefined);
+    return () => { active = false; };
+  }, []);
 
   function update<K extends keyof SalesBrief>(key: K, value: SalesBrief[K]) {
     setBrief(current => ({ ...current, [key]: value }));
@@ -74,6 +86,7 @@ export default function SalesContentStudio() {
         body: JSON.stringify({ mode, prompt })
       });
       const result = await response.json().catch(() => ({}));
+      if (result.usage) setUsage(result.usage as Usage);
       if (!response.ok) throw new Error(result.error || "تولید محتوا ناموفق بود.");
       if (mode === "text") setOutput(String(result.output || ""));
       else setImage(String(result.imageDataUrl || ""));
@@ -128,7 +141,8 @@ export default function SalesContentStudio() {
           <strong>تولید با هوش مصنوعی</strong>
           <span className="free-tag">ممکن است هزینه API داشته باشد</span>
         </div>
-        <p className="hub-intro">تولید فقط پس از ورود به حساب و با کلید امنی که مدیر روی سرور تنظیم می‌کند انجام می‌شود. کلید در گوشی ذخیره نمی‌شود.</p>
+        <p className="hub-intro">تولید فقط پس از ورود به حساب انجام می‌شود. کلید API در گوشی ذخیره نمی‌شود. متن ۱ اعتبار و تصویر ۵ اعتبار مصرف می‌کند.</p>
+        {usage && <p className="backup-notice" role="status">سهمیهٔ امروز: {usage.used} از {usage.limit} اعتبار مصرف شده؛ {usage.remaining} اعتبار باقی مانده است. سهمیه هر روز ساعت ۰۰:۰۰ UTC بازنشانی می‌شود.</p>}
         <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
           <button type="button" disabled={Boolean(busy)} onClick={() => generate("text")}>{busy === "text" ? "در حال تولید..." : "تولید متن تبلیغاتی"}</button>
           <button type="button" disabled={Boolean(busy)} onClick={() => generate("image")}>{busy === "image" ? "در حال تولید تصویر..." : "تولید تصویر تبلیغاتی"}</button>
