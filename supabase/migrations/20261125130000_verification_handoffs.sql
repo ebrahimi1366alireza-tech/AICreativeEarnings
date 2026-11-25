@@ -66,7 +66,7 @@ begin
   if p_url is null or char_length(p_url) > 2048 or p_url !~* '^https://' then raise exception 'only HTTPS URLs are accepted'; end if;
   v_host := lower(split_part(split_part(p_url, '/', 3), ':', 1));
   if v_host = '' or v_host = 'localhost' or v_host like '%.local' or v_host like '%.internal'
-     or v_host ~ '^[0-9.]+$' or v_host ~ '^[0-9a-f:]+$'
+     or v_host ~ '^[0-9.]+$' or v_host like '%:%'
      or v_host like '127.%' or v_host like '10.%' or v_host like '192.168.%'
      or v_host like '169.254.%' or v_host like '172.1%' or v_host like '172.2%' or v_host like '172.3%' then
     raise exception 'unsafe verification host';
