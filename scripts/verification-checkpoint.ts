@@ -67,6 +67,16 @@ export function createCheckpointReporter(config: CheckpointReporterConfig) {
       if (url.protocol !== "https:" || reportedUrls.has(url.toString())) {
         return { detected: false };
       }
+      const sensitiveQueryKeys = /^(access_token|refresh_token|token|token_hash|code|otp|password|secret|api_key|key|signature|sig|jwt|ticket)$/i;
+      if ([...url.searchParams.keys()].some(key => sensitiveQueryKeys.test(key))) {
+        return {
+          detected: true,
+          sent: false,
+          reason: "This URL contains a credential-like query parameter. It was not forwarded; pause and ask the user to complete verification without sharing the one-time link.",
+          kind: "unknown"
+        };
+      }
+      url.hash = "";
 
       let visibleText = "";
       try {
