@@ -89,11 +89,26 @@ export default function CloudWorkspaceSync() {
         setStatus("این مرورگر قبلاً برای حساب دیگری استفاده شده است. برای جلوگیری از انتقال یا بازنویسی اطلاعات بین حساب‌ها، همگام‌سازی خودکار متوقف شد؛ ابتدا از اطلاعات محلی فایل پشتیبان بگیر.");
         return false;
       }
+      const cloudResponse = await fetch("/api/workspace/sync", { cache: "no-store" });
+      if (!cloudResponse.ok) throw new Error("بررسی نسخه فضای ابری ناموفق بود.");
+      const cloud = await cloudResponse.json() as { updatedAt?: string | null };
+      const localVersion = localStorage.getItem("creativeops-cloud-version-v1");
+      if (cloud.updatedAt && localVersion !== cloud.updatedAt) {
+        setStatus("نسخه ابری با نسخه این دستگاه تفاوت دارد؛ برای جلوگیری از بازنویسی اطلاعات جدید، ذخیره خودکار متوقف شد. همگام‌سازی دستی را اجرا کن.");
+        return false;
+      }
+      const local = readLocal();
+      const payload = { ...local, ...(cloud.updatedAt ? { expectedUpdatedAt: cloud.updatedAt } : {}) };
       const response = await fetch("/api/workspace/sync", {
         method: "PUT", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(readLocal())
+        body: JSON.stringify(payload)
       });
-      if (!response.ok) throw new Error("ذخیره ابری انجام نشد.");
+      const saved = await response.json().catch(() => ({})) as { error?: string; updatedAt?: string };
+      if (!response.ok) {
+        if (response.status === 409) { setStatus(saved.error || "نسخه ابری تغییر کرده است؛ ذخیره متوقف شد."); return false; }
+        throw new Error(saved.error || "ذخیره ابری انجام نشد.");
+      }
+      if (saved.updatedAt) localStorage.setItem("creativeops-cloud-version-v1", saved.updatedAt);
       localStorage.setItem(OWNER_KEY, email);
       return true;
     }
@@ -118,10 +133,7 @@ export default function CloudWorkspaceSync() {
         if (!response.ok) throw new Error("دریافت اطلاعات ابری ناموفق بود.");
         const remote = await response.json();
         const data = remote.data as Workspace | null;
-        const hasRemote = Boolean(data && (
-          data.opportunities?.length || data.deliveries?.length || data.income?.length ||
-          data.kycRecords?.length || (data.wallet?.address && data.wallet.address.length > 0)
-        ));
+        const hasRemote = Boolean(data && remote.updatedAt);
         if (hasRemote) {
           const marker = remote.updatedAt || "remote";
           if (localStorage.getItem("creativeops-cloud-version-v1") !== marker) {
