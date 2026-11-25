@@ -166,3 +166,60 @@ No account was created, no application was submitted, no wallet was connected, n
 - No platform escrow was identified. This is a payment-risk warning, not a reason to remove the platform. Prefer written scope, milestones, and partial upfront payment before delivering final files.
 - Keep it active for searching relevant AI-assisted writing, design, video, animation, and other digital-work listings. Verify the live listing, client credibility, payment amount, and terms before starting.
 - User accepts human-presence checks (selfie/face/liveness); government ID, country restrictions, and any paid checks remain separate checks.
+
+
+## Consolidated due-diligence refresh — 2026-11-26
+
+This pass reconciles the platform catalog, source registry, KYC seed list and operational tracker. **No platform is marked eligible for this user merely because it accepts a wallet or advertises global access.** The relevant case is Iranian passport + physical presence in Armenia + no Armenian residence permit. Public terms reviewed so far do not explicitly settle that complete combination for any candidate.
+
+### Best candidates to inspect first (not yet user-eligible)
+
+| Platform | Verified public facts from official sources | Remaining blockers | Project action |
+|---|---|---|---|
+| Taskmarket | Base tasks settle in USDC to a wallet; no platform fee; first five bounty/benchmark submissions per task are free, later submissions may cost 0.001 USDC; standard paid actions can cost 0.001 USDC. Some tasks can require identity/reputation or TAP verification. | Identity, age and sanctions checks may be requested; some gated tasks require TAP, and hosted agents need a verified Visa card for TAP tasks. No explicit Iranian-passport acceptance or Armenia/no-residence confirmation found. | High-priority conditional. Only no-stake tasks with funded escrow, no TAP/Visa gate; inspect each task before work. |
+| MoltJobs | Official homepage states USDC on Base, 5% fee on funded jobs, 10 free bid credits/month, and escrow funded before work. | No public proof of Iranian passport acceptance, Armenia access without residence, or withdrawal KYC. Verify each task's actual escrow funding. | High-priority conditional; browse only until country/KYC and funding are verified. |
+| Getly | Official October 2026 terms: seller fee paid twice monthly in USDT/USDC; seller receives 80–90%; seller must provide accurate payout and tax information; platform may request further documents/KYC. | No explicit Iran passport or Armenia/no-residence decision; sales are not guaranteed and default platform share is 20%. | Digital-product storefront candidate; no production/listing until payout onboarding is confirmed. |
+| make.fun | Terms dated Nov 23, 2026: rewards paid USDC on Solana; most bounties free; sanctions screening and country/region checks before payout; tax form only where US law requires. | Terms do not establish this user's passport/presence combination. Broad, perpetual, royalty-free, sublicensable licence covers submitted content/data including AI transcripts. | Selective free-entry only; flag substantial content/data licence before submission. |
+| Superteam Earn | Official terms restrict use where illegal or contrary to sanctions; platform disclaims responsibility for partner non-payment. Armenia region page lists campaigns. | A regional page or "Global" label does not prove Iranian passport acceptance, residence-permit waiver, or payout eligibility; payout may be sponsor-specific. Raenest-dependent campaign needs written eligibility confirmation. | Campaign discovery only; verify sponsor, live deadline, payout and eligibility per bounty. |
+| Gibwork | Public bounty marketplace with task-specific rewards and Solana ecosystem work. | Escrow release depends on employer acceptance; exact country/KYC and fees are not verified for the user. | Conditional for legitimate creative briefs only; verify funded escrow first. |
+| Monero.Jobs | Listings advertise direct XMR payment; no platform escrow identified. | No-escrow counterparty risk; advertised no-KYC does not prove every employer or local law accepts the user. | Keep active as user-approved lead; written scope, milestones and partial payment before final delivery. |
+
+### Restrictions, exclusions and low priority
+
+- **Microworker.app:** official eligibility page excludes Iran as a service location and says payouts are USDT/USDC to personal wallets on BNB Smart Chain, Arbitrum or Polygon. This is a location exclusion for Iran; it does not prove a blanket ban on Iranian passport holders physically in Armenia. Passport/KYC and Armenia access still need explicit confirmation. Do not label eligible.
+- **AnoWorks:** official disclaimer dated Oct 27, 2026 confirms 10% platform fee, internal platform balance, crypto deposits and TRX withdrawals. Visible task examples include low-value engagement/review tasks; do not perform fake reviews, likes or manipulation. No verified passport/Armenia eligibility.
+- **CryptoTask:** manual-only; no bots/scrapers or autonomous execution unless written permission is provided. Verify escrow funding on each project.
+- **HireForHumans:** retain blocked/excluded based on the earlier explicit Iran restriction recorded in this project; do not attempt signup or country circumvention.
+- **LaborX:** low priority until current listings, Iranian-passport/KYC and wallet withdrawal are confirmed.
+- **Scribble Network:** watchlist only; last saved snapshot showed zero live bounties.
+- **BasedAgents:** do not claim paid tasks requiring the 1 USDC refundable bond; free reputation-only tasks do not count as cash income.
+- **Stacker News / PeakD / 3Speak:** optional variable community rewards, not reliable paid work.
+- **TaskOn / Zealy / Layer3 / Genesis / Kolo:** only count explicit liquid token payouts; points, NFTs, badges and speculative airdrops are not income.
+- **Prolific / Clickworker / Upwork / Fiverr / CrowdGen and other fiat-only channels:** exclude from the primary shortlist because the project requires crypto payout to the user's own wallet.
+- **Higgsfield Talent Contest:** cash/bank payout rather than verified direct crypto payout; do not prioritize under the project's payout rule.
+- **BountyBook, Claw Earn, and paid-bond/stake platforms:** do not prioritize for the zero-capital path unless current official evidence proves a free route and actual payout eligibility.
+
+### Rules applied to every catalog entry
+
+1. Iranian passport acceptance, physical presence in Armenia, and formal Armenian residence requirement are separate checks.
+2. "Global", "open worldwide", "no KYC at signup", or a working registration form is not proof of withdrawal eligibility.
+3. KYC can include government ID/passport, proof of address, tax information, sanctions screening and human liveness; record each separately. Human liveness is acceptable, but do not submit documents or biometrics without explicit approval.
+4. Only direct crypto payout to the user's own wallet is eligible; record asset, network, minimum, withdrawal fee, platform fee and any hold.
+5. No deposits, stakes, bonds, paid boosts, subscriptions, mandatory purchases or paid verification.
+6. Contests, points, NFTs, referrals, social engagement and speculative rewards are not guaranteed income.
+7. Every task needs a real current brief, deadline, deliverable, acceptance criteria, AI-use permission and funded escrow/payment protection (or explicit staged P2P terms).
+8. Unknown remains unknown. No account creation, applications, wallet connection, legal acceptance or transactions without explicit approval.
+
+Official evidence reviewed:
+- Taskmarket worker requirements: https://docs.taskmarket.dev/reference/worker-requirements
+- Taskmarket Base payments: https://docs.taskmarket.dev/networks/base
+- Taskmarket settlement terms: https://docs.taskmarket.dev/settlement-terms/terms
+- MoltJobs: https://moltjobs.io/
+- Getly terms: https://www.getly.store/terms
+- make.fun terms: https://make.fun/terms
+- Microworker eligibility: https://microworker.app/eligibility/
+- AnoWorks disclaimer: https://www.anoworks.app/disclaimer
+- Superteam Earn terms: https://superteam.fun/earn/terms-of-use.pdf
+- Superteam Earn Armenia opportunities: https://superteam.fun/earn/regions/armenia
+
+No account, KYC submission, wallet connection, application, legal acceptance or payment was performed in this research pass.

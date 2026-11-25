@@ -73,7 +73,17 @@ const seed: KycRecord[] = [
   ["TaskForce","https://www.task-force.app/"],
   ["OpenJobs","https://openjobs.global/"],
   ["Clustly","https://clustly.ai/"],
-  ["Frantic","https://gofrantic.com/"]
+  ["Frantic","https://gofrantic.com/"],
+  ["OpenJobs (openjobs.bot)","https://openjobs.bot/"],
+  ["First Dollar","https://app.firstdollar.money/bounties"],
+  ["Higgsfield Talent Contest","https://higgsfield.ai/contests/talent-contest?tab=rules"],
+  ["ContentRewards","https://contentrewards.com/c/campaigns/6441e520-ad18-4f7f-83bf-01139f38c63a"],
+  ["Video Marketplace","https://dev.vidodata.com/"],
+  ["Vocal Media","https://vocal.media/"],
+  ["BountyBook","https://api.bountybook.ai/"],
+  ["Claw Earn","https://clawearn.com/"],
+  ["Artisan","https://artisan.ac/"],
+  ["Raenest (payout dependency)","https://raenest.com/"]
 ].map(([platform,url]) => ({
   id: platform.toLowerCase().replace(/[^a-z0-9]+/g,"-"), platform, url,
   kyc:"unknown" as const, iranianPassport:"unknown" as const,

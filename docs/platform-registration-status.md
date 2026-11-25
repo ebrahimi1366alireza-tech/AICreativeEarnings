@@ -127,3 +127,12 @@ Research-only status: no accounts were created, no applications submitted, no wa
 - A platform is labeled documented-eligible only when all required conditions are explicitly recorded, including direct crypto payout, no mandatory entry fee/deposit, supported country, accepted Iranian passport, no KYC, asset/network, minimum, fee and HTTPS evidence.
 - This release is a working manual evidence tracker and risk gate, **not** an automatic live KYC verifier. No platform is marked eligible by default. Automatic official-source refresh and cloud sync remain future work.
 - Safety: no false identity, altered documents, rented accounts, sanctions evasion or VPN-based country concealment.
+
+
+## Consolidated eligibility refresh — 2026-11-26
+- [x] Cross-checked repository catalog, source registry, KYC seed list and operational tracker.
+- [x] Added missing saved leads to the KYC tracker: OpenJobs (openjobs.bot), First Dollar, Higgsfield Talent Contest, ContentRewards, Video Marketplace, Vocal Media, BountyBook, Claw Earn, Artisan and Raenest as a payout dependency.
+- [x] Recorded official terms for Taskmarket, MoltJobs, Getly, make.fun, Microworker.app, AnoWorks and Superteam Earn in the research log.
+- [ ] No candidate is marked fully eligible for Iranian passport + physical presence in Armenia + no Armenian residence permit; no official source reviewed conclusively establishes all three together.
+- [ ] No account created, application submitted, KYC documents or biometrics uploaded, wallet connected, or transaction made.
+- [ ] Next implementation: expand live discovery adapters beyond LaborX/Subnano only after official public feeds/API terms and source stability are confirmed. Static registry links are not live job feeds.
