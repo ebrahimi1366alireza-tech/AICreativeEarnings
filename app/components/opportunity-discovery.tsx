@@ -89,9 +89,12 @@ function isSecureEvidenceUrl(value: string) {
 
 function isFreshVerificationDate(value: string) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
-  const timestamp = Date.parse(value + "T00:00:00.000Z");
+  const parsed = new Date(value + "T00:00:00.000Z");
+  const timestamp = parsed.getTime();
+  // Date parsing normalizes impossible dates such as 2026-02-31; reject them.
+  if (!Number.isFinite(timestamp) || parsed.toISOString().slice(0, 10) !== value) return false;
   const age = Date.now() - timestamp;
-  return Number.isFinite(timestamp) && age >= 0 && age <= 90 * 24 * 60 * 60 * 1000;
+  return age >= 0 && age <= 90 * 24 * 60 * 60 * 1000;
 }
 
 function scoreLead(input: {
