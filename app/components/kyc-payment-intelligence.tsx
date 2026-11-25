@@ -223,7 +223,7 @@ export default function KycPaymentIntelligence() {
         {visible.map(item => {
           const state = readiness(item,residence,citizenship,bankCountry);
           const residenceAccess = item.countryAccessByResidence?.[residence] ?? item.countryAccess;
-          const bankAccess = item.bankCountryAccessByCountry?.[bankCountry] ?? item.bankCountryAccess ?? "unknown";
+          const bankAccess = item.bankCountryAccessByCountry?.[bankCountry] ?? "unknown";
           const passportAcceptance = item.passportAcceptanceByCitizenship?.[citizenship] ?? (citizenship === "IR" ? item.iranianPassport : "unknown");
           return <article className="kpi-card" key={item.id}>
             <div className="kpi-card-head"><div><strong>{item.platform}</strong><a href={item.url} target="_blank" rel="noreferrer">سایت رسمی ↗</a></div>
