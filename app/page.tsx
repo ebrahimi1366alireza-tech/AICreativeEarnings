@@ -82,14 +82,14 @@ export default function Home() {
         const storedAddress = typeof parsed.address === "string" ? parsed.address : "";
         if (storedAddress === LEGACY_PLACEHOLDER_WALLET_ADDRESS) {
           setWalletAddress("");
-          localStorage.setItem("creativeops-wallet-v1", JSON.stringify({ address: "", network: typeof parsed.network === "string" ? parsed.network : "EVM - انتخاب شبکه هنگام برداشت" }));
+          localStorage.setItem("creativeops-wallet-v1", JSON.stringify({ address: "", network: typeof parsed.network === "string" ? parsed.network : "شبکه را مطابق توکن و پلتفرم وارد کن" }));
         } else {
           setWalletAddress(storedAddress);
         }
         if (typeof parsed.network === "string") setWalletNetwork(parsed.network);
       } catch { /* ignore invalid wallet data */ }
     } else {
-      localStorage.setItem("creativeops-wallet-v1", JSON.stringify({ address: DEFAULT_WALLET_ADDRESS, network: "EVM - انتخاب شبکه هنگام برداشت" }));
+      localStorage.setItem("creativeops-wallet-v1", JSON.stringify({ address: DEFAULT_WALLET_ADDRESS, network: "شبکه را مطابق توکن و پلتفرم وارد کن" }));
     }
   }, [loaded]);
   function saveWallet(event: React.FormEvent<HTMLFormElement>) {
