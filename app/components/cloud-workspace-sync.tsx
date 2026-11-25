@@ -68,6 +68,8 @@ export default function CloudWorkspaceSync() {
         local.deliveries.length > 0 ||
         local.income.length > 0 ||
         Boolean(local.wallet.address) ||
+        (typeof local.wallet.network === "string" &&
+          !["انتخاب شبکه هنگام برداشت", "شبکه را مطابق توکن و پلتفرم وارد کن"].includes(local.wallet.network)) ||
         Boolean(local.kycRecords?.length) ||
         local.kycResidence !== "AM" ||
         local.kycCitizenship !== "IR" ||
