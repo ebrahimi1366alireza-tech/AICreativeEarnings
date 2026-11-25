@@ -6,6 +6,7 @@ export const runtime = "nodejs";
 
 const BUCKET = "portfolio-assets";
 const MAX_FILE_SIZE = 1.5 * 1024 * 1024;
+const MAX_ITEMS = 20;
 const MIME_EXTENSIONS: Record<string, string> = {
   "image/jpeg": "jpg",
   "image/png": "png",
@@ -96,6 +97,17 @@ export async function POST(request: NextRequest) {
   const fileBuffer = await file.arrayBuffer();
   if (!matchesImageSignature(new Uint8Array(fileBuffer), file.type)) {
     return NextResponse.json({ error: "محتوای فایل با فرمت اعلام‌شده تصویر مطابقت ندارد." }, { status: 415 });
+  }
+  const existingResponse = await fetch(`${ctx.base}/storage/v1/object/list/${BUCKET}`, {
+    method: "POST",
+    headers: { ...headers(ctx), "Content-Type": "application/json" },
+    body: JSON.stringify({ prefix: ctx.user.id, limit: MAX_ITEMS, offset: 0 }),
+    cache: "no-store"
+  });
+  if (!existingResponse.ok) return NextResponse.json({ error: "بررسی ظرفیت گالری ناموفق بود." }, { status: 502 });
+  const existingFiles = await existingResponse.json();
+  if (Array.isArray(existingFiles) && existingFiles.length >= MAX_ITEMS) {
+    return NextResponse.json({ error: "گالری به سقف ۲۰ تصویر رسیده است. ابتدا یک مورد را حذف کن." }, { status: 409 });
   }
   const safeTitle = encodeURIComponent(title).replace(/_/g, "%5F").replace(/%2F/gi, "%252F");
   const safeCategory = encodeURIComponent(category).replace(/_/g, "%5F").replace(/%2F/gi, "%252F");
