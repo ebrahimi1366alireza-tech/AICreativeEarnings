@@ -39,6 +39,7 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 - Email/password signup and login through Supabase Auth. Passwords are handled by Supabase and are never stored by this app.
 - Supabase access and refresh tokens are stored in HTTP-only cookies.
 - Authenticated cloud workspace sync through the `workspace_state` table. The API derives the owner from the verified Supabase session; clients cannot select another owner's ID. Row Level Security restricts each account to its own workspace.
+- Cloud backup also includes the KYC/payment review catalogue and the selected residence, citizenship, and payout-bank country. Platform eligibility is stored separately by residence, and identity-document acceptance is stored separately by citizenship; unknown values remain unverified.
 - If a cloud workspace already has data, the app restores it after sign-in. If it is empty, the app uploads the current browser workspace. Keep JSON backups as an additional safety measure.
 
 ## Infrastructure
