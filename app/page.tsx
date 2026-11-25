@@ -126,7 +126,9 @@ export default function Home() {
     const form = new FormData(event.currentTarget);
     const title = String(form.get("title") || "").trim();
     if (!title) return;
-    setOpportunities(current => [{ id: crypto.randomUUID(), title, platform: String(form.get("platform") || "نامشخص"), pay: String(form.get("pay") || "نامشخص"), status: "نیازمند بررسی", stream: String(form.get("stream") || "نامشخص"), country: String(form.get("country") || "نامشخص"), payout: String(form.get("payout") || "نامشخص"), network: String(form.get("network") || "نامشخص"), minimum: String(form.get("minimum") || "نامشخص"), fee: String(form.get("fee") || "نامشخص"), kyc: String(form.get("kyc") || "نامشخص"), proofUrl: String(form.get("proofUrl") || "").trim() }, ...current]);
+    const payout = String(form.get("payout") || "نامشخص");
+    const nonCryptoPayout = /غیررمزارزی|فقط صرافی|فیات|بانکی|کارت هدیه|paypal|payoneer|wise/i.test(payout);
+    setOpportunities(current => [{ id: crypto.randomUUID(), title, platform: String(form.get("platform") || "نامشخص"), pay: String(form.get("pay") || "نامشخص"), status: nonCryptoPayout ? "رد شد" : "نیازمند بررسی", stream: String(form.get("stream") || "نامشخص"), country: String(form.get("country") || "نامشخص"), payout, network: String(form.get("network") || "نامشخص"), minimum: String(form.get("minimum") || "نامشخص"), fee: String(form.get("fee") || "نامشخص"), kyc: String(form.get("kyc") || "نامشخص"), proofUrl: String(form.get("proofUrl") || "").trim() }, ...current]);
     event.currentTarget.reset();
   }
   function updateStatus(id: string, status: string) {
@@ -343,7 +345,7 @@ export default function Home() {
               <input name="pay" placeholder="مبلغ و واحد پاداش" aria-label="مبلغ و پاداش"/>
               <select name="stream" aria-label="مسیر درآمدی"><option value="نوشتن و مقاله">نوشتن و مقاله</option><option value="موسیقی و صدا">موسیقی و صدا</option><option value="رأی‌گیری آهنگ">رأی‌گیری آهنگ</option><option value="نظرسنجی">نظرسنجی و تحقیقات بازار</option><option value="عکس و ویدئو">عکس و ویدئو</option><option value="میکروتسک و تست وب">میکروتسک و تست وب</option></select>
               <input name="country" placeholder="کشورهای مجاز / محدودیت کشور" aria-label="کشورهای مجاز"/>
-              <select name="payout" aria-label="روش پرداخت"><option value="نامشخص">روش پرداخت نامشخص</option><option value="مستقیم به کیف پول">مستقیم به کیف پول</option><option value="فقط صرافی">فقط حساب صرافی</option><option value="غیررمزارزی">غیررمزارزی</option></select>
+              <select name="payout" aria-label="روش برداشت"><option value="نامشخص">روش برداشت نامشخص</option><option value="مستقیم به کیف پول">رمزارز مستقیم به کیف پول شخصی</option><option value="رمزارز از طریق قرارداد به کیف پول">رمزارز از طریق قرارداد/امانت به کیف پول شخصی</option></select>
               <input name="network" placeholder="شبکه برداشت (مثلاً TRC20)" aria-label="شبکه برداشت"/>
               <input name="minimum" placeholder="حداقل برداشت" aria-label="حداقل برداشت"/>
               <input name="fee" placeholder="کارمزد برداشت" aria-label="کارمزد"/>
