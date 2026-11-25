@@ -42,6 +42,17 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 - Cloud backup also includes the KYC/payment review catalogue and the selected residence, citizenship, and payout-bank country. Platform eligibility is stored separately by residence, and identity-document acceptance is stored separately by citizenship; unknown values remain unverified.
 - If a cloud workspace already has data, the app restores it after sign-in. If it is empty, the app uploads the current browser workspace. Keep JSON backups as an additional safety measure.
 
+
+## Smart Login & Verification handoff
+
+- A phone-side handoff panel can receive an exact HTTPS verification URL from an integrated automation agent and open it in the same visible browser tab.
+- The user performs email-code, liveness, face, and identity checks directly on the provider's page. OTPs, passwords, face images, and identity documents are not sent to this app.
+- Pairing uses a random bearer token; only its SHA-256 hash is stored. The handoff queue expires after 15 minutes and is owner-scoped with Supabase RLS.
+- Apply `supabase/migrations/20261125130000_verification_handoffs.sql` before pairing a device.
+- The automation agent must call `POST /api/verification/handoff` with the paired bearer token. Automatic detection on third-party pages is not implemented until that agent hook is connected.
+- For immediate same-tab navigation, keep the dashboard visible on the Android phone. A web page cannot silently force a background browser tab to the foreground.
+- Full setup and API details: [docs/SMART_LOGIN_VERIFICATION.md](docs/SMART_LOGIN_VERIFICATION.md).
+
 ## Infrastructure
 
 - GitHub repository: `ebrahimi1366alireza-tech/AICreativeEarnings`
