@@ -5,6 +5,7 @@ import AccountConnections from "./components/account-connections";
 import CloudWorkspaceSync from "./components/cloud-workspace-sync";
 import OpportunityDiscovery from "./components/opportunity-discovery";
 import KycPaymentIntelligence from "./components/kyc-payment-intelligence";
+import SalesContentStudio from "./components/sales-content-studio";
 
 const workflow = [
   { number: "۰۱", title: "کشف فرصت‌ها", detail: "جست‌وجوی زنده در فیدهای عمومی جهانی؛ آگهی‌ها هنوز سفارش تأییدشده نیستند", state: "فعال · بررسی اولیه" },
@@ -265,6 +266,8 @@ export default function Home() {
         </section>
 
         <section className="panel tools-panel" id="tools"><div className="panel-head"><div><span className="eyebrow">PROJECT CREATIVE TOOLKIT</span><h2>ابزارهای پروژه و دسترسی‌ها</h2></div><span className="free-tag">اولویت با رایگان‌ها</span></div><div className="tool-grid">{tools.map((tool) => <article className="tool-card" key={tool.mark}><div className="tool-mark">{tool.mark}</div><div><strong>{tool.name}</strong><p>{tool.note}</p><small>{tool.status}</small><a href={tool.url} target="_blank" rel="noreferrer" style={{display:"inline-block",marginTop:7,color:"#b9a4ff",fontSize:10,textDecoration:"none"}}>بازکردن ابزار ↗</a></div></article>)}</div><p className="footnote">این ابزارها جعبه‌ابزار فعلی پروژه‌اند؛ Krea از طریق اتصال ChatGPT در دسترس است و بقیه ابزارها بر اساس دسترسی حساب کاربر استفاده می‌شوند. این فهرست به معنی اتصال به بازار سفارش یا تضمین درآمد نیست. سهمیه، دسترسی منطقه‌ای، واترمارک و مجوز تجاری را پیش از استفاده بررسی کن.</p></section>
+
+        <SalesContentStudio />
 
         <AccountConnections />
         <CloudWorkspaceSync />
