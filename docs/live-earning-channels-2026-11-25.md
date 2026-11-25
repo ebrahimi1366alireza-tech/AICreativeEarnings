@@ -71,7 +71,7 @@ Decision: **exclude from the main path**. Do not spend time on fake/paid engagem
 
 ## Recommended next execution
 
-1. Build a small, original portfolio pack for restaurant and food businesses: menu/poster layouts, food-promotion social graphics, and short-form video concepts. This is a better match for AI-assisted creative services than chasing tiny engagement tasks.
+1. Build a small, original, non-food portfolio pack focused on commercial design: product-advertising visuals, brand identity concepts, app/UI promotional graphics, technology product mockups, lifestyle campaign graphics, and short-form video concepts.
 2. Prepare each item with clear previews, deliverable specifications, and a truthful AI-use note. Do not use copyrighted brand assets or imply a client relationship that does not exist.
 3. Treat Subnano as a possible free storefront after the user confirms the account and payout setup. Publish only after explicit user approval.
 4. Continue checking Gibwork for funded, eligible design/video briefs. Do not apply to social manipulation or human-only tasks.
