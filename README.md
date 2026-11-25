@@ -2,14 +2,16 @@
 
 A Persian RTL workspace for discovering, reviewing, producing, delivering, and tracking paid creative work. This project is completely separate from AIRDROP AI.
 
-## Target paid services
+## Six income streams
 
-1. AI product images, image editing, and visual assets.
-2. Advertising graphics, banners, posters, thumbnails, and social-media post/story designs.
-3. Short-form promotional videos, reels, product clips, and basic motion graphics.
-4. Bundled visual campaigns combining consistent images, graphics, and short videos.
+1. Paid writing and text services: articles, product copy, editing, and related client work.
+2. AI music and audio production: original tracks, sound effects, and promotional audio.
+3. Music evaluation and voting: only legitimate paid rating or judging programs with transparent rules; no fake or manipulated votes.
+4. Paid surveys and market research: only genuine research participation with clear compensation.
+5. AI image and video production: product visuals, advertising graphics, short videos, and creative deliverables.
+6. Browser-only microtasks and website testing: web QA, content/data evaluation, and short tasks usable directly in a mobile browser.
 
-The current discovery focus is global AI-assisted image, design, and short-video orders. These categories are not verified earning opportunities. A lead stays unverified until no-KYC status, country eligibility, commercial rights, direct crypto payout, exact asset/network, fees, minimum withdrawal, and zero mandatory entry costs are documented.
+The six streams are product scope, not proof that matching live opportunities or integrations already exist. The current public discovery feed reads LaborX and Subnano only; surveys, music evaluation, and browser-task platforms are not yet connected to live feeds. Every lead remains unverified until country eligibility, identity/KYC, payment method, fees, minimum withdrawal, task requirements, and zero mandatory entry costs are documented.
 
 ## Operating rules
 
@@ -19,7 +21,7 @@ The current discovery focus is global AI-assisted image, design, and short-video
 - Human approval is required for account verification, contracts, and financial actions.
 - Never use fake votes, fake reviews, bots, or duplicate accounts to manipulate a platform.
 - Do not bypass country restrictions with VPNs or false information.
-- Do not add game testing, game installation offers, Freecash, app-install rewards, or unrelated microtask platforms.
+- Include browser-only microtasks and website testing where tasks can be completed without installing an app. Exclude mandatory app/game installation, app-only testing, and reward offers that require installing software.
 - Never store passwords, Google credentials, private keys, or wallet recovery phrases in the app or repository.
 
 ## AI-assisted remote work services
