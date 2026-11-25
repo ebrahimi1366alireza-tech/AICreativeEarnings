@@ -39,8 +39,9 @@ export async function PUT(request: NextRequest) {
   try { body = await request.json(); } catch { return NextResponse.json({ error: "داده ارسالی معتبر نیست." }, { status: 400 }); }
   if (!body || typeof body !== "object" || Array.isArray(body)) return NextResponse.json({ error: "ساختار پشتیبان معتبر نیست." }, { status: 400 });
   const data = body as Record<string, unknown>;
-  const allowed = ["opportunities", "deliveries", "income", "wallet", "kycRecords", "kycResidence", "kycCitizenship", "kycBankCountry"];
+  const allowed = ["opportunities", "deliveries", "income", "wallet", "kycRecords", "kycResidence", "kycCitizenship", "kycBankCountry", "expectedUpdatedAt"];
   if (Object.keys(data).some(key => !allowed.includes(key)) ||
+      (data.expectedUpdatedAt !== undefined && typeof data.expectedUpdatedAt !== "string") ||
       !Array.isArray(data.opportunities) || !Array.isArray(data.deliveries) ||
       !Array.isArray(data.income) || !data.wallet || typeof data.wallet !== "object" || Array.isArray(data.wallet) ||
       (data.kycRecords !== undefined && !Array.isArray(data.kycRecords)) ||
