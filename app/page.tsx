@@ -101,7 +101,7 @@ export default function Home() {
   function saveWallet(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const address = walletAddress.trim();
-    if (address && (address.length < 8 || address.length > 256 || /\\s/.test(address))) {
+    if (address && (address.length < 8 || address.length > 256 || /\s/.test(address))) {
       setWalletNotice("قالب آدرس معتبر نیست؛ آدرس باید بین ۸ تا ۲۵۶ نویسه و بدون فاصله باشد. اعتبار واقعی را شبکه مقصد تعیین می‌کند.");
       return;
     }
@@ -197,7 +197,7 @@ export default function Home() {
       const validOpportunities = Array.isArray(data.opportunities) && data.opportunities.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
       const validDeliveries = Array.isArray(data.deliveries) && data.deliveries.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
       const validIncome = Array.isArray(data.income) && data.income.every(item => isRecord(item) && typeof item.id === "string" && typeof item.source === "string" && typeof item.amount === "number" && Number.isFinite(item.amount) && typeof item.received === "boolean");
-      const validWallet = data.wallet === undefined || (isRecord(data.wallet) && typeof data.wallet.address === "string" && (data.wallet.address === "" || (data.wallet.address.length >= 8 && data.wallet.address.length <= 256 && !/\\s/.test(data.wallet.address))) && typeof data.wallet.network === "string");
+      const validWallet = data.wallet === undefined || (isRecord(data.wallet) && typeof data.wallet.address === "string" && (data.wallet.address === "" || (data.wallet.address.length >= 8 && data.wallet.address.length <= 256 && !/\s/.test(data.wallet.address))) && typeof data.wallet.network === "string");
       if (data.app !== "AI Creative Earnings" || data.schemaVersion !== 1 || !validOpportunities || !validDeliveries || !validIncome || !validWallet) throw new Error("invalid");
       if (!window.confirm("اطلاعات فعلی جایگزین اطلاعات داخل فایل پشتیبان شود؟ قبل از ادامه، از داده‌های فعلی خروجی بگیر.")) {
         event.target.value = "";
