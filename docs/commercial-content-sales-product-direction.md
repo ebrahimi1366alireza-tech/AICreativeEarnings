@@ -28,19 +28,25 @@ The product helps a worker move through this sequence:
 ## Current implementation status
 
 ### Implemented in this change
-- Added a commercial content brief studio to the main workspace.
-- The form captures product/service, target buyer, market, sales channel, deliverable, language, benefit, and client requirements.
-- It produces a structured production prompt/brief that can be copied.
-- UI explicitly says Instagram connection is not needed.
+- Commercial content brief studio integrated into the main workspace.
+- Brief fields: product/service, target buyer, market, sales channel, deliverable, language, benefit, and client requirements.
+- Authenticated server endpoint `POST /api/creative/generate` for text and image generation.
+- Server-side OpenAI API integration using `OPENAI_API_KEY`; text model configurable with `OPENAI_TEXT_MODEL` (default `gpt-4.1-mini`), image model configurable with `OPENAI_IMAGE_MODEL` (default `gpt-image-1`).
+- Client controls to request generated advertising copy or a commercial image and preview/download the image.
+- Authentication is checked server-side using the existing HttpOnly Supabase access cookie. The provider key is never sent to the browser.
+- Same-origin POST validation, JSON content-type check, bounded request size, prompt length limit, request timeouts, and no-store responses.
+- UI explicitly states that Instagram connection is not needed and generation may incur API charges.
 
 ### Not implemented yet (do not claim otherwise)
-- Live AI image/video generation from the app.
-- Provider credentials, model routing, quota metering, and per-user cost controls.
+- Video generation or motion-graphics rendering.
+- Persistent per-user quotas, billing, cost attribution, and abuse/rate-limit controls. Current endpoint is authenticated and request-bounded but is **not safe for unrestricted public launch** until these are added.
+- Persistent storage/library for generated images and text; image output currently returns to the current browser session as a data URL.
 - A real buyer/marketplace connector that submits assets or bids.
 - Automatic delivery or payment confirmation.
 - Public multi-user subscription billing and production-grade tenant isolation tests.
+- Commercial-use licensing verification for each model/provider plan.
 
-The current brief builder creates a structured prompt. It does **not** itself call an AI model or produce a finished image/video. The next engineering milestone is to add a server-side, provider-agnostic AI generation layer.
+Generation requires an administrator to configure `OPENAI_API_KEY` in the server environment. No provider key is included in the repository or APK. Image generation can incur provider charges. The app does not trigger generation until the user clicks a generation action. If the key is absent, the endpoint returns a configuration message. Video generation is not yet available.
 
 ## Required architecture for AI generation
 
