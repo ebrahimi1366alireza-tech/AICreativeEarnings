@@ -103,7 +103,7 @@ npm install
 npm run dev
 ``
 
-The current app is a management workspace, not an earning guarantee. Manual entry does not verify a platform or make an opportunity eligible.
+The app is a commercial creative workspace: it prepares briefs and supports authenticated AI text/image generation. Daily user credits are enforced through Supabase. This is not an earning guarantee. Manual entry does not verify a platform or make an opportunity eligible.
 
 ## Shared cloud development and optional FCC
 
@@ -115,3 +115,11 @@ GitHub Actions runs the TypeScript check on pushes and pull requests. This workf
 
 
 The worker onboarding and new global creative-lead follow-up is [docs/worker-onboarding-and-global-leads-2026-11-26.md](docs/worker-onboarding-and-global-leads-2026-11-26.md). It records Loopuman's Telegram route and unresolved wallet/KYC details, plus conditional AIDO and Tether leads. No accounts, applications, identity submissions, or wallet actions were performed.
+
+
+### AI generation and daily credits
+
+- Text generation uses 1 credit; image generation uses 5 credits. Default limit: 10 credits per user per UTC day (`CREATIVE_DAILY_CREDITS`).
+- Supabase migrations in `supabase/migrations/` create the private usage ledger and server-only RPCs. The API fails closed if usage accounting is unavailable.
+- Configure `OPENAI_API_KEY` and `SUPABASE_SERVICE_ROLE_KEY` only in the server environment. Never expose either in a `NEXT_PUBLIC_` variable or APK.
+- Daily credits are usage limits, not a dollar-cost estimate. Subscription billing, actual provider cost attribution, video generation, persistent generated-file storage, and marketplace delivery are still pending.
