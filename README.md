@@ -52,7 +52,7 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 
 ## Current earning-channel review
 
-The latest global live review is [docs/live-global-opportunities-2026-11-26.md](docs/live-global-opportunities-2026-11-26.md). It checks opportunities worldwide while separating Armenia residence from Iranian citizenship, and records current eligibility, KYC, payout, cost, and task-availability gaps. The previous channel review is [docs/live-earning-channels-2026-11-25.md](docs/live-earning-channels-2026-11-25.md).
+The latest saved-platform audit is [docs/audit-saved-platforms-2026-11-26.md](docs/audit-saved-platforms-2026-11-26.md), covering the original 25 platforms and later additions. The latest global live-opportunity review is [docs/live-global-opportunities-2026-11-26.md](docs/live-global-opportunities-2026-11-26.md). The complete source registry is [docs/opportunity-sources.md](docs/opportunity-sources.md).
 
 ## Live discovery and current limitations
 
