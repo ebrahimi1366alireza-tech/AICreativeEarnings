@@ -36,7 +36,7 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 - Income ledger that distinguishes pending from actually received payments and tracks totals separately by token symbol.
 - Network-agnostic public wallet-address and network settings for supported crypto assets; the app does not connect to or control the wallet. Address format checks are basic input hygiene, not proof that an address or network is valid.
 - JSON backup and restore.
-- User-managed creative portfolio gallery for real image samples; images remain local to the current browser and are not cloud-synced.
+- User-managed creative portfolio gallery for real image samples. Signed-in accounts use a private Supabase Storage bucket with expiring signed URLs; signed-out users keep images locally in the current browser. Before switching a device with local samples to cloud mode, the app preserves a downloadable local-gallery backup.
 - Smart Login verification handoff panel for a paired Android device. The secure queue and Supabase Edge Function are deployed, but automatic detection still requires the external browser automation agent to call the handoff endpoint.
 - Email/password signup and login through Supabase Auth. Passwords are handled by Supabase and are never stored by this app.
 - Supabase access and refresh tokens are stored in HTTP-only cookies.
@@ -50,7 +50,7 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 - Vercel project: `ai-creative-earnings`
 - Supabase project: `AI-Creative-Earnings` (`eu-central-1`)
 - Core Supabase tables: `profiles`, `opportunities`, `production_orders`, `assets`, `earnings`, `workspace_state`, `verification_devices`, and `verification_handoffs`. RLS is enabled on all eight tables.
-- The latest production deployment completed successfully. A user account has not yet been registered, so end-to-end signup, login, and cross-device sync still require a real account test.
+- The latest feature-branch preview deployment completed successfully after the private gallery and cloud-sync changes. Production has not been promoted; real-account signup, upload/list/delete, and cross-device sync still require user-device testing.
 
 ## Current earning-channel review
 
