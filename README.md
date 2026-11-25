@@ -16,7 +16,7 @@ The six streams are product scope, not proof that matching live opportunities or
 ## Operating rules
 
 - Start with free tools and free quotas. No registration fees, deposits, required purchases, or subscriptions to unlock tasks.
-- Payouts must be crypto-only to the user's wallet; USDT is preferred. Do not mark a platform eligible until its supported asset/network, fees, minimum withdrawal, and country restrictions are verified.
+- Payouts must be crypto-only to the user's personal wallet; no token or coin has priority. Keep each asset's balance separate and never add unlike assets without a verified conversion. Do not mark a platform eligible until its exact supported asset/network, fees, minimum withdrawal, and country restrictions are verified.
 - Never claim revenue until payment has actually arrived.
 - Human approval is required for account verification, contracts, and financial actions.
 - Never use fake votes, fake reviews, bots, or duplicate accounts to manipulate a platform.
@@ -33,8 +33,8 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 - Persian right-to-left dashboard focused on AI image, design, and short-video services.
 - Opportunity radar with manual lead entry, source links, and review statuses.
 - Production-order and delivery tracking.
-- Income ledger that distinguishes pending from actually received payments.
-- Public EVM payout-address settings; the app does not connect to or control the wallet.
+- Income ledger that distinguishes pending from actually received payments and tracks totals separately by token symbol.
+- Network-agnostic public wallet-address and network settings for supported crypto assets; the app does not connect to or control the wallet. Address format checks are basic input hygiene, not proof that an address or network is valid.
 - JSON backup and restore.
 - User-managed creative portfolio gallery for real image samples; images remain local to the current browser and are not cloud-synced.
 - Smart Login verification handoff panel for a paired Android device. The secure queue and Supabase Edge Function are deployed, but automatic detection still requires the external browser automation agent to call the handoff endpoint.
