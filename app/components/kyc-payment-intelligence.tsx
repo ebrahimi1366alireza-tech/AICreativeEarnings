@@ -11,7 +11,6 @@ type KycRecord = {
   passportAcceptanceByCitizenship?: Record<string, "accepted" | "rejected" | "unknown">;
   countryAccess: "allowed" | "blocked" | "unknown";
   countryAccessByResidence?: Record<string, "allowed" | "blocked" | "unknown">;
-  bankCountryAccess?: "allowed" | "blocked" | "unknown";
   bankCountryAccessByCountry?: Record<string, "allowed" | "blocked" | "unknown">;
   payout: "direct-crypto" | "platform-wallet" | "fiat" | "unknown";
   cost: "free" | "fee" | "deposit" | "unknown";
@@ -94,7 +93,7 @@ type Filter = "all" | "ready" | "review" | "blocked";
 
 function readiness(item: KycRecord, residence: string, citizenship: string, bankCountry: string) {
   const countryAccess = item.countryAccessByResidence?.[residence] ?? item.countryAccess;
-  const bankAccess = item.bankCountryAccessByCountry?.[bankCountry] ?? item.bankCountryAccess ?? "unknown";
+  const bankAccess = item.bankCountryAccessByCountry?.[bankCountry] ?? "unknown";
   const passportAcceptance = item.passportAcceptanceByCitizenship?.[citizenship] ?? (citizenship === "IR" ? item.iranianPassport : "unknown");
   if (passportAcceptance === "rejected" || countryAccess === "blocked" || bankAccess === "blocked" || item.payout === "fiat" || item.cost === "fee" || item.cost === "deposit") return "blocked";
   if (item.kyc === "none" && passportAcceptance === "accepted" && countryAccess === "allowed" && bankAccess === "allowed" &&
