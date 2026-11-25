@@ -33,7 +33,7 @@ function readLocal(): Workspace {
     opportunities: read(KEYS.opportunities) ?? [],
     deliveries: read(KEYS.deliveries) ?? [],
     income: read(KEYS.income) ?? [],
-    wallet: read(KEYS.wallet) ?? { address: "", network: "EVM - انتخاب شبکه هنگام برداشت" },
+    wallet: read(KEYS.wallet) ?? { address: "", network: "انتخاب شبکه هنگام برداشت" },
     kycRecords: read("creativeops-kyc-intelligence-v1") ?? [],
     kycResidence: readText("creativeops-kyc-residence-v2", "AM"),
     kycCitizenship: readText("creativeops-kyc-citizenship-v1", "IR"),

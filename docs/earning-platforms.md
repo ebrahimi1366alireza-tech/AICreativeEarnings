@@ -6,7 +6,7 @@ Purpose: keep a durable shortlist of marketplaces and payout routes for paid AI-
 ## Selection rules
 - Prefer zero-cost entry: no subscription, deposit, stake, bond, or mandatory paid credits.
 - Human-presence verification, selfie, face match, and liveness/video checks are acceptable to the user; do not reject a platform for these alone. Check separately whether it also requires government ID/passport, proof of address, tax documents, or a paid verification fee. Never submit identity documents or biometric data without the user's explicit approval.
-- Accept any cryptocurrency or token paid to the user's own wallet; no asset has priority. Verify the exact supported token/network, fees, minimum withdrawal, and country restrictions.
+- Accept any crypto asset or token with no preferred ticker. Keep balances separated by asset, and verify the exact token contract/network, payout route, fees, minimum withdrawal, and country restrictions before marking a platform eligible.
 - Check separately: account signup requirements, payout/KYC requirements, country restrictions, AI-use rules, escrow/funding, fees, and live paid-task availability.
 - Never start work on an unfunded task where payment is not protected.
 - Do not use paid-entry competitions, refundable bonds, staking, or any other deposit without explicit user approval.
