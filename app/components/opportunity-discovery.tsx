@@ -89,8 +89,8 @@ function scoreLead(input: {
   const hardReject: string[] = [];
   if (/^(https?:\/\/)?(www\.)?(laborx\.com|subnano\.ai)(\/|$)/i.test(input.sourceUrl)) score += 15;
   if (input.payout === "کیف پول مستقیم") score += 20;
-  else if (input.payout === "رمزارز از طریق قرارداد") score += 15;
-  else if (input.payout === "فیات یا کارت هدیه") hardReject.push("روش پرداخت با سیاست پروژه سازگار نیست");
+  else if (input.payout === "رمزارز از طریق قرارداد به کیف پول") score += 15;
+  else if (/فیات|کارت هدیه|صرافی|بانکی|paypal|payoneer|wise/i.test(input.payout)) hardReject.push("روش برداشت غیررمزارزی یا غیرمستقیم با سیاست پروژه سازگار نیست");
   if (input.paymentAsset === "USDT") score += 10;
   else if (["USDC", "XNO"].includes(input.paymentAsset)) score += 6;
   if (input.countryCheck === "مجاز بودن کشور تأیید شده") score += 15;
@@ -109,14 +109,14 @@ function scoreLead(input: {
   if (hardReject.length) return { score: 0, decision: "رد خودکار", reason: hardReject.join("؛ ") };
   const complianceVerified = input.kyc === "بدون KYC"
     && input.countryCheck === "مجاز بودن کشور تأیید شده"
-    && input.payout === "کیف پول مستقیم"
+    && ["کیف پول مستقیم", "رمزارز از طریق قرارداد به کیف پول"].includes(input.payout)
     && input.deposit === "بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری"
     && input.paymentAsset !== "نامشخص"
     && input.paymentAsset !== "سایر رمزارزها"
     && Boolean(input.network.trim())
     && Boolean(input.minimum.trim())
     && input.fee !== "نامشخص";
-  if (!complianceVerified) return { score: Math.min(score, 44), decision: "نیازمند بررسی", reason: "تا وقتی KYC، کشور مجاز، ارز و شبکه دقیق، حداقل برداشت، پرداخت مستقیم رمزارزی، کارمزد و نبود هزینه ثبت‌نام/اشتراک/سپرده مستند نشوند، این فرصت واجد شرایط نیست." };
+  if (!complianceVerified) return { score: Math.min(score, 44), decision: "نیازمند بررسی", reason: "تا وقتی نبود KYC، کشور مجاز، ارز و شبکه دقیق، حداقل برداشت، پرداخت رمزارزی به کیف پول شخصی، کارمزد و نبود هزینه ثبت‌نام/اشتراک/سپرده مستند نشوند، این فرصت واجد شرایط نیست." };
   if (score >= 70) return { score, decision: "واجد شرایط اولیه", reason: "شرایط پایه ثبت شده؛ قرارداد، حداقل برداشت و پرداخت نهایی را پیش از شروع دوباره بررسی کن." };
   if (score >= 45) return { score, decision: "نیازمند بررسی", reason: "شواهد تکمیلی پرداخت یا شرایط قرارداد کافی نیست." };
   return { score, decision: "اولویت پایین", reason: "شواهد پرداخت، کشور یا هزینه‌ها کافی نیست." };
@@ -331,7 +331,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         <input value={pay} onChange={e => setPay(e.target.value)} placeholder="بودجه و واحد پرداخت" aria-label="بودجه"/>
         <input value={country} onChange={e => setCountry(e.target.value)} placeholder="کشورهای مجاز یا محدودیت‌ها" aria-label="محدودیت کشور"/>
         <select value={countryCheck} onChange={e => setCountryCheck(e.target.value)} aria-label="بررسی کشور"><option>هنوز بررسی نشده</option><option>مجاز بودن کشور تأیید شده</option><option>کشور مسدود است</option></select>
-        <select value={payout} onChange={e => setPayout(e.target.value)} aria-label="روش پرداخت"><option>نامشخص</option><option>کیف پول مستقیم</option><option>رمزارز از طریق قرارداد</option><option>فیات یا کارت هدیه</option></select>
+        <select value={payout} onChange={e => setPayout(e.target.value)} aria-label="روش برداشت"><option>نامشخص</option><option>کیف پول مستقیم</option><option>رمزارز از طریق قرارداد به کیف پول</option></select>
         <select value={paymentAsset} onChange={e => setPaymentAsset(e.target.value)} aria-label="ارز پرداخت"><option>نامشخص</option><option>USDT</option><option>USDC</option><option>XNO</option><option>سایر رمزارزها</option></select>
         <input value={network} onChange={e => setNetwork(e.target.value)} placeholder="شبکه دقیق پرداخت" aria-label="شبکه"/>
         <select value={deposit} onChange={e => setDeposit(e.target.value)} aria-label="هزینه ورود، اشتراک و سپرده"><option>هنوز بررسی نشده</option><option>بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری</option><option>هزینه ثبت‌نام یا اشتراک اجباری دارد</option><option>سپرده یا خرید اجباری دارد</option></select>
