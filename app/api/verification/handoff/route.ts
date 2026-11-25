@@ -33,8 +33,8 @@ function safeVerificationUrl(raw: unknown): string | null {
 
 export async function POST(request: NextRequest) {
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!base || !serviceKey) return NextResponse.json({ error: "اتصال امن سرور برای دریافت درخواست‌ها هنوز پیکربندی نشده است." }, { status: 503 });
+  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  if (!base || !key) return NextResponse.json({ error: "تنظیمات Supabase کامل نیست." }, { status: 503 });
   const token = request.headers.get("authorization")?.match(/^Bearer\\s+(.+)$/i)?.[1] || "";
   if (token.length < 32 || token.length > 256) return NextResponse.json({ error: "کلید اتصال معتبر نیست." }, { status: 401 });
   let body: { url?: unknown; kind?: unknown; platform?: unknown };
@@ -44,28 +44,15 @@ export async function POST(request: NextRequest) {
   const kind = typeof body.kind === "string" && kinds.includes(body.kind) ? body.kind : "unknown";
   const platform = typeof body.platform === "string" ? body.platform.trim().slice(0, 80) : "وب‌سایت";
   if (!url) return NextResponse.json({ error: "فقط نشانی HTTPS عمومی و معتبر پذیرفته می‌شود." }, { status: 400 });
-  const tokenHash = createHash("sha256").update(token, "utf8").digest("hex");
-  const adminHeaders = { apikey: serviceKey, Authorization: `Bearer ${serviceKey}`, "Content-Type": "application/json" };
-  const deviceQuery = new URLSearchParams({ select: "id,owner_id", token_hash: `eq.${tokenHash}`, revoked_at: "is.null", limit: "1" });
-  const deviceResponse = await fetch(`${base}/rest/v1/verification_devices?${deviceQuery}`, {
-    headers: adminHeaders, cache: "no-store"
-  });
-  if (!deviceResponse.ok) return NextResponse.json({ error: "بررسی کلید اتصال انجام نشد." }, { status: 502 });
-  const devices = await deviceResponse.json();
-  const device = Array.isArray(devices) ? devices[0] : null;
-  if (!device?.id || !device?.owner_id) return NextResponse.json({ error: "کلید اتصال نامعتبر یا لغوشده است." }, { status: 401 });
-  const insertResponse = await fetch(`${base}/rest/v1/verification_handoffs`, {
+  const response = await fetch(`${base}/functions/v1/verification-handoff`, {
     method: "POST",
-    headers: { ...adminHeaders, Prefer: "return=representation" },
-    body: JSON.stringify({
-      owner_id: device.owner_id, device_id: device.id, platform, kind, url,
-      status: "pending", expires_at: new Date(Date.now() + 15 * 60 * 1000).toISOString()
-    }),
+    headers: { apikey: key, Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ url, kind, platform }),
     cache: "no-store"
   });
-  if (!insertResponse.ok) return NextResponse.json({ error: "ثبت درخواست انتقال ناموفق بود." }, { status: 502 });
-  const rows = await insertResponse.json();
-  return NextResponse.json({ accepted: true, request_id: rows?.[0]?.id, expires_in_seconds: 900 });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) return NextResponse.json({ error: data.error || "درخواست انتقال پذیرفته نشد." }, { status: response.status });
+  return NextResponse.json(data);
 }
 
 export async function GET(request: NextRequest) {
