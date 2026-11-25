@@ -15,6 +15,7 @@ This is a starting catalog for AI Creative Earnings and future income-oriented p
 |---|---|---|---|
 | Shopify | https://www.shopify.com/ | Build and operate an online store | Not a task/reward site and does not itself provide customers or earnings; check subscription/trial charges, payment processor eligibility, country restrictions, and operating costs before proposing it |
 
+| Paragraph (Mirror successor) | https://paragraph.com/ | Onchain publishing and reader-backed writer coins; speculative creator monetization, not guaranteed paid work. Mirror migrated into Paragraph in 2025. | Check wallet/network, liquidity, KYC, Iranian passport and Armenia access; no paid plan or credits. |
 ## Web3 / task and bounty leads
 
 | Platform | Official site | Intended use | Checks required before relying on it |

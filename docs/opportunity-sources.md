@@ -7,6 +7,8 @@ These sources are discovery targets, not guaranteed income. Prioritize work with
 
 ## Creator campaigns, video, writing, and animation
 
+| Paragraph (successor to Mirror) | https://paragraph.com/ | Onchain publishing, post coins and writer coins; variable/speculative creator monetization, not fixed-paid work. Mirror's standalone service was wound down and migrated here (official notice: https://paragraph.com/@blog/bringing-the-best-of-mirror-to-paragraph). Iranian-passport, Armenia/no-residence, KYC and direct payout eligibility remain unverified. |
+
 | Platform / listing | URL | Focus |
 |---|---|---|
 | Superteam Earn — Raenest Global Bounty | https://superteam.fun/earn/listing/the-raenest-global-bounty-writing-video-and-animation | Writing, video, animation bounty |

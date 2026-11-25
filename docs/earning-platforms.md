@@ -223,3 +223,14 @@ Official evidence reviewed:
 - Superteam Earn Armenia opportunities: https://superteam.fun/earn/regions/armenia
 
 No account, KYC submission, wallet connection, application, legal acceptance or payment was performed in this research pass.
+
+
+## Mirror / Paragraph — migration and current earning model (verified 2026-11-26)
+
+**Mirror is no longer a standalone platform.** Paragraph announced on 2025-09-15 that Mirror would wind down and that posts and subscribers would migrate automatically to Paragraph. The official migration notice says Mirror content remains live on Paragraph and old Mirror blog links redirect there: https://paragraph.com/@blog/bringing-the-best-of-mirror-to-paragraph
+
+**Current successor:** https://paragraph.com/ . Paragraph supports reader-backed post coins and writer coins. Its official writer-coin documentation says a creator needs a connected wallet to launch a writer coin; creators are allocated 50% of the token supply vesting over 36 months and receive 2% of transactions involving that writer coin. The ability to realize proceeds depends on demand, buyers, and liquidity; this is a speculative token/community monetization model, not a paid writing job or guaranteed income: https://paragraph.com/docs/earn/writer-coins
+
+Paragraph's Terms of Use (effective 2026-07-28) say blockchain transactions are subject to network fees and digital assets may lose value; payment features are subject to provider eligibility. The Terms also allow paid plans/usage charges for some services, so do not buy a plan or credits. Public content and connected wallet activity carry privacy and on-chain visibility considerations: https://paragraph.com/terms-of-use
+
+**Eligibility for this user remains UNKNOWN:** no official evidence found in this pass confirming acceptance of an Iranian passport, access from Armenia without a residence permit, withdrawal/KYC treatment for an Iranian national, or a guaranteed direct payout path. Do not mark eligible. If investigated later, use only free publishing, no paid AI credits, and no wallet connection or signature until separately approved. Writer coins should be classified as speculative/variable creator monetization, not predictable income.
