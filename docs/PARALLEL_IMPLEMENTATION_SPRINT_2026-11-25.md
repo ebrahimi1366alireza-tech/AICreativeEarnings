@@ -17,6 +17,7 @@ This sprint tracks three workstreams in parallel. It is an implementation checkl
 - Verify backup/restore with empty, partially populated, malformed, and cross-account local data.
 - Make backup export and restore status visible and understandable on narrow Android screens.
 - Review whether KYC review records contain document images or other sensitive identity data. Keep raw identity documents and biometric templates out of workspace sync; sync only the minimum review metadata needed.
+- **Implemented in draft:** KYC/payment readiness distinguishes the user's current physical presence in a country from a formal residence-permit requirement. Legacy residence-access fields are not treated as proof of lawful physical-presence eligibility. ID or liveness KYC can qualify only when the passport for the selected citizenship is explicitly accepted; address KYC and unknown KYC remain under review. Readiness requires a separate evidence excerpt and evidence-check date no older than 90 days.
 - Integration tests remain pending for unauthenticated access, cross-account isolation, payload validation, concurrent updates, and recovery from HTTP 409.
 - Keep Codespaces stopped when idle and never add paid usage or payment methods without explicit approval.
 
@@ -37,7 +38,7 @@ This sprint tracks three workstreams in parallel. It is an implementation checkl
 - Add source adapters independently, with per-source timeouts, response validation, rate limits, deduplication, and source freshness timestamps.
 - Prioritize official/public sources for: AI image/design orders, short-video work, writing, original audio/music work, legitimate paid research, and browser-only QA/microtasks.
 - Do not add employment vacancies as if they were paid creative orders.
-- **Implemented in draft:** manual qualification now separates Iranian passport acceptance, whether Armenia residence is required, current-presence eligibility, KYC acceptance with an Iranian passport, crypto payout, fees, and mandatory deposits. An evidence URL, excerpt, and verification date are required before an initial-eligible decision. Automated source verification is still pending.
+- **Implemented in draft:** opportunity scoring separates Iranian passport acceptance, KYC with that passport, legal access based on current physical presence, formal residence-permit requirements, crypto payout, and mandatory fees/deposits. An eligible decision also requires a valid HTTPS source, an excerpt of at least 30 characters, and an explicit evidence-check date within the last 90 days. Automated source verification and official evidence for individual platforms remain pending.
 - Unknown eligibility must remain `needs review`; a topical score must never imply payment or eligibility.
 - Show the source page and last-checked time; expire or flag stale listings.
 
