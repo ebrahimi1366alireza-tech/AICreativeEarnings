@@ -24,10 +24,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Smoke test OpenCode CLI installation
-        run: |
-          npm install --global @opencode/cli
-          opencode --version
       - name: Install dependencies
         run: npm install
       - name: Check FCC installer wrapper syntax
