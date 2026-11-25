@@ -24,6 +24,9 @@ function safeVerificationUrl(raw: unknown): string | null {
     const url = new URL(raw);
     const host = url.hostname.toLowerCase();
     if (url.protocol !== "https:" || url.username || url.password || (url.port && url.port !== "443")) return null;
+    const sensitiveQueryKeys = /^(access_token|refresh_token|token|token_hash|code|otp|password|secret|api_key|key|signature|sig|jwt|ticket)$/i;
+    if ([...url.searchParams.keys()].some(key => sensitiveQueryKeys.test(key))) return null;
+    url.hash = "";
     if (!host || host === "localhost" || host.endsWith(".local") || host.endsWith(".internal")) return null;
     if (/^(\d{1,3}\.){3}\d{1,3}$/.test(host) || host.includes(":")) return null;
     if (/^(127\.|10\.|192\.168\.|169\.254\.)/.test(host) || /^172\.(1[6-9]|2\d|3[01])\./.test(host)) return null;
