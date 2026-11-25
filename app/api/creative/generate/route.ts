@@ -118,8 +118,9 @@ export async function POST(request: NextRequest) {
       usage: { used: reservation.used, remaining: reservation.remaining, limit: reservation.limit, unitCost: units }
     }, { headers: { "Cache-Control": "no-store" } });
   } catch {
-    await releaseCreativeCredits(user.id, units).catch(() => null);
-    return NextResponse.json({ error: "ارتباط با موتور تولید برقرار نشد یا زمان پاسخ به پایان رسید. سهمیه در صورت امکان بازگردانده شد." }, { status: 502, headers: { "Cache-Control": "no-store" } });
+    // A timeout/network failure is ambiguous: the provider may have completed and billed the request.
+    // Keep the reserved credits rather than refunding and allowing unbounded retries.
+    return NextResponse.json({ error: "ارتباط با موتور تولید قطع شد یا زمان پاسخ به پایان رسید. برای جلوگیری از مصرف تکراری، اعتبار این درخواست فعلاً رزرو باقی می‌ماند." }, { status: 502, headers: { "Cache-Control": "no-store" } });
   }
 }
 
