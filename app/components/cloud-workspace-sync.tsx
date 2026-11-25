@@ -8,6 +8,10 @@ type Workspace = {
   deliveries: unknown[];
   income: unknown[];
   wallet: { address: string; network: string };
+  kycRecords?: unknown[];
+  kycResidence?: string;
+  kycCitizenship?: string;
+  kycBankCountry?: string;
 };
 
 const OWNER_KEY = "creativeops-cloud-owner-v1";
@@ -28,7 +32,11 @@ function readLocal(): Workspace {
     opportunities: read(KEYS.opportunities) ?? [],
     deliveries: read(KEYS.deliveries) ?? [],
     income: read(KEYS.income) ?? [],
-    wallet: read(KEYS.wallet) ?? { address: "", network: "EVM - انتخاب شبکه هنگام برداشت" }
+    wallet: read(KEYS.wallet) ?? { address: "", network: "EVM - انتخاب شبکه هنگام برداشت" },
+    kycRecords: read("creativeops-kyc-intelligence-v1") ?? [],
+    kycResidence: read("creativeops-kyc-residence-v2") ?? "AM",
+    kycCitizenship: read("creativeops-kyc-citizenship-v1") ?? "IR",
+    kycBankCountry: read("creativeops-kyc-bank-country-v1") ?? "AM"
   };
 }
 
@@ -37,6 +45,10 @@ function writeLocal(data: Workspace) {
   localStorage.setItem(KEYS.deliveries, JSON.stringify(data.deliveries));
   localStorage.setItem(KEYS.income, JSON.stringify(data.income));
   localStorage.setItem(KEYS.wallet, JSON.stringify(data.wallet));
+  if (Array.isArray(data.kycRecords)) localStorage.setItem("creativeops-kyc-intelligence-v1", JSON.stringify(data.kycRecords));
+  if (typeof data.kycResidence === "string") localStorage.setItem("creativeops-kyc-residence-v2", data.kycResidence);
+  if (typeof data.kycCitizenship === "string") localStorage.setItem("creativeops-kyc-citizenship-v1", data.kycCitizenship);
+  if (typeof data.kycBankCountry === "string") localStorage.setItem("creativeops-kyc-bank-country-v1", data.kycBankCountry);
 }
 
 export default function CloudWorkspaceSync() {
@@ -107,7 +119,7 @@ export default function CloudWorkspaceSync() {
         const data = remote.data as Workspace | null;
         const hasRemote = Boolean(data && (
           data.opportunities?.length || data.deliveries?.length || data.income?.length ||
-          (data.wallet?.address && data.wallet.address.length > 0)
+          data.kycRecords?.length || (data.wallet?.address && data.wallet.address.length > 0)
         ));
         if (hasRemote) {
           const marker = remote.updatedAt || "remote";
