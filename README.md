@@ -16,7 +16,7 @@ The six streams are product scope, not proof that matching live opportunities or
 ## Operating rules
 
 - Start with free tools and free quotas. No registration fees, deposits, required purchases, or subscriptions to unlock tasks.
-- Payouts must be crypto-only to the user's wallet; USDT is preferred. Do not mark a platform eligible until its supported asset/network, fees, minimum withdrawal, and country restrictions are verified.
+- Payouts must be crypto/token-only to the user's own wallet. No cryptocurrency or token has priority. Accept any asset only when the platform genuinely supports wallet payout for that asset and its exact network, fees, minimum withdrawal, and country restrictions have been verified.
 - Never claim revenue until payment has actually arrived.
 - Human approval is required for account verification, contracts, and financial actions.
 - Never use fake votes, fake reviews, bots, or duplicate accounts to manipulate a platform.
