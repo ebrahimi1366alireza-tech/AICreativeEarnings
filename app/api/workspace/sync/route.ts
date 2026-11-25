@@ -31,6 +31,13 @@ export async function GET(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
+  const origin = request.headers.get("origin");
+  if (!origin || origin !== new URL(request.url).origin) {
+    return NextResponse.json({ error: "درخواست معتبر نیست." }, { status: 403, headers: { "Cache-Control": "no-store" } });
+  }
+  if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
+    return NextResponse.json({ error: "نوع درخواست معتبر نیست." }, { status: 415, headers: { "Cache-Control": "no-store" } });
+  }
   const user = await authenticatedUser(request);
   if (!user) return NextResponse.json({ error: "برای همگام‌سازی ابتدا وارد حساب شو." }, { status: 401 });
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
