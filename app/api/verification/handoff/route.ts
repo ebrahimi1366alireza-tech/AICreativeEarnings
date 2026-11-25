@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   if (!base || !key) return NextResponse.json({ error: "تنظیمات Supabase کامل نیست." }, { status: 503 });
-  const token = request.headers.get("authorization")?.match(/^Bearer\\s+(.+)$/i)?.[1] || "";
+  const token = request.headers.get("authorization")?.match(/^Bearer\s+(.+)$/i)?.[1] || "";
   if (token.length < 32 || token.length > 256) return NextResponse.json({ error: "کلید اتصال معتبر نیست." }, { status: 401 });
   let body: { url?: unknown; kind?: unknown; platform?: unknown };
   try { body = await request.json(); } catch { return NextResponse.json({ error: "درخواست معتبر نیست." }, { status: 400 }); }
