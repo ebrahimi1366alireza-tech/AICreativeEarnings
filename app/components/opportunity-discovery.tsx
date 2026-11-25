@@ -91,7 +91,7 @@ function scoreLead(input: {
 }) {
   let score = 0;
   const hardReject: string[] = [];
-  if (/^(https?:\\/\\/)?(www\\.)?(laborx\\.com|subnano\\.ai)(\\/|$)/i.test(input.sourceUrl)) score += 10;
+  if (/^(https?:\/\/)?(www\.)?(laborx\.com|subnano\.ai)(\/|$)/i.test(input.sourceUrl)) score += 10;
   if (input.payout === "کیف پول مستقیم" || input.payout === "رمزارز از طریق قرارداد به کیف پول") score += 15;
   else if (/فیات|کارت هدیه|صرافی|بانکی|paypal|payoneer|wise/i.test(input.payout)) hardReject.push("برداشت مستقیم رمزارزی به کیف پول شخصی ارائه نمی‌شود");
   if (input.paymentAsset === "USDT" || input.paymentAsset === "USDC") score += 10;
