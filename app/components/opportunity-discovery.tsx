@@ -92,7 +92,7 @@ function scoreLead(input: {
   else if (input.payout === "رمزارز از طریق قرارداد به کیف پول") score += 15;
   else if (/فیات|کارت هدیه|صرافی|بانکی|paypal|payoneer|wise/i.test(input.payout)) hardReject.push("روش برداشت غیررمزارزی یا غیرمستقیم با سیاست پروژه سازگار نیست");
   if (input.paymentAsset === "USDT") score += 10;
-  else if (["USDC", "XNO"].includes(input.paymentAsset)) score += 6;
+  else if (input.paymentAsset === "USDC") score += 6;
   if (input.countryCheck === "مجاز بودن کشور تأیید شده") score += 15;
   else if (input.countryCheck === "کشور مسدود است") hardReject.push("کشور محل اقامت پذیرفته نمی‌شود");
   else score -= 8;
@@ -111,12 +111,11 @@ function scoreLead(input: {
     && input.countryCheck === "مجاز بودن کشور تأیید شده"
     && ["کیف پول مستقیم", "رمزارز از طریق قرارداد به کیف پول"].includes(input.payout)
     && input.deposit === "بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری"
-    && input.paymentAsset !== "نامشخص"
-    && input.paymentAsset !== "سایر رمزارزها"
+    && ["USDT", "USDC"].includes(input.paymentAsset)
     && Boolean(input.network.trim())
     && Boolean(input.minimum.trim())
     && input.fee !== "نامشخص";
-  if (!complianceVerified) return { score: Math.min(score, 44), decision: "نیازمند بررسی", reason: "تا وقتی نبود KYC، کشور مجاز، ارز و شبکه دقیق، حداقل برداشت، پرداخت رمزارزی به کیف پول شخصی، کارمزد و نبود هزینه ثبت‌نام/اشتراک/سپرده مستند نشوند، این فرصت واجد شرایط نیست." };
+  if (!complianceVerified) return { score: Math.min(score, 44), decision: "نیازمند بررسی", reason: "تا وقتی نبود KYC، کشور مجاز، ارز و شبکه دقیق، حداقل برداشت، پرداخت رمزارزی به کیف پول شخصی، کارمزد و نبود هزینه ثبت‌نام/اشتراک/سپرده مستند نشوند، این فرصت واجد شرایط نیست. ارزهای غیر از USDT و USDC فقط پس از بررسی دستی جداگانه پذیرفته می‌شوند." };
   if (score >= 70) return { score, decision: "واجد شرایط اولیه", reason: "شرایط پایه ثبت شده؛ قرارداد، حداقل برداشت و پرداخت نهایی را پیش از شروع دوباره بررسی کن." };
   if (score >= 45) return { score, decision: "نیازمند بررسی", reason: "شواهد تکمیلی پرداخت یا شرایط قرارداد کافی نیست." };
   return { score, decision: "اولویت پایین", reason: "شواهد پرداخت، کشور یا هزینه‌ها کافی نیست." };
