@@ -126,8 +126,16 @@ export default function CloudWorkspaceSync() {
         const remote = await response.json();
         const data = remote.data as Workspace | null;
         const hasRemote = Boolean(data && (
-          data.opportunities?.length || data.deliveries?.length || data.income?.length ||
-          data.kycRecords?.length || (data.wallet?.address && data.wallet.address.length > 0)
+          data.opportunities?.length ||
+          data.deliveries?.length ||
+          data.income?.length ||
+          data.kycRecords?.length ||
+          Boolean(data.wallet?.address) ||
+          (typeof data.wallet?.network === "string" &&
+            !["انتخاب شبکه هنگام برداشت", "شبکه را مطابق توکن و پلتفرم وارد کن"].includes(data.wallet.network)) ||
+          (typeof data.kycResidence === "string" && data.kycResidence !== "AM") ||
+          (typeof data.kycCitizenship === "string" && data.kycCitizenship !== "IR") ||
+          (typeof data.kycBankCountry === "string" && data.kycBankCountry !== "AM")
         ));
         if (hasRemote) {
           const marker = remote.updatedAt || "remote";
