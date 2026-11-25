@@ -22,6 +22,8 @@ export type DiscoveryLead = {
   paymentAsset: string;
   iranPassport: string;
   armeniaResidence: string;
+  evidenceNote: string;
+  verifiedAt: string;
   score: number;
   decision: string;
   writingType?: string;
@@ -87,6 +89,8 @@ function scoreLead(input: {
   kyc: string;
   iranPassport: string;
   armeniaResidence: string;
+  evidenceNote: string;
+  verifiedAt: string;
   stream: string;
 }) {
   let score = 0;
@@ -117,11 +121,12 @@ function scoreLead(input: {
     ["USDT", "USDC"].includes(input.paymentAsset) &&
     input.iranPassport === "پذیرش پاسپورت ایرانی تأیید شده" &&
     input.armeniaResidence === "اقامت ارمنستان لازم نیست" &&
+    Boolean(input.evidenceNote.trim()) && Boolean(input.verifiedAt.trim()) &&
     input.countryCheck === "حضور در ارمنستان مجاز تأیید شده" &&
     input.deposit === "بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری" &&
     ["بدون KYC", "KYC با پاسپورت ایرانی تأیید شده"].includes(input.kyc) &&
     Boolean(input.network.trim()) && Boolean(input.minimum.trim()) && input.fee !== "نامشخص";
-  if (!fullyVerified) return { score: Math.min(score, 49), decision: "نیازمند بررسی", reason: "برای واجد شرایط شدن باید پذیرش پاسپورت ایرانی، عدم نیاز به اقامت ارمنستان، مجاز بودن حضور فعلی در ارمنستان، روش و شبکه برداشت مستقیم رمزارزی، KYC قابل انجام با پاسپورت ایرانی یا عدم نیاز به آن، حداقل برداشت، کارمزد و نبود هرگونه هزینه اجباری با سند رسمی تأیید شوند. ثبت‌نام موفق به‌تنهایی تأیید برداشت نیست." };
+  if (!fullyVerified) return { score: Math.min(score, 49), decision: "نیازمند بررسی", reason: "برای واجد شرایط شدن باید پذیرش پاسپورت ایرانی، عدم نیاز به اقامت ارمنستان، مجاز بودن حضور فعلی در ارمنستان، روش و شبکه برداشت مستقیم رمزارزی، KYC قابل انجام با پاسپورت ایرانی یا عدم نیاز به آن، حداقل برداشت، کارمزد و نبود هرگونه هزینه اجباری با لینک سند، خلاصه بند و تاریخ بررسی ثبت شوند. ثبت‌نام موفق به‌تنهایی تأیید برداشت نیست." };
   if (score >= 80) return { score, decision: "واجد شرایط اولیه", reason: "شرایط اصلی طبق شواهد ثبت شده؛ پیش از کار، محدودیت‌های حساب و اولین برداشت را دوباره از منبع رسمی بررسی کن." };
   return { score: Math.min(score, 79), decision: "نیازمند بررسی", reason: "بخشی از شواهد مربوط به پرداخت، هزینه یا شرایط قرارداد هنوز کامل نیست." };
 }
@@ -141,6 +146,8 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
   const [kyc, setKyc] = useState("KYC بررسی نشده");
   const [iranPassport, setIranPassport] = useState("بررسی نشده");
   const [armeniaResidence, setArmeniaResidence] = useState("نامشخص");
+  const [evidenceNote, setEvidenceNote] = useState("");
+  const [verifiedAt, setVerifiedAt] = useState("");
   const [deposit, setDeposit] = useState("هنوز بررسی نشده");
   const [escrow, setEscrow] = useState("نامشخص");
   const [proofUrl, setProofUrl] = useState("");
@@ -161,7 +168,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
   const [proposalDeadline, setProposalDeadline] = useState("");
   const [proposalText, setProposalText] = useState("");
 
-  const assessment = useMemo(() => scoreLead({ sourceUrl: proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, network, minimum, fee, kyc, iranPassport, armeniaResidence, stream }), [proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, network, minimum, fee, kyc, iranPassport, armeniaResidence, stream]);
+  const assessment = useMemo(() => scoreLead({ sourceUrl: proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, network, minimum, fee, kyc, iranPassport, armeniaResidence, evidenceNote, verifiedAt, stream }), [proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, network, minimum, fee, kyc, iranPassport, armeniaResidence, evidenceNote, verifiedAt, stream]);
 
   async function discoverOpportunities() {
     setLiveLoading(true); setLiveError(""); setLiveNotice("");
@@ -235,6 +242,8 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
       paymentAsset,
       iranPassport,
       armeniaResidence,
+      evidenceNote,
+      verifiedAt,
       score: assessment.score,
       decision: assessment.decision,
       ...(stream === "نوشتن و مقاله" ? { writingType, contentLanguage, wordCount: wordCount.trim() || "نامشخص", deadline: deadline.trim() || "نامشخص", seoRequired, commercialRights } : {})
@@ -364,7 +373,9 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
             <select value={commercialRights} onChange={e => setCommercialRights(e.target.value)} aria-label="حقوق تجاری محتوا"><option>باید از کارفرما تأیید شود</option><option>حقوق تجاری و مالکیت مشخص است</option><option>استفاده تجاری ممنوع است</option></select>
           </div>
         )}
-        <input value={proofUrl} onChange={e => setProofUrl(e.target.value)} type="url" required placeholder="لینک مستقیم همان سفارش یا منبع رسمی" aria-label="لینک مستقیم سفارش"/>
+        <input value={proofUrl} onChange={e => setProofUrl(e.target.value)} type="url" required placeholder="لینک مستقیم سند رسمی پذیرش، KYC، کشور و پرداخت" aria-label="لینک مدرک رسمی"/>
+        <input value={evidenceNote} onChange={e => setEvidenceNote(e.target.value)} placeholder="خلاصه دقیق متن مدرک رسمی و بند مربوط به ایرانی‌ها/اقامت/برداشت" aria-label="خلاصه مدرک رسمی"/>
+        <input value={verifiedAt} onChange={e => setVerifiedAt(e.target.value)} type="date" aria-label="تاریخ بررسی مدرک"/>
         <button type="submit">ثبت در رادار فرصت‌ها</button>
       </form>
       <div className="discovery-assessment" role="status">
