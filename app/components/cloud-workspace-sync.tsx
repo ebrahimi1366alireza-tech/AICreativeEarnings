@@ -24,6 +24,7 @@ const KEYS = {
 };
 
 function readLocal(): Workspace {
+  const readText = (key: string, fallback: string) => localStorage.getItem(key) ?? fallback;
   const read = (key: string) => {
     try { const value = localStorage.getItem(key); return value ? JSON.parse(value) : null; }
     catch { return null; }
@@ -34,9 +35,9 @@ function readLocal(): Workspace {
     income: read(KEYS.income) ?? [],
     wallet: read(KEYS.wallet) ?? { address: "", network: "EVM - انتخاب شبکه هنگام برداشت" },
     kycRecords: read("creativeops-kyc-intelligence-v1") ?? [],
-    kycResidence: read("creativeops-kyc-residence-v2") ?? "AM",
-    kycCitizenship: read("creativeops-kyc-citizenship-v1") ?? "IR",
-    kycBankCountry: read("creativeops-kyc-bank-country-v1") ?? "AM"
+    kycResidence: readText("creativeops-kyc-residence-v2", "AM"),
+    kycCitizenship: readText("creativeops-kyc-citizenship-v1", "IR"),
+    kycBankCountry: readText("creativeops-kyc-bank-country-v1", "AM")
   };
 }
 
