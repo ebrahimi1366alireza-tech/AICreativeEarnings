@@ -36,7 +36,14 @@ export async function PUT(request: NextRequest) {
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
   if (!base) return NextResponse.json({ error: "تنظیمات پایگاه داده کامل نیست." }, { status: 503 });
   let body: unknown;
+  const contentLength = Number(request.headers.get("content-length") || "0");
+  if (Number.isFinite(contentLength) && contentLength > 1_000_000) {
+    return NextResponse.json({ error: "حجم فضای کاری بیش از حد مجاز است؛ فایل‌های حجیم یا اسناد هویتی را همگام‌سازی نکن." }, { status: 413 });
+  }
   try { body = await request.json(); } catch { return NextResponse.json({ error: "داده ارسالی معتبر نیست." }, { status: 400 }); }
+  if (new TextEncoder().encode(JSON.stringify(body)).byteLength > 1_000_000) {
+    return NextResponse.json({ error: "حجم فضای کاری بیش از حد مجاز است؛ فایل‌های حجیم یا اسناد هویتی را همگام‌سازی نکن." }, { status: 413 });
+  }
   if (!body || typeof body !== "object" || Array.isArray(body)) return NextResponse.json({ error: "ساختار پشتیبان معتبر نیست." }, { status: 400 });
   const data = body as Record<string, unknown>;
   const allowed = ["opportunities", "deliveries", "income", "wallet", "kycRecords", "kycResidence", "kycCitizenship", "kycBankCountry", "expectedUpdatedAt"];

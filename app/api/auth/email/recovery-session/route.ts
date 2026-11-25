@@ -6,8 +6,11 @@ export const runtime = "nodejs";
 export async function POST(request: Request) {
   try {
     const origin = request.headers.get("origin");
-    if (origin && origin !== new URL(request.url).origin) {
+    if (!origin || origin !== new URL(request.url).origin) {
       return NextResponse.json({ error: "درخواست معتبر نیست." }, { status: 403 });
+    }
+    if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
+      return NextResponse.json({ error: "نوع درخواست معتبر نیست." }, { status: 415, headers: { "Cache-Control": "no-store" } });
     }
     const body = await request.json() as { access_token?: string; refresh_token?: string; expires_in?: number; type?: string };
     const accessToken = String(body.access_token || "");
@@ -19,7 +22,7 @@ export async function POST(request: Request) {
     if (!verified.ok || !verified.data?.id) {
       return NextResponse.json({ error: "نشست بازیابی معتبر نیست یا منقضی شده است." }, { status: 401 });
     }
-    const response = NextResponse.json({ ok: true, message: "نشست بازیابی تأیید شد. رمز جدید را وارد کن." });
+    const response = NextResponse.json({ ok: true, message: "نشست بازیابی تأیید شد. رمز جدید را وارد کن." }, { headers: { "Cache-Control": "no-store" } });
     setSupabaseSessionCookies(response, {
       access_token: accessToken,
       refresh_token: refreshToken,

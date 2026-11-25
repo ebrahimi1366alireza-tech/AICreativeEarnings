@@ -4,6 +4,13 @@ import { supabaseAuthRequest } from "@/lib/supabase-auth";
 export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
+  const origin = request.headers.get("origin");
+  if (!origin || origin !== new URL(request.url).origin) {
+    return NextResponse.json({ error: "درخواست معتبر نیست." }, { status: 403, headers: { "Cache-Control": "no-store" } });
+  }
+  if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
+    return NextResponse.json({ error: "نوع درخواست معتبر نیست." }, { status: 415, headers: { "Cache-Control": "no-store" } });
+  }
   try {
     const access = request.cookies.get("creativeops_supabase_access")?.value;
     if (!access) return NextResponse.json({ error: "نشست بازیابی پیدا نشد؛ لینک ایمیل را دوباره باز کن." }, { status: 401 });
@@ -23,7 +30,7 @@ export async function POST(request: NextRequest) {
     });
     const result = await response.json().catch(() => ({}));
     if (!response.ok) return NextResponse.json({ error: result.msg || result.message || "تغییر رمز انجام نشد؛ رمز دیگری انتخاب کن." }, { status: response.status });
-    return NextResponse.json({ ok: true, message: "رمز عبور با موفقیت تغییر کرد." });
+    return NextResponse.json({ ok: true, message: "رمز عبور با موفقیت تغییر کرد." }, { headers: { "Cache-Control": "no-store" } });
   } catch {
     return NextResponse.json({ error: "تغییر رمز عبور انجام نشد." }, { status: 500 });
   }

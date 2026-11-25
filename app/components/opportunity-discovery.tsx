@@ -76,6 +76,24 @@ const sources = [
   }
 ];
 
+function isSecureEvidenceUrl(value: string) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" && Boolean(url.hostname) &&
+      !url.username && !url.password &&
+      !["localhost", "127.0.0.1", "::1"].includes(url.hostname);
+  } catch {
+    return false;
+  }
+}
+
+function isFreshVerificationDate(value: string) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const timestamp = Date.parse(value + "T00:00:00.000Z");
+  const age = Date.now() - timestamp;
+  return Number.isFinite(timestamp) && age >= 0 && age <= 90 * 24 * 60 * 60 * 1000;
+}
+
 function scoreLead(input: {
   sourceUrl: string;
   payout: string;
@@ -95,7 +113,10 @@ function scoreLead(input: {
 }) {
   let score = 0;
   const hardReject: string[] = [];
-  if (/^(https?:\/\/)?(www\.)?(laborx\.com|subnano\.ai)(\/|$)/i.test(input.sourceUrl)) score += 10;
+  const evidenceUrlValid = isSecureEvidenceUrl(input.sourceUrl);
+  const evidenceExcerptValid = input.evidenceNote.trim().length >= 30;
+  const evidenceDateValid = isFreshVerificationDate(input.verifiedAt);
+  if (evidenceUrlValid && /^https:\/\/(www\.)?(laborx\.com|subnano\.ai)(\/|$)/i.test(input.sourceUrl)) score += 10;
   if (input.payout === "کیف پول مستقیم" || input.payout === "رمزارز از طریق قرارداد به کیف پول") score += 15;
   else if (/فیات|کارت هدیه|صرافی|بانکی|paypal|payoneer|wise/i.test(input.payout)) hardReject.push("برداشت مستقیم رمزارزی به کیف پول شخصی ارائه نمی‌شود");
   if (input.paymentAsset === "USDT" || input.paymentAsset === "USDC") score += 10;
@@ -121,12 +142,12 @@ function scoreLead(input: {
     ["USDT", "USDC"].includes(input.paymentAsset) &&
     input.iranPassport === "پذیرش پاسپورت ایرانی تأیید شده" &&
     input.armeniaResidence === "اقامت ارمنستان لازم نیست" &&
-    Boolean(input.evidenceNote.trim()) && Boolean(input.verifiedAt.trim()) &&
+    evidenceUrlValid && evidenceExcerptValid && evidenceDateValid &&
     input.countryCheck === "حضور در ارمنستان مجاز تأیید شده" &&
     input.deposit === "بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری" &&
     ["بدون KYC", "KYC با پاسپورت ایرانی تأیید شده"].includes(input.kyc) &&
     Boolean(input.network.trim()) && Boolean(input.minimum.trim()) && input.fee !== "نامشخص";
-  if (!fullyVerified) return { score: Math.min(score, 49), decision: "نیازمند بررسی", reason: "برای واجد شرایط شدن باید پذیرش پاسپورت ایرانی، عدم نیاز به اقامت ارمنستان، مجاز بودن حضور فعلی در ارمنستان، روش و شبکه برداشت مستقیم رمزارزی، KYC قابل انجام با پاسپورت ایرانی یا عدم نیاز به آن، حداقل برداشت، کارمزد و نبود هرگونه هزینه اجباری با لینک سند، خلاصه بند و تاریخ بررسی ثبت شوند. ثبت‌نام موفق به‌تنهایی تأیید برداشت نیست." };
+  if (!fullyVerified) return { score: Math.min(score, 49), decision: "نیازمند بررسی", reason: "برای واجد شرایط شدن باید پذیرش پاسپورت ایرانی، عدم نیاز به اقامت ارمنستان، مجاز بودن حضور فعلی در ارمنستان، روش و شبکه برداشت مستقیم رمزارزی، KYC قابل انجام با پاسپورت ایرانی یا عدم نیاز به آن، حداقل برداشت، کارمزد و نبود هرگونه هزینه اجباری با لینک HTTPS معتبر، خلاصه حداقل ۳۰ نویسه و تاریخ بررسی حداکثر ۹۰ روزه ثبت شوند. ثبت‌نام موفق به‌تنهایی تأیید برداشت نیست." };
   if (score >= 80) return { score, decision: "واجد شرایط اولیه", reason: "شرایط اصلی طبق شواهد ثبت شده؛ پیش از کار، محدودیت‌های حساب و اولین برداشت را دوباره از منبع رسمی بررسی کن." };
   return { score: Math.min(score, 79), decision: "نیازمند بررسی", reason: "بخشی از شواهد مربوط به پرداخت، هزینه یا شرایط قرارداد هنوز کامل نیست." };
 }
@@ -376,6 +397,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         <input value={proofUrl} onChange={e => setProofUrl(e.target.value)} type="url" required placeholder="لینک مستقیم سند رسمی پذیرش، KYC، کشور و پرداخت" aria-label="لینک مدرک رسمی"/>
         <input value={evidenceNote} onChange={e => setEvidenceNote(e.target.value)} placeholder="خلاصه دقیق متن مدرک رسمی و بند مربوط به ایرانی‌ها/اقامت/برداشت" aria-label="خلاصه مدرک رسمی"/>
         <input value={verifiedAt} onChange={e => setVerifiedAt(e.target.value)} type="date" aria-label="تاریخ بررسی مدرک"/>
+        <small>مدرک باید از نشانی HTTPS باشد؛ خلاصه بند حداقل ۳۰ نویسه و تاریخ بررسی حداکثر ۹۰ روز اخیر باشد. اطلاعات نامشخص واجد شرایط محسوب نمی‌شود.</small>
         <button type="submit">ثبت در رادار فرصت‌ها</button>
       </form>
       <div className="discovery-assessment" role="status">
