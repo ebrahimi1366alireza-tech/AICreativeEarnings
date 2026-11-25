@@ -47,10 +47,6 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 - Core Supabase tables: `profiles`, `opportunities`, `production_orders`, `assets`, `earnings`, and `workspace_state`. RLS is enabled on all six tables.
 - The latest production deployment completed successfully. A user account has not yet been registered, so end-to-end signup, login, and cross-device sync still require a real account test.
 
-## Portfolio production
-
-The first original portfolio brief is [docs/portfolio-starter-pack-01-restaurant-food.md](docs/portfolio-starter-pack-01-restaurant-food.md). It defines three clearly labeled speculative concepts (Persian grill hero visual, café social launch set, and 15-second food promo), deliverable specs, quality checks, and a no-paid-tools workflow. It contains prompts and production instructions only; no final assets or client work are claimed.
-
 ## Current earning-channel review
 
 The latest live review is [docs/live-earning-channels-2026-11-25.md](docs/live-earning-channels-2026-11-25.md). It identifies Subnano as a possible free creator storefront (not guaranteed demand), keeps Gibwork on watchlist until a funded eligible creative bounty is verified, treats HireForHumans as waitlist-only until a live worker board is confirmed, and excludes low-value or manipulative Anoworks engagement tasks.
