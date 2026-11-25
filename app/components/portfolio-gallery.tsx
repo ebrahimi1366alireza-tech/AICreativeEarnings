@@ -24,6 +24,7 @@ export default function PortfolioGallery() {
   const [cloudMode, setCloudMode] = useState(false);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
+  const [hasLocalBackup, setHasLocalBackup] = useState(false);
 
   async function refreshCloudGallery() {
     const response = await fetch("/api/portfolio", { cache: "no-store" });
@@ -33,24 +34,27 @@ export default function PortfolioGallery() {
   }
 
   useEffect(() => {
+    let localItems: PortfolioItem[] = [];
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed: unknown = JSON.parse(raw);
         if (Array.isArray(parsed)) {
-          setItems(parsed.filter((item): item is PortfolioItem =>
+          localItems = parsed.filter((item): item is PortfolioItem =>
             Boolean(item) && typeof item.id === "string" &&
             typeof item.title === "string" && typeof item.category === "string" &&
             typeof item.image === "string" && item.image.startsWith("data:image/") &&
             typeof item.createdAt === "string" &&
             (item.size === undefined || (typeof item.size === "number" && item.size > 0))
-          ).slice(0, MAX_ITEMS));
+          ).slice(0, MAX_ITEMS);
+          setItems(localItems);
         }
       }
     } catch {
       setNotice("اطلاعات گالری قابل خواندن نبود؛ فایل‌های اصلی دستگاه حذف نشده‌اند.");
     }
     setLoaded(true);
+    setHasLocalBackup(Boolean(localStorage.getItem("creativeops-portfolio-cloud-restore-backup-v1")));
 
     let active = true;
     void fetch("/api/auth/status", { cache: "no-store" })
@@ -61,9 +65,20 @@ export default function PortfolioGallery() {
         if (!response.ok) throw new Error("گالری ابری فعلاً در دسترس نیست؛ اطلاعات محلی دست‌نخورده باقی ماند.");
         const data = await response.json() as { items?: PortfolioItem[] };
         if (!active) return;
+        if (localItems.length > 0 && !localStorage.getItem("creativeops-portfolio-cloud-restore-backup-v1")) {
+          localStorage.setItem("creativeops-portfolio-cloud-restore-backup-v1", JSON.stringify({
+            app: "AI Creative Earnings",
+            schemaVersion: 1,
+            exportedAt: new Date().toISOString(),
+            items: localItems
+          }));
+          setHasLocalBackup(true);
+        }
         setCloudMode(true);
         setItems(Array.isArray(data.items) ? data.items : []);
-        setNotice("گالری به فضای ابری خصوصی حساب متصل شد.");
+        setNotice(localItems.length > 0
+          ? "گالری ابری فعال شد؛ نسخه پشتیبان نمونه‌کارهای محلی این دستگاه نگه داشته شده است."
+          : "گالری به فضای ابری خصوصی حساب متصل شد.");
       })
       .catch(error => { if (active) setNotice(error instanceof Error ? error.message : "اتصال گالری ابری ناموفق بود."); });
     return () => { active = false; };
@@ -77,6 +92,20 @@ export default function PortfolioGallery() {
       setNotice("فضای ذخیره‌سازی مرورگر کافی نیست. چند تصویر بزرگ را حذف کن و دوباره تلاش کن.");
     }
   }, [items, loaded, cloudMode]);
+
+  function downloadLocalBackup() {
+    const raw = localStorage.getItem("creativeops-portfolio-cloud-restore-backup-v1");
+    if (!raw) return;
+    const blob = new Blob([raw], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `ai-creative-earnings-local-portfolio-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
 
   async function addItem(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -189,6 +218,10 @@ export default function PortfolioGallery() {
         <label className="portfolio-file">انتخاب تصویر <input name="image" type="file" accept="image/jpeg,image/png,image/webp,image/gif" required /></label>
         <button type="submit" disabled={busy}>{busy ? "در حال انجام..." : "+ افزودن به گالری"}</button>
       </form>
+      {hasLocalBackup && <div className="portfolio-notice" role="status">
+        نمونه‌کارهای ذخیره‌شده قبلی این دستگاه در پشتیبان جداگانه محفوظ‌اند.
+        <button type="button" onClick={downloadLocalBackup} style={{marginInlineStart:8}}>دانلود پشتیبان گالری قبلی</button>
+      </div>}
       <p className="portfolio-notice" role="status">{notice || "حداکثر ۲۰ تصویر، هرکدام تا ۱.۵ مگابایت. برای جلوگیری از نمونه‌کار ساختگی، فقط فایل‌هایی نمایش داده می‌شوند که خودت اضافه کنی."}</p>
       {!loaded ? <div className="empty-state">در حال بارگذاری گالری…</div> : items.length === 0 ? (
         <div className="empty-state"><span>✧</span><strong>هنوز نمونه‌کاری اضافه نشده</strong><p>اولین خروجی واقعی خودت را از تصویرساز یا ابزار طراحی انتخاب کن و به گالری اضافه کن. هیچ تصویر ساختگی به‌صورت پیش‌فرض نمایش داده نمی‌شود.</p></div>
