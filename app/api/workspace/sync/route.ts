@@ -39,10 +39,14 @@ export async function PUT(request: NextRequest) {
   try { body = await request.json(); } catch { return NextResponse.json({ error: "داده ارسالی معتبر نیست." }, { status: 400 }); }
   if (!body || typeof body !== "object" || Array.isArray(body)) return NextResponse.json({ error: "ساختار پشتیبان معتبر نیست." }, { status: 400 });
   const data = body as Record<string, unknown>;
-  const allowed = ["opportunities", "deliveries", "income", "wallet"];
+  const allowed = ["opportunities", "deliveries", "income", "wallet", "kycRecords", "kycResidence", "kycCitizenship", "kycBankCountry"];
   if (Object.keys(data).some(key => !allowed.includes(key)) ||
       !Array.isArray(data.opportunities) || !Array.isArray(data.deliveries) ||
-      !Array.isArray(data.income) || !data.wallet || typeof data.wallet !== "object" || Array.isArray(data.wallet)) {
+      !Array.isArray(data.income) || !data.wallet || typeof data.wallet !== "object" || Array.isArray(data.wallet) ||
+      (data.kycRecords !== undefined && !Array.isArray(data.kycRecords)) ||
+      (data.kycResidence !== undefined && typeof data.kycResidence !== "string") ||
+      (data.kycCitizenship !== undefined && typeof data.kycCitizenship !== "string") ||
+      (data.kycBankCountry !== undefined && typeof data.kycBankCountry !== "string")) {
     return NextResponse.json({ error: "ساختار اطلاعات فضای کاری کامل نیست." }, { status: 400 });
   }
   const response = await fetch(`${base}/rest/v1/workspace_state?on_conflict=owner_id`, {
