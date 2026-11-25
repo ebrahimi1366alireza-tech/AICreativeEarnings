@@ -5,6 +5,8 @@ import AccountConnections from "./components/account-connections";
 import CloudWorkspaceSync from "./components/cloud-workspace-sync";
 import OpportunityDiscovery from "./components/opportunity-discovery";
 import KycPaymentIntelligence from "./components/kyc-payment-intelligence";
+import PortfolioGallery from "./components/portfolio-gallery";
+import SmartLoginVerification from "./components/smart-login-verification";
 
 const workflow = [
   { number: "۰۱", title: "کشف فرصت‌ها", detail: "جست‌وجوی زنده در فیدهای عمومی جهانی؛ آگهی‌ها هنوز سفارش تأییدشده نیستند", state: "فعال · بررسی اولیه" },
@@ -42,8 +44,12 @@ export default function Home() {
   const [walletAddress, setWalletAddress] = useState(DEFAULT_WALLET_ADDRESS);
   const [walletNetwork, setWalletNetwork] = useState("شبکه را مطابق توکن و پلتفرم وارد کن");
   const [walletNotice, setWalletNotice] = useState("");
-  const receivedByAsset = income.filter(item => item.received).reduce<Record<string, number>>((totals, item) => { const asset = item.currency.toUpperCase(); totals[asset] = (totals[asset] || 0) + item.amount; return totals; }, {});
-  const receivedSummary = Object.entries(receivedByAsset).map(([asset, amount]) => `${amount.toFixed(4)} ${asset}`).join(" · ") || "هنوز دریافتی ثبت نشده";
+  const receivedByAsset = income.filter(item => item.received).reduce<Record<string, number>>((totals, item) => {
+    const asset = String(item.currency || "").trim().toUpperCase();
+    if (asset) totals[asset] = (totals[asset] || 0) + item.amount;
+    return totals;
+  }, {});
+  const receivedAssetCount = Object.keys(receivedByAsset).length;
   useEffect(() => {
     setTodayLabel(new Intl.DateTimeFormat("fa-IR", { day: "numeric", month: "long", year: "numeric" }).format(new Date()));
     try {
@@ -95,8 +101,8 @@ export default function Home() {
   function saveWallet(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const address = walletAddress.trim();
-    if (address && /\s/.test(address)) {
-      setWalletNotice("آدرس کیف پول نباید فاصله یا خط جدید داشته باشد.");
+    if (address && (address.length < 8 || address.length > 256 || /\s/.test(address))) {
+      setWalletNotice("قالب آدرس معتبر نیست؛ آدرس باید بین ۸ تا ۲۵۶ نویسه و بدون فاصله باشد. اعتبار واقعی را شبکه مقصد تعیین می‌کند.");
       return;
     }
     localStorage.setItem("creativeops-wallet-v1", JSON.stringify({ address, network: walletNetwork }));
@@ -118,7 +124,7 @@ export default function Home() {
     setDeliveries(rows => [{ id: crypto.randomUUID(), title, client: String(form.get("client") || "نامشخص"), due: String(form.get("due") || ""), status: "در حال آماده‌سازی" }, ...rows]); event.currentTarget.reset();
   }
   function addIncome(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault(); const form = new FormData(event.currentTarget); const source = String(form.get("incomeSource") || "").trim(); const amount = Number(form.get("amount")); const currency = String(form.get("currency") || "").trim().toUpperCase(); if (!source || !Number.isFinite(amount) || amount <= 0 || !/^[A-Z0-9._-]{2,20}$/.test(currency)) return;
+    event.preventDefault(); const form = new FormData(event.currentTarget); const source = String(form.get("incomeSource") || "").trim(); const amount = Number(form.get("amount")); const currency = String(form.get("currency") || "").trim().toUpperCase(); if (!source || !Number.isFinite(amount) || amount <= 0 || !/^[A-Z0-9._-]{1,15}$/.test(currency)) return;
     setIncome(rows => [{ id: crypto.randomUUID(), source, amount, currency, received: form.get("received") === "on", date: new Date().toISOString().slice(0,10) }, ...rows]); event.currentTarget.reset();
   }
   function addOpportunity(event: React.FormEvent<HTMLFormElement>) {
@@ -190,8 +196,8 @@ export default function Home() {
       const isRecord = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === "object" && !Array.isArray(value);
       const validOpportunities = Array.isArray(data.opportunities) && data.opportunities.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
       const validDeliveries = Array.isArray(data.deliveries) && data.deliveries.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
-      const validIncome = Array.isArray(data.income) && data.income.every(item => isRecord(item) && typeof item.id === "string" && typeof item.source === "string" && typeof item.amount === "number" && Number.isFinite(item.amount) && typeof item.received === "boolean");
-      const validWallet = data.wallet === undefined || (isRecord(data.wallet) && typeof data.wallet.address === "string" && (data.wallet.address === "" || /^0x[a-fA-F0-9]{40}$/.test(data.wallet.address)) && typeof data.wallet.network === "string");
+      const validIncome = Array.isArray(data.income) && data.income.every(item => isRecord(item) && typeof item.id === "string" && typeof item.source === "string" && typeof item.amount === "number" && Number.isFinite(item.amount) && item.amount > 0 && typeof item.currency === "string" && /^[A-Z0-9._-]{1,15}$/i.test(item.currency) && typeof item.received === "boolean");
+      const validWallet = data.wallet === undefined || (isRecord(data.wallet) && typeof data.wallet.address === "string" && (data.wallet.address === "" || (data.wallet.address.length >= 8 && data.wallet.address.length <= 256 && !/\s/.test(data.wallet.address))) && typeof data.wallet.network === "string");
       if (data.app !== "AI Creative Earnings" || data.schemaVersion !== 1 || !validOpportunities || !validDeliveries || !validIncome || !validWallet) throw new Error("invalid");
       if (!window.confirm("اطلاعات فعلی جایگزین اطلاعات داخل فایل پشتیبان شود؟ قبل از ادامه، از داده‌های فعلی خروجی بگیر.")) {
         event.target.value = "";
@@ -238,6 +244,8 @@ export default function Home() {
         <a className="nav-item" href="#tools"><span>◈</span> ابزارهای هوش مصنوعی</a>
         <a className="nav-item" href="#accounts"><span>◎</span> اتصال حساب‌ها</a>
         <a className="nav-item" href="#kyc-intelligence"><span>◇</span> احراز هویت و برداشت</a>
+        <a className="nav-item" href="#smart-login-verification"><span>↗</span> تأیید ورود روی گوشی</a>
+        <a className="nav-item" href="#portfolio"><span>▧</span> گالری نمونه‌کارها</a>
         <a className="nav-item" href="#deliveries"><span>⇧</span> تحویل‌ها</a>
         <a className="nav-item" href="#finance"><span>＄</span> درآمدها</a>
         <div className="sidebar-bottom"><div className="avatar">AI</div><div><strong>مدیریت پروژه</strong><small>نسخه آزمایشی شخصی</small></div></div>
@@ -256,12 +264,12 @@ export default function Home() {
           <article className="stat-card"><span className="stat-icon purple">⌕</span><span className="stat-label">فرصت‌های ثبت‌شده</span><strong>{opportunities.length}</strong><small>فرصت‌های ذخیره‌شده در این مرورگر</small></article>
           <article className="stat-card"><span className="stat-icon blue">▧</span><span className="stat-label">سفارش‌های تولید ثبت‌شده</span><strong>{deliveries.length}</strong><small>سفارش‌های ثبت‌شده برای تولید</small></article>
           <article className="stat-card"><span className="stat-icon green">⇧</span><span className="stat-label">تحویل‌های موفق</span><strong>{deliveries.filter(item => item.status === "تحویل شد").length}</strong><small>تحویل‌های ثبت‌شده</small></article>
-          <article className="stat-card"><span className="stat-icon amber">₮</span><span className="stat-label">درآمد رمزارزی دریافت‌شده</span><strong>{Object.keys(receivedByAsset).length ? Object.keys(receivedByAsset).length+" نوع توکن" : "۰"}</strong><small>{receivedSummary}</small></article>
+          <article className="stat-card"><span className="stat-icon amber">₿</span><span className="stat-label">دارایی‌های دریافت‌شده</span><strong>{receivedAssetCount}</strong><small>{Object.entries(receivedByAsset).map(([asset, amount]) => `${amount.toFixed(8)} ${asset}`).join(" · ") || "هنوز پرداختی دریافت نشده"}</small></article>
         </section>
 
         <section className="content-grid" id="workflow">
           <div className="panel workflow-panel"><div className="panel-head"><div><span className="eyebrow">PIPELINE</span><h2>مراحل اجرای سفارش</h2></div><span className="counter">۰ از ۵</span></div><div className="workflow-list">{workflow.map((item) => <div className="workflow-row" key={item.number}><div className="step-number">{item.number}</div><div className="step-copy"><strong>{item.title}</strong><p>{item.detail}</p></div><span className="status">{item.state}</span></div>)}</div></div>
-          <div className="panel goal-panel" id="finance"><span className="eyebrow">CRYPTO INCOME</span><h2>دریافتی واقعی به تفکیک توکن</h2><div className="goal-value">{Object.keys(receivedByAsset).length} توکن</div><p>هیچ توکنی اولویت ندارد. مقدار هر ارز جداگانه نمایش داده می‌شود و توکن‌های متفاوت با هم جمع نمی‌شوند.</p><div className="goal-foot"><span>مبالغ دریافت‌شده</span><strong>{receivedSummary}</strong></div><div className="goal-note">فقط پرداختی که واقعاً به کیف پول رسیده ثبت می‌شود.</div></div>
+          <div className="panel goal-panel" id="finance"><span className="eyebrow">WEEKLY TARGET</span><h2>گزارش درآمد واقعی</h2><div className="goal-value">{income.filter(item => item.received).length} پرداخت</div><p>موجودی هر رمزارز جداگانه گزارش می‌شود؛ دارایی‌های متفاوت با هم جمع نمی‌شوند و هیچ توکنی اولویت ندارد.</p><div className="goal-note">هزینه شروع موردنظر: <b>0</b></div></div>
         </section>
 
         <section className="panel tools-panel" id="tools"><div className="panel-head"><div><span className="eyebrow">PROJECT CREATIVE TOOLKIT</span><h2>ابزارهای پروژه و دسترسی‌ها</h2></div><span className="free-tag">اولویت با رایگان‌ها</span></div><div className="tool-grid">{tools.map((tool) => <article className="tool-card" key={tool.mark}><div className="tool-mark">{tool.mark}</div><div><strong>{tool.name}</strong><p>{tool.note}</p><small>{tool.status}</small><a href={tool.url} target="_blank" rel="noreferrer" style={{display:"inline-block",marginTop:7,color:"#b9a4ff",fontSize:10,textDecoration:"none"}}>بازکردن ابزار ↗</a></div></article>)}</div><p className="footnote">این ابزارها جعبه‌ابزار فعلی پروژه‌اند؛ Krea از طریق اتصال ChatGPT در دسترس است و بقیه ابزارها بر اساس دسترسی حساب کاربر استفاده می‌شوند. این فهرست به معنی اتصال به بازار سفارش یا تضمین درآمد نیست. سهمیه، دسترسی منطقه‌ای، واترمارک و مجوز تجاری را پیش از استفاده بررسی کن.</p></section>
@@ -269,11 +277,12 @@ export default function Home() {
         <AccountConnections />
         <CloudWorkspaceSync />
         <KycPaymentIntelligence />
+        <SmartLoginVerification />
 
         <section className="panel income-hub" id="income-hub">
           <div className="panel-head"><div><span className="eyebrow">MULTI-STREAM INCOME</span><h2>مرکز درآمد چندگانه · AI Income Hub</h2><p className="hub-intro">پروژه مستقل AI Creative Earnings؛ هیچ بخش ایردراپ یا تسک رمزارزی AIRDROP AI در این داشبورد ادغام نمی‌شود.</p></div><span className="free-tag">شروع با هزینه صفر</span></div>
           <p className="hub-intro">شش مسیر مستقل درآمدی: نگارش متن و مقاله، ساخت موسیقی، رأی‌گیری و داوری آهنگ، نظرسنجی و تحقیقات بازار، تولید عکس و ویدئو، و میکروتسک و تست وب‌سایت در مرورگر. این برنامه کاملاً جدا از AIRDROP AI است؛ اطلاعات، کیف پول‌ها و گزارش‌های ایردراپ وارد این پروژه نمی‌شوند. هر فرصت پیش از شروع از نظر اعتبار، کشور مجاز، زمان، حداقل برداشت و روش پرداخت بررسی می‌شود.</p>
-          <div className="crypto-only-policy"><strong>قانون برداشت: فقط رمزارز</strong><p>فقط فرصت‌هایی پذیرفته می‌شوند که برداشت مستقیم رمزارزی به کیف پول شخصی را پشتیبانی کنند. هیچ رمزارز یا توکنی اولویت ندارد؛ هر دارایی دیجیتال قابل دریافت به کیف پول شخصی پذیرفته است، به شرط پشتیبانی واقعی شبکه و امکان برداشت. PayPal، حواله بانکی و روش‌های فیات پذیرفته نیستند. روش برداشت، شبکه، کارمزد، حداقل برداشت و محدودیت کشور باید پیش از شروع تأیید شود.</p></div>
+          <div className="crypto-only-policy"><strong>قانون برداشت: فقط رمزارز</strong><p>فقط فرصت‌هایی پذیرفته می‌شوند که برداشت مستقیم رمزارزی به کیف پول شخصی را پشتیبانی کنند. هیچ رمزارز یا توکنی اولویت ندارد؛ هر دارایی فقط در صورت پشتیبانی واقعی پلتفرم و شبکه مقصد پذیرفته می‌شود. PayPal، حواله بانکی و روش‌های فیات پذیرفته نیستند. روش برداشت، شبکه، کارمزد، حداقل برداشت و محدودیت کشور باید پیش از شروع تأیید شود.</p></div>
           <div className="income-module-grid">
             <article className="income-module">
               <div className="module-icon writing">✎</div><div className="module-kicker">01 · AI WRITING</div><h3>تولید متن و مقاله</h3>
@@ -319,8 +328,8 @@ export default function Home() {
             </article>
           </div>
           <div className="income-manager" id="income-manager">
-            <div><span className="eyebrow">INCOME MANAGER</span><h3>مدیریت یکپارچه درآمد</h3><p>درآمد هر مسیر جداگانه ثبت می‌شود؛ دریافتی هر توکن جداگانه جمع می‌شود و دارایی‌های متفاوت با هم مخلوط نمی‌شوند.</p></div>
-            <div className="income-manager-stats"><div><small>مسیرهای درآمدی</small><strong>۶</strong></div><div><small>درآمد تأییدشده</small><strong>{receivedSummary}</strong></div><div><small>هزینه ابزار</small><strong>0 USDT</strong></div></div>
+            <div><span className="eyebrow">INCOME MANAGER</span><h3>مدیریت یکپارچه درآمد</h3><p>درآمد هر مسیر و هر دارایی جداگانه ثبت می‌شود؛ واحدهای متفاوت هرگز بدون تبدیل معتبر با هم جمع نمی‌شوند.</p></div>
+            <div className="income-manager-stats"><div><small>مسیرهای درآمدی</small><strong>۶</strong></div><div><small>دارایی‌های دریافت‌شده</small><strong>{receivedAssetCount}</strong></div><div><small>هزینه ابزار</small><strong>0</strong></div></div>
           </div>
           <p className="hub-footnote">این بخش فعلاً رابط و نقشه اجرایی است؛ فید زنده فعلی فقط LaborX و Subnano را می‌خواند و به پلتفرم‌های نظرسنجی، رأی‌گیری موسیقی یا میکروتسک‌های مرورگری متصل نشده است. هیچ درآمدی تضمین‌شده نیست. ثبت‌نام، احراز هویت و تأییدهای مالی فقط با دخالت و تأیید خودت انجام می‌شود؛ هیچ هزینه یا سپرده‌ای برای بازکردن تسک پرداخت نمی‌کنیم.</p>
         </section>
@@ -360,25 +369,26 @@ export default function Home() {
                   <option>نیازمند بررسی</option><option>در حال بررسی</option><option>رد شد</option><option>درخواست ارسال شد</option><option>پذیرفته شد</option><option>تحویل شد</option><option>پرداخت شد</option>
                 </select>
                 <button type="button" className="remove-opportunity" onClick={() => removeOpportunity(item.id)} aria-label="حذف فرصت">×</button>
-              </article>)}</div>}</div><div className="panel" id="production"><span className="eyebrow">CREATION DESK</span><h2>میز تولید و پیگیری تحویل</h2>
+              </article>)}</div>}</div><PortfolioGallery />
+          <div className="panel" id="production"><span className="eyebrow">CREATION DESK</span><h2>میز تولید و پیگیری تحویل</h2>
           <form className="opportunity-form" onSubmit={addDelivery}><input name="deliveryTitle" required placeholder="عنوان سفارش / نوع محتوا" aria-label="عنوان سفارش"/><input name="client" placeholder="مشتری یا پلتفرم" aria-label="مشتری"/><input name="due" type="date" aria-label="مهلت تحویل"/><button type="submit">+ ثبت سفارش تولید</button></form>
           {deliveries.length === 0 ? <div className="empty-state"><span>✧</span><strong>هنوز سفارش تولیدی ثبت نشده</strong><p>سفارش پذیرفته‌شده را دستی ثبت و تا تحویل پیگیری کن؛ اطلاعات فقط در همین مرورگر ذخیره می‌شود.</p></div> : <div className="saved-opportunities">{deliveries.map(item => <article className="saved-opportunity" key={item.id}><div><strong>{item.title}</strong><p>{item.client}{item.due ? " · مهلت: "+item.due : ""}</p></div><select aria-label="وضعیت تحویل" value={item.status} onChange={e => setDeliveries(rows => rows.map(row => row.id === item.id ? {...row,status:e.target.value} : row))}><option>در حال آماده‌سازی</option><option>در انتظار بازبینی</option><option>آماده تحویل</option><option>تحویل شد</option><option>لغو شد</option></select><button type="button" className="remove-opportunity" onClick={() => setDeliveries(rows => rows.filter(row => row.id !== item.id))} aria-label="حذف سفارش">×</button></article>)}</div>}
         </div></section>
         <section className="panel income-log"><div className="panel-head"><div><span className="eyebrow">PAYMENT TRACKER</span><h2>ثبت درآمد و پرداخت‌ها</h2></div><span className="free-tag">ثبت دستی و شفاف</span></div><p className="hub-intro">فقط پرداخت رمزارزی که واقعاً به کیف پول رسیده باشد ثبت می‌شود. پرداخت فیات در این دفتر پذیرفته نیست. اطلاعات این دفتر فقط در همین مرورگر و دستگاه ذخیره می‌شود.</p>
-          <form className="income-form" onSubmit={addIncome}><input name="incomeSource" required placeholder="منبع درآمد / سفارش" aria-label="منبع درآمد"/><input name="amount" type="number" min="0.01" step="0.01" required placeholder="مبلغ" aria-label="مبلغ"/><input name="currency" required maxLength={20} pattern="[A-Za-z0-9._-]{2,20}" placeholder="نماد توکن، مثلاً ETH یا SOL" aria-label="نماد رمزارز یا توکن"/><label className="received-check"><input name="received" type="checkbox"/> واقعاً دریافت شده</label><button type="submit">+ ثبت درآمد</button></form>
+          <form className="income-form" onSubmit={addIncome}><input name="incomeSource" required placeholder="منبع درآمد / سفارش" aria-label="منبع درآمد"/><input name="amount" type="number" min="0.01" step="0.01" required placeholder="مبلغ" aria-label="مبلغ"/><input name="currency" required aria-label="نماد رمزارز یا توکن" placeholder="نماد دارایی، مثلاً BTC یا ETH" maxLength={15} pattern="[A-Za-z0-9._-]{1,15}" autoComplete="off"/><label className="received-check"><input name="received" type="checkbox"/> واقعاً دریافت شده</label><button type="submit">+ ثبت درآمد</button></form>
           {income.length === 0 ? <div className="empty-state"><span>₮</span><strong>هنوز پرداختی ثبت نشده</strong><p>درآمد واقعی را پس از دریافت ثبت کن.</p></div> : <div className="saved-opportunities">{income.map(item => <article className="saved-opportunity" key={item.id}><div><strong>{item.source}</strong><p>{item.date} · {item.amount.toFixed(2)} {item.currency}</p></div><label className="received-check"><input type="checkbox" checked={item.received} onChange={e => setIncome(rows => rows.map(row => row.id === item.id ? {...row,received:e.target.checked} : row))}/>{item.received ? "دریافت شده" : "در انتظار دریافت"}</label><button type="button" className="remove-opportunity" onClick={() => setIncome(rows => rows.filter(row => row.id !== item.id))} aria-label="حذف درآمد">×</button></article>)}</div>}
         </section>
 
         <section className="panel wallet-panel" id="wallet">
           <div className="panel-head"><div><span className="eyebrow">PAYOUT DESTINATION</span><h2>کیف پول دریافت درآمد</h2></div><span className="free-tag">ذخیره محلی</span></div>
-          <p className="hub-intro">این بخش فقط مقصد دریافت را نگه می‌دارد و خودش پرداخت یا اتصال کیف پول انجام نمی‌دهد. آدرس و شبکه باید دقیقاً با توکن و روش برداشت پلتفرم یکی باشد. برای شبکه‌ها یا دارایی‌های مختلف، آدرس و شبکه متناظر را جداگانه بررسی کن؛ این بخش فقط یک مقصد عمومی را ذخیره می‌کند.</p>
+          <p className="hub-intro">این بخش فقط مقصد دریافت را نگه می‌دارد و خودش پرداخت یا اتصال کیف پول انجام نمی‌دهد. آدرس و شبکه را دقیقاً مطابق دارایی و شبکه‌ای وارد کن که پلتفرم پرداخت پشتیبانی می‌کند.</p>
           <form className="opportunity-form" onSubmit={saveWallet}>
-            <input name="walletAddress" value={walletAddress} onChange={e => setWalletAddress(e.target.value)} placeholder="آدرس عمومی کیف پول برای شبکه انتخابی" aria-label="آدرس عمومی کیف پول" autoComplete="off" spellCheck={false}/>
-            <input aria-label="شبکه کیف پول" value={walletNetwork} onChange={e => setWalletNetwork(e.target.value)} placeholder="شبکه: Solana، Bitcoin، TON، TRON، Base و غیره"/>
+            <input name="walletAddress" value={walletAddress} onChange={e => setWalletAddress(e.target.value)} placeholder="آدرس عمومی کیف پول، هر شبکه" aria-label="آدرس عمومی کیف پول" autoComplete="off" spellCheck={false}/>
+            <input aria-label="شبکه کیف پول" value={walletNetwork} onChange={e => setWalletNetwork(e.target.value)} placeholder="نام شبکه دقیق، مثلاً Solana یا TON" autoComplete="off"/>
             <button type="submit">ذخیره آدرس در این دستگاه</button>
             <button type="button" onClick={copyWallet} disabled={!walletAddress}>کپی آدرس</button>
           </form>
-          <p className="backup-notice" role="status">{walletNotice || "هشدار: ذخیره آدرس به معنی تأیید AML، پشتیبانی همه توکن‌ها یا امن‌بودن شبکه نیست. پیش از دریافت وجه، شبکه و وضعیت آدرس را در سرویس پرداخت بررسی کن."}</p>
+          <p className="backup-notice" role="status">{walletNotice || "هشدار: اعتبار قالب آدرس به معنی تأیید AML، نبود فلگ یا امن‌بودن همه شبکه‌ها نیست. پیش از دریافت وجه، شبکه و وضعیت آدرس را در سرویس پرداخت بررسی کن."}</p>
         </section>
 
         <section className="panel backup-panel" id="backup">

@@ -33,7 +33,7 @@ function readLocal(): Workspace {
     opportunities: read(KEYS.opportunities) ?? [],
     deliveries: read(KEYS.deliveries) ?? [],
     income: read(KEYS.income) ?? [],
-    wallet: read(KEYS.wallet) ?? { address: "", network: "EVM - انتخاب شبکه هنگام برداشت" },
+    wallet: read(KEYS.wallet) ?? { address: "", network: "انتخاب شبکه هنگام برداشت" },
     kycRecords: read("creativeops-kyc-intelligence-v1") ?? [],
     kycResidence: readText("creativeops-kyc-residence-v2", "AM"),
     kycCitizenship: readText("creativeops-kyc-citizenship-v1", "IR"),
@@ -60,20 +60,39 @@ export default function CloudWorkspaceSync() {
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined;
     let stopped = false;
+    let initialSyncSafe = false;
+    let pendingLocalSync = false;
+    let restoringRemote = false;
     setHasRestoreBackup(Boolean(localStorage.getItem(RESTORE_BACKUP_KEY)));
 
-    function preserveLocalBeforeRestore(email: string) {
+    function preserveLocalBeforeRestore(targetAccount: string): boolean {
       const local = readLocal();
-      const hasLocal = local.opportunities.length > 0 || local.deliveries.length > 0 || local.income.length > 0 || Boolean(local.wallet.address);
-      if (!hasLocal) return;
-      localStorage.setItem(RESTORE_BACKUP_KEY, JSON.stringify({
-        app: "AI Creative Earnings",
-        schemaVersion: 1,
-        exportedAt: new Date().toISOString(),
-        account: email,
-        ...local
-      }));
-      setHasRestoreBackup(true);
+      const hasLocal = local.opportunities.length > 0 ||
+        local.deliveries.length > 0 ||
+        local.income.length > 0 ||
+        Boolean(local.wallet.address) ||
+        (typeof local.wallet.network === "string" &&
+          !["انتخاب شبکه هنگام برداشت", "شبکه را مطابق توکن و پلتفرم وارد کن"].includes(local.wallet.network)) ||
+        Boolean(local.kycRecords?.length) ||
+        local.kycResidence !== "AM" ||
+        local.kycCitizenship !== "IR" ||
+        local.kycBankCountry !== "AM";
+      if (!hasLocal) return true;
+      try {
+        localStorage.setItem(RESTORE_BACKUP_KEY, JSON.stringify({
+          app: "AI Creative Earnings",
+          schemaVersion: 1,
+          exportedAt: new Date().toISOString(),
+          sourceAccount: localStorage.getItem(OWNER_KEY) || "این دستگاه، حساب قبلی مشخص نیست",
+          targetAccount,
+          ...local
+        }));
+        setHasRestoreBackup(true);
+        return true;
+      } catch {
+        setHasRestoreBackup(true);
+        return false;
+      }
     }
 
     async function pushLocal(): Promise<boolean> {
@@ -111,7 +130,9 @@ export default function CloudWorkspaceSync() {
         const email = auth.profile.email.toLowerCase();
         const owner = localStorage.getItem(OWNER_KEY);
         if (owner && owner !== email) {
-          setStatus("این مرورگر قبلاً برای حساب دیگری استفاده شده است. برای جلوگیری از انتقال یا بازنویسی اطلاعات، همگام‌سازی متوقف شد؛ ابتدا از اطلاعات حساب قبلی پشتیبان بگیر و فضای محلی را جداگانه مدیریت کن.");
+          preserveLocalBeforeRestore(email);
+          setHasRestoreBackup(true);
+          setStatus("این مرورگر قبلاً برای حساب دیگری استفاده شده است. همگام‌سازی متوقف شد؛ پیش از هر تغییر، از دکمه دانلود پشتیبان اطلاعات همین دستگاه را ذخیره کن.");
           return;
         }
         const response = await fetch("/api/workspace/sync", { cache: "no-store" });
@@ -119,23 +140,39 @@ export default function CloudWorkspaceSync() {
         const remote = await response.json();
         const data = remote.data as Workspace | null;
         const hasRemote = Boolean(data && (
-          data.opportunities?.length || data.deliveries?.length || data.income?.length ||
-          data.kycRecords?.length || (data.wallet?.address && data.wallet.address.length > 0)
+          data.opportunities?.length ||
+          data.deliveries?.length ||
+          data.income?.length ||
+          data.kycRecords?.length ||
+          Boolean(data.wallet?.address) ||
+          (typeof data.wallet?.network === "string" &&
+            !["انتخاب شبکه هنگام برداشت", "شبکه را مطابق توکن و پلتفرم وارد کن"].includes(data.wallet.network)) ||
+          (typeof data.kycResidence === "string" && data.kycResidence !== "AM") ||
+          (typeof data.kycCitizenship === "string" && data.kycCitizenship !== "IR") ||
+          (typeof data.kycBankCountry === "string" && data.kycBankCountry !== "AM")
         ));
         if (hasRemote) {
           const marker = remote.updatedAt || "remote";
           if (localStorage.getItem("creativeops-cloud-version-v1") !== marker) {
-            preserveLocalBeforeRestore(email);
+            const backupReady = preserveLocalBeforeRestore(email);
+            if (!backupReady) {
+              setStatus("فضای مرورگر برای ساخت پشتیبان خودکار کافی نیست. بازیابی ابری متوقف شد تا اطلاعات محلی بازنویسی نشود؛ از دکمه دانلود پشتیبان استفاده کن.");
+              setHasRestoreBackup(true);
+              return;
+            }
             writeLocal(data!);
             localStorage.setItem("creativeops-cloud-version-v1", marker);
             localStorage.setItem(OWNER_KEY, email);
             setStatus("اطلاعات حساب از فضای ابری بازیابی شد.");
+            restoringRemote = true;
             window.location.reload();
             return;
           }
           localStorage.setItem(OWNER_KEY, email);
           setStatus("اطلاعات این حساب با فضای ابری همگام است.");
+          initialSyncSafe = true;
         } else {
+          initialSyncSafe = true;
           const saved = await pushLocal();
           if (saved) {
             setStatus("اطلاعات این دستگاه در فضای ابری ذخیره شد.");
@@ -145,10 +182,18 @@ export default function CloudWorkspaceSync() {
         setStatus(error instanceof Error ? error.message : "خطا در همگام‌سازی.");
       } finally {
         if (!stopped) setBusy(false);
+        if (pendingLocalSync && initialSyncSafe && !restoringRemote) {
+          pendingLocalSync = false;
+          scheduleSync();
+        }
       }
     }
 
     function scheduleSync() {
+      if (!initialSyncSafe) {
+        pendingLocalSync = true;
+        return;
+      }
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => {
         void pushLocal()
@@ -173,8 +218,13 @@ export default function CloudWorkspaceSync() {
   }, []);
 
   function downloadRestoreBackup() {
-    const raw = localStorage.getItem(RESTORE_BACKUP_KEY);
-    if (!raw) return;
+    const raw = localStorage.getItem(RESTORE_BACKUP_KEY) || JSON.stringify({
+      app: "AI Creative Earnings",
+      schemaVersion: 1,
+      exportedAt: new Date().toISOString(),
+      sourceAccount: localStorage.getItem(OWNER_KEY) || "این دستگاه، حساب قبلی مشخص نیست",
+      ...readLocal()
+    }, null, 2);
     const blob = new Blob([raw], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");

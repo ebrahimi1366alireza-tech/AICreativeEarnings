@@ -31,6 +31,10 @@ export async function GET(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
+  const contentLength = request.headers.get("content-length");
+  if (contentLength && (!/^\\d+$/.test(contentLength) || Number(contentLength) > 2 * 1024 * 1024)) {
+    return NextResponse.json({ error: "حجم اطلاعات همگام‌سازی بیش از حد مجاز است." }, { status: 413 });
+  }
   const user = await authenticatedUser(request);
   if (!user) return NextResponse.json({ error: "برای همگام‌سازی ابتدا وارد حساب شو." }, { status: 401 });
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL;

@@ -16,7 +16,7 @@ The six streams are product scope, not proof that matching live opportunities or
 ## Operating rules
 
 - Start with free tools and free quotas. No registration fees, deposits, required purchases, or subscriptions to unlock tasks.
-- Payouts must be crypto/token-only to the user's own wallet. No cryptocurrency or token has priority. Accept any asset only when the platform genuinely supports wallet payout for that asset and its exact network, fees, minimum withdrawal, and country restrictions have been verified.
+- Payouts must be crypto-only to the user's personal wallet; no token or coin has priority. Keep each asset's balance separate and never add unlike assets without a verified conversion. Do not mark a platform eligible until its exact supported asset/network, fees, minimum withdrawal, and country restrictions are verified.
 - Never claim revenue until payment has actually arrived.
 - Human approval is required for account verification, contracts, and financial actions.
 - Never use fake votes, fake reviews, bots, or duplicate accounts to manipulate a platform.
@@ -33,13 +33,15 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 - Persian right-to-left dashboard focused on AI image, design, and short-video services.
 - Opportunity radar with manual lead entry, source links, and review statuses.
 - Production-order and delivery tracking.
-- Income ledger that distinguishes pending from actually received payments.
-- Public wallet-address and network settings for different supported crypto assets; the app does not connect to or control the wallet.
+- Income ledger that distinguishes pending from actually received payments and tracks totals separately by token symbol.
+- Network-agnostic public wallet-address and network settings for supported crypto assets; the app does not connect to or control the wallet. Address format checks are basic input hygiene, not proof that an address or network is valid.
 - JSON backup and restore.
+- User-managed creative portfolio gallery for real image samples. Signed-in accounts use a private Supabase Storage bucket with expiring signed URLs; signed-out users keep images locally in the current browser. Before switching a device with local samples to cloud mode, the app preserves a downloadable local-gallery backup.
+- Smart Login verification handoff panel for a paired Android device. The secure queue and Supabase Edge Function are deployed, but automatic detection still requires the external browser automation agent to call the handoff endpoint.
 - Email/password signup and login through Supabase Auth. Passwords are handled by Supabase and are never stored by this app.
 - Supabase access and refresh tokens are stored in HTTP-only cookies.
 - Authenticated cloud workspace sync through the `workspace_state` table. The API derives the owner from the verified Supabase session; clients cannot select another owner's ID. Row Level Security restricts each account to its own workspace.
-- Cloud backup also includes the KYC/payment review catalogue and the selected residence, citizenship, and payout-bank country. Platform eligibility is stored separately by residence, and identity-document acceptance is stored separately by citizenship; unknown values remain unverified.
+- Cloud backup also includes the KYC/payment review catalogue and the selected residence, citizenship, and payout-bank country. Platform eligibility is stored separately by residence and payout-account country, and identity-document acceptance is stored separately by citizenship; unknown values remain unverified.
 - If a cloud workspace already has data, the app restores it after sign-in. If it is empty, the app uploads the current browser workspace. Keep JSON backups as an additional safety measure.
 
 ## Infrastructure
@@ -47,8 +49,8 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 - GitHub repository: `ebrahimi1366alireza-tech/AICreativeEarnings`
 - Vercel project: `ai-creative-earnings`
 - Supabase project: `AI-Creative-Earnings` (`eu-central-1`)
-- Core Supabase tables: `profiles`, `opportunities`, `production_orders`, `assets`, `earnings`, and `workspace_state`. RLS is enabled on all six tables.
-- The latest production deployment completed successfully. A user account has not yet been registered, so end-to-end signup, login, and cross-device sync still require a real account test.
+- Core Supabase tables: `profiles`, `opportunities`, `production_orders`, `assets`, `earnings`, `workspace_state`, `verification_devices`, and `verification_handoffs`. RLS is enabled on all eight tables.
+- The latest feature-branch preview deployment completed successfully after the private gallery and cloud-sync changes. Production has not been promoted; real-account signup, upload/list/delete, and cross-device sync still require user-device testing.
 
 ## Current earning-channel review
 
@@ -63,7 +65,7 @@ The latest live review is [docs/live-earning-channels-2026-11-25.md](docs/live-e
 - Subnano's current FAQ documents Nano and USDC on Base creator payouts, with a 7.5% Nano sale fee and 15% USDC sale fee. The FAQ does not itself establish that KYC is never required or that every country is eligible, so Subnano remains review-only until those points are confirmed.
 - LaborX listings can be found publicly, but this project has not established a no-KYC guarantee or universal country eligibility for LaborX. Keep it review-only.
 - No marketplace account, client application, contract, content submission, or financial action is automated. Human approval is required.
-- No automatic payout confirmation or on-chain payment verification is implemented.
+- No automatic payout confirmation or on-chain payment verification is implemented. The Smart Login phone handoff is implemented, but the browser automation agent is not yet wired to detect OTP/liveness/identity checkpoints and call it.
 
 Do not present a public listing as a verified paid order or a review-only platform as KYC-free.
 
