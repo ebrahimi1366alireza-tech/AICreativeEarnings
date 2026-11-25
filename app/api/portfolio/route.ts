@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
   const response = await fetch(`${ctx.base}/storage/v1/object/list/${BUCKET}`, {
     method: "POST",
     headers: { ...headers(ctx), "Content-Type": "application/json" },
-    body: JSON.stringify({ prefix: ctx.user.id, limit: 100, offset: 0, sortBy: { column: "created_at", order: "desc" } }),
+    body: JSON.stringify({ prefix: `${ctx.user.id}/`, limit: 100, offset: 0, sortBy: { column: "created_at", order: "desc" } }),
     cache: "no-store"
   });
   if (!response.ok) return NextResponse.json({ error: "خواندن گالری ابری ناموفق بود." }, { status: 502 });
@@ -86,6 +86,10 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const ctx = await context(request);
   if ("response" in ctx) return ctx.response;
+  const contentLength = Number(request.headers.get("content-length") || 0);
+  if (contentLength > 2 * 1024 * 1024) {
+    return NextResponse.json({ error: "حجم درخواست آپلود بیش از حد مجاز است." }, { status: 413 });
+  }
   const form = await request.formData().catch(() => null);
   const file = form?.get("image");
   const title = String(form?.get("title") || "").trim().slice(0, 80);
@@ -101,7 +105,7 @@ export async function POST(request: NextRequest) {
   const existingResponse = await fetch(`${ctx.base}/storage/v1/object/list/${BUCKET}`, {
     method: "POST",
     headers: { ...headers(ctx), "Content-Type": "application/json" },
-    body: JSON.stringify({ prefix: ctx.user.id, limit: MAX_ITEMS, offset: 0 }),
+    body: JSON.stringify({ prefix: `${ctx.user.id}/`, limit: MAX_ITEMS, offset: 0 }),
     cache: "no-store"
   });
   if (!existingResponse.ok) return NextResponse.json({ error: "بررسی ظرفیت گالری ناموفق بود." }, { status: 502 });
