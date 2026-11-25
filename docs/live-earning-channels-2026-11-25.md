@@ -71,11 +71,11 @@ Decision: **exclude from the main path**. Do not spend time on fake/paid engagem
 
 ## Recommended next execution
 
-1. Build a small, original portfolio pack for restaurant and food businesses: menu/poster layouts, food-promotion social graphics, and short-form video concepts. This is a better match for AI-assisted creative services than chasing tiny engagement tasks.
-2. Prepare each item with clear previews, deliverable specifications, and a truthful AI-use note. Do not use copyrighted brand assets or imply a client relationship that does not exist.
-3. Treat Subnano as a possible free storefront after the user confirms the account and payout setup. Publish only after explicit user approval.
-4. Continue checking Gibwork for funded, eligible design/video briefs. Do not apply to social manipulation or human-only tasks.
-5. Keep all channels unverified until a real task is awarded and a payout is received.
+1. Do not assume in advance what image, video, animation, or other deliverable a platform will pay for. First identify a real, current brief or buyer request, then follow its exact format, subject, specifications, budget, acceptance criteria, and deadline.
+2. Build or adapt a portfolio sample only when it supports a real target service or a verified buyer need. Keep samples within advertising design, branding, product visuals, posters, digital content, and video; do not create food, restaurant, menu, or cooking samples for this project.
+3. Treat Subnano as a possible free storefront only after the user confirms account disclosures and crypto wallet/network setup. Publish only after explicit user approval.
+4. Continue checking Gibwork for funded, eligible creative briefs. Do not apply to social manipulation or human-only tasks.
+5. Keep all channels unverified until a real task is awarded and a crypto payout to the user's own wallet is actually received.
 
 ## Sources checked
 - https://subnano.ai/creators
