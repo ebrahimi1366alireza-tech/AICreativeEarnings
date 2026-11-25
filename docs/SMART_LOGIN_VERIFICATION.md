@@ -28,7 +28,7 @@ The endpoint stores a 15-minute request and returns a request ID. It rejects non
 
 ## Supabase setup
 
-Apply supabase/migrations/20261125130000_verification_handoffs.sql to the project's Supabase database. The migration creates the device pairing and handoff tables, owner-scoped RLS policies, and a narrowly scoped RPC for bearer-token submissions.
+The schema is already deployed to the connected Supabase project as migration `20261125090327_verification_handoffs`. It creates `verification_devices` and `verification_handoffs` with owner-scoped RLS policies. Bearer-token submissions are validated by the `verification-handoff` Edge Function; there is no RPC in this flow. A follow-up migration, `20261125183432_optimize_verification_handoffs_policies_and_indexes`, adds the device foreign-key index and wraps `auth.uid()` in a scalar subquery to avoid per-row re-evaluation.
 
 ## Important platform limits
 
