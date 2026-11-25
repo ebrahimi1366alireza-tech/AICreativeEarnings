@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseUser } from "@/lib/supabase-auth";
+import { getCreativeUsage, getDailyCreativeLimit, releaseCreativeCredits, reserveCreativeCredits } from "@/lib/creative-usage";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const MAX_BODY = 16_000;
 const MAX_PROMPT = 8_000;
+const CREDIT_COST = { text: 1, image: 5 } as const;
 
 async function readBody(request: NextRequest) {
   const length = Number(request.headers.get("content-length") || "0");
@@ -45,6 +47,20 @@ export async function POST(request: NextRequest) {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return NextResponse.json({ error: "موتور تولید هنوز پیکربندی نشده است. مدیر باید OPENAI_API_KEY را در تنظیمات امن سرور اضافه کند." }, { status: 503, headers: { "Cache-Control": "no-store" } });
 
+  const units = CREDIT_COST[mode];
+  let reservation;
+  try {
+    reservation = await reserveCreativeCredits(user.id, units);
+  } catch {
+    return NextResponse.json({ error: "سامانهٔ سهمیه در دسترس نیست. برای جلوگیری از مصرف کنترل‌نشده، تولید موقتاً متوقف شد." }, { status: 503, headers: { "Cache-Control": "no-store" } });
+  }
+  if (!reservation.allowed) {
+    return NextResponse.json({
+      error: "سهمیهٔ روزانهٔ تولیدت تمام شده است.",
+      usage: { used: reservation.used, remaining: reservation.remaining, limit: reservation.limit }
+    }, { status: 429, headers: { "Cache-Control": "no-store" } });
+  }
+
   try {
     if (mode === "text") {
       const model = process.env.OPENAI_TEXT_MODEL || "gpt-4.1-mini";
@@ -64,10 +80,19 @@ export async function POST(request: NextRequest) {
         cache: "no-store"
       });
       const result = await response.json().catch(() => ({}));
-      if (!response.ok) return NextResponse.json({ error: response.status === 429 ? "محدودیت یا اعتبار موتور هوش مصنوعی اجازه تولید نمی‌دهد." : "تولید متن توسط سرویس هوش مصنوعی ناموفق بود." }, { status: response.status === 429 ? 429 : 502, headers: { "Cache-Control": "no-store" } });
+      if (!response.ok) {
+        await releaseCreativeCredits(user.id, units).catch(() => null);
+        return NextResponse.json({ error: response.status === 429 ? "محدودیت یا اعتبار موتور هوش مصنوعی اجازه تولید نمی‌دهد." : "تولید متن توسط سرویس هوش مصنوعی ناموفق بود." }, { status: response.status === 429 ? 429 : 502, headers: { "Cache-Control": "no-store" } });
+      }
       const text = result.choices?.[0]?.message?.content;
-      if (typeof text !== "string" || !text.trim()) return NextResponse.json({ error: "سرویس خروجی متنی معتبری برنگرداند." }, { status: 502 });
-      return NextResponse.json({ ok: true, mode, model, output: text.trim() }, { headers: { "Cache-Control": "no-store" } });
+      if (typeof text !== "string" || !text.trim()) {
+        await releaseCreativeCredits(user.id, units).catch(() => null);
+        return NextResponse.json({ error: "سرویس خروجی متنی معتبری برنگرداند." }, { status: 502 });
+      }
+      return NextResponse.json({
+        ok: true, mode, model, output: text.trim(),
+        usage: { used: reservation.used, remaining: reservation.remaining, limit: reservation.limit, unitCost: units }
+      }, { headers: { "Cache-Control": "no-store" } });
     }
 
     const model = process.env.OPENAI_IMAGE_MODEL || "gpt-image-1";
@@ -79,11 +104,37 @@ export async function POST(request: NextRequest) {
       cache: "no-store"
     });
     const result = await response.json().catch(() => ({}));
-    if (!response.ok) return NextResponse.json({ error: response.status === 429 ? "محدودیت یا اعتبار تولید تصویر اجازه ادامه نمی‌دهد." : "تولید تصویر توسط سرویس هوش مصنوعی ناموفق بود." }, { status: response.status === 429 ? 429 : 502, headers: { "Cache-Control": "no-store" } });
+    if (!response.ok) {
+      await releaseCreativeCredits(user.id, units).catch(() => null);
+      return NextResponse.json({ error: response.status === 429 ? "محدودیت یا اعتبار تولید تصویر اجازه ادامه نمی‌دهد." : "تولید تصویر توسط سرویس هوش مصنوعی ناموفق بود." }, { status: response.status === 429 ? 429 : 502, headers: { "Cache-Control": "no-store" } });
+    }
     const encoded = result.data?.[0]?.b64_json;
-    if (typeof encoded !== "string" || encoded.length > 18_000_000) return NextResponse.json({ error: "تصویر خروجی معتبر یا در محدودهٔ اندازه نبود." }, { status: 502 });
-    return NextResponse.json({ ok: true, mode, model, imageDataUrl: `data:image/png;base64,${encoded}` }, { headers: { "Cache-Control": "no-store" } });
+    if (typeof encoded !== "string" || encoded.length > 18_000_000) {
+      await releaseCreativeCredits(user.id, units).catch(() => null);
+      return NextResponse.json({ error: "تصویر خروجی معتبر یا در محدودهٔ اندازه نبود." }, { status: 502 });
+    }
+    return NextResponse.json({
+      ok: true, mode, model, imageDataUrl: `data:image/png;base64,${encoded}`,
+      usage: { used: reservation.used, remaining: reservation.remaining, limit: reservation.limit, unitCost: units }
+    }, { headers: { "Cache-Control": "no-store" } });
   } catch {
-    return NextResponse.json({ error: "ارتباط با موتور تولید برقرار نشد یا زمان پاسخ به پایان رسید." }, { status: 502, headers: { "Cache-Control": "no-store" } });
+    await releaseCreativeCredits(user.id, units).catch(() => null);
+    return NextResponse.json({ error: "ارتباط با موتور تولید برقرار نشد یا زمان پاسخ به پایان رسید. سهمیه در صورت امکان بازگردانده شد." }, { status: 502, headers: { "Cache-Control": "no-store" } });
+  }
+}
+
+export async function GET(request: NextRequest) {
+  const origin = request.headers.get("origin");
+  if (origin && origin !== new URL(request.url).origin) {
+    return NextResponse.json({ error: "درخواست معتبر نیست." }, { status: 403, headers: { "Cache-Control": "no-store" } });
+  }
+  const access = request.cookies.get("creativeops_supabase_access")?.value;
+  const user = await getSupabaseUser(access);
+  if (!user) return NextResponse.json({ error: "برای مشاهدهٔ سهمیه ابتدا وارد حساب کاربری شو." }, { status: 401, headers: { "Cache-Control": "no-store" } });
+  try {
+    const usage = await getCreativeUsage(user.id);
+    return NextResponse.json({ ok: true, usage }, { headers: { "Cache-Control": "no-store" } });
+  } catch {
+    return NextResponse.json({ error: "اطلاعات سهمیه در دسترس نیست." }, { status: 503, headers: { "Cache-Control": "no-store" } });
   }
 }
