@@ -116,3 +116,14 @@ No account was created, no content was submitted, no wallet was connected, and n
 | Monero Bounties | Yes | No | No | Bounty-specific; board appears mainly technical; older notices restrict translation/research intake | No | Low priority; check for currently open nontechnical bounty before spending time. |
 
 Research-only status: no accounts were created, no applications submitted, no wallets connected, and no legal terms, payments, or transactions were authorized for these seven platforms.
+
+
+## KYC & Payment Intelligence module — 2026-11-25
+
+- Added a user-visible dashboard section at `#kyc-intelligence`.
+- Initial research leads are preloaded from the existing project catalog and platform tracker; all KYC, Iranian-passport acceptance, residence-country eligibility, payout, fees and withdrawal values intentionally default to **unknown** until supported by current official evidence.
+- The user can select residence country (Armenia, Iran, UAE, Qatar, Oman, other), record Iranian-passport acceptance, KYC type, country eligibility, crypto payout route, mandatory entry cost, asset/network, minimum withdrawal, fees, official evidence URL and check date.
+- Records are stored in this browser's localStorage. This is a personal single-user tool; it is not yet cloud-synced.
+- A platform is labeled documented-eligible only when all required conditions are explicitly recorded, including direct crypto payout, no mandatory entry fee/deposit, supported country, accepted Iranian passport, no KYC, asset/network, minimum, fee and HTTPS evidence.
+- This release is a working manual evidence tracker and risk gate, **not** an automatic live KYC verifier. No platform is marked eligible by default. Automatic official-source refresh and cloud sync remain future work.
+- Safety: no false identity, altered documents, rented accounts, sanctions evasion or VPN-based country concealment.
