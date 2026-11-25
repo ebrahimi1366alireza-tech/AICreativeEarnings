@@ -11,6 +11,8 @@ type KycRecord = {
   passportAcceptanceByCitizenship?: Record<string, "accepted" | "rejected" | "unknown">;
   countryAccess: "allowed" | "blocked" | "unknown";
   countryAccessByResidence?: Record<string, "allowed" | "blocked" | "unknown">;
+  bankCountryAccess?: "allowed" | "blocked" | "unknown";
+  bankCountryAccessByCountry?: Record<string, "allowed" | "blocked" | "unknown">;
   payout: "direct-crypto" | "platform-wallet" | "fiat" | "unknown";
   cost: "free" | "fee" | "deposit" | "unknown";
   asset: string;
@@ -90,11 +92,12 @@ const labels = {
 
 type Filter = "all" | "ready" | "review" | "blocked";
 
-function readiness(item: KycRecord, residence: string, citizenship: string) {
+function readiness(item: KycRecord, residence: string, citizenship: string, bankCountry: string) {
   const countryAccess = item.countryAccessByResidence?.[residence] ?? item.countryAccess;
+  const bankAccess = item.bankCountryAccessByCountry?.[bankCountry] ?? item.bankCountryAccess ?? "unknown";
   const passportAcceptance = item.passportAcceptanceByCitizenship?.[citizenship] ?? (citizenship === "IR" ? item.iranianPassport : "unknown");
-  if (passportAcceptance === "rejected" || countryAccess === "blocked" || item.payout === "fiat" || item.cost === "fee" || item.cost === "deposit") return "blocked";
-  if (item.kyc === "none" && passportAcceptance === "accepted" && countryAccess === "allowed" &&
+  if (passportAcceptance === "rejected" || countryAccess === "blocked" || bankAccess === "blocked" || item.payout === "fiat" || item.cost === "fee" || item.cost === "deposit") return "blocked";
+  if (item.kyc === "none" && passportAcceptance === "accepted" && countryAccess === "allowed" && bankAccess === "allowed" &&
       item.payout === "direct-crypto" && item.cost === "free" && item.asset.trim() &&
       item.network.trim() && item.minimum.trim() && item.fee.trim() && item.evidenceUrl.startsWith("https://")) return "ready";
   return "review";
@@ -141,8 +144,8 @@ export default function KycPaymentIntelligence() {
     }
   },[records,residence,citizenship,bankCountry,loaded]);
 
-  const counts = useMemo(() => records.reduce((a,r) => { a[readiness(r,residence,citizenship)]++; return a; },{ready:0,review:0,blocked:0}),[records,residence,citizenship]);
-  const visible = records.filter(r => filter === "all" || readiness(r,residence,citizenship) === filter);
+  const counts = useMemo(() => records.reduce((a,r) => { a[readiness(r,residence,citizenship,bankCountry)]++; return a; },{ready:0,review:0,blocked:0}),[records,residence,citizenship,bankCountry]);
+  const visible = records.filter(r => filter === "all" || readiness(r,residence,citizenship,bankCountry) === filter);
 
   function update(id:string, patch:Partial<KycRecord>) {
     setRecords(current => current.map(r => r.id === id ? {...r,...patch,checkedAt:new Date().toISOString().slice(0,10)} : r));
@@ -160,6 +163,14 @@ export default function KycPaymentIntelligence() {
     setRecords(current => current.map(r => r.id === id ? {
       ...r,
       countryAccessByResidence: { ...(r.countryAccessByResidence || {}), [residence]: value },
+      checkedAt: new Date().toISOString().slice(0,10)
+    } : r));
+  }
+
+  function updateBankCountryAccess(id:string, value:KycRecord["countryAccess"]) {
+    setRecords(current => current.map(r => r.id === id ? {
+      ...r,
+      bankCountryAccessByCountry: { ...(r.bankCountryAccessByCountry || {}), [bankCountry]: value },
       checkedAt: new Date().toISOString().slice(0,10)
     } : r));
   }
@@ -211,8 +222,9 @@ export default function KycPaymentIntelligence() {
       </div>
       <div className="kpi-list">
         {visible.map(item => {
-          const state = readiness(item,residence,citizenship);
+          const state = readiness(item,residence,citizenship,bankCountry);
           const residenceAccess = item.countryAccessByResidence?.[residence] ?? item.countryAccess;
+          const bankAccess = item.bankCountryAccessByCountry?.[bankCountry] ?? item.bankCountryAccess ?? "unknown";
           const passportAcceptance = item.passportAcceptanceByCitizenship?.[citizenship] ?? (citizenship === "IR" ? item.iranianPassport : "unknown");
           return <article className="kpi-card" key={item.id}>
             <div className="kpi-card-head"><div><strong>{item.platform}</strong><a href={item.url} target="_blank" rel="noreferrer">سایت رسمی ↗</a></div>
@@ -222,6 +234,7 @@ export default function KycPaymentIntelligence() {
               <label>KYC<select value={item.kyc} onChange={e=>update(item.id,{kyc:e.target.value as KycRecord["kyc"]})}>{Object.entries(labels.kyc).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>پذیرش مدرک تابعیت<select value={passportAcceptance} onChange={e=>updatePassportAcceptance(item.id,e.target.value as KycRecord["iranianPassport"])}>{Object.entries(labels.iranianPassport).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>دسترسی {countryName(residence)}<select value={residenceAccess} onChange={e=>updateResidenceAccess(item.id,e.target.value as KycRecord["countryAccess"])}>{Object.entries(labels.countryAccess).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
+              <label>دسترسی کشور حساب دریافت {countryName(bankCountry)}<select value={bankAccess} onChange={e=>updateBankCountryAccess(item.id,e.target.value as KycRecord["countryAccess"])}>{Object.entries(labels.countryAccess).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>روش برداشت<select value={item.payout} onChange={e=>update(item.id,{payout:e.target.value as KycRecord["payout"]})}>{Object.entries(labels.payout).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>هزینه ورود<select value={item.cost} onChange={e=>update(item.id,{cost:e.target.value as KycRecord["cost"]})}>{Object.entries(labels.cost).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>ارز پرداخت<input value={item.asset} onChange={e=>update(item.id,{asset:e.target.value})} placeholder="هر توکن پشتیبانی‌شده، مثلاً ETH یا SOL"/></label>
@@ -230,12 +243,12 @@ export default function KycPaymentIntelligence() {
               <label>کارمزد<input value={item.fee} onChange={e=>update(item.id,{fee:e.target.value})} placeholder="مقدار / درصد"/></label>
               <label className="wide">لینک مدرک رسمی<input value={item.evidenceUrl} onChange={e=>update(item.id,{evidenceUrl:e.target.value})} placeholder="https://... (شرایط KYC، کشور یا برداشت)"/></label>
             </div>
-            <div className="kpi-card-foot"><span>آخرین ثبت: {item.checkedAt || "هنوز بررسی نشده"}</span><span>نتیجه برای {countryName(residence)}: {state==="ready"?"همه شروط ثبت شده":state==="blocked"?"حداقل یک مانع ثبت شده":"شواهد کافی نیست"}</span></div>
+            <div className="kpi-card-foot"><span>آخرین ثبت: {item.checkedAt || "هنوز بررسی نشده"}</span><span>نتیجه برای اقامت {countryName(residence)} و حساب دریافت {countryName(bankCountry)}: {state==="ready"?"همه شروط ثبت شده":state==="blocked"?"حداقل یک مانع ثبت شده":"شواهد کافی نیست"}</span></div>
           </article>;
         })}
         {visible.length===0 && <div className="empty-state">موردی در این فیلتر نیست.</div>}
       </div>
-      <p className="hub-footnote">نکته امنیتی: هویت جعلی، مدارک دستکاری‌شده، حساب اجاره‌ای، VPN برای پنهان‌کردن کشور یا دورزدن محدودیت‌ها استفاده نمی‌شود. فهرست کشورها بر پایه کدهای ISO 3166-1 است و نام‌ها با زبان مرورگر نمایش داده می‌شوند. این نسخه اطلاعات را در حافظه همین مرورگر نگه می‌دارد؛ بررسی خودکار زنده شرایط سایت‌ها و همگام‌سازی ابری هنوز به منبع داده و اتصال سرور نیاز دارد. برای تأیید نهایی، لینک رسمی و تاریخ بررسی را ثبت کن.</p>
+      <p className="hub-footnote">نکته امنیتی: هویت جعلی، مدارک دستکاری‌شده، حساب اجاره‌ای، VPN برای پنهان‌کردن کشور یا دورزدن محدودیت‌ها استفاده نمی‌شود. فهرست کشورها بر پایه کدهای ISO 3166-1 است و نام‌ها با زبان مرورگر نمایش داده می‌شوند. این نسخه اطلاعات را در حافظه همین مرورگر نگه می‌دارد؛ بررسی خودکار زنده شرایط سایت‌ها هنوز به منابع رسمی و اتصال سرور نیاز دارد. کشور محل اقامت، تابعیت و کشور حساب دریافت هرکدام جداگانه ارزیابی می‌شوند. برای تأیید نهایی، لینک رسمی و تاریخ بررسی را ثبت کن.</p>
     </section>
   );
 }
