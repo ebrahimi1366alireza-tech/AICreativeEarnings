@@ -47,6 +47,10 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 - Core Supabase tables: `profiles`, `opportunities`, `production_orders`, `assets`, `earnings`, and `workspace_state`. RLS is enabled on all six tables.
 - The latest production deployment completed successfully. A user account has not yet been registered, so end-to-end signup, login, and cross-device sync still require a real account test.
 
+## Current earning-channel review
+
+The latest live review is [docs/live-earning-channels-2026-11-25.md](docs/live-earning-channels-2026-11-25.md). It identifies Subnano as a possible free creator storefront (not guaranteed demand), keeps Gibwork on watchlist until a funded eligible creative bounty is verified, treats HireForHumans as waitlist-only until a live worker board is confirmed, and excludes low-value or manipulative Anoworks engagement tasks.
+
 ## Live discovery and current limitations
 
 - A server-side public-feed discovery endpoint currently reads LaborX freelance posts and Subnano public requests. Employment feeds (Jobicy, Himalayas, Remote OK) are intentionally excluded because job vacancies are not the same as paid creative orders. The endpoint deduplicates and ranks topical matches and returns source links.
