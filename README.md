@@ -52,7 +52,7 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 
 ## Current earning-channel review
 
-The latest live review is [docs/live-earning-channels-2026-11-25.md](docs/live-earning-channels-2026-11-25.md). It identifies Subnano as a possible free creator storefront (not guaranteed demand), keeps Gibwork on watchlist until a funded eligible creative bounty is verified, treats HireForHumans as waitlist-only until a live worker board is confirmed, and excludes low-value or manipulative Anoworks engagement tasks.
+The latest global live review is [docs/live-global-opportunities-2026-11-26.md](docs/live-global-opportunities-2026-11-26.md). It checks opportunities worldwide while separating Armenia residence from Iranian citizenship, and records current eligibility, KYC, payout, cost, and task-availability gaps. The previous channel review is [docs/live-earning-channels-2026-11-25.md](docs/live-earning-channels-2026-11-25.md).
 
 ## Live discovery and current limitations
 
