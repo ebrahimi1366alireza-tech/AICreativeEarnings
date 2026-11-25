@@ -6,6 +6,7 @@ import CloudWorkspaceSync from "./components/cloud-workspace-sync";
 import OpportunityDiscovery from "./components/opportunity-discovery";
 import KycPaymentIntelligence from "./components/kyc-payment-intelligence";
 import PortfolioGallery from "./components/portfolio-gallery";
+import SmartLoginVerification from "./components/smart-login-verification";
 
 const workflow = [
   { number: "۰۱", title: "کشف فرصت‌ها", detail: "جست‌وجوی زنده در فیدهای عمومی جهانی؛ آگهی‌ها هنوز سفارش تأییدشده نیستند", state: "فعال · بررسی اولیه" },
@@ -270,6 +271,7 @@ export default function Home() {
         <AccountConnections />
         <CloudWorkspaceSync />
         <KycPaymentIntelligence />
+        <SmartLoginVerification />
 
         <section className="panel income-hub" id="income-hub">
           <div className="panel-head"><div><span className="eyebrow">MULTI-STREAM INCOME</span><h2>مرکز درآمد چندگانه · AI Income Hub</h2><p className="hub-intro">پروژه مستقل AI Creative Earnings؛ هیچ بخش ایردراپ یا تسک رمزارزی AIRDROP AI در این داشبورد ادغام نمی‌شود.</p></div><span className="free-tag">شروع با هزینه صفر</span></div>
