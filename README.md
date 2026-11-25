@@ -52,7 +52,7 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 
 ## Current earning-channel review
 
-The latest saved-platform audit is [docs/audit-saved-platforms-2026-11-26.md](docs/audit-saved-platforms-2026-11-26.md), covering the original 25 platforms and later additions. The latest global live-opportunity review is [docs/live-global-opportunities-2026-11-26.md](docs/live-global-opportunities-2026-11-26.md). The complete source registry is [docs/opportunity-sources.md](docs/opportunity-sources.md).
+The latest saved-platform audit is [docs/audit-saved-platforms-2026-11-26.md](docs/audit-saved-platforms-2026-11-26.md), covering the original 25 platforms and later additions. The practical priority-platform check is [docs/practical-platform-check-2026-11-26.md](docs/practical-platform-check-2026-11-26.md). The latest global live-opportunity review is [docs/live-global-opportunities-2026-11-26.md](docs/live-global-opportunities-2026-11-26.md). The complete source registry is [docs/opportunity-sources.md](docs/opportunity-sources.md).
 
 ## Live discovery and current limitations
 
