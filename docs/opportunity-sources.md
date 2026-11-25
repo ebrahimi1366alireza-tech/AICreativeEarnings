@@ -109,3 +109,8 @@ These were added as candidate platforms from the earlier discussion. They are no
 - **Monero Bounties:** Community bounty board appears weighted toward software/development. A site notice indicated translation/research bounty intake had been paused since March 2024 and established-project bounty submissions require prior approval since March 2025; verify current rules and open listings.
 
 These are research leads only. No account was created, no application submitted, no wallet connected, and no legal acceptance or transaction made. Check current country eligibility, sanctions terms, KYC, fees, escrow funding, AI-use rules, payout thresholds, and net reward before applying. Never pay to unlock a task or withdraw earnings.
+
+
+## Full saved-platform audit — 2026-11-26
+
+The original 25-platform list, additional saved earning platforms, and the Notion tool/resource list have been reconciled against the project's strict eligibility and direct-wallet payout rules. See [docs/audit-saved-platforms-2026-11-26.md](audit-saved-platforms-2026-11-26.md) for platform-by-platform status, evidence, exclusions, and next actions. The audit distinguishes verified payout rails from unverified KYC, country, and live-task availability; no account creation, KYC submission, wallet connection, deposit, or application was performed.
