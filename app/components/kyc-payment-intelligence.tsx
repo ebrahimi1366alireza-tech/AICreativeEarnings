@@ -224,7 +224,7 @@ export default function KycPaymentIntelligence() {
               <label>دسترسی {countryName(residence)}<select value={residenceAccess} onChange={e=>updateResidenceAccess(item.id,e.target.value as KycRecord["countryAccess"])}>{Object.entries(labels.countryAccess).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>روش برداشت<select value={item.payout} onChange={e=>update(item.id,{payout:e.target.value as KycRecord["payout"]})}>{Object.entries(labels.payout).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>هزینه ورود<select value={item.cost} onChange={e=>update(item.id,{cost:e.target.value as KycRecord["cost"]})}>{Object.entries(labels.cost).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
-              <label>ارز پرداخت<input value={item.asset} onChange={e=>update(item.id,{asset:e.target.value})} placeholder="مثلاً USDT"/></label>
+              <label>ارز پرداخت<input value={item.asset} onChange={e=>update(item.id,{asset:e.target.value})} placeholder="هر توکن پشتیبانی‌شده، مثلاً ETH یا SOL"/></label>
               <label>شبکه<input value={item.network} onChange={e=>update(item.id,{network:e.target.value})} placeholder="مثلاً Polygon"/></label>
               <label>حداقل برداشت<input value={item.minimum} onChange={e=>update(item.id,{minimum:e.target.value})} placeholder="مقدار و واحد"/></label>
               <label>کارمزد<input value={item.fee} onChange={e=>update(item.id,{fee:e.target.value})} placeholder="مقدار / درصد"/></label>
