@@ -20,10 +20,10 @@ export type DiscoveryLead = {
   escrow: string;
   countryCheck: string;
   paymentAsset: string;
-  iranPassport: string;
-  armeniaResidence: string;
-  evidenceNote: string;
-  verifiedAt: string;
+  iranPassport?: string;
+  armeniaResidence?: string;
+  evidenceNote?: string;
+  verifiedAt?: string;
   score: number;
   decision: string;
   writingType?: string;
