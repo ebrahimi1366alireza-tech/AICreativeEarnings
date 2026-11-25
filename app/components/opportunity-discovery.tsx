@@ -20,6 +20,8 @@ export type DiscoveryLead = {
   escrow: string;
   countryCheck: string;
   paymentAsset: string;
+  iranPassport: string;
+  armeniaResidence: string;
   score: number;
   decision: string;
   writingType?: string;
@@ -83,42 +85,45 @@ function scoreLead(input: {
   minimum: string;
   fee: string;
   kyc: string;
+  iranPassport: string;
+  armeniaResidence: string;
   stream: string;
 }) {
   let score = 0;
   const hardReject: string[] = [];
-  if (/^(https?:\/\/)?(www\.)?(laborx\.com|subnano\.ai)(\/|$)/i.test(input.sourceUrl)) score += 15;
-  if (input.payout === "کیف پول مستقیم") score += 20;
-  else if (input.payout === "رمزارز از طریق قرارداد به کیف پول") score += 15;
-  else if (/فیات|کارت هدیه|صرافی|بانکی|paypal|payoneer|wise/i.test(input.payout)) hardReject.push("روش برداشت غیررمزارزی یا غیرمستقیم با سیاست پروژه سازگار نیست");
-  if (input.paymentAsset === "USDT") score += 10;
-  else if (input.paymentAsset === "USDC") score += 6;
-  if (input.countryCheck === "مجاز بودن کشور تأیید شده") score += 15;
-  else if (input.countryCheck === "کشور مسدود است") hardReject.push("کشور محل اقامت پذیرفته نمی‌شود");
-  else score -= 8;
-  if (input.deposit === "بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری") score += 20;
-  else if (["سپرده یا خرید اجباری دارد", "هزینه ثبت‌نام یا اشتراک اجباری دارد"].includes(input.deposit)) hardReject.push("هزینه ورود، اشتراک اجباری، سپرده یا خرید اجباری با شرط پروژه سازگار نیست");
-  else score -= 10;
-  if (input.escrow === "وجه در امانت قفل شده") score += 15;
-  if (input.fee === "۰ تا ۱۰٪") score += 10;
-  else if (input.fee === "بیشتر از ۱۰٪") score += 4;
-  if (input.kyc === "نیازمند KYC") hardReject.push("احراز هویت اجباری با شرط پروژه سازگار نیست");
-  if (input.kyc !== "بدون KYC") score -= 25;
+  if (/^(https?:\\/\\/)?(www\\.)?(laborx\\.com|subnano\\.ai)(\\/|$)/i.test(input.sourceUrl)) score += 10;
+  if (input.payout === "کیف پول مستقیم" || input.payout === "رمزارز از طریق قرارداد به کیف پول") score += 15;
+  else if (/فیات|کارت هدیه|صرافی|بانکی|paypal|payoneer|wise/i.test(input.payout)) hardReject.push("برداشت مستقیم رمزارزی به کیف پول شخصی ارائه نمی‌شود");
+  if (input.paymentAsset === "USDT" || input.paymentAsset === "USDC") score += 10;
+  else if (input.paymentAsset !== "نامشخص") score += 3;
+  if (input.iranPassport === "پذیرش پاسپورت ایرانی تأیید شده") score += 20;
+  else if (input.iranPassport === "پاسپورت ایرانی پذیرفته نمی‌شود") hardReject.push("پاسپورت ایرانی طبق مدرک رسمی پذیرفته نمی‌شود");
+  if (input.armeniaResidence === "اقامت ارمنستان لازم نیست") score += 15;
+  else if (input.armeniaResidence === "اقامت ارمنستان یا کشور محل حضور الزامی است") hardReject.push("برای این سرویس مدرک اقامت لازم است و اقامت ارمنستان در دسترس نیست");
+  if (input.countryCheck === "حضور در ارمنستان مجاز تأیید شده") score += 10;
+  else if (input.countryCheck === "حضور در ارمنستان/ایران مسدود است") hardReject.push("حضور فعلی در ارمنستان یا محدودیت مرتبط با ایران مانع استفاده است");
+  if (input.deposit === "بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری") score += 15;
+  else if (["سپرده یا خرید اجباری دارد", "هزینه ثبت‌نام یا اشتراک اجباری دارد"].includes(input.deposit)) hardReject.push("هزینه ورود، اشتراک، سپرده یا خرید اجباری دارد");
+  if (input.escrow === "وجه در امانت قفل شده") score += 5;
+  if (input.fee === "۰ تا ۱۰٪") score += 5;
+  else if (input.fee === "بیشتر از ۱۰٪") score += 2;
+  if (input.kyc === "KYC با پاسپورت ایرانی تأیید شده" || input.kyc === "بدون KYC") score += 10;
+  else if (input.kyc === "KYC با پاسپورت ایرانی رد شده") hardReject.push("ارائه‌دهنده احراز هویت پاسپورت ایرانی را رد می‌کند");
   if (input.stream !== "نامشخص") score += 5;
   score = Math.max(0, Math.min(100, score));
   if (hardReject.length) return { score: 0, decision: "رد خودکار", reason: hardReject.join("؛ ") };
-  const complianceVerified = input.kyc === "بدون KYC"
-    && input.countryCheck === "مجاز بودن کشور تأیید شده"
-    && ["کیف پول مستقیم", "رمزارز از طریق قرارداد به کیف پول"].includes(input.payout)
-    && input.deposit === "بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری"
-    && ["USDT", "USDC"].includes(input.paymentAsset)
-    && Boolean(input.network.trim())
-    && Boolean(input.minimum.trim())
-    && input.fee !== "نامشخص";
-  if (!complianceVerified) return { score: Math.min(score, 44), decision: "نیازمند بررسی", reason: "تا وقتی نبود KYC، کشور مجاز، ارز و شبکه دقیق، حداقل برداشت، پرداخت رمزارزی به کیف پول شخصی، کارمزد و نبود هزینه ثبت‌نام/اشتراک/سپرده مستند نشوند، این فرصت واجد شرایط نیست. ارزهای غیر از USDT و USDC فقط پس از بررسی دستی جداگانه پذیرفته می‌شوند." };
-  if (score >= 70) return { score, decision: "واجد شرایط اولیه", reason: "شرایط پایه ثبت شده؛ قرارداد، حداقل برداشت و پرداخت نهایی را پیش از شروع دوباره بررسی کن." };
-  if (score >= 45) return { score, decision: "نیازمند بررسی", reason: "شواهد تکمیلی پرداخت یا شرایط قرارداد کافی نیست." };
-  return { score, decision: "اولویت پایین", reason: "شواهد پرداخت، کشور یا هزینه‌ها کافی نیست." };
+  const fullyVerified =
+    ["کیف پول مستقیم", "رمزارز از طریق قرارداد به کیف پول"].includes(input.payout) &&
+    ["USDT", "USDC"].includes(input.paymentAsset) &&
+    input.iranPassport === "پذیرش پاسپورت ایرانی تأیید شده" &&
+    input.armeniaResidence === "اقامت ارمنستان لازم نیست" &&
+    input.countryCheck === "حضور در ارمنستان مجاز تأیید شده" &&
+    input.deposit === "بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری" &&
+    ["بدون KYC", "KYC با پاسپورت ایرانی تأیید شده"].includes(input.kyc) &&
+    Boolean(input.network.trim()) && Boolean(input.minimum.trim()) && input.fee !== "نامشخص";
+  if (!fullyVerified) return { score: Math.min(score, 49), decision: "نیازمند بررسی", reason: "برای واجد شرایط شدن باید پذیرش پاسپورت ایرانی، عدم نیاز به اقامت ارمنستان، مجاز بودن حضور فعلی در ارمنستان، روش و شبکه برداشت مستقیم رمزارزی، KYC قابل انجام با پاسپورت ایرانی یا عدم نیاز به آن، حداقل برداشت، کارمزد و نبود هرگونه هزینه اجباری با سند رسمی تأیید شوند. ثبت‌نام موفق به‌تنهایی تأیید برداشت نیست." };
+  if (score >= 80) return { score, decision: "واجد شرایط اولیه", reason: "شرایط اصلی طبق شواهد ثبت شده؛ پیش از کار، محدودیت‌های حساب و اولین برداشت را دوباره از منبع رسمی بررسی کن." };
+  return { score: Math.min(score, 79), decision: "نیازمند بررسی", reason: "بخشی از شواهد مربوط به پرداخت، هزینه یا شرایط قرارداد هنوز کامل نیست." };
 }
 
 export default function OpportunityDiscovery({ onAdd }: Props) {
@@ -133,7 +138,9 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
   const [network, setNetwork] = useState("");
   const [fee, setFee] = useState("نامشخص");
   const [minimum, setMinimum] = useState("");
-  const [kyc, setKyc] = useState("نامشخص");
+  const [kyc, setKyc] = useState("KYC بررسی نشده");
+  const [iranPassport, setIranPassport] = useState("بررسی نشده");
+  const [armeniaResidence, setArmeniaResidence] = useState("نامشخص");
   const [deposit, setDeposit] = useState("هنوز بررسی نشده");
   const [escrow, setEscrow] = useState("نامشخص");
   const [proofUrl, setProofUrl] = useState("");
@@ -154,7 +161,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
   const [proposalDeadline, setProposalDeadline] = useState("");
   const [proposalText, setProposalText] = useState("");
 
-  const assessment = useMemo(() => scoreLead({ sourceUrl: proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, network, minimum, fee, kyc, stream }), [proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, network, minimum, fee, kyc, stream]);
+  const assessment = useMemo(() => scoreLead({ sourceUrl: proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, network, minimum, fee, kyc, iranPassport, armeniaResidence, stream }), [proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, network, minimum, fee, kyc, iranPassport, armeniaResidence, stream]);
 
   async function discoverOpportunities() {
     setLiveLoading(true); setLiveError(""); setLiveNotice("");
@@ -226,6 +233,8 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
       escrow,
       countryCheck,
       paymentAsset,
+      iranPassport,
+      armeniaResidence,
       score: assessment.score,
       decision: assessment.decision,
       ...(stream === "نوشتن و مقاله" ? { writingType, contentLanguage, wordCount: wordCount.trim() || "نامشخص", deadline: deadline.trim() || "نامشخص", seoRequired, commercialRights } : {})
@@ -245,7 +254,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         <div><span className="eyebrow">OPPORTUNITY DISCOVERY ENGINE · MVP</span><h2>موتور پیدا کردن و ارزیابی سفارش</h2></div>
         <span className="free-tag">منابع رایگان</span>
       </div>
-      <p className="hub-intro">فرصت‌های درآمدی تصویر و طراحی، ویدئو، نویسندگی و مقاله، تولید موسیقی با AI، داوری موسیقی و نظرسنجی پولی را در مسیرهای جداگانه ثبت و ارزیابی کن. جست‌وجوی خودکار فعلی فقط آگهی‌های فریلنسری منابع متصل را پوشش می‌دهد؛ رأی‌گیری و نظرسنجی تا اتصال منبع معتبر باید دستی ثبت شوند. امتیاز موضوعی فقط میزان تطابق کار با مهارت‌ها را نشان می‌دهد و تأیید پرداخت نیست. تا وقتی نبود KYC، پذیرش کشور، پرداخت مستقیم به کیف پول، نبود سپرده و همه کارمزدها از منبع رسمی تأیید نشده‌اند، هیچ موردی واجد شرایط نیست.</p>
+      <p className="hub-intro">فرصت‌های درآمدی تصویر و طراحی، ویدئو، نویسندگی و مقاله، تولید موسیقی با AI، داوری موسیقی و نظرسنجی پولی را در مسیرهای جداگانه ثبت و ارزیابی کن. جست‌وجوی خودکار فعلی فقط آگهی‌های فریلنسری منابع متصل را پوشش می‌دهد؛ رأی‌گیری و نظرسنجی تا اتصال منبع معتبر باید دستی ثبت شوند. امتیاز موضوعی فقط میزان تطابق کار با مهارت‌ها را نشان می‌دهد و تأیید پرداخت نیست. فقط فرصت‌هایی واجد شرایط می‌شوند که پذیرش پاسپورت ایرانی و حضور در ارمنستان، عدم نیاز به اقامت ارمنستان، برداشت مستقیم رمزارزی، امکان KYC با پاسپورت ایرانی یا عدم نیاز به KYC و نبود هزینه اجباری با منبع رسمی تأیید شده باشد.</p>
       <section className="live-discovery-block" aria-label="weekly income target and work priorities">
         <div className="panel-head discovery-form-head">
           <div><span className="eyebrow">WEEKLY EARNING PLAN</span><h3>هدف اولیه درآمد هفتگی</h3></div>
@@ -329,7 +338,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         <select value={stream} onChange={e => setStream(e.target.value)} aria-label="نوع کار"><option>عکس و طراحی</option><option>ویدئو</option><option>نوشتن و مقاله</option><option>تولید آهنگ با هوش مصنوعی</option><option>رأی‌گیری و داوری موسیقی</option><option>نظرسنجی پولی</option><option>نامشخص</option></select>
         <input value={pay} onChange={e => setPay(e.target.value)} placeholder="بودجه و واحد پرداخت" aria-label="بودجه"/>
         <input value={country} onChange={e => setCountry(e.target.value)} placeholder="کشورهای مجاز یا محدودیت‌ها" aria-label="محدودیت کشور"/>
-        <select value={countryCheck} onChange={e => setCountryCheck(e.target.value)} aria-label="بررسی کشور"><option>هنوز بررسی نشده</option><option>مجاز بودن کشور تأیید شده</option><option>کشور مسدود است</option></select>
+        <select value={countryCheck} onChange={e => setCountryCheck(e.target.value)} aria-label="بررسی کشور"><option>هنوز بررسی نشده</option><option>حضور در ارمنستان مجاز تأیید شده</option><option>حضور در ارمنستان/ایران مسدود است</option></select>
         <select value={payout} onChange={e => setPayout(e.target.value)} aria-label="روش برداشت"><option>نامشخص</option><option>کیف پول مستقیم</option><option>رمزارز از طریق قرارداد به کیف پول</option></select>
         <select value={paymentAsset} onChange={e => setPaymentAsset(e.target.value)} aria-label="ارز پرداخت"><option>نامشخص</option><option>USDT</option><option>USDC</option><option>XNO</option><option>سایر رمزارزها</option></select>
         <input value={network} onChange={e => setNetwork(e.target.value)} placeholder="شبکه دقیق پرداخت" aria-label="شبکه"/>
@@ -337,7 +346,9 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         <select value={escrow} onChange={e => setEscrow(e.target.value)} aria-label="وضعیت امانت‌داری"><option>نامشخص</option><option>وجه در امانت قفل شده</option><option>بدون امانت‌داری</option></select>
         <select value={fee} onChange={e => setFee(e.target.value)} aria-label="کارمزد پلتفرم و برداشت"><option>نامشخص</option><option>۰ تا ۱۰٪</option><option>بیشتر از ۱۰٪</option></select>
         <input value={minimum} onChange={e => setMinimum(e.target.value)} placeholder="حداقل برداشت" aria-label="حداقل برداشت"/>
-        <select value={kyc} onChange={e => setKyc(e.target.value)} aria-label="احراز هویت"><option>نامشخص</option><option>بدون KYC</option><option>نیازمند KYC</option></select>
+        <select value={kyc} onChange={e => setKyc(e.target.value)} aria-label="احراز هویت"><option>KYC بررسی نشده</option><option>بدون KYC</option><option>KYC با پاسپورت ایرانی تأیید شده</option><option>KYC با پاسپورت ایرانی رد شده</option></select>
+        <select value={iranPassport} onChange={e => setIranPassport(e.target.value)} aria-label="پذیرش پاسپورت ایرانی"><option>بررسی نشده</option><option>پذیرش پاسپورت ایرانی تأیید شده</option><option>پاسپورت ایرانی پذیرفته نمی‌شود</option></select>
+        <select value={armeniaResidence} onChange={e => setArmeniaResidence(e.target.value)} aria-label="نیاز به اقامت ارمنستان"><option>نامشخص</option><option>اقامت ارمنستان لازم نیست</option><option>اقامت ارمنستان یا کشور محل حضور الزامی است</option></select>
         {stream === "نوشتن و مقاله" && (
           <div className="writing-order-fields">
             <div className="writing-fields-heading"><strong>مشخصات اختصاصی سفارش متن و مقاله</strong><small>این اطلاعات برای تخمین زمان، قیمت و آماده‌سازی تحویل ثبت می‌شوند.</small></div>
@@ -359,7 +370,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
       <div className="discovery-assessment" role="status">
         <strong>امتیاز فعلی: {assessment.score}/100 · {assessment.decision}</strong>
         <p>{assessment.reason}</p>
-        <small>رد خودکار در صورت KYC اجباری، پرداخت غیررمزارزی، کشور مسدود یا هر هزینه ورود/اشتراک/سپرده اجباری. کشف زنده فقط از منابع عمومی انجام می‌شود؛ شرایط هر سفارش باید دستی و با سند رسمی تأیید شود.</small>
+        <small>رد خودکار در صورت رد پاسپورت ایرانی، الزام اقامت ارمنستان، محدودیت محل حضور، برداشت غیررمزارزی یا هزینه اجباری. KYC مجاز است فقط اگر پاسپورت ایرانی پذیرفته شود. کشف زنده فقط از منابع عمومی انجام می‌شود؛ شرایط هر سفارش باید دستی و با سند رسمی تأیید شود.</small>
       </div>
     </section>
   );
