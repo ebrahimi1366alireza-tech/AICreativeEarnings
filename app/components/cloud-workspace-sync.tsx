@@ -60,6 +60,9 @@ export default function CloudWorkspaceSync() {
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined;
     let stopped = false;
+    let initialSyncComplete = false;
+    let pendingLocalSync = false;
+    let restoringRemote = false;
     setHasRestoreBackup(Boolean(localStorage.getItem(RESTORE_BACKUP_KEY)));
 
     function preserveLocalBeforeRestore(email: string) {
@@ -147,6 +150,7 @@ export default function CloudWorkspaceSync() {
             localStorage.setItem("creativeops-cloud-version-v1", marker);
             localStorage.setItem(OWNER_KEY, email);
             setStatus("اطلاعات حساب از فضای ابری بازیابی شد.");
+            restoringRemote = true;
             window.location.reload();
             return;
           }
@@ -162,10 +166,18 @@ export default function CloudWorkspaceSync() {
         setStatus(error instanceof Error ? error.message : "خطا در همگام‌سازی.");
       } finally {
         if (!stopped) setBusy(false);
+        if (!initialSyncComplete) {
+          initialSyncComplete = true;
+          if (pendingLocalSync && !restoringRemote) scheduleSync();
+        }
       }
     }
 
     function scheduleSync() {
+      if (!initialSyncComplete) {
+        pendingLocalSync = true;
+        return;
+      }
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => {
         void pushLocal()
