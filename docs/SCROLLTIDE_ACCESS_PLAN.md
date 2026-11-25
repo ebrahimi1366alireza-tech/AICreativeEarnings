@@ -1,7 +1,7 @@
 # Scrolltide Access and Free-Resource Workflow
 
 ## User account note
-- The user is registering for Scrolltide with their **old Gmail account**.
+- The user has **completed Scrolltide registration** with their **old Gmail account**.
 - The exact email address is intentionally not copied into project documentation.
 - Never request or store the user's password, one-time codes, or recovery credentials.
 
@@ -20,7 +20,7 @@ This work is scheduled **after the shared ChatGPT Work replacement environment i
 - AIRDROP AI remains behind AI Creative Earnings in the development order.
 
 ## Access and security constraints
-- Registration by the user does not itself grant this assistant direct access to the private account.
+- Registration is complete, but it does not itself grant this assistant direct access to the private account.
 - Use the cloud browser only when the replacement environment is actually available and the user has authorized the session.
 - The user handles login challenges, OTPs, email confirmations, and other human verification steps.
 - Do not claim that account access or automation is active until it has been tested successfully.
