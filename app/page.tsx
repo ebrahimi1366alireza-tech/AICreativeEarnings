@@ -95,7 +95,7 @@ export default function Home() {
   function saveWallet(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const address = walletAddress.trim();
-    if (address && /\\s/.test(address)) {
+    if (address && /\s/.test(address)) {
       setWalletNotice("آدرس کیف پول نباید فاصله یا خط جدید داشته باشد.");
       return;
     }
