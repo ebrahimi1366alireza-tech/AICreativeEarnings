@@ -90,3 +90,11 @@ npm run dev
 ``
 
 The current app is a management workspace, not an earning guarantee. Manual entry does not verify a platform or make an opportunity eligible.
+
+## Shared cloud development and optional FCC
+
+The Dev Container keeps OpenCode as the primary coding agent. Free Claude Code (FCC) is an optional companion and is **not** installed automatically during container creation because its official installer is interactive and may offer additional agents.
+
+See [docs/FCC_SETUP.md](docs/FCC_SETUP.md). Run the preflight with `bash scripts/install-fcc.sh --check`; install only after reviewing the provider-cost and security notes with `bash scripts/install-fcc.sh --install`. Choose OpenCode only in the official installer. FCC installation/provider connection has not been verified merely by adding these setup files.
+
+GitHub Actions runs the TypeScript check on pushes and pull requests. This workflow does not deploy the app or connect to Supabase.
