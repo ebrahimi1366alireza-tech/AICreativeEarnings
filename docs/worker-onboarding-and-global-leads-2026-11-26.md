@@ -108,3 +108,26 @@ Sources:
 2. Keep AIDO on hold until written confirmation of direct crypto payout, country/nationality clearance, and a paid test.
 3. Keep Tether on hold until the actual employer confirms nationality eligibility, compensation, and payment rail.
 4. Continue global discovery for fixed-budget creative orders where direct wallet settlement is explicit. Treat Upwork/fiat-paid roles as market intelligence only, not qualified opportunities.
+
+
+## 5. New Superteam Earn creator lead — KriptoK (conditional, date inconsistency to resolve)
+
+The official listing for **Create Content About KriptoK · 200 USDC Creator Challenge** is labelled Global and currently shows 9 submissions. It accepts original posts, threads, videos, and product walkthroughs; English or English subtitles are required. No follower minimum is stated. The brief requires following KriptoK accounts on X, joining its Telegram community, participating in conversations, publishing one original piece, and submitting the public link.
+
+The listing says no purchase, deposit, or trade is required. The prize pool is split across ten winners (first prize 50 USDC; lower prizes down to 10 USDC). This is a competitive bounty, not a guaranteed paid commission.
+
+**Date inconsistency:** the page displays a December 9, 2026 winner announcement but also a “32d” remaining countdown. Those two fields do not reconcile with the current review date (November 26, 2026). Confirm the live deadline directly on the listing before spending time.
+
+Superteam's broader KYC and jurisdiction terms still apply. Iranian nationality plus Armenia residence has not been confirmed as eligible. A USDC prize is advertised, but exact network, fees, and wallet delivery for this particular sponsor are not independently confirmed in the listing.
+
+**Status: CONDITIONAL WATCHLIST.** No application, social follow, Telegram join, wallet connection, or content creation was performed.
+
+Official listing: https://superteam.fun/earn/listing/kriptok-creator-challenge-01
+
+### Swap.io x402 video bounty — deadline / announcement fields conflict
+
+The official listing describes a 60–120 second video explaining a concrete use case for Swap.io's x402 Agent API, with 500 USDC total prize pool (top prize 200 USDC). AI voiceovers are explicitly allowed; original work is required. Submission requires public posts on X and Medium. The optional demo bonus requires an actual paid API call and an on-chain transaction proof, which could incur a USDC network/API cost and is not necessary for the base entry.
+
+The page shows a remaining countdown but its winner-announcement date is November 25, 2026, already past on the date of this review. Treat this as stale/conflicting and do not create or submit a video unless the sponsor confirms the bounty is still open and the exact deadline.
+
+Official listing: https://superteam.fun/earn/listing/make-a-video-about-our-x402-feature
