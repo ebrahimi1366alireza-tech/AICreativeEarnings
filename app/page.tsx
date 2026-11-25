@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import AccountConnections from "./components/account-connections";
 import CloudWorkspaceSync from "./components/cloud-workspace-sync";
 import OpportunityDiscovery from "./components/opportunity-discovery";
+import KycPaymentIntelligence from "./components/kyc-payment-intelligence";
 
 const workflow = [
   { number: "۰۱", title: "کشف فرصت‌ها", detail: "جست‌وجوی زنده در فیدهای عمومی جهانی؛ آگهی‌ها هنوز سفارش تأییدشده نیستند", state: "فعال · بررسی اولیه" },
@@ -234,6 +235,7 @@ export default function Home() {
         <a className="nav-item" href="#income-hub"><span>✳</span> مرکز درآمد چندگانه</a>
         <a className="nav-item" href="#tools"><span>◈</span> ابزارهای هوش مصنوعی</a>
         <a className="nav-item" href="#accounts"><span>◎</span> اتصال حساب‌ها</a>
+        <a className="nav-item" href="#kyc-intelligence"><span>◇</span> احراز هویت و برداشت</a>
         <a className="nav-item" href="#deliveries"><span>⇧</span> تحویل‌ها</a>
         <a className="nav-item" href="#finance"><span>＄</span> درآمدها</a>
         <div className="sidebar-bottom"><div className="avatar">AI</div><div><strong>مدیریت پروژه</strong><small>نسخه آزمایشی شخصی</small></div></div>
@@ -264,6 +266,7 @@ export default function Home() {
 
         <AccountConnections />
         <CloudWorkspaceSync />
+        <KycPaymentIntelligence />
 
         <section className="panel income-hub" id="income-hub">
           <div className="panel-head"><div><span className="eyebrow">MULTI-STREAM INCOME</span><h2>مرکز درآمد چندگانه · AI Income Hub</h2><p className="hub-intro">پروژه مستقل AI Creative Earnings؛ هیچ بخش ایردراپ یا تسک رمزارزی AIRDROP AI در این داشبورد ادغام نمی‌شود.</p></div><span className="free-tag">شروع با هزینه صفر</span></div>
