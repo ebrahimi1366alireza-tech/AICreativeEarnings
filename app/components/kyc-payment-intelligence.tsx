@@ -35,6 +35,13 @@ const seed: KycRecord[] = [
   asset:"", network:"", minimum:"نامشخص", fee:"نامشخص", evidenceUrl:"", checkedAt:""
 }));
 
+// ISO 3166-1 alpha-2 country/territory codes. Names are localized by the browser.
+const COUNTRY_CODES = `AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW`.split(" ");
+const regionNames = new Intl.DisplayNames(["fa"], { type: "region" });
+const COUNTRIES = COUNTRY_CODES.map(code => ({ code, name: regionNames.of(code) || code }))
+  .sort((a,b) => a.name.localeCompare(b.name, "fa"));
+const countryName = (code:string) => COUNTRIES.find(c => c.code === code)?.name || code;
+
 const labels = {
   kyc: { none:"بدون KYC", id:"مدرک هویتی / پاسپورت", address:"مدرک آدرس / مالیات", selfie:"سلفی / زنده‌سنجی", unknown:"نامشخص" },
   iranianPassport: { accepted:"پذیرفته می‌شود", rejected:"پذیرفته نمی‌شود", unknown:"بررسی نشده" },
@@ -57,7 +64,9 @@ export default function KycPaymentIntelligence() {
   const [records,setRecords] = useState<KycRecord[]>(seed);
   const [loaded,setLoaded] = useState(false);
   const [filter,setFilter] = useState<Filter>("all");
-  const [residence,setResidence] = useState("ارمنستان");
+  const [residence,setResidence] = useState("AM");
+  const [citizenship,setCitizenship] = useState("IR");
+  const [bankCountry,setBankCountry] = useState("AM");
   const [newName,setNewName] = useState("");
   const [newUrl,setNewUrl] = useState("");
   const [notice,setNotice] = useState("");
@@ -73,17 +82,23 @@ export default function KycPaymentIntelligence() {
         }
       }
     } catch { /* keep safe defaults */ }
-    const savedResidence = localStorage.getItem("creativeops-kyc-residence-v1");
-    if (savedResidence) setResidence(savedResidence);
+    const savedResidence = localStorage.getItem("creativeops-kyc-residence-v2") || localStorage.getItem("creativeops-kyc-residence-v1");
+    if (savedResidence) setResidence(savedResidence === "ارمنستان" ? "AM" : savedResidence === "ایران" ? "IR" : savedResidence);
+    const savedCitizenship = localStorage.getItem("creativeops-kyc-citizenship-v1");
+    if (savedCitizenship) setCitizenship(savedCitizenship);
+    const savedBankCountry = localStorage.getItem("creativeops-kyc-bank-country-v1");
+    if (savedBankCountry) setBankCountry(savedBankCountry);
     setLoaded(true);
   },[]);
 
   useEffect(() => {
     if (loaded) {
       localStorage.setItem("creativeops-kyc-intelligence-v1",JSON.stringify(records));
-      localStorage.setItem("creativeops-kyc-residence-v1",residence);
+      localStorage.setItem("creativeops-kyc-residence-v2",residence);
+      localStorage.setItem("creativeops-kyc-citizenship-v1",citizenship);
+      localStorage.setItem("creativeops-kyc-bank-country-v1",bankCountry);
     }
-  },[records,residence,loaded]);
+  },[records,residence,citizenship,bankCountry,loaded]);
 
   const counts = useMemo(() => records.reduce((a,r) => { a[readiness(r)]++; return a; },{ready:0,review:0,blocked:0}),[records]);
   const visible = records.filter(r => filter === "all" || readiness(r) === filter);
@@ -103,14 +118,24 @@ export default function KycPaymentIntelligence() {
   return (
     <section className="panel kpi-panel" id="kyc-intelligence">
       <div className="panel-head"><div><span className="eyebrow">KYC & PAYMENT INTELLIGENCE</span><h2>هوش احراز هویت و برداشت درآمد</h2></div><span className="free-tag">فقط مسیر قانونی</span></div>
-      <p className="hub-intro">برای هر پلتفرم، پذیرش پاسپورت ایرانی، دسترسی کشور محل اقامت، نوع KYC، پرداخت رمزارزی، هزینه ورود و ریسک بلوکه‌شدن را ثبت و غربال کن. اطلاعات اولیه عمداً «نامشخص» هستند؛ تا وقتی منبع رسمی و تاریخ بررسی ثبت نشده، هیچ گزینه‌ای تأییدشده محسوب نمی‌شود.</p>
+      <p className="hub-intro">برای هر پلتفرم، کشور محل اقامت، کشور تابعیت و کشور حساب بانکی را جداگانه بررسی کن. فهرست شامل کشورهای جهان است؛ پذیرش پاسپورت، دسترسی منطقه‌ای، نوع KYC، پرداخت و ریسک بلوکه‌شدن را ثبت و غربال کن. اطلاعات اولیه عمداً «نامشخص» هستند؛ تا وقتی منبع رسمی و تاریخ بررسی ثبت نشده، هیچ گزینه‌ای تأییدشده محسوب نمی‌شود.</p>
       <div className="kpi-toolbar">
         <label>کشور محل اقامت
           <select value={residence} onChange={e=>setResidence(e.target.value)}>
-            {["ارمنستان","ایران","امارات","قطر","عمان","کشور دیگر"].map(x=><option key={x}>{x}</option>)}
+            {COUNTRIES.map(c=><option value={c.code} key={c.code}>{c.name}</option>)}
           </select>
         </label>
-        <div className="kpi-passport"><small>مدرک مورد بررسی</small><strong>پاسپورت ایرانی</strong></div>
+        <label>کشور تابعیت
+          <select value={citizenship} onChange={e=>setCitizenship(e.target.value)}>
+            {COUNTRIES.map(c=><option value={c.code} key={c.code}>{c.name}</option>)}
+          </select>
+        </label>
+        <label>کشور حساب بانکی / دریافت
+          <select value={bankCountry} onChange={e=>setBankCountry(e.target.value)}>
+            {COUNTRIES.map(c=><option value={c.code} key={c.code}>{c.name}</option>)}
+          </select>
+        </label>
+        <div className="kpi-passport"><small>مدرک هویتی</small><strong>{citizenship === "IR" ? "پاسپورت ایرانی" : "تابعیت: "+countryName(citizenship)}</strong></div>
       </div>
       <div className="kpi-counts">
         <button type="button" className={filter==="all"?"selected":""} onClick={()=>setFilter("all")}><strong>{records.length}</strong><span>همه پلتفرم‌ها</span></button>
@@ -136,7 +161,7 @@ export default function KycPaymentIntelligence() {
             <div className="kpi-fields">
               <label>KYC<select value={item.kyc} onChange={e=>update(item.id,{kyc:e.target.value as KycRecord["kyc"]})}>{Object.entries(labels.kyc).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>پاسپورت ایرانی<select value={item.iranianPassport} onChange={e=>update(item.id,{iranianPassport:e.target.value as KycRecord["iranianPassport"]})}>{Object.entries(labels.iranianPassport).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
-              <label>دسترسی {residence}<select value={item.countryAccess} onChange={e=>update(item.id,{countryAccess:e.target.value as KycRecord["countryAccess"]})}>{Object.entries(labels.countryAccess).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
+              <label>دسترسی {countryName(residence)}<select value={item.countryAccess} onChange={e=>update(item.id,{countryAccess:e.target.value as KycRecord["countryAccess"]})}>{Object.entries(labels.countryAccess).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>روش برداشت<select value={item.payout} onChange={e=>update(item.id,{payout:e.target.value as KycRecord["payout"]})}>{Object.entries(labels.payout).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>هزینه ورود<select value={item.cost} onChange={e=>update(item.id,{cost:e.target.value as KycRecord["cost"]})}>{Object.entries(labels.cost).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>ارز پرداخت<input value={item.asset} onChange={e=>update(item.id,{asset:e.target.value})} placeholder="مثلاً USDT"/></label>
@@ -145,12 +170,12 @@ export default function KycPaymentIntelligence() {
               <label>کارمزد<input value={item.fee} onChange={e=>update(item.id,{fee:e.target.value})} placeholder="مقدار / درصد"/></label>
               <label className="wide">لینک مدرک رسمی<input value={item.evidenceUrl} onChange={e=>update(item.id,{evidenceUrl:e.target.value})} placeholder="https://... (شرایط KYC، کشور یا برداشت)"/></label>
             </div>
-            <div className="kpi-card-foot"><span>آخرین ثبت: {item.checkedAt || "هنوز بررسی نشده"}</span><span>نتیجه برای {residence}: {state==="ready"?"همه شروط ثبت شده":state==="blocked"?"حداقل یک مانع ثبت شده":"شواهد کافی نیست"}</span></div>
+            <div className="kpi-card-foot"><span>آخرین ثبت: {item.checkedAt || "هنوز بررسی نشده"}</span><span>نتیجه برای {countryName(residence)}: {state==="ready"?"همه شروط ثبت شده":state==="blocked"?"حداقل یک مانع ثبت شده":"شواهد کافی نیست"}</span></div>
           </article>;
         })}
         {visible.length===0 && <div className="empty-state">موردی در این فیلتر نیست.</div>}
       </div>
-      <p className="hub-footnote">نکته امنیتی: هویت جعلی، مدارک دستکاری‌شده، حساب اجاره‌ای، VPN برای پنهان‌کردن کشور یا دورزدن محدودیت‌ها استفاده نمی‌شود. این نسخه اطلاعات را در حافظه همین مرورگر نگه می‌دارد؛ بررسی خودکار زنده شرایط سایت‌ها و همگام‌سازی ابری هنوز به منبع داده و اتصال سرور نیاز دارد. برای تأیید نهایی، لینک رسمی و تاریخ بررسی را ثبت کن.</p>
+      <p className="hub-footnote">نکته امنیتی: هویت جعلی، مدارک دستکاری‌شده، حساب اجاره‌ای، VPN برای پنهان‌کردن کشور یا دورزدن محدودیت‌ها استفاده نمی‌شود. فهرست کشورها بر پایه کدهای ISO 3166-1 است و نام‌ها با زبان مرورگر نمایش داده می‌شوند. این نسخه اطلاعات را در حافظه همین مرورگر نگه می‌دارد؛ بررسی خودکار زنده شرایط سایت‌ها و همگام‌سازی ابری هنوز به منبع داده و اتصال سرور نیاز دارد. برای تأیید نهایی، لینک رسمی و تاریخ بررسی را ثبت کن.</p>
     </section>
   );
 }
