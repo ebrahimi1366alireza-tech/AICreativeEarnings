@@ -100,3 +100,34 @@ Official source:
 
 ## Evidence caveats
 Public pages are not a substitute for an authenticated worker dashboard. A public task example is not proof that a task is live or claimable by this worker. A general “worldwide” statement is not proof of acceptance of both the user's current residence and citizenship. The next decisive test requires the user to view the onboarding/payout screen using true details, without submitting identity documents or accepting new legal terms until the eligibility and payout path are understood.
+
+
+## Live listing scan — additional detail (2026-11-26)
+
+### LaborX live creative inventory
+- LaborX's Design & Creative category currently reports 38 posted listings, but the visible examples include many older posts (2024–2025) and some full-time/office/hybrid roles rather than small freelance gigs. This count is not a count of current funded commissions.
+- Its Video category currently shows 5 listings, but the visible results are mostly freelancer service offers (people advertising their editing services), plus old buyer requests from 2024/2022; no clearly current funded video-editing order was verified.
+- A Graphic Designer for Web & Social Media listing showed 600 in ETH/DAI/USDT, but the search result says it ended September 29, 2026. It is closed and must not be presented as an open opportunity.
+- Therefore LaborX remains a marketplace worth monitoring, but **no currently verified, open, suitable AI-creative paid order was found in this scan**. Do not confuse service-provider gig cards with client-funded jobs.
+
+Sources:
+- https://laborx.com/vacancies/design-and-creative
+- https://laborx.com/jobs/video
+- https://laborx.com/jobs/graphic-designer-for-web-amp-social-media-104462
+
+### Superteam Earn live shortlist
+- Current public feed showed a KriptoK content challenge with 200 USDC and a deadline shown as 18 days away; it is a contest/competitive reward, not a guaranteed commission.
+- “Show us how you use MozaikPay” showed 500 USDC and a deadline 13 days away; inspect the exact creative brief and any requirement to use/fund a financial product before considering it.
+- Other visible listings include writing/research and trading/prediction-related campaigns. Do not infer suitability from reward amount alone.
+- The current Terms of Use are effective June 24, 2026. They say access may be barred where a user's location, citizenship, or residence makes use unlawful, and they do not guarantee partner payment. External sponsor payment terms and KYC can vary. No nationality/residence determination was obtained for this user.
+
+Sources:
+- https://superteam.fun/earn/
+- https://superteam.fun/earn/terms-of-use.pdf
+- https://docs.superteam.fun/the-superteam-handbook/community/faqs/superteam-earn-faq
+
+### GIMI updated legal terms
+The latest terms are dated October 6, 2026 (not the older April 2025 version surfaced by some cached pages). Current terms state payout options are region-dependent through third-party providers, including USD-denominated USDC only where offered; current minimum is USD 10 and fee is 5%. Additional identity/tax verification may be required. The terms also contain sanctions restrictions and say brands own content once approved, subject to the campaign-specific agreement. A direct self-custody USDC payout route and acceptance of Armenia residence + Iranian passport remain unverified.
+
+Source:
+- https://www.gimi.co/terms-of-use
