@@ -60,7 +60,7 @@ export default function CloudWorkspaceSync() {
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined;
     let stopped = false;
-    let initialSyncComplete = false;
+    let initialSyncSafe = false;
     let pendingLocalSync = false;
     let restoringRemote = false;
     setHasRestoreBackup(Boolean(localStorage.getItem(RESTORE_BACKUP_KEY)));
@@ -156,7 +156,9 @@ export default function CloudWorkspaceSync() {
           }
           localStorage.setItem(OWNER_KEY, email);
           setStatus("اطلاعات این حساب با فضای ابری همگام است.");
+          initialSyncSafe = true;
         } else {
+          initialSyncSafe = true;
           const saved = await pushLocal();
           if (saved) {
             setStatus("اطلاعات این دستگاه در فضای ابری ذخیره شد.");
@@ -166,15 +168,15 @@ export default function CloudWorkspaceSync() {
         setStatus(error instanceof Error ? error.message : "خطا در همگام‌سازی.");
       } finally {
         if (!stopped) setBusy(false);
-        if (!initialSyncComplete) {
-          initialSyncComplete = true;
-          if (pendingLocalSync && !restoringRemote) scheduleSync();
+        if (pendingLocalSync && initialSyncSafe && !restoringRemote) {
+          pendingLocalSync = false;
+          scheduleSync();
         }
       }
     }
 
     function scheduleSync() {
-      if (!initialSyncComplete) {
+      if (!initialSyncSafe) {
         pendingLocalSync = true;
         return;
       }
