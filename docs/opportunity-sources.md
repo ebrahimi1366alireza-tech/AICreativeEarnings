@@ -119,3 +119,8 @@ The original 25-platform list, additional saved earning platforms, and the Notio
 ## Practical priority-platform check — 2026-11-26
 
 The deeper public-source check of Loopuman, ClipRush.net, LaborX, Superteam Earn, and GIMI is recorded in [docs/practical-platform-check-2026-11-26.md](practical-platform-check-2026-11-26.md). Important distinction: cliprush.online is a separate PayPal-only workflow and is not the crypto-advertising cliprush.net. No user accounts, KYC, wallet links, submissions, or paid actions were performed.
+
+
+## Latest worker onboarding and global creative leads — 2026-11-26
+
+See [worker onboarding and global creative leads review](worker-onboarding-and-global-leads-2026-11-26.md) for the Loopuman Telegram/web onboarding route, Celo payout-wallet inconsistency, unresolved Iranian-passport / Armenia-residence eligibility, and conditional AIDO and Tether leads. This is a public-source review only; no account or application was created.
