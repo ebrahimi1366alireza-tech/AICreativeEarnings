@@ -32,7 +32,7 @@ function signedUrl(base: string, value: string) {
   return `${base}/storage/v1${value.startsWith("/") ? value : `/${value}`}`;
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const ctx = await context(request);
   if ("response" in ctx) return ctx.response;
   const response = await fetch(`${ctx.base}/storage/v1/object/list/${BUCKET}`, {
