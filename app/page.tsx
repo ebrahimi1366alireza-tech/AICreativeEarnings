@@ -234,7 +234,8 @@ export default function Home() {
         <div className="side-label">فضای کاری</div>
         <a className="nav-item active" href="#overview"><span>▦</span> نمای کلی</a>
         <a className="nav-item" href="#opportunities"><span>⌕</span> فرصت‌های درآمدی</a>
-        <a className="nav-item" href="#production"><span>▧</span> استودیو تولید</a>
+        <a className="nav-item" href="#production"><span>▧</span> پیگیری سفارش‌ها</a>
+        <a className="nav-item" href="#sales-studio"><span>✦</span> تولید محتوای قابل فروش</a>
         <a className="nav-item" href="#income-hub"><span>✳</span> مرکز درآمد چندگانه</a>
         <a className="nav-item" href="#tools"><span>◈</span> ابزارهای هوش مصنوعی</a>
         <a className="nav-item" href="#accounts"><span>◎</span> اتصال حساب‌ها</a>
