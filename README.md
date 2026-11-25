@@ -105,3 +105,6 @@ The Dev Container keeps OpenCode as the primary coding agent. Free Claude Code (
 See [docs/FCC_SETUP.md](docs/FCC_SETUP.md). Run the preflight with `bash scripts/install-fcc.sh --check`; install only after reviewing the provider-cost and security notes with `bash scripts/install-fcc.sh --install`. Choose OpenCode only in the official installer. FCC installation/provider connection has not been verified merely by adding these setup files.
 
 GitHub Actions runs the TypeScript check on pushes and pull requests. This workflow does not deploy the app or connect to Supabase.
+
+
+The worker onboarding and new global creative-lead follow-up is [docs/worker-onboarding-and-global-leads-2026-11-26.md](docs/worker-onboarding-and-global-leads-2026-11-26.md). It records Loopuman's Telegram route and unresolved wallet/KYC details, plus conditional AIDO and Tether leads. No accounts, applications, identity submissions, or wallet actions were performed.
