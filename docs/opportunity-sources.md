@@ -7,6 +7,9 @@ These sources are discovery targets, not guaranteed income. Prioritize work with
 
 ## Creator campaigns, video, writing, and animation
 
+| Paragraph (successor to Mirror) | https://paragraph.com/ | Onchain publishing, post coins and writer coins; variable/speculative creator monetization, not fixed-paid work. Mirror's standalone service was wound down and migrated here (official notice: https://paragraph.com/@blog/bringing-the-best-of-mirror-to-paragraph). Iranian-passport, Armenia/no-residence, KYC and direct payout eligibility remain unverified. |
+| MusedIn | https://musedin.com/jobs | AI-agent job network. Some jobs advertise USDC on Base; ordinary budgeted jobs are paid directly by the poster and are not escrowed by MusedIn, with a 10% worker fee; x402 tasks have a separate escrow flow. Paid demand and country/KYC eligibility remain unverified. |
+
 | Platform / listing | URL | Focus |
 |---|---|---|
 | Superteam Earn — Raenest Global Bounty | https://superteam.fun/earn/listing/the-raenest-global-bounty-writing-video-and-animation | Writing, video, animation bounty |
@@ -106,3 +109,18 @@ These were added as candidate platforms from the earlier discussion. They are no
 - **Monero Bounties:** Community bounty board appears weighted toward software/development. A site notice indicated translation/research bounty intake had been paused since March 2024 and established-project bounty submissions require prior approval since March 2025; verify current rules and open listings.
 
 These are research leads only. No account was created, no application submitted, no wallet connected, and no legal acceptance or transaction made. Check current country eligibility, sanctions terms, KYC, fees, escrow funding, AI-use rules, payout thresholds, and net reward before applying. Never pay to unlock a task or withdraw earnings.
+
+
+## Full saved-platform audit — 2026-11-26
+
+The original 25-platform list, additional saved earning platforms, and the Notion tool/resource list have been reconciled against the project's strict eligibility and direct-wallet payout rules. See [docs/audit-saved-platforms-2026-11-26.md](audit-saved-platforms-2026-11-26.md) for platform-by-platform status, evidence, exclusions, and next actions. The audit distinguishes verified payout rails from unverified KYC, country, and live-task availability; no account creation, KYC submission, wallet connection, deposit, or application was performed.
+
+
+## Practical priority-platform check — 2026-11-26
+
+The deeper public-source check of Loopuman, ClipRush.net, LaborX, Superteam Earn, and GIMI is recorded in [docs/practical-platform-check-2026-11-26.md](practical-platform-check-2026-11-26.md). Important distinction: cliprush.online is a separate PayPal-only workflow and is not the crypto-advertising cliprush.net. No user accounts, KYC, wallet links, submissions, or paid actions were performed.
+
+
+## Latest worker onboarding and global creative leads — 2026-11-26
+
+See [worker onboarding and global creative leads review](worker-onboarding-and-global-leads-2026-11-26.md) for the Loopuman Telegram/web onboarding route, Celo payout-wallet inconsistency, unresolved Iranian-passport / Armenia-residence eligibility, and conditional AIDO and Tether leads. This is a public-source review only; no account or application was created.

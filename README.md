@@ -2,6 +2,13 @@
 
 A Persian RTL workspace for discovering, reviewing, producing, delivering, and tracking paid creative work. This project is completely separate from AIRDROP AI.
 
+
+## Product focus: create commercial content to sell
+
+AI Creative Earnings is designed to help each user discover real buyers and paid creative briefs, produce commercial assets (product visuals, advertising graphics, short videos, copy, and other digital deliverables), quality-check them, and deliver them for payment. It is **not** an Instagram page-management tool. Instagram or other social-account connection is not required for the core workflow, and users do not need to install ChatGPT. Each user works in their own account and workspace.
+
+The current app includes a commercial production-brief builder. It prepares a structured brief/prompt from the product, buyer, market, sales channel, and deliverable. This is a first workflow scaffold, **not yet an in-app AI image/video generator**. Actual model integration, provider credentials, per-user usage limits/cost controls, and marketplace delivery integrations remain to be implemented. See [commercial content sales product direction](docs/commercial-content-sales-product-direction.md).
+
 ## Six income streams
 
 1. Paid writing and text services: articles, product copy, editing, and related client work.
@@ -52,7 +59,7 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 
 ## Current earning-channel review
 
-The latest live review is [docs/live-earning-channels-2026-11-25.md](docs/live-earning-channels-2026-11-25.md). It identifies Subnano as a possible free creator storefront (not guaranteed demand), keeps Gibwork on watchlist until a funded eligible creative bounty is verified, treats HireForHumans as waitlist-only until a live worker board is confirmed, and excludes low-value or manipulative Anoworks engagement tasks.
+The latest saved-platform audit is [docs/audit-saved-platforms-2026-11-26.md](docs/audit-saved-platforms-2026-11-26.md), covering the original 25 platforms and later additions. The practical priority-platform check is [docs/practical-platform-check-2026-11-26.md](docs/practical-platform-check-2026-11-26.md). The latest global live-opportunity review is [docs/live-global-opportunities-2026-11-26.md](docs/live-global-opportunities-2026-11-26.md). The complete source registry is [docs/opportunity-sources.md](docs/opportunity-sources.md).
 
 ## Live discovery and current limitations
 
@@ -105,3 +112,6 @@ The Dev Container keeps OpenCode as the primary coding agent. Free Claude Code (
 See [docs/FCC_SETUP.md](docs/FCC_SETUP.md). Run the preflight with `bash scripts/install-fcc.sh --check`; install only after reviewing the provider-cost and security notes with `bash scripts/install-fcc.sh --install`. Choose OpenCode only in the official installer. FCC installation/provider connection has not been verified merely by adding these setup files.
 
 GitHub Actions runs the TypeScript check on pushes and pull requests. This workflow does not deploy the app or connect to Supabase.
+
+
+The worker onboarding and new global creative-lead follow-up is [docs/worker-onboarding-and-global-leads-2026-11-26.md](docs/worker-onboarding-and-global-leads-2026-11-26.md). It records Loopuman's Telegram route and unresolved wallet/KYC details, plus conditional AIDO and Tether leads. No accounts, applications, identity submissions, or wallet actions were performed.

@@ -10,6 +10,12 @@ type KycRecord = {
   iranianPassport: "accepted" | "rejected" | "unknown";
   passportAcceptanceByCitizenship?: Record<string, "accepted" | "rejected" | "unknown">;
   countryAccess: "allowed" | "blocked" | "unknown";
+  /** Access based on current physical presence, separate from formal residence. */
+  currentPresenceAccess?: "allowed" | "blocked" | "unknown";
+  currentPresenceAccessByCountry?: Record<string, "allowed" | "blocked" | "unknown">;
+  /** Whether a formal residence permit is required for the selected country. */
+  residencePermitRequirement?: "required" | "not-required" | "unknown";
+  residencePermitRequirementByCountry?: Record<string, "required" | "not-required" | "unknown">;
   countryAccessByResidence?: Record<string, "allowed" | "blocked" | "unknown">;
   payout: "direct-crypto" | "platform-wallet" | "fiat" | "unknown";
   cost: "free" | "fee" | "deposit" | "unknown";
@@ -18,6 +24,8 @@ type KycRecord = {
   minimum: string;
   fee: string;
   evidenceUrl: string;
+  evidenceNote?: string;
+  evidenceCheckedAt?: string;
   checkedAt: string;
 };
 
@@ -65,7 +73,29 @@ const seed: KycRecord[] = [
   ["TaskForce","https://www.task-force.app/"],
   ["OpenJobs","https://openjobs.global/"],
   ["Clustly","https://clustly.ai/"],
-  ["Frantic","https://gofrantic.com/"]
+  ["Frantic","https://gofrantic.com/"],
+  ["OpenJobs (openjobs.bot)","https://openjobs.bot/"],
+  ["First Dollar","https://app.firstdollar.money/bounties"],
+  ["Higgsfield Talent Contest","https://higgsfield.ai/contests/talent-contest?tab=rules"],
+  ["ContentRewards","https://contentrewards.com/c/campaigns/6441e520-ad18-4f7f-83bf-01139f38c63a"],
+  ["Video Marketplace","https://dev.vidodata.com/"],
+  ["Vocal Media","https://vocal.media/"],
+  ["BountyBook","https://api.bountybook.ai/"],
+  ["Claw Earn","https://clawearn.com/"],
+  ["Artisan","https://artisan.ac/"],
+  ["Raenest (payout dependency)","https://raenest.com/"],
+  ["Paragraph (Mirror migration)","https://paragraph.com/"],
+  ["Microworkers.com","https://www.microworkers.com/"],
+  ["Freecash","https://freecash.com/"],
+  ["Toloka","https://toloka.ai/"],
+  ["Mindrift","https://mindrift.ai/"],
+  ["Ruul","https://ruul.io/"],
+  ["Gumroad","https://gumroad.com/"],
+  ["Ko-fi","https://ko-fi.com/"],
+  ["Shutterstock Contributor","https://submit.shutterstock.com/"],
+  ["BeatStars","https://www.beatstars.com/"],
+  ["MusedIn","https://musedin.com/"],
+  ["AgentPact","https://agentpact.io/"]
 ].map(([platform,url]) => ({
   id: platform.toLowerCase().replace(/[^a-z0-9]+/g,"-"), platform, url,
   kyc:"unknown" as const, iranianPassport:"unknown" as const,
@@ -83,20 +113,36 @@ const countryName = (code:string) => COUNTRIES.find(c => c.code === code)?.name 
 const labels = {
   kyc: { none:"بدون KYC", id:"مدرک هویتی / پاسپورت", address:"مدرک آدرس / مالیات", selfie:"سلفی / زنده‌سنجی", unknown:"نامشخص" },
   iranianPassport: { accepted:"پذیرفته می‌شود", rejected:"پذیرفته نمی‌شود", unknown:"بررسی نشده" },
-  countryAccess: { allowed:"کشور محل اقامت مجاز", blocked:"کشور محل اقامت مسدود", unknown:"نامشخص" },
+  countryAccess: { allowed:"دسترسی کشور مجاز", blocked:"دسترسی کشور مسدود", unknown:"نامشخص" },
+  currentPresenceAccess: { allowed:"حضور فعلی مجاز", blocked:"حضور فعلی غیرمجاز", unknown:"بررسی نشده" },
+  residencePermitRequirement: { required:"اقامت رسمی الزامی", "not-required":"اقامت رسمی لازم نیست", unknown:"بررسی نشده" },
   payout: { "direct-crypto":"مستقیم به کیف پول", "platform-wallet":"موجودی داخلی پلتفرم", fiat:"فقط فیات", unknown:"نامشخص" },
   cost: { free:"رایگان، بدون سپرده", fee:"هزینه / اشتراک اجباری", deposit:"سپرده / وثیقه اجباری", unknown:"نامشخص" }
 };
 
 type Filter = "all" | "ready" | "review" | "blocked";
 
-function readiness(item: KycRecord, residence: string, citizenship: string) {
-  const countryAccess = item.countryAccessByResidence?.[residence] ?? item.countryAccess;
+function isVerifiedEvidence(item: KycRecord) {
+  if (!item.evidenceUrl || !item.evidenceNote || item.evidenceNote.trim().length < 30 || !item.evidenceCheckedAt) return false;
+  try {
+    const url = new URL(item.evidenceUrl);
+    if (url.protocol !== "https:" || !url.hostname || url.username || url.password) return false;
+  } catch { return false; }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(item.evidenceCheckedAt)) return false;
+  const checked = Date.parse(item.evidenceCheckedAt + "T00:00:00.000Z");
+  const age = Date.now() - checked;
+  return Number.isFinite(checked) && age >= 0 && age <= 90 * 24 * 60 * 60 * 1000;
+}
+
+function readiness(item: KycRecord, presenceCountry: string, citizenship: string) {
+  const presenceAccess = item.currentPresenceAccessByCountry?.[presenceCountry] ?? item.currentPresenceAccess ?? "unknown";
+  const permitRequirement = item.residencePermitRequirementByCountry?.[presenceCountry] ?? item.residencePermitRequirement ?? "unknown";
   const passportAcceptance = item.passportAcceptanceByCitizenship?.[citizenship] ?? (citizenship === "IR" ? item.iranianPassport : "unknown");
-  if (passportAcceptance === "rejected" || countryAccess === "blocked" || item.payout === "fiat" || item.cost === "fee" || item.cost === "deposit") return "blocked";
-  if (item.kyc === "none" && passportAcceptance === "accepted" && countryAccess === "allowed" &&
+  if (passportAcceptance === "rejected" || presenceAccess === "blocked" || permitRequirement === "required" || item.payout === "fiat" || item.cost === "fee" || item.cost === "deposit") return "blocked";
+  const kycCompatible = item.kyc === "none" || ((item.kyc === "id" || item.kyc === "selfie") && passportAcceptance === "accepted");
+  if (kycCompatible && passportAcceptance === "accepted" && presenceAccess === "allowed" && permitRequirement === "not-required" &&
       item.payout === "direct-crypto" && item.cost === "free" && item.asset.trim() &&
-      item.network.trim() && item.minimum.trim() && item.fee.trim() && item.evidenceUrl.startsWith("https://")) return "ready";
+      item.network.trim() && item.minimum.trim() && item.fee.trim() && isVerifiedEvidence(item)) return "ready";
   return "review";
 }
 
@@ -156,10 +202,18 @@ export default function KycPaymentIntelligence() {
     } : r));
   }
 
-  function updateResidenceAccess(id:string, value:KycRecord["countryAccess"]) {
+  function updatePresenceAccess(id:string, value:"allowed"|"blocked"|"unknown") {
     setRecords(current => current.map(r => r.id === id ? {
       ...r,
-      countryAccessByResidence: { ...(r.countryAccessByResidence || {}), [residence]: value },
+      currentPresenceAccessByCountry: { ...(r.currentPresenceAccessByCountry || {}), [residence]: value },
+      checkedAt: new Date().toISOString().slice(0,10)
+    } : r));
+  }
+
+  function updateResidencePermitRequirement(id:string, value:"required"|"not-required"|"unknown") {
+    setRecords(current => current.map(r => r.id === id ? {
+      ...r,
+      residencePermitRequirementByCountry: { ...(r.residencePermitRequirementByCountry || {}), [residence]: value },
       checkedAt: new Date().toISOString().slice(0,10)
     } : r));
   }
@@ -176,9 +230,9 @@ export default function KycPaymentIntelligence() {
   return (
     <section className="panel kpi-panel" id="kyc-intelligence">
       <div className="panel-head"><div><span className="eyebrow">KYC & PAYMENT INTELLIGENCE</span><h2>هوش احراز هویت و برداشت درآمد</h2></div><span className="free-tag">فقط مسیر قانونی</span></div>
-      <p className="hub-intro">برای هر پلتفرم، کشور محل اقامت، کشور تابعیت و کشور حساب بانکی را جداگانه بررسی کن. فهرست شامل کشورهای جهان است؛ پذیرش پاسپورت، دسترسی منطقه‌ای، نوع KYC، پرداخت و ریسک بلوکه‌شدن را ثبت و غربال کن. اطلاعات اولیه عمداً «نامشخص» هستند؛ تا وقتی منبع رسمی و تاریخ بررسی ثبت نشده، هیچ گزینه‌ای تأییدشده محسوب نمی‌شود.</p>
+      <p className="hub-intro">برای هر پلتفرم، کشور محل حضور فیزیکی، الزام اقامت رسمی، کشور تابعیت و کشور حساب بانکی را جداگانه بررسی کن. حضور در ارمنستان به‌معنای داشتن اقامت ارمنستان نیست؛ این دو شرط مستقل‌اند. نوع KYC، پرداخت و ریسک بلوکه‌شدن را نیز ثبت و غربال کن. اطلاعات اولیه عمداً «نامشخص» هستند؛ تا وقتی منبع رسمی و تاریخ بررسی ثبت نشده، هیچ گزینه‌ای تأییدشده محسوب نمی‌شود.</p>
       <div className="kpi-toolbar">
-        <label>کشور محل اقامت
+        <label>کشور محل حضور فعلی
           <select value={residence} onChange={e=>setResidence(e.target.value)}>
             {COUNTRIES.map(c=><option value={c.code} key={c.code}>{c.name}</option>)}
           </select>
@@ -212,7 +266,8 @@ export default function KycPaymentIntelligence() {
       <div className="kpi-list">
         {visible.map(item => {
           const state = readiness(item,residence,citizenship);
-          const residenceAccess = item.countryAccessByResidence?.[residence] ?? item.countryAccess;
+          const presenceAccess = item.currentPresenceAccessByCountry?.[residence] ?? item.currentPresenceAccess ?? "unknown";
+          const permitRequirement = item.residencePermitRequirementByCountry?.[residence] ?? item.residencePermitRequirement ?? "unknown";
           const passportAcceptance = item.passportAcceptanceByCitizenship?.[citizenship] ?? (citizenship === "IR" ? item.iranianPassport : "unknown");
           return <article className="kpi-card" key={item.id}>
             <div className="kpi-card-head"><div><strong>{item.platform}</strong><a href={item.url} target="_blank" rel="noreferrer">سایت رسمی ↗</a></div>
@@ -221,7 +276,8 @@ export default function KycPaymentIntelligence() {
             <div className="kpi-fields">
               <label>KYC<select value={item.kyc} onChange={e=>update(item.id,{kyc:e.target.value as KycRecord["kyc"]})}>{Object.entries(labels.kyc).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>پذیرش مدرک تابعیت<select value={passportAcceptance} onChange={e=>updatePassportAcceptance(item.id,e.target.value as KycRecord["iranianPassport"])}>{Object.entries(labels.iranianPassport).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
-              <label>دسترسی {countryName(residence)}<select value={residenceAccess} onChange={e=>updateResidenceAccess(item.id,e.target.value as KycRecord["countryAccess"])}>{Object.entries(labels.countryAccess).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
+              <label>دسترسی حضور در {countryName(residence)}<select value={presenceAccess} onChange={e=>updatePresenceAccess(item.id,e.target.value as "allowed" | "blocked" | "unknown")}>{Object.entries(labels.currentPresenceAccess).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
+              <label>نیاز به اقامت رسمی {countryName(residence)}<select value={permitRequirement} onChange={e=>updateResidencePermitRequirement(item.id,e.target.value as "required" | "not-required" | "unknown")}>{Object.entries(labels.residencePermitRequirement).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>روش برداشت<select value={item.payout} onChange={e=>update(item.id,{payout:e.target.value as KycRecord["payout"]})}>{Object.entries(labels.payout).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>هزینه ورود<select value={item.cost} onChange={e=>update(item.id,{cost:e.target.value as KycRecord["cost"]})}>{Object.entries(labels.cost).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>ارز پرداخت<input value={item.asset} onChange={e=>update(item.id,{asset:e.target.value})} placeholder="هر توکن پشتیبانی‌شده، مثلاً ETH یا SOL"/></label>
@@ -229,13 +285,15 @@ export default function KycPaymentIntelligence() {
               <label>حداقل برداشت<input value={item.minimum} onChange={e=>update(item.id,{minimum:e.target.value})} placeholder="مقدار و واحد"/></label>
               <label>کارمزد<input value={item.fee} onChange={e=>update(item.id,{fee:e.target.value})} placeholder="مقدار / درصد"/></label>
               <label className="wide">لینک مدرک رسمی<input value={item.evidenceUrl} onChange={e=>update(item.id,{evidenceUrl:e.target.value})} placeholder="https://... (شرایط KYC، کشور یا برداشت)"/></label>
+              <label className="wide">خلاصه بند رسمی<input value={item.evidenceNote || ""} onChange={e=>update(item.id,{evidenceNote:e.target.value})} placeholder="حداقل ۳۰ نویسه از شرط رسمی مربوط به تابعیت، حضور یا اقامت"/></label>
+              <label>تاریخ بررسی مدرک<input type="date" value={item.evidenceCheckedAt || ""} onChange={e=>update(item.id,{evidenceCheckedAt:e.target.value})}/></label>
             </div>
-            <div className="kpi-card-foot"><span>آخرین ثبت: {item.checkedAt || "هنوز بررسی نشده"}</span><span>نتیجه برای {countryName(residence)}: {state==="ready"?"همه شروط ثبت شده":state==="blocked"?"حداقل یک مانع ثبت شده":"شواهد کافی نیست"}</span></div>
+            <div className="kpi-card-foot"><span>آخرین تغییر: {item.checkedAt || "هنوز ثبت نشده"}</span><span>نتیجه برای حضور در {countryName(residence)}: {state==="ready"?"همه شروط و شواهد ثبت شده":state==="blocked"?"حداقل یک مانع ثبت شده":"شواهد کافی نیست"}</span></div>
           </article>;
         })}
         {visible.length===0 && <div className="empty-state">موردی در این فیلتر نیست.</div>}
       </div>
-      <p className="hub-footnote">نکته امنیتی: هویت جعلی، مدارک دستکاری‌شده، حساب اجاره‌ای، VPN برای پنهان‌کردن کشور یا دورزدن محدودیت‌ها استفاده نمی‌شود. فهرست کشورها بر پایه کدهای ISO 3166-1 است و نام‌ها با زبان مرورگر نمایش داده می‌شوند. این نسخه اطلاعات را در حافظه همین مرورگر نگه می‌دارد؛ بررسی خودکار زنده شرایط سایت‌ها و همگام‌سازی ابری هنوز به منبع داده و اتصال سرور نیاز دارد. برای تأیید نهایی، لینک رسمی و تاریخ بررسی را ثبت کن.</p>
+      <p className="hub-footnote">نکته امنیتی: هویت جعلی، مدارک دستکاری‌شده، حساب اجاره‌ای، VPN برای پنهان‌کردن کشور یا دورزدن محدودیت‌ها استفاده نمی‌شود. وضعیت حضور فیزیکی و الزام اقامت رسمی دو فیلد مستقل‌اند؛ KYC مدرک هویتی یا زنده‌سنجی فقط وقتی قابل قبول است که پذیرش پاسپورت همان تابعیت تأیید شده باشد. برای وضعیت واجد شرایط مستند، لینک HTTPS، خلاصه حداقل ۳۰ نویسه و تاریخ بررسی حداکثر ۹۰ روزه لازم است. فهرست کشورها بر پایه کدهای ISO 3166-1 است و نام‌ها با زبان مرورگر نمایش داده می‌شوند. این نسخه اطلاعات را در حافظه همین مرورگر نگه می‌دارد؛ بررسی خودکار زنده شرایط سایت‌ها و همگام‌سازی ابری هنوز به منبع داده و اتصال سرور نیاز دارد. برای تأیید نهایی، لینک رسمی و تاریخ بررسی را ثبت کن.</p>
     </section>
   );
 }

@@ -3,6 +3,36 @@ import { supabaseAuthRequest } from "@/lib/supabase-auth";
 
 export const runtime = "nodejs";
 
+const MAX_BODY_BYTES = 1_000_000;
+
+async function readBoundedJson(request: NextRequest): Promise<unknown> {
+  if (!request.body) throw new Error("EMPTY_BODY");
+  const reader = request.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > MAX_BODY_BYTES) {
+        await reader.cancel();
+        throw new Error("BODY_TOO_LARGE");
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes));
+}
+
 async function authenticatedUser(request: NextRequest) {
   const access = request.cookies.get("creativeops_supabase_access")?.value;
   if (!access) return null;
@@ -19,42 +49,75 @@ function supabaseHeaders(access: string) {
 
 export async function GET(request: NextRequest) {
   const user = await authenticatedUser(request);
-  if (!user) return NextResponse.json({ error: "برای همگام‌سازی ابتدا وارد حساب شو." }, { status: 401 });
+  if (!user) return NextResponse.json({ error: "برای همگام‌سازی ابتدا وارد حساب شو." }, { status: 401, headers: { "Cache-Control": "no-store" } });
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  if (!base) return NextResponse.json({ error: "تنظیمات پایگاه داده کامل نیست." }, { status: 503 });
+  if (!base) return NextResponse.json({ error: "تنظیمات پایگاه داده کامل نیست." }, { status: 503, headers: { "Cache-Control": "no-store" } });
   const response = await fetch(`${base}/rest/v1/workspace_state?select=data,updated_at&owner_id=eq.${encodeURIComponent(user.id)}`, {
     headers: supabaseHeaders(user.access), cache: "no-store"
   });
-  if (!response.ok) return NextResponse.json({ error: "خواندن اطلاعات ابری ناموفق بود." }, { status: 502 });
+  if (!response.ok) return NextResponse.json({ error: "خواندن اطلاعات ابری ناموفق بود." }, { status: 502, headers: { "Cache-Control": "no-store" } });
   const rows = await response.json();
   return NextResponse.json({ data: rows?.[0]?.data ?? null, updatedAt: rows?.[0]?.updated_at ?? null }, { headers: { "Cache-Control": "no-store" } });
 }
 
 export async function PUT(request: NextRequest) {
+  const origin = request.headers.get("origin");
+  if (!origin || origin !== new URL(request.url).origin) {
+    return NextResponse.json({ error: "درخواست معتبر نیست." }, { status: 403, headers: { "Cache-Control": "no-store" } });
+  }
+  if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
+    return NextResponse.json({ error: "نوع درخواست معتبر نیست." }, { status: 415, headers: { "Cache-Control": "no-store" } });
+  }
   const user = await authenticatedUser(request);
-  if (!user) return NextResponse.json({ error: "برای همگام‌سازی ابتدا وارد حساب شو." }, { status: 401 });
+  if (!user) return NextResponse.json({ error: "برای همگام‌سازی ابتدا وارد حساب شو." }, { status: 401, headers: { "Cache-Control": "no-store" } });
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  if (!base) return NextResponse.json({ error: "تنظیمات پایگاه داده کامل نیست." }, { status: 503 });
+  if (!base) return NextResponse.json({ error: "تنظیمات پایگاه داده کامل نیست." }, { status: 503, headers: { "Cache-Control": "no-store" } });
+
+  const contentLength = Number(request.headers.get("content-length") || "0");
+  if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
+    return NextResponse.json({ error: "حجم فضای کاری بیش از حد مجاز است؛ فایل‌های حجیم یا اسناد هویتی را همگام‌سازی نکن." }, { status: 413, headers: { "Cache-Control": "no-store" } });
+  }
   let body: unknown;
-  try { body = await request.json(); } catch { return NextResponse.json({ error: "داده ارسالی معتبر نیست." }, { status: 400 }); }
-  if (!body || typeof body !== "object" || Array.isArray(body)) return NextResponse.json({ error: "ساختار پشتیبان معتبر نیست." }, { status: 400 });
+  try {
+    body = await readBoundedJson(request);
+  } catch (error) {
+    const tooLarge = error instanceof Error && error.message === "BODY_TOO_LARGE";
+    return NextResponse.json({
+      error: tooLarge ? "حجم فضای کاری بیش از حد مجاز است؛ فایل‌های حجیم یا اسناد هویتی را همگام‌سازی نکن." : "داده ارسالی معتبر نیست."
+    }, { status: tooLarge ? 413 : 400, headers: { "Cache-Control": "no-store" } });
+  }
+  if (!body || typeof body !== "object" || Array.isArray(body)) return NextResponse.json({ error: "ساختار پشتیبان معتبر نیست." }, { status: 400, headers: { "Cache-Control": "no-store" } });
   const data = body as Record<string, unknown>;
-  const allowed = ["opportunities", "deliveries", "income", "wallet", "kycRecords", "kycResidence", "kycCitizenship", "kycBankCountry"];
+  const allowed = ["opportunities", "deliveries", "income", "wallet", "kycRecords", "kycResidence", "kycCitizenship", "kycBankCountry", "expectedUpdatedAt"];
   if (Object.keys(data).some(key => !allowed.includes(key)) ||
+      (data.expectedUpdatedAt !== undefined && typeof data.expectedUpdatedAt !== "string") ||
       !Array.isArray(data.opportunities) || !Array.isArray(data.deliveries) ||
       !Array.isArray(data.income) || !data.wallet || typeof data.wallet !== "object" || Array.isArray(data.wallet) ||
       (data.kycRecords !== undefined && !Array.isArray(data.kycRecords)) ||
       (data.kycResidence !== undefined && typeof data.kycResidence !== "string") ||
       (data.kycCitizenship !== undefined && typeof data.kycCitizenship !== "string") ||
       (data.kycBankCountry !== undefined && typeof data.kycBankCountry !== "string")) {
-    return NextResponse.json({ error: "ساختار اطلاعات فضای کاری کامل نیست." }, { status: 400 });
+    return NextResponse.json({ error: "ساختار اطلاعات فضای کاری کامل نیست." }, { status: 400, headers: { "Cache-Control": "no-store" } });
   }
-  const response = await fetch(`${base}/rest/v1/workspace_state?on_conflict=owner_id`, {
-    method: "POST",
-    headers: { ...supabaseHeaders(user.access), Prefer: "resolution=merge-duplicates,return=minimal" },
-    body: JSON.stringify({ owner_id: user.id, data, updated_at: new Date().toISOString() }),
-    cache: "no-store"
-  });
-  if (!response.ok) return NextResponse.json({ error: "ذخیره اطلاعات ابری ناموفق بود." }, { status: 502 });
-  return NextResponse.json({ saved: true, updatedAt: new Date().toISOString() });
+  const expectedUpdatedAt = typeof data.expectedUpdatedAt === "string" ? data.expectedUpdatedAt : null;
+  delete data.expectedUpdatedAt;
+  const updatedAt = new Date().toISOString();
+  const headers = { ...supabaseHeaders(user.access), Prefer: "return=representation" };
+  const endpoint = `${base}/rest/v1/workspace_state`;
+  const response = expectedUpdatedAt
+    ? await fetch(`${endpoint}?owner_id=eq.${encodeURIComponent(user.id)}&updated_at=eq.${encodeURIComponent(expectedUpdatedAt)}`, {
+        method: "PATCH", headers,
+        body: JSON.stringify({ data, updated_at: updatedAt }), cache: "no-store"
+      })
+    : await fetch(`${endpoint}?on_conflict=owner_id`, {
+        method: "POST",
+        headers: { ...headers, Prefer: "resolution=ignore-duplicates,return=representation" },
+        body: JSON.stringify({ owner_id: user.id, data, updated_at: updatedAt }), cache: "no-store"
+      });
+  if (!response.ok) return NextResponse.json({ error: "ذخیره اطلاعات ابری ناموفق بود." }, { status: 502, headers: { "Cache-Control": "no-store" } });
+  const rows = await response.json().catch(() => []);
+  if (!Array.isArray(rows) || rows.length === 0) {
+    return NextResponse.json({ error: "نسخه فضای ابری تغییر کرده است؛ برای جلوگیری از بازنویسی اطلاعات جدید، همگام‌سازی متوقف شد. ابتدا همگام‌سازی دستی را اجرا کن." }, { status: 409, headers: { "Cache-Control": "no-store" } });
+  }
+  return NextResponse.json({ saved: true, updatedAt: rows[0]?.updated_at ?? updatedAt }, { headers: { "Cache-Control": "no-store" } });
 }
