@@ -114,3 +114,8 @@ These are research leads only. No account was created, no application submitted,
 ## Full saved-platform audit — 2026-11-26
 
 The original 25-platform list, additional saved earning platforms, and the Notion tool/resource list have been reconciled against the project's strict eligibility and direct-wallet payout rules. See [docs/audit-saved-platforms-2026-11-26.md](audit-saved-platforms-2026-11-26.md) for platform-by-platform status, evidence, exclusions, and next actions. The audit distinguishes verified payout rails from unverified KYC, country, and live-task availability; no account creation, KYC submission, wallet connection, deposit, or application was performed.
+
+
+## Practical priority-platform check — 2026-11-26
+
+The deeper public-source check of Loopuman, ClipRush.net, LaborX, Superteam Earn, and GIMI is recorded in [docs/practical-platform-check-2026-11-26.md](practical-platform-check-2026-11-26.md). Important distinction: cliprush.online is a separate PayPal-only workflow and is not the crypto-advertising cliprush.net. No user accounts, KYC, wallet links, submissions, or paid actions were performed.
