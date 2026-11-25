@@ -150,7 +150,7 @@ export default function SalesContentStudio() {
       </div>}
       {output && <div style={{ marginTop: 16 }}>
         <div className="panel-head"><strong>محتوای تولیدشده</strong><button type="button" onClick={() => copyText(output)}>کپی متن</button></div>
-        <pre style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", direction: "auto", textAlign: "start", background: "#0d121b", border: "1px solid var(--line)", borderRadius: 10, padding: 16, color: "#d9e3f2", fontSize: 13, lineHeight: 1.8 }}>{output}</pre>
+        <pre dir="auto" style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", textAlign: "start", background: "#0d121b", border: "1px solid var(--line)", borderRadius: 10, padding: 16, color: "#d9e3f2", fontSize: 13, lineHeight: 1.8 }}>{output}</pre>
       </div>}
       {image && <div style={{ marginTop: 16 }}>
         <div className="panel-head"><strong>تصویر تولیدشده</strong><a href={image} download="commercial-creative.png">ذخیره تصویر</a></div>
