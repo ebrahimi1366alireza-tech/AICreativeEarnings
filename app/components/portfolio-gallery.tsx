@@ -8,11 +8,13 @@ type PortfolioItem = {
   category: string;
   image: string;
   createdAt: string;
+  size: number;
 };
 
 const STORAGE_KEY = "creativeops-portfolio-v1";
-const MAX_FILE_SIZE = 4 * 1024 * 1024;
-const MAX_ITEMS = 30;
+const MAX_FILE_SIZE = 1.5 * 1024 * 1024;
+const MAX_TOTAL_SIZE = 3 * 1024 * 1024;
+const MAX_ITEMS = 20;
 
 export default function PortfolioGallery() {
   const [items, setItems] = useState<PortfolioItem[]>([]);
@@ -29,7 +31,8 @@ export default function PortfolioGallery() {
             Boolean(item) && typeof item.id === "string" &&
             typeof item.title === "string" && typeof item.category === "string" &&
             typeof item.image === "string" && item.image.startsWith("data:image/") &&
-            typeof item.createdAt === "string"
+            typeof item.createdAt === "string" &&
+            (item.size === undefined || (typeof item.size === "number" && item.size > 0))
           ).slice(0, MAX_ITEMS));
         }
       }
@@ -64,7 +67,12 @@ export default function PortfolioGallery() {
       return;
     }
     if (file.size > MAX_FILE_SIZE) {
-      setNotice("حجم هر تصویر باید کمتر از ۴ مگابایت باشد.");
+      setNotice("حجم هر تصویر باید کمتر از ۱.۵ مگابایت باشد.");
+      return;
+    }
+    const storedBytes = items.reduce((total, item) => total + (item.size || 0), 0);
+    if (storedBytes + file.size > MAX_TOTAL_SIZE) {
+      setNotice("برای جلوگیری از پرشدن حافظه مرورگر، مجموع حجم تصاویر باید کمتر از ۳ مگابایت بماند. چند تصویر را حذف یا کوچک کن.");
       return;
     }
     if (items.length >= MAX_ITEMS) {
@@ -82,7 +90,8 @@ export default function PortfolioGallery() {
         title,
         category,
         image: reader.result as string,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        size: file.size
       }, ...current]);
       setNotice("نمونه‌کار به گالری همین دستگاه اضافه شد.");
       form.reset();
@@ -117,7 +126,7 @@ export default function PortfolioGallery() {
         <label className="portfolio-file">انتخاب تصویر <input name="image" type="file" accept="image/*" required /></label>
         <button type="submit">+ افزودن به گالری</button>
       </form>
-      <p className="portfolio-notice" role="status">{notice || "حداکثر ۳۰ تصویر، هرکدام تا ۴ مگابایت. برای جلوگیری از نمونه‌کار ساختگی، فقط فایل‌هایی نمایش داده می‌شوند که خودت اضافه کنی."}</p>
+      <p className="portfolio-notice" role="status">{notice || "حداکثر ۲۰ تصویر، هرکدام تا ۱.۵ مگابایت و مجموعاً تا ۳ مگابایت. برای جلوگیری از نمونه‌کار ساختگی، فقط فایل‌هایی نمایش داده می‌شوند که خودت اضافه کنی."}</p>
       {!loaded ? <div className="empty-state">در حال بارگذاری گالری…</div> : items.length === 0 ? (
         <div className="empty-state"><span>✧</span><strong>هنوز نمونه‌کاری اضافه نشده</strong><p>اولین خروجی واقعی خودت را از تصویرساز یا ابزار طراحی انتخاب کن و به گالری اضافه کن. هیچ تصویر غذایی یا نمونه ساختگی به‌صورت پیش‌فرض نمایش داده نمی‌شود.</p></div>
       ) : (
