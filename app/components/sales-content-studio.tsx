@@ -3,29 +3,20 @@
 import { useState } from "react";
 
 type SalesBrief = {
-  product: string;
-  buyer: string;
-  market: string;
-  channel: string;
-  format: string;
-  language: string;
-  benefit: string;
-  notes: string;
+  product: string; buyer: string; market: string; channel: string;
+  format: string; language: string; benefit: string; notes: string;
 };
 
 export default function SalesContentStudio() {
   const [brief, setBrief] = useState<SalesBrief>({
-    product: "",
-    buyer: "",
-    market: "جهانی",
-    channel: "بازار سفارش‌های فریلنسری",
-    format: "تصویر تبلیغاتی محصول",
-    language: "انگلیسی",
-    benefit: "",
-    notes: ""
+    product: "", buyer: "", market: "جهانی", channel: "بازار سفارش‌های فریلنسری",
+    format: "تصویر تبلیغاتی محصول", language: "انگلیسی", benefit: "", notes: ""
   });
+  const [briefText, setBriefText] = useState("");
   const [output, setOutput] = useState("");
+  const [image, setImage] = useState("");
   const [notice, setNotice] = useState("");
+  const [busy, setBusy] = useState<"text" | "image" | "">("");
 
   function update<K extends keyof SalesBrief>(key: K, value: SalesBrief[K]) {
     setBrief(current => ({ ...current, [key]: value }));
@@ -39,34 +30,67 @@ export default function SalesContentStudio() {
     }
     const prompt = [
       "COMMERCIAL CREATIVE PRODUCTION BRIEF",
-      "Purpose: create an original commercial asset for sale to a client or digital-content buyer. This is NOT an Instagram page-management task.",
+      "Purpose: create an original commercial asset for sale to a real client or digital-content buyer. This is NOT an Instagram page-management task.",
       `Product/service: ${brief.product.trim()}`,
       `Target buyer: ${brief.buyer.trim()}`,
       `Target market: ${brief.market}`,
       `Sales channel: ${brief.channel}`,
       `Deliverable: ${brief.format}`,
       `Output language: ${brief.language}`,
-      `Main selling benefit: ${brief.benefit.trim() || "Research and propose a defensible benefit; do not invent product claims."}`,
+      `Main selling benefit: ${brief.benefit.trim() || "Do not invent product claims; identify missing facts."}`,
       `Client requirements: ${brief.notes.trim() || "None supplied"}`,
       "",
-      "Required output:",
-      "1. A concise creative concept and rationale for the target buyer.",
-      "2. A production-ready script/layout/image-generation prompt appropriate to the deliverable.",
-      "3. Exact copy/headline/CTA where relevant.",
-      "4. A quality-control checklist for dimensions, legibility, factual accuracy, originality, and commercial-use rights.",
-      "5. A delivery checklist and suggested file formats.",
-      "Do not invent client approval, guaranteed sales, product features, licensing rights, or a confirmed buyer. Flag missing facts clearly."
+      "Create a sale-ready creative concept, production instructions, exact copy/headline/CTA where relevant, quality-control checklist, and delivery checklist. Do not invent client approval, guaranteed sales, product facts, licensing rights, or a confirmed buyer. Flag assumptions."
     ].join("\n");
-    setOutput(prompt);
-    setNotice("بریف آماده شد. این هنوز خروجی نهایی تصویر یا ویدئو نیست؛ برای تولید واقعی باید موتور AI و ابزار رسانه‌ای به سرور متصل شوند.");
+    setBriefText(prompt);
+    setOutput("");
+    setImage("");
+    setNotice("بریف آماده شد. حالا می‌توانی تولید متن تبلیغاتی یا تصویر را درخواست کنی.");
   }
 
-  async function copyBrief() {
+  async function generate(mode: "text" | "image") {
+    if (!briefText) {
+      setNotice("ابتدا اطلاعات محصول و خریدار را وارد و بریف را بساز.");
+      return;
+    }
+    if (mode === "image" && !brief.format.toLowerCase().includes("تصویر") && !brief.format.toLowerCase().includes("عکس") && !brief.format.toLowerCase().includes("بنر") && !brief.format.toLowerCase().includes("پوستر")) {
+      setNotice("این خروجی انتخاب‌شده تصویر ثابت نیست. برای تولید تصویر، نوع خروجی را به تصویر تبلیغاتی یا بنر تغییر بده.");
+      return;
+    }
+    setBusy(mode);
+    setNotice(mode === "text" ? "در حال تولید محتوای تبلیغاتی با هوش مصنوعی..." : "در حال تولید تصویر؛ ممکن است زمان‌بر باشد...");
     try {
-      await navigator.clipboard.writeText(output);
-      setNotice("بریف تولید کپی شد.");
+      const prompt = mode === "text"
+        ? briefText
+        : [
+            "Create one polished, original commercial advertising image. Do not add fake logos, watermarks, fabricated certifications, or unreadable text. Prioritize a strong product composition and professional art direction.",
+            briefText,
+            output ? `Use this approved creative direction as context: ${output.slice(0, 2500)}` : ""
+          ].filter(Boolean).join("\n\n");
+      const response = await fetch("/api/creative/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ mode, prompt })
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || "تولید محتوا ناموفق بود.");
+      if (mode === "text") setOutput(String(result.output || ""));
+      else setImage(String(result.imageDataUrl || ""));
+      setNotice(mode === "text" ? "محتوای متنی تولید شد. پیش از تحویل، اطلاعات و ادعاهای محصول را بررسی کن." : "تصویر تولید شد. پیش از فروش، کیفیت و مجوز استفادهٔ تجاری سرویس را بررسی کن.");
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "خطای نامشخص در تولید محتوا.");
+    } finally {
+      setBusy("");
+    }
+  }
+
+  async function copyText(value: string) {
+    try {
+      await navigator.clipboard.writeText(value);
+      setNotice("متن کپی شد.");
     } catch {
-      setNotice("کپی خودکار در این مرورگر در دسترس نیست؛ متن را دستی انتخاب و کپی کن.");
+      setNotice("کپی خودکار در این مرورگر در دسترس نیست؛ متن را دستی انتخاب کن.");
     }
   }
 
@@ -76,7 +100,7 @@ export default function SalesContentStudio() {
         <div><span className="eyebrow">COMMERCIAL CONTENT WORKBENCH</span><h2>استودیوی تولید محتوای قابل فروش</h2></div>
         <span className="free-tag">بدون اتصال اینستاگرام</span>
       </div>
-      <p className="hub-intro">برای سفارش مشتری یا فروش فایل دیجیتال، بریف تولید بساز. خروجی برای تولید دارایی تجاری است، نه مدیریت پیج اجتماعی.</p>
+      <p className="hub-intro">برای سفارش مشتری یا فروش فایل دیجیتال، بریف بساز و از موتور هوش مصنوعی برای تولید متن تبلیغاتی یا تصویر استفاده کن.</p>
       <form className="opportunity-form" onSubmit={createBrief}>
         <input value={brief.product} onChange={e => update("product", e.target.value)} placeholder="محصول یا خدمت موردنظر" aria-label="محصول یا خدمت" required />
         <input value={brief.buyer} onChange={e => update("buyer", e.target.value)} placeholder="خریدار هدف؛ مثلاً برند پوشاک یا فروشگاه" aria-label="خریدار هدف" required />
@@ -97,9 +121,26 @@ export default function SalesContentStudio() {
         <button type="submit">ساخت بریف تجاری</button>
       </form>
       {notice && <p className="backup-notice" role="status">{notice}</p>}
+      {briefText && <div style={{ marginTop: 16 }}>
+        <div className="panel-head"><strong>بریف تولید</strong><button type="button" onClick={() => copyText(briefText)}>کپی بریف</button></div>
+        <pre style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", direction: "ltr", textAlign: "left", background: "#0d121b", border: "1px solid var(--line)", borderRadius: 10, padding: 16, color: "#d9e3f2", fontSize: 12, lineHeight: 1.8 }}>{briefText}</pre>
+        <div className="panel-head" style={{ marginTop: 12 }}>
+          <strong>تولید با هوش مصنوعی</strong>
+          <span className="free-tag">ممکن است هزینه API داشته باشد</span>
+        </div>
+        <p className="hub-intro">تولید فقط پس از ورود به حساب و با کلید امنی که مدیر روی سرور تنظیم می‌کند انجام می‌شود. کلید در گوشی ذخیره نمی‌شود.</p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+          <button type="button" disabled={Boolean(busy)} onClick={() => generate("text")}>{busy === "text" ? "در حال تولید..." : "تولید متن تبلیغاتی"}</button>
+          <button type="button" disabled={Boolean(busy)} onClick={() => generate("image")}>{busy === "image" ? "در حال تولید تصویر..." : "تولید تصویر تبلیغاتی"}</button>
+        </div>
+      </div>}
       {output && <div style={{ marginTop: 16 }}>
-        <div className="panel-head"><strong>بریف آمادهٔ تولید</strong><button type="button" onClick={copyBrief}>کپی بریف</button></div>
-        <pre style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", direction: "ltr", textAlign: "left", background: "#0d121b", border: "1px solid var(--line)", borderRadius: 10, padding: 16, color: "#d9e3f2", fontSize: 12, lineHeight: 1.8 }}>{output}</pre>
+        <div className="panel-head"><strong>محتوای تولیدشده</strong><button type="button" onClick={() => copyText(output)}>کپی متن</button></div>
+        <pre style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", direction: "auto", textAlign: "start", background: "#0d121b", border: "1px solid var(--line)", borderRadius: 10, padding: 16, color: "#d9e3f2", fontSize: 13, lineHeight: 1.8 }}>{output}</pre>
+      </div>}
+      {image && <div style={{ marginTop: 16 }}>
+        <div className="panel-head"><strong>تصویر تولیدشده</strong><a href={image} download="commercial-creative.png">ذخیره تصویر</a></div>
+        <img src={image} alt="تصویر تبلیغاتی تولیدشده با هوش مصنوعی" style={{ display: "block", width: "100%", maxWidth: 720, height: "auto", borderRadius: 12 }} />
       </div>}
     </section>
   );
