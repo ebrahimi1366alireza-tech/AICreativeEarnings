@@ -21,12 +21,12 @@ type KycRecord = {
 
 const seed: KycRecord[] = [
   ["LaborX","https://laborx.com/"],["Subnano","https://subnano.ai/"],
-  ["Taskmarket","https://taskmarket.xyz/"],["MoltJobs","https://moltjobs.com/"],
-  ["Getly","https://getly.ai/"],["Gibwork","https://gib.work/"],
-  ["BasedAgents","https://basedagents.xyz/"],["Monero.Jobs","https://monero.jobs/"],
+  ["Taskmarket","https://taskmarket.dev/"],["MoltJobs","https://moltjobs.io/"],
+  ["Getly","https://www.getly.store/"],["Gibwork","https://gib.work/"],
+  ["BasedAgents","https://basedagents.ai/"],["Monero.Jobs","https://monero.jobs/"],
   ["XMRBazaar","https://xmrbazaar.com/"],["make.fun","https://make.fun/"],
-  ["AgentHansa","https://agenthansa.com/"],["t2000","https://t2000.ai/"],
-  ["Agentizable","https://agentizable.com/"],["Upwork","https://www.upwork.com/"],
+  ["AgentHansa","https://www.agenthansa.com/"],["t2000","https://t2000.ai/"],
+  ["Agentizable","https://agentizable.ai/"],["Upwork","https://www.upwork.com/"],
   ["Fiverr","https://www.fiverr.com/"]
 ].map(([platform,url]) => ({
   id: platform.toLowerCase().replace(/[^a-z0-9]+/g,"-"), platform, url,
