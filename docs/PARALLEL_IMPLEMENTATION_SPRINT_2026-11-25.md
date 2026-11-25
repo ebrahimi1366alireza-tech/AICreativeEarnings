@@ -13,11 +13,11 @@ This sprint tracks three workstreams in parallel. It is an implementation checkl
 - `app/api/workspace/sync/route.ts` derives the owner from the verified Supabase access token and relies on row-level security.
 
 ### Work remaining
-- Add explicit conflict handling for simultaneous edits on two devices; do not silently prefer a remote timestamp over newer local work.
+- **Implemented in draft:** conditional cloud writes compare the expected `updated_at`; stale writes return HTTP 409, and concurrent initial inserts do not overwrite an existing row. End-to-end two-device tests remain pending.
 - Verify backup/restore with empty, partially populated, malformed, and cross-account local data.
 - Make backup export and restore status visible and understandable on narrow Android screens.
 - Review whether KYC review records contain document images or other sensitive identity data. Keep raw identity documents and biometric templates out of workspace sync; sync only the minimum review metadata needed.
-- Add integration tests for unauthenticated access, cross-account isolation, payload validation, and concurrent updates.
+- Integration tests remain pending for unauthenticated access, cross-account isolation, payload validation, concurrent updates, and recovery from HTTP 409.
 - Keep Codespaces stopped when idle and never add paid usage or payment methods without explicit approval.
 
 ### Acceptance checks
@@ -37,7 +37,7 @@ This sprint tracks three workstreams in parallel. It is an implementation checkl
 - Add source adapters independently, with per-source timeouts, response validation, rate limits, deduplication, and source freshness timestamps.
 - Prioritize official/public sources for: AI image/design orders, short-video work, writing, original audio/music work, legitimate paid research, and browser-only QA/microtasks.
 - Do not add employment vacancies as if they were paid creative orders.
-- For each lead, separately record evidence for Armenia residence eligibility, Iranian citizenship/document acceptance, KYC/liveness requirements, direct wallet payout, exact asset and network, fees, minimum withdrawal, escrow/funding, and mandatory deposits or purchases.
+- **Implemented in draft:** manual qualification now separates Iranian passport acceptance, whether Armenia residence is required, current-presence eligibility, KYC acceptance with an Iranian passport, crypto payout, fees, and mandatory deposits. An evidence URL, excerpt, and verification date are required before an initial-eligible decision. Automated source verification is still pending.
 - Unknown eligibility must remain `needs review`; a topical score must never imply payment or eligibility.
 - Show the source page and last-checked time; expire or flag stale listings.
 
@@ -56,7 +56,7 @@ This sprint tracks three workstreams in parallel. It is an implementation checkl
 - Signup correctly reports when email confirmation is required; the user has already completed one email-confirmation flow.
 
 ### Work remaining
-- Add a clear resend-confirmation and password-reset flow, with safe generic responses and rate limiting.
+- **Implemented in draft:** generic password-reset request, recovery-token validation, HttpOnly session cookies, and a mobile new-password form. End-to-end email-link testing and rate limiting review remain pending.
 - Add Google OAuth only after provider configuration, callback URLs, state/PKCE handling, and mobile-browser return flow are verified.
 - Add a visible human-verification handoff for email links, OTP, CAPTCHA, and identity checks. Never bypass these steps or collect the user's codes in chat.
 - Design a user-visible face/liveness entry point only through a lawful, trusted identity provider and only with explicit consent. Do not capture or persist raw face images, face templates, or biometric data in this app.
@@ -64,7 +64,7 @@ This sprint tracks three workstreams in parallel. It is an implementation checkl
 - Enable Supabase leaked-password protection after confirming the Auth setting and testing signup behavior.
 
 ### Acceptance checks
-- Password reset and confirmation links return to the correct mobile app route.
+- Password reset and confirmation links return to the correct mobile app route. Password recovery is implemented in draft; live email-link verification remains pending.
 - OAuth cannot be marked connected until the callback is validated and the session is established.
 - Human checks remain in the user's control; no CAPTCHA/OTP bypass.
 - No password, OTP, recovery code, OAuth secret, or biometric data is written to logs or local storage.
