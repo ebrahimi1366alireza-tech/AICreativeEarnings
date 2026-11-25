@@ -37,16 +37,23 @@ The product helps a worker move through this sequence:
 - Same-origin POST validation, JSON content-type check, bounded request size, prompt length limit, request timeouts, and no-store responses.
 - UI explicitly states that Instagram connection is not needed and generation may incur API charges.
 
+### Implemented in the quota increment
+- Daily per-user credit ledger in Supabase (`creative_daily_usage`) with RLS enabled and no client table grants.
+- Atomic reserve/release/read RPCs, executable only by `service_role`; functions use `SECURITY INVOKER`.
+- Text generation costs 1 credit; image generation costs 5 credits. Default allowance is 10 credits per user per UTC day, configurable by `CREATIVE_DAILY_CREDITS`.
+- Quota is reserved before calling the provider. Explicit provider errors release the reservation; ambiguous network timeouts keep it reserved to avoid duplicate paid retries.
+- The studio displays the user's daily usage and remaining credits.
+
 ### Not implemented yet (do not claim otherwise)
 - Video generation or motion-graphics rendering.
-- Persistent per-user quotas, billing, cost attribution, and abuse/rate-limit controls. Current endpoint is authenticated and request-bounded but is **not safe for unrestricted public launch** until these are added.
+- Subscription billing, paid plan entitlements, actual dollar-cost attribution, and distributed abuse/rate-limit controls. Daily credits are a product quota, not a dollar-cost guarantee.
 - Persistent storage/library for generated images and text; image output currently returns to the current browser session as a data URL.
 - A real buyer/marketplace connector that submits assets or bids.
 - Automatic delivery or payment confirmation.
 - Public multi-user subscription billing and production-grade tenant isolation tests.
 - Commercial-use licensing verification for each model/provider plan.
 
-Generation requires an administrator to configure `OPENAI_API_KEY` in the server environment. No provider key is included in the repository or APK. Image generation can incur provider charges. The app does not trigger generation until the user clicks a generation action. If the key is absent, the endpoint returns a configuration message. Video generation is not yet available.
+Generation requires an administrator to configure `OPENAI_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, and the public Supabase URL/publishable key in the server environment. Apply the quota migrations in `supabase/migrations/` before enabling generation. No service-role or provider key is included in the repository or APK. No provider key is included in the repository or APK. Image generation can incur provider charges. The app does not trigger generation until the user clicks a generation action. If the key is absent, the endpoint returns a configuration message. Video generation is not yet available.
 
 ## Required architecture for AI generation
 
