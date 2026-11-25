@@ -64,7 +64,14 @@ export default function CloudWorkspaceSync() {
 
     function preserveLocalBeforeRestore(email: string) {
       const local = readLocal();
-      const hasLocal = local.opportunities.length > 0 || local.deliveries.length > 0 || local.income.length > 0 || Boolean(local.wallet.address);
+      const hasLocal = local.opportunities.length > 0 ||
+        local.deliveries.length > 0 ||
+        local.income.length > 0 ||
+        Boolean(local.wallet.address) ||
+        Boolean(local.kycRecords?.length) ||
+        local.kycResidence !== "AM" ||
+        local.kycCitizenship !== "IR" ||
+        local.kycBankCountry !== "AM";
       if (!hasLocal) return;
       localStorage.setItem(RESTORE_BACKUP_KEY, JSON.stringify({
         app: "AI Creative Earnings",
