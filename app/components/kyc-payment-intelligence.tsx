@@ -106,7 +106,7 @@ function isVerifiedEvidence(item: KycRecord) {
     const url = new URL(item.evidenceUrl);
     if (url.protocol !== "https:" || !url.hostname || url.username || url.password) return false;
   } catch { return false; }
-  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(item.evidenceCheckedAt)) return false;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(item.evidenceCheckedAt)) return false;
   const checked = Date.parse(item.evidenceCheckedAt + "T00:00:00.000Z");
   const age = Date.now() - checked;
   return Number.isFinite(checked) && age >= 0 && age <= 90 * 24 * 60 * 60 * 1000;
@@ -176,14 +176,6 @@ export default function KycPaymentIntelligence() {
       ...r,
       ...(citizenship === "IR" ? { iranianPassport: value } : {}),
       passportAcceptanceByCitizenship: { ...(r.passportAcceptanceByCitizenship || {}), [citizenship]: value },
-      checkedAt: new Date().toISOString().slice(0,10)
-    } : r));
-  }
-
-  function updateResidenceAccess(id:string, value:KycRecord["countryAccess"]) {
-    setRecords(current => current.map(r => r.id === id ? {
-      ...r,
-      countryAccessByResidence: { ...(r.countryAccessByResidence || {}), [residence]: value },
       checkedAt: new Date().toISOString().slice(0,10)
     } : r));
   }
