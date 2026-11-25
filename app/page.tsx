@@ -270,7 +270,7 @@ export default function Home() {
 
         <section className="panel income-hub" id="income-hub">
           <div className="panel-head"><div><span className="eyebrow">MULTI-STREAM INCOME</span><h2>مرکز درآمد چندگانه · AI Income Hub</h2><p className="hub-intro">پروژه مستقل AI Creative Earnings؛ هیچ بخش ایردراپ یا تسک رمزارزی AIRDROP AI در این داشبورد ادغام نمی‌شود.</p></div><span className="free-tag">شروع با هزینه صفر</span></div>
-          <p className="hub-intro">پنج مسیر مستقل درآمدی: نگارش متن و مقاله، ساخت موسیقی، رأی‌گیری و داوری آهنگ، نظرسنجی و تحقیقات بازار، و تولید عکس و ویدئو. این برنامه کاملاً جدا از AIRDROP AI است؛ اطلاعات، کیف پول‌ها و گزارش‌های ایردراپ وارد این پروژه نمی‌شوند. هر فرصت پیش از شروع از نظر اعتبار، کشور مجاز، زمان، حداقل برداشت و روش پرداخت بررسی می‌شود.</p>
+          <p className="hub-intro">شش مسیر مستقل درآمدی: نگارش متن و مقاله، ساخت موسیقی، رأی‌گیری و داوری آهنگ، نظرسنجی و تحقیقات بازار، تولید عکس و ویدئو، و میکروتسک و تست وب‌سایت در مرورگر. این برنامه کاملاً جدا از AIRDROP AI است؛ اطلاعات، کیف پول‌ها و گزارش‌های ایردراپ وارد این پروژه نمی‌شوند. هر فرصت پیش از شروع از نظر اعتبار، کشور مجاز، زمان، حداقل برداشت و روش پرداخت بررسی می‌شود.</p>
           <div className="crypto-only-policy"><strong>قانون برداشت: فقط رمزارز</strong><p>فقط فرصت‌هایی پذیرفته می‌شوند که برداشت مستقیم رمزارزی به کیف پول شخصی را پشتیبانی کنند. اولویت با USDT و شبکه کم‌کارمزدِ پشتیبانی‌شده است. PayPal، حواله بانکی و روش‌های فیات پذیرفته نیستند. روش برداشت، شبکه، کارمزد، حداقل برداشت و محدودیت کشور باید پیش از شروع تأیید شود.</p></div>
           <div className="income-module-grid">
             <article className="income-module">
@@ -308,12 +308,19 @@ export default function Home() {
               <span className="module-status">مرحله فعلی: ابزارها فهرست شده‌اند؛ اتصال سفارش و تحویل در حال توسعه</span>
               <a href="#production">رفتن به میز تولید ←</a>
             </article>
+            <article className="income-module">
+              <div className="module-icon survey">⌕</div><div className="module-kicker">06 · BROWSER TASKS & WEB TESTING</div><h3>میکروتسک و تست وب‌سایت</h3>
+              <p>انجام کارهای کوتاه، ارزیابی محتوا و تست سایت‌ها و رابط‌های وب که مستقیماً در مرورگر گوشی قابل انجام باشند.</p>
+              <ul><li>تست وب‌سایت و فرم‌ها در مرورگر</li><li>برچسب‌گذاری و ارزیابی داده و محتوا</li><li>حذف تسک‌های نیازمند نصب اجباری اپ یا بازی</li></ul>
+              <span className="module-status">مرحله فعلی: فهرست پلتفرم‌ها موجود است؛ سازگاری مرورگر، کشور و پرداخت باید برای هر تسک تأیید شود</span>
+              <a href="#opportunities">ثبت میکروتسک یا تست وب ←</a>
+            </article>
           </div>
           <div className="income-manager" id="income-manager">
             <div><span className="eyebrow">INCOME MANAGER</span><h3>مدیریت یکپارچه درآمد</h3><p>درآمد هر مسیر جداگانه ثبت می‌شود؛ فقط USDT دریافت‌شده به کیف پول در جمع کل می‌آید.</p></div>
-            <div className="income-manager-stats"><div><small>مسیرهای درآمدی</small><strong>۵</strong></div><div><small>درآمد تأییدشده</small><strong>0 USDT</strong></div><div><small>هزینه ابزار</small><strong>0 USDT</strong></div></div>
+            <div className="income-manager-stats"><div><small>مسیرهای درآمدی</small><strong>۶</strong></div><div><small>درآمد تأییدشده</small><strong>0 USDT</strong></div><div><small>هزینه ابزار</small><strong>0 USDT</strong></div></div>
           </div>
-          <p className="hub-footnote">این بخش فعلاً رابط و نقشه اجرایی است؛ هنوز به پلتفرم‌های نظرسنجی، بازار سفارش متن/موسیقی یا شبکه‌های تسک متصل نشده. هیچ درآمدی تضمین‌شده نیست. ثبت‌نام، احراز هویت و تأییدهای مالی فقط با دخالت و تأیید خودت انجام می‌شود؛ هیچ هزینه یا سپرده‌ای برای بازکردن تسک پرداخت نمی‌کنیم.</p>
+          <p className="hub-footnote">این بخش فعلاً رابط و نقشه اجرایی است؛ فید زنده فعلی فقط LaborX و Subnano را می‌خواند و به پلتفرم‌های نظرسنجی، رأی‌گیری موسیقی یا میکروتسک‌های مرورگری متصل نشده است. هیچ درآمدی تضمین‌شده نیست. ثبت‌نام، احراز هویت و تأییدهای مالی فقط با دخالت و تأیید خودت انجام می‌شود؛ هیچ هزینه یا سپرده‌ای برای بازکردن تسک پرداخت نمی‌کنیم.</p>
         </section>
 
 
@@ -334,7 +341,7 @@ export default function Home() {
               <input name="title" required placeholder="عنوان فرصت / سفارش" aria-label="عنوان فرصت"/>
               <input name="platform" placeholder="نام پلتفرم / کارفرما" aria-label="پلتفرم"/>
               <input name="pay" placeholder="مبلغ و واحد پاداش" aria-label="مبلغ و پاداش"/>
-              <select name="stream" aria-label="مسیر درآمدی"><option value="نوشتن و مقاله">نوشتن و مقاله</option><option value="موسیقی و صدا">موسیقی و صدا</option><option value="رأی‌گیری آهنگ">رأی‌گیری آهنگ</option><option value="نظرسنجی">نظرسنجی و تحقیقات بازار</option><option value="عکس و ویدئو">عکس و ویدئو</option></select>
+              <select name="stream" aria-label="مسیر درآمدی"><option value="نوشتن و مقاله">نوشتن و مقاله</option><option value="موسیقی و صدا">موسیقی و صدا</option><option value="رأی‌گیری آهنگ">رأی‌گیری آهنگ</option><option value="نظرسنجی">نظرسنجی و تحقیقات بازار</option><option value="عکس و ویدئو">عکس و ویدئو</option><option value="میکروتسک و تست وب">میکروتسک و تست وب</option></select>
               <input name="country" placeholder="کشورهای مجاز / محدودیت کشور" aria-label="کشورهای مجاز"/>
               <select name="payout" aria-label="روش پرداخت"><option value="نامشخص">روش پرداخت نامشخص</option><option value="مستقیم به کیف پول">مستقیم به کیف پول</option><option value="فقط صرافی">فقط حساب صرافی</option><option value="غیررمزارزی">غیررمزارزی</option></select>
               <input name="network" placeholder="شبکه برداشت (مثلاً TRC20)" aria-label="شبکه برداشت"/>
