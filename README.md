@@ -34,7 +34,7 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 - Opportunity radar with manual lead entry, source links, and review statuses.
 - Production-order and delivery tracking.
 - Income ledger that distinguishes pending from actually received payments.
-- Public EVM payout-address settings; the app does not connect to or control the wallet.
+- Public wallet-address and network settings for different supported crypto assets; the app does not connect to or control the wallet.
 - JSON backup and restore.
 - Email/password signup and login through Supabase Auth. Passwords are handled by Supabase and are never stored by this app.
 - Supabase access and refresh tokens are stored in HTTP-only cookies.
