@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseUser } from "@/lib/supabase-auth";
-import { getCreativeUsage, getDailyCreativeLimit, releaseCreativeCredits, reserveCreativeCredits } from "@/lib/creative-usage";
+import { getCreativeUsage, releaseCreativeCredits, reserveCreativeCredits } from "@/lib/creative-usage";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
   if (!apiKey) return NextResponse.json({ error: "موتور تولید هنوز پیکربندی نشده است. مدیر باید OPENAI_API_KEY را در تنظیمات امن سرور اضافه کند." }, { status: 503, headers: { "Cache-Control": "no-store" } });
 
   const units = CREDIT_COST[mode];
-  let reservation;
+  let reservation: Awaited<ReturnType<typeof reserveCreativeCredits>>;
   try {
     reservation = await reserveCreativeCredits(user.id, units);
   } catch {
