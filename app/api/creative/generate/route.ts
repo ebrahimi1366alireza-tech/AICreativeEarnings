@@ -14,8 +14,8 @@ function sign(value: string, secret: string) {
   return createHmac("sha256", secret).update(value).digest("hex");
 }
 
-function encodeTasks(tasks: Array<{ id: string; kind: string; createdAt: number }>, secret: string) {
-  const value = Buffer.from(JSON.stringify(tasks.slice(-20))).toString("base64url");
+function encodeTasks(ownerId: string, tasks: Array<{ id: string; kind: string; createdAt: number }>, secret: string) {
+  const value = Buffer.from(JSON.stringify({ ownerId, tasks: tasks.slice(-20) })).toString("base64url");
   return value + "." + sign(value, secret);
 }
 
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
     if (encoded && signature && sign(encoded, cookieSecret) === signature) {
       try {
         const parsed = JSON.parse(Buffer.from(encoded, "base64url").toString("utf8"));
-        if (Array.isArray(parsed)) tasks = parsed.filter(item => item && typeof item.id === "string" && ["image", "video"].includes(item.kind));
+        if (parsed?.ownerId === user.id && Array.isArray(parsed.tasks)) tasks = parsed.tasks.filter((item: any) => item && typeof item.id === "string" && ["image", "video"].includes(item.kind));
       } catch { tasks = []; }
     }
     tasks.push({ id: result.id, kind: body.kind, createdAt: Date.now() });
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
       estimatedUsd: cost.usd,
       note: "تولید در پس‌زمینه انجام می‌شود. پس از آماده‌شدن، خروجی را ذخیره کن؛ پیوندهای تحویل Runway موقت هستند."
     }, { headers: { "Cache-Control": "no-store" } });
-    output.cookies.set(TASK_COOKIE, encodeTasks(tasks, cookieSecret), {
+    output.cookies.set(TASK_COOKIE, encodeTasks(user.id, tasks, cookieSecret), {
       httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax",
       path: "/api/creative", maxAge: COOKIE_MAX_AGE
     });
