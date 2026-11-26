@@ -440,3 +440,16 @@ Research boundary: no registration, account connection, wallet signature, trade,
 
 ### KriptoK listing count caveat
 Search/index snapshots now show different submission counts for the same live listing (including 9 and 357). Do not quote a submission count in user-facing advice until rechecked on the live page. Prize pool and listed winner-announcement date remain 200 USDC total and 9 December 2026.
+
+
+## Anna bounty deadline/contact recheck — 2026-11-26 (official page supersedes mirrors)
+- Re-opened official listing: https://superteam.fun/earn/listing/create-an-engaging-x-thread-introducing-anna-ai-messenger-1/
+- The official page currently confirms Global, 250 USDC (150/75/25), 627 submissions at the captured live fetch, and winner announcement **December 7, 2026**. The live deadline field was still showing **“Syncing…”**, so an exact closing date/time could not be verified from the official listing at this check.
+- A third-party mirror updated Nov 25 claims a Nov 30, 2026 deadline and 606 submissions, but this conflicts with the official page's live state/count. Treat Nov 30 as **unverified** until the sponsor confirms. Do not repeat it as a confirmed deadline.
+- Official listing's Contact link resolves to Telegram **@notinvariant**. No email contact was published on the listing. A support message can be sent manually at https://t.me/notinvariant; no message has been sent.
+- Important: the listing asks for 3 mandatory X follows, a public original thread of at least 3 posts, an original visual, and X Paid Partnership disclosure for promotional entries. It expressly says not to claim personal product use unless the entrant has access. The Anna product remains in private preview.
+- Current decision remains **do not participate or publish yet**: first obtain written confirmation of Iranian passport + Armenia residence eligibility, KYC/liveness, USDC network, payout provider/fees and exact deadline.
+- Sources:
+  - Official listing: https://superteam.fun/earn/listing/create-an-engaging-x-thread-introducing-anna-ai-messenger-1/
+  - Third-party mirror (deadline claim only; not authoritative): https://condor-nest.lat/o/st-create-an-engaging-x-thread-introducing-anna-ai-messenger-1
+  - Contact: https://t.me/notinvariant
