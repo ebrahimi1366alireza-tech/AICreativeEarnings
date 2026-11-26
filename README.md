@@ -16,13 +16,17 @@ The six streams are product scope, not proof that matching live opportunities or
 ## Operating rules
 
 - Start with free tools and free quotas. No registration fees, deposits, required purchases, or subscriptions to unlock tasks.
-- Payouts must be crypto/token-only to the user's own wallet. No cryptocurrency or token has priority. Accept any asset only when the platform genuinely supports wallet payout for that asset and its exact network, fees, minimum withdrawal, and country restrictions have been verified.
+- No currency or asset has priority or is selected by default. Evaluate opportunities by real net profitability, risk, fees, minimum withdrawal, country eligibility, KYC, and practical payout access. Fiat and crypto are both valid when genuinely supported and accessible; record exact asset/network requirements without ranking currencies.
 - Never claim revenue until payment has actually arrived.
 - Human approval is required for account verification, contracts, and financial actions.
 - Never use fake votes, fake reviews, bots, or duplicate accounts to manipulate a platform.
 - Do not bypass country restrictions with VPNs or false information.
 - Include browser-only microtasks and website testing where tasks can be completed without installing an app. Exclude mandatory app/game installation, app-only testing, and reward offers that require installing software.
 - Never store passwords, Google credentials, private keys, or wallet recovery phrases in the app or repository.
+
+## Supervised Orchestration Manager
+
+The deterministic Orchestration Manager creates and tracks project records across opportunity triage, creative production, quality review, delivery preparation, and earnings audit. It records stage, status, blockers, next action, approvals, and an event log. This first version is a supervised state tracker: it does not yet invoke or transfer data between the five assistants automatically, and it performs no external actions. Completion requires explicit user confirmation.
 
 ## Supervised Creative Producer
 
