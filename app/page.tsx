@@ -6,6 +6,7 @@ import CloudWorkspaceSync from "./components/cloud-workspace-sync";
 import OpportunityDiscovery from "./components/opportunity-discovery";
 import CreativeProducer from "./components/creative-producer";
 import QualityReviewer from "./components/quality-reviewer";
+import DeliveryAssistant from "./components/delivery-assistant";
 import KycPaymentIntelligence from "./components/kyc-payment-intelligence";
 
 const workflow = [
@@ -332,6 +333,7 @@ export default function Home() {
         <OpportunityDiscovery onAdd={(lead) => setOpportunities(current => [{ ...lead }, ...current])} />
         <CreativeProducer />
         <QualityReviewer />
+        <DeliveryAssistant />
 
         <section className="panel vetted-opportunities" id="verified-opportunities">
           <div className="panel-head"><div><span className="eyebrow">CRYPTO PAYMENT EVIDENCE</span><h2>پلتفرم‌های دارای مستندات پرداخت رمزارزی</h2></div><span className="free-tag">بدون سپرده اولیه</span></div>
