@@ -178,6 +178,39 @@ const seed: KycRecord[] = [
   evidenceNote:"صفحه رسمی اپ می‌گوید کاربر می‌تواند USDT، USDC یا USDm را انتخاب کند و موجودی پس از رسیدن به ۱ دلار به کیف پول ارسال می‌شود. سایت رسمی شبکه پرداخت را Celo اعلام می‌کند؛ شرایط KYC، کشورها و هزینه دقیق برداشت هنوز روشن نیست.",
   evidenceCheckedAt:"2026-11-26",
   checkedAt:"2026-11-26"
+} : record.id === "monero-jobs" ? {
+  ...record,
+  kyc:"none" as const,
+  kycStage:"signup" as const,
+  kycStageNote:"Monero.Jobs ادعا می‌کند ثبت‌نام و پیشنهادها بدون KYC است. این ادعا پذیرش تابعیت ایرانی یا اقامت ارمنستان را ثابت نمی‌کند؛ فهرست رسمی کشورهای مجاز و پاسخ پشتیبانی درباره این ترکیب منتشر نشده است. آگهی Stasher News علاوه بر تولید محتوا، حضور صوتی در پادکست، مدیریت شبکه اجتماعی و آشنایی واقعی با Monero می‌خواهد؛ انتشار آگهی از ۴ اکتبر ۲۰۲۶ است و فعال‌بودن استخدام هنوز از کارفرما تأیید نشده.",
+  payout:"direct-crypto" as const,
+  cost:"free" as const,
+  asset:"XMR",
+  network:"Monero mainnet",
+  minimum:"نامشخص؛ حداقل برداشت عمومی اعلام نشده",
+  fee:"۰٪ کارمزد پلتفرم طبق ادعای سایت؛ کارمزد شبکه Monero",
+  evidenceUrl:"https://monero.jobs/",
+  evidenceNote:"صفحه رسمی Monero.Jobs پرداخت مستقیم XMR به کیف پول non-custodial، پیشنهاد ناشناس، عدم KYC و کارمزد صفر پلتفرم را ادعا می‌کند. هیچ فهرست رسمی کشورها یا تأیید پذیرش پاسپورت ایرانی/اقامت ارمنستان پیدا نشد. آگهی Stasher News: 50 mXMR در هفته پایه (~27 دلار با نرخ مبنای آگهی)، 10 mXMR برای هر محتوای پذیرفته‌شده تا ۳ مورد در هفته، اما نقش همچنین میکروفون/پادکست و مشارکت در جامعه Monero می‌خواهد؛ یک‌ماهه و ادامه وابسته به عملکرد.",
+  evidenceCheckedAt:"2026-11-26",
+  checkedAt:"2026-11-26"
+} : record.id === "taskmarket" ? {
+  ...record,
+  kyc:"unknown" as const,
+  kycStage:"multiple" as const,
+  kycStageNote:"برای تسک‌های عادی، الزام عمومی مدرک دولتی/سلفی در مستندات کارگر ذکر نشده؛ اما KYC و بررسی تحریم/هویت ممکن است طبق قانون یا محدودیت ارائه‌دهنده انجام شود. فقط تسک‌هایی که صراحتاً TAP Verified می‌خواهند به تأیید TAP نیاز دارند؛ TAP روی Tempo به ثبت کلید و تأیید Visa card وابسته است. این شرط را با KYC پاسپورت یکی نکن.",
+  currentPresenceAccessByCountry:{ AM:"unknown" as const },
+  payoutCountryAccessByCountry:{ AM:"unknown" as const },
+  residencePermitRequirementByCountry:{ AM:"unknown" as const },
+  payout:"platform-wallet" as const,
+  cost:"free" as const,
+  asset:"USDC (Base) / OUSD (Tempo)",
+  network:"Base mainnet / Tempo mainnet",
+  minimum:"نامشخص؛ حداقل برداشت عمومی در مستندات بررسی‌شده اعلام نشده",
+  fee:"بدون کارمزد پلتفرم در Base؛ پنج اقدام اول هر تسک رایگان تا ۵۰ اقدام کل، سپس paid action برابر 0.001 USDC؛ گس را پلتفرم می‌پردازد. هزینه‌های Tempo را در هر تسک بررسی کن.",
+  evidenceUrl:"https://docs.taskmarket.dev/features/withdrawals",
+  evidenceNote:"Taskmarket پرداخت را ابتدا در کیف پول داخلی همان پلتفرم نگه می‌دارد و سپس به آدرس برداشت ثبت‌شده روی همان شبکه می‌فرستد؛ Base با USDC و Tempo با OUSD. برای Base گس برداشت را پلتفرم می‌پردازد. مستندات کارگر می‌گویند شرط TAP فقط وقتی روی تسک ثبت شود لازم است؛ TAP فقط روی Tempo است و ثبت‌نام کلید می‌تواند به تأیید Visa card نیاز داشته باشد. Legal Center می‌گوید اسناد Terms/Privacy/Risk/AUP نسخه 2026-10-draft-5 هنوز پیش‌نویس و غیرفعال‌اند؛ متن پیش‌نویس حق screening هویت/موقعیت/آدرس و محدودکردن تراکنش‌های تحریمی را برای پلتفرم محفوظ می‌دارد. فهرست رسمی پذیرش پاسپورت ایرانی، حضور ارمنستان و نیاز به اقامت منتشر نشده؛ هیچ‌یک تأییدشده نیست. برخی تسک‌های جاری تولید محتوا/ویدئو TAP-gated و پررقابت‌اند؛ تسک فونت $1 با 75 ارسال در 26 نوامبر باز بود ولی ارزش اقتصادی ضعیف دارد.",
+  evidenceCheckedAt:"2026-11-26",
+  checkedAt:"2026-11-26"
 } : record);
 
 // ISO 3166-1 alpha-2 country/territory codes. Names are localized by the browser.
@@ -272,6 +305,40 @@ export default function KycPaymentIntelligence() {
               },
               payout: existing.payout === "unknown" ? x.payout : existing.payout,
               cost: existing.cost === "unknown" ? x.cost : existing.cost,
+              asset: !existing.asset ? x.asset : existing.asset,
+              network: !existing.network ? x.network : existing.network,
+              minimum: !existing.minimum || existing.minimum === "نامشخص" ? x.minimum : existing.minimum,
+              fee: !existing.fee || existing.fee === "نامشخص" ? x.fee : existing.fee,
+              evidenceUrl: !existing.evidenceUrl ? x.evidenceUrl : existing.evidenceUrl,
+              evidenceNote: !existing.evidenceNote ? x.evidenceNote : existing.evidenceNote,
+              evidenceCheckedAt: !existing.evidenceCheckedAt ? x.evidenceCheckedAt : existing.evidenceCheckedAt,
+              checkedAt: !existing.checkedAt ? x.checkedAt : existing.checkedAt
+            };
+            if (x.id === "monero-jobs" || x.id === "taskmarket") return {
+              ...merged,
+              kyc: existing.kyc === "unknown" ? x.kyc : existing.kyc,
+              kycStage: existing.kycStage === "unknown" || !existing.kycStage ? x.kycStage : existing.kycStage,
+              kycStageNote: !existing.kycStageNote ? x.kycStageNote : existing.kycStageNote,
+              payout: existing.payout === "unknown" ? x.payout : existing.payout,
+              cost: existing.cost === "unknown" ? x.cost : existing.cost,
+              currentPresenceAccessByCountry: {
+                ...(existing.currentPresenceAccessByCountry || {}),
+                AM: !existing.currentPresenceAccessByCountry?.AM || existing.currentPresenceAccessByCountry.AM === "unknown"
+                  ? "unknown"
+                  : existing.currentPresenceAccessByCountry.AM
+              },
+              payoutCountryAccessByCountry: {
+                ...(existing.payoutCountryAccessByCountry || {}),
+                AM: !existing.payoutCountryAccessByCountry?.AM || existing.payoutCountryAccessByCountry.AM === "unknown"
+                  ? "unknown"
+                  : existing.payoutCountryAccessByCountry.AM
+              },
+              residencePermitRequirementByCountry: {
+                ...(existing.residencePermitRequirementByCountry || {}),
+                AM: !existing.residencePermitRequirementByCountry?.AM || existing.residencePermitRequirementByCountry.AM === "unknown"
+                  ? "unknown"
+                  : existing.residencePermitRequirementByCountry.AM
+              },
               asset: !existing.asset ? x.asset : existing.asset,
               network: !existing.network ? x.network : existing.network,
               minimum: !existing.minimum || existing.minimum === "نامشخص" ? x.minimum : existing.minimum,
