@@ -68,3 +68,25 @@ Do not mark either platform as eligible based only on a generic "worldwide" or "
 10. Is the $1.00 threshold gross balance or net amount after any platform/network fee? Who pays Celo gas, and what exact deductions apply?
 11. Can an Iranian citizen physically residing in Armenia complete the worker verification and receive payouts, and are there any separate citizenship, residence, task-location or payout-country restrictions?
 12. Is VAE ever required to unlock worker tasks, withdraw earnings, or pass verification? Please confirm that no purchase, deposit, or paid membership is required for a worker to earn and withdraw.
+
+
+## 3. Microworker.app — Iranian passport, Armenia presence, and crypto cash-out
+
+**To:** support@microworker.app (confirm the current contact on the official site before sending)  
+**Subject:** Eligibility clarification for Iranian citizen currently in Armenia
+
+Hello Microworker Support,
+
+I am considering using Microworker while physically residing in Armenia. I hold an Iranian passport. Before creating an account or submitting work, please confirm:
+
+1. Your eligibility page lists Armenia and excludes people in Iran. Can an Iranian citizen who is physically present in Armenia register and work, provided the account is created and used only while genuinely in Armenia?
+2. Does Microworker apply any separate citizenship or passport restriction for Iranian nationals, or is the restriction based only on current location, connection history, and applicable law?
+3. Your Terms and Privacy Policy say an account or device previously used from Iran may be refused and remain refused until manual review, and a cash-out may be held. If a person has previously used the same phone or browser in Iran before Microworker registration, does that affect a new account created while physically in Armenia? Please explain the exact rule before I register.
+4. What verification can be required for a worker cash-out? Do you request an identity document, selfie/liveness check, proof of address, or tax information? Is an Iranian passport accepted if verification is requested?
+5. Are there any Armenia-specific requirements, including a residence permit, for registration or receiving crypto payouts?
+6. Your public payout page lists a $5 minimum and USDT on BNB Smart Chain, Arbitrum or Polygon, or USDC on BNB Smart Chain. Are these still the complete payout options for Armenia-based workers? Are any processor or network fees deducted from a worker's payout?
+7. Please confirm that workers do not need to pay a signup fee, deposit, subscription, or purchase credits to complete tasks and withdraw earned rewards.
+
+I will use accurate identity and location information and will not use a VPN or another person's account to bypass restrictions. I would appreciate written clarification before registration.
+
+Thank you.
