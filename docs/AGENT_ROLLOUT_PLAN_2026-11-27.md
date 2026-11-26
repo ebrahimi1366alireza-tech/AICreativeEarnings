@@ -177,3 +177,13 @@ Verification snapshot:
 - Amount arithmetic uses exact decimal scaling up to 18 fractional digits. Net receipt is gross receipt minus user-entered fee and is compared with expected net payout.
 - No wallet or platform connection, blockchain lookup, payment verification, external message, or financial action is performed. References are stored but not verified. Follow-up messages are drafts only.
 - Records are stored locally in the browser under a separate key; they are not automatically synchronized with the older basic income list or a cloud database.
+
+
+## Orchestration Manager implementation — 2026-11-27
+
+- Added a deterministic project state engine, TypeScript declarations, dashboard component, and seven transition/safety tests.
+- Tracks project stage across opportunity triage, creative production, quality review, delivery preparation, and earnings audit, plus blockers, next action, approvals, and event history.
+- Stage progression requires a review gate; completion requires an explicit user-confirmation marker.
+- This is a supervised state tracker, not an autonomous LLM agent. It does not yet invoke assistants or transfer their form data automatically. No external actions are enabled.
+- Currency-neutral policy: no fiat currency, crypto asset, or network is prioritized or preselected. Assess opportunities by net profitability, risk, fees, minimum withdrawal, country/KYC restrictions, and practical payout access.
+- Earnings Auditor now starts with a blank asset field; users must enter the relevant asset/currency for each record.
