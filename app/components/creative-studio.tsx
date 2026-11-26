@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { buildCreativePrompt } from "@/lib/creative-prompts.cjs";
+import { buildCreativePrompt, type CreativeMode, type CreativeStyle } from "@/lib/creative-prompts.cjs";
 
 export default function CreativeStudio() {
-  const [mode, setMode] = useState("product");
-  const [style, setStyle] = useState("photoreal");
+  const [mode, setMode] = useState<CreativeMode>("product");
+  const [style, setStyle] = useState<CreativeStyle>("photoreal");
   const [subject, setSubject] = useState("");
   const [audience, setAudience] = useState("");
   const [platform, setPlatform] = useState("Instagram و فروشگاه آنلاین");
