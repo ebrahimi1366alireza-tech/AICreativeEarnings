@@ -167,3 +167,13 @@ Verification snapshot:
 - The result is blocked for prohibited rights or blocked QC; otherwise it requires revision if assets/details are missing, QC is not ready for human review, rights are unknown, or corrections remain open.
 - A complete package reaches `ready_for_human_approval` only. Upload and send flags are always false; final approval remains with the user.
 - File existence/content, QC claims, rights evidence, and recipient/channel details are not independently verified.
+
+
+## Earnings Auditor implementation — 2026-11-27
+
+- Added a deterministic earnings ledger and reconciliation engine, TypeScript declarations, UI, and ten automated tests.
+- Each record captures expected net payout, gross received amount, fee, currency, source/order, optional transaction/evidence references, date, and notes.
+- The engine distinguishes pending payment, user-attested receipt, reference-recorded receipt, missing data, disputes, refunds, and net-amount mismatches. Summaries are grouped by asset.
+- Amount arithmetic uses exact decimal scaling up to 18 fractional digits. Net receipt is gross receipt minus user-entered fee and is compared with expected net payout.
+- No wallet or platform connection, blockchain lookup, payment verification, external message, or financial action is performed. References are stored but not verified. Follow-up messages are drafts only.
+- Records are stored locally in the browser under a separate key; they are not automatically synchronized with the older basic income list or a cloud database.
