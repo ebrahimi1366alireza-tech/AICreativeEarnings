@@ -1,0 +1,10 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {createWorkflowProject,updateWorkflowProject,getWorkflowSnapshot} from "../lib/orchestration-manager.mjs";
+test("creates supervised project at triage with no currency preference",()=>{const r=createWorkflowProject({id:"p1",title:"Sample"});assert.equal(r.ok,true);assert.equal(r.project.currentStage,"opportunity_triage");assert.equal(r.project.currency,null);});
+test("requires title",()=>assert.equal(createWorkflowProject({}).ok,false));
+test("does not advance an unreviewed project",()=>{const p=createWorkflowProject({title:"Sample"}).project;const r=updateWorkflowProject(p,{nextStage:"creative_production"});assert.equal(r.ok,false);});
+test("allows reviewed transition and keeps external actions disabled",()=>{const p=createWorkflowProject({title:"Sample"}).project;const r=updateWorkflowProject(p,{status:"ready_for_human_review",nextStage:"creative_production"});assert.equal(r.ok,true);assert.equal(r.project.externalActionsPerformed,false);});
+test("completion requires explicit user confirmation",()=>{const p=createWorkflowProject({title:"Sample"}).project;assert.equal(updateWorkflowProject(p,{status:"completed"}).ok,false);assert.equal(updateWorkflowProject(p,{status:"completed",approvals:["completion_confirmed_by_user"]}).ok,true);});
+test("cannot approve while blockers remain",()=>{const p=createWorkflowProject({title:"Sample"}).project;assert.equal(updateWorkflowProject(p,{status:"awaiting_user_approval"}).ok,false);});
+test("snapshot states no asset preference",()=>{const p=createWorkflowProject({title:"Sample"}).project;assert.equal(getWorkflowSnapshot(p).currencyPriority,"none");});
