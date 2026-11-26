@@ -94,7 +94,7 @@ function readiness(item: KycRecord, residence: string, citizenship: string) {
   const countryAccess = item.countryAccessByResidence?.[residence] ?? item.countryAccess;
   const passportAcceptance = item.passportAcceptanceByCitizenship?.[citizenship] ?? (citizenship === "IR" ? item.iranianPassport : "unknown");
   if (passportAcceptance === "rejected" || countryAccess === "blocked" || item.payout === "fiat" || item.cost === "fee" || item.cost === "deposit") return "blocked";
-  if (item.kyc === "none" && passportAcceptance === "accepted" && countryAccess === "allowed" &&
+  if (["none", "selfie"].includes(item.kyc) && passportAcceptance === "accepted" && countryAccess === "allowed" &&
       item.payout === "direct-crypto" && item.cost === "free" && item.asset.trim() &&
       item.network.trim() && item.minimum.trim() && item.fee.trim() && item.evidenceUrl.startsWith("https://")) return "ready";
   return "review";
