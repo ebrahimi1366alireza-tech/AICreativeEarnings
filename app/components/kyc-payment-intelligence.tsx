@@ -243,7 +243,12 @@ export default function KycPaymentIntelligence() {
             // Backfill newly sourced facts into old browser records without overwriting user edits.
             if (x.id === "microworker-app") return {
               ...merged,
-              currentPresenceAccessByCountry: { ...(existing.currentPresenceAccessByCountry || {}), AM: "allowed" },
+              currentPresenceAccessByCountry: {
+                ...(existing.currentPresenceAccessByCountry || {}),
+                AM: !existing.currentPresenceAccessByCountry?.AM || existing.currentPresenceAccessByCountry.AM === "unknown"
+                  ? "allowed"
+                  : existing.currentPresenceAccessByCountry.AM
+              },
               payout: existing.payout === "unknown" ? x.payout : existing.payout,
               cost: existing.cost === "unknown" ? x.cost : existing.cost,
               asset: !existing.asset ? x.asset : existing.asset,
