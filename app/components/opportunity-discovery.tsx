@@ -324,13 +324,14 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
           </div>
         )}
         <textarea value={evidenceText} onChange={e => setEvidenceText(e.target.value)} rows={5} placeholder={"برای هر مورد یک لینک رسمی وارد کن، هر مورد در یک خط به شکل field=https://... ؛ فیلدها: country, citizenship, kyc, payout, asset, network, minimum, fee, entryCost"} aria-label="مدارک رسمی هر شرط" />
-        <small>لینک‌ها باید از منبع رسمی باشند. هر شرط باید سند جداگانه داشته باشد؛ لینک آگهی به‌تنهایی مدرک KYC یا پذیرش کشور نیست.</small>
+        <small>برای هر شرط لینک منبع رسمی جداگانه وارد کن. توجه: سیستم فعلاً فقط قالب HTTPS لینک را بررسی می‌کند؛ محتوای صفحه، رسمی‌بودن دامنه و اثبات ادعا را هنوز تأیید نمی‌کند.</small>
         <input value={proofUrl} onChange={e => setProofUrl(e.target.value)} type="url" required placeholder="لینک مستقیم همان سفارش یا منبع رسمی" aria-label="لینک مستقیم سفارش"/>
         <button type="submit">ثبت در رادار فرصت‌ها</button>
       </form>
       <div className="discovery-assessment" role="status">
         <strong>امتیاز فعلی: {assessment.score}/100 · {assessment.decision}</strong>
         <p>{assessment.reason}</p>
+        <small>وضعیت شواهد: لینک‌ها ثبت شده‌اند، اما محتوای آن‌ها هنوز راستی‌آزمایی نشده است. امتیاز ۱۰۰ به معنی اثبات شرایط نیست.</small>
         <small>رد خودکار در صورت KYC مدرکی، پرداخت غیررمزارزی، کشور یا تابعیت مسدود، یا هزینه ورود. امتیاز کامل فقط پرونده را برای تأیید نهایی انسانی آماده می‌کند و هرگز به معنی تأیید خودکار نیست.</small>
       </div>
     </section>
