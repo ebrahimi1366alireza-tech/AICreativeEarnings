@@ -129,3 +129,13 @@ GitHub Actions runs the TypeScript check on pushes and pull requests. This workf
 - A complete pack is marked `ready_for_human_approval`, never sent automatically. It generates a client-message draft but does not invent contact details, verify files, upload assets, contact clients, or submit deliverables.
 - Asset names and QC/rights statuses are user-provided claims. File existence, content, license evidence, and delivery-channel access are not independently verified.
 - Eight Node tests cover complete packs, missing assets, missing QC, unknown/prohibited rights, missing fields, no invented recipient, and outstanding corrections.
+
+
+## Earnings Auditor
+
+- The supervised Earnings Auditor records expected net payout, user-entered gross receipt, fees, asset, order/source, optional payment date, transaction reference, evidence reference, and notes.
+- It separates pending, received, disputed, refunded, amount-mismatch, and incomplete records. Summaries are grouped by asset and distinguish expected, pending, and user-recorded received amounts.
+- Decimal arithmetic supports up to 18 fractional digits. A received amount is reconciled against expected net amount after the entered fee.
+- A transaction hash or receipt URL is stored as a reference only. The app does not connect to wallets, query blockchains or platforms, verify payment, or send follow-up messages.
+- Follow-up text is a draft only. Records are stored in the current browser's local storage; export a workspace backup before changing devices or clearing site data.
+- Ten Node tests cover exact reconciliation, pending and disputed/refunded states, amount mismatch, missing data, fee validation, aggregation, decimal precision, and the absence of external actions.
