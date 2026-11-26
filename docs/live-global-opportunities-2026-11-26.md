@@ -250,3 +250,28 @@ Research boundary: public-page research only. No accounts, applications, social 
 - Official source: https://www.clipstake.com/creators
 
 Research boundary: official public pages only. No account was created, no identity document was submitted, no wallet was connected or signed, no content was published, and no payment or purchase was made.
+
+
+## Humanbased and Gibwork eligibility update — 2026-11-26
+
+### Humanbased — wallet payout verified; account-access wording conflicts
+- Current official contributor documentation confirms USDC withdrawals on Base mainnet to a wallet controlled and linked by the contributor. The contributor pays network gas; Humanbased states it charges no withdrawal fee. The withdrawal minimum is account-specific and displayed in Earnings, not a public fixed figure. The withdrawal flow requires a wallet ownership signature and current payout terms.
+- Current account documentation says Contributor signup requires no invitation code and can be completed without identity verification. Identity verification can be required by a particular Campaign or when lifetime earnings reach an unpublished threshold; the identity flow can request a government ID and selfie/face match, and the supported document list depends on the issuing country.
+- However, the current public Contributors page still says access is invite-only during beta. These official statements conflict or may refer to different access layers (account role vs campaign/product access). Do not claim fully open campaign access. No public official confirmation found for Iranian-passport acceptance, Armenia residence eligibility, or a country-specific sanctions decision.
+- Decision: **highest-priority conditional lead**. Confirm whether a new Armenian-based contributor can actually enter the Contributor portal and claim open tasks; ask whether an Iranian passport issued by Iran can pass any identity review while current residence is Armenia; ask whether campaigns require address/residence permits; and confirm current USDC/Base minimum, gas, and any additional payout hold. No signup, agreement acceptance, ID submission, or wallet signature performed.
+- Official sources:
+  - https://humanbased.ai/contributors
+  - https://docs.humanbased.ai/start/account/
+  - https://docs.humanbased.ai/learning/credentials/
+  - https://docs.humanbased.ai/rewards/withdraw/
+  - https://docs.humanbased.ai/help/support/
+
+### Gibwork — exclude for Iranian citizenship under its published terms
+- Official Terms (updated August 1, 2026) prohibit use by a person who is located in, or a citizen or resident of, a jurisdiction subject to comprehensive sanctions. The same Terms say bounty payments are processed through Solana escrow and released after client approval, with a platform fee deducted; fees are not stated as a fixed percentage in the Terms. Subscription plans are optional, so do not pay for Plus.
+- OFAC's official FAQ (updated October 26, 2026) identifies Iran among jurisdictions subject to broad jurisdiction-based/comprehensive sanctions. Read together with Gibwork's explicit citizenship restriction, the published terms exclude an Iranian citizen even when physically in Armenia. This is a terms-based eligibility exclusion, not an inference from IP location.
+- Decision: **blocked / exclude from the user's shortlist**. No account creation, login, wallet connection or bounty submission.
+- Official sources:
+  - https://gib.work/terms
+  - https://ofac.treasury.gov/faqs/updated/2026-10-26
+
+Research boundary: official public terms and documentation only. No account was created, no agreement was accepted, no identity document was submitted, no wallet was connected or signed, and no content was submitted.
