@@ -131,3 +131,34 @@ The latest terms are dated October 6, 2026 (not the older April 2025 version sur
 
 Source:
 - https://www.gimi.co/terms-of-use
+
+
+## Additional direct-crypto lead check — Microworker.app and Worqen (2026-11-26)
+
+### Microworker.app — promising payout mechanics; identity eligibility still unresolved
+- Armenia appears explicitly in the official supported-country list; Iran is excluded as a place of use. This does not answer whether an Iranian passport is accepted for a worker physically in Armenia.
+- Payout: USDT on BNB Smart Chain (BEP20), Arbitrum or Polygon; or USDC on BNB Smart Chain (BEP20), sent to the worker's own wallet.
+- Minimum: $5. Rewards become withdrawable three days after payment. The public payout page reports a median of about one hour from cash-out request to sending, with linked on-chain examples.
+- Workers pay no platform fee; employer-side platform fees are stated in the Terms. Exact network/provider deductions remain unclear. Cash-outs may be subject to verification and limits.
+- The Terms and Privacy Policy updated November 24, 2026 describe restrictions and review holds when an account/device is associated with use from Iran or other excluded places. They use connection and browser/device signals; do not use VPN or false location data.
+- No official public detail was found for the KYC provider, accepted ID documents, selfie/liveness, Iranian-passport acceptance, or Armenian residence-permit requirement.
+- Decision: **conditional / support confirmation before registration**. A support inquiry template has been added to docs/support-inquiries/eligibility-confirmation-templates.md. Do not create an account or submit tasks until the exact Iranian-passport + Armenia-presence case is answered.
+
+Official sources:
+- https://microworker.app/eligibility/
+- https://microworker.app/terms/
+- https://microworker.app/payouts/
+- https://microworker.app/privacy/
+
+### Worqen — Solana escrow and 0% freelancer platform fee, but not cleared for onboarding
+- Official site says deals are funded into Solana-mainnet escrow before work starts, with USDC, USDT, EURC or SOL payouts. Freelancers pay no platform fee; clients pay 5%, and Solana network fees are separate.
+- External self-custody wallets such as Phantom or Solflare are supported. The platform also offers a custodial wallet, but that is not required.
+- The official site excludes visitors connecting from Iran and several other jurisdictions. Armenia is not named in that exclusion list, but the list is not a complete guarantee of availability; citizenship and passport rules remain unverified.
+- KYC document list, liveness, Armenia residence-permit requirements, payout minimum and acceptance of Iranian citizenship were not established from the official pages reviewed. The escrow is open source but has not received an independent third-party audit according to the official About page.
+- Decision: **conditional watchlist**, only for a real buyer-funded creative contract. Confirm country/KYC in writing, verify the escrow transaction on Solscan, and agree milestones before beginning work.
+
+Official sources:
+- https://worqen.com/
+- https://worqen.com/about/
+
+No account, wallet, identity document, public content, or paid action was used in this check.
