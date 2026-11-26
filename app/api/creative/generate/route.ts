@@ -44,6 +44,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "نوع خروجی یا متن تولید معتبر نیست." }, { status: 400 });
   }
 
+  if (process.env.CREATIVE_PAID_API_ENABLED !== "true") {
+    return NextResponse.json({ error: "تولید مستقیم از API پولی غیرفعال است. از مسیر کپی بریف و چت خارجی استفاده کن." }, { status: 503, headers: { "Cache-Control": "no-store" } });
+  }
+
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return NextResponse.json({ error: "موتور تولید هنوز پیکربندی نشده است. مدیر باید OPENAI_API_KEY را در تنظیمات امن سرور اضافه کند." }, { status: 503, headers: { "Cache-Control": "no-store" } });
 
@@ -134,7 +138,7 @@ export async function GET(request: NextRequest) {
   if (!user) return NextResponse.json({ error: "برای مشاهدهٔ سهمیه ابتدا وارد حساب کاربری شو." }, { status: 401, headers: { "Cache-Control": "no-store" } });
   try {
     const usage = await getCreativeUsage(user.id);
-    return NextResponse.json({ ok: true, usage }, { headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json({ ok: true, usage, paidApiEnabled: process.env.CREATIVE_PAID_API_ENABLED === "true" }, { headers: { "Cache-Control": "no-store" } });
   } catch {
     return NextResponse.json({ error: "اطلاعات سهمیه در دسترس نیست." }, { status: 503, headers: { "Cache-Control": "no-store" } });
   }
