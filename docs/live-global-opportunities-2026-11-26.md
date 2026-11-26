@@ -424,3 +424,19 @@ Research boundary: public-source review only. No account registration, KYC, bank
   - Superteam Earn KYC/payment FAQ: https://docs.superteam.fun/the-superteam-handbook/community/faqs/superteam-earn-faq
 
 Research boundary: no registration, account connection, wallet signature, trade, purchase, deposit, KYC, or public submission was performed.
+
+
+## Anna AI Messenger — new Global content bounty (checked 2026-11-26)
+- Official Superteam Earn listing labels the opportunity **Global** and offers **250 USDC total**: 150 / 75 / 25 USDC to three winners. The page shows 24 submissions in the captured listing result; treat this as a changing count, not a stable fact. Winner announcement is listed for **7 December 2026**. The listing's remaining-time display and third-party mirrors are inconsistent, so re-check the live deadline immediately before any submission.
+- Deliverable: one original public X thread of at least 3 posts, in English, introducing Anna AI Messenger; include at least one original visual/diagram. The thread must accurately explain the product, team and private-preview status, without claiming personal use or presenting preview features as publicly available. Follow @annaos_ai, @notinvariant and @causisresearch; submit the public thread URL through Superteam Earn. The listing requires a Paid Partnership disclosure for promotional competition entries.
+- Product status: Anna is described as an AI-native messenger coordinating AI colleagues in conversations; it is in private preview and has a waitlist. Do not imply access or features that have not been verified.
+- Payment: this is an external sponsor listing, not clearly a Superteam/Solana-sponsored reward. Superteam FAQ says external sponsors generally pay to the wallet linked to the winner's Superteam Earn account, but may request invoices or KYC. The exact USDC network, wallet requirement, payout timing, fees, KYC/liveness, Iranian-citizen eligibility and Armenia-resident eligibility are **not published in the listing**.
+- Decision: **conditional review candidate**, with a stronger fixed prize pool than KriptoK but a higher creative requirement and no confirmed user-specific payout eligibility. Do not register, connect a wallet, follow accounts, publish content or submit until the user approves and sponsor/Superteam confirms Iranian passport + Armenia residence and payout/KYC details in writing.
+- Official sources:
+  - Listing: https://superteam.fun/earn/listing/create-an-engaging-x-thread-introducing-anna-ai-messenger-1
+  - Product/waitlist: https://annaos.ai/
+  - Superteam Earn FAQ: https://docs.superteam.fun/the-superteam-handbook/community/faqs/superteam-earn-faq
+- Research boundary: public-source review only; no signup, follow, wallet connection, KYC, public post or submission was performed.
+
+### KriptoK listing count caveat
+Search/index snapshots now show different submission counts for the same live listing (including 9 and 357). Do not quote a submission count in user-facing advice until rechecked on the live page. Prize pool and listed winner-announcement date remain 200 USDC total and 9 December 2026.
