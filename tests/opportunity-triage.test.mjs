@@ -23,9 +23,10 @@ const eligibleForReview = {
 
 test("complete evidence only becomes ready for human approval, never auto-approved", () => {
   const result = assessOpportunity(eligibleForReview);
-  assert.equal(result.status, "ready_for_user_approval");
-  assert.equal(result.decision, "آماده بررسی نهایی کاربر");
-  assert.equal(result.score, 100);
+  assert.equal(result.status, "review_required");
+  assert.equal(result.decision, "نیازمند راستی‌آزمایی انسانی لینک‌ها");
+  assert.equal(result.score, 79);
+  assert.ok(result.missingEvidence.includes("content_verification"));
   assert.equal(result.evidenceVerification, "not_verified");
   assert.match(result.reason, /محتوای لینک‌ها/);
 });
