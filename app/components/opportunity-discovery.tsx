@@ -91,8 +91,6 @@ function scoreLead(input: {
   if (input.payout === "کیف پول مستقیم") score += 20;
   else if (input.payout === "رمزارز از طریق قرارداد به کیف پول") score += 15;
   else if (/فیات|کارت هدیه|صرافی|بانکی|paypal|payoneer|wise/i.test(input.payout)) hardReject.push("روش برداشت غیررمزارزی یا غیرمستقیم با سیاست پروژه سازگار نیست");
-  if (input.paymentAsset === "USDT") score += 10;
-  else if (input.paymentAsset === "USDC") score += 6;
   if (input.countryCheck === "مجاز بودن کشور تأیید شده") score += 15;
   else if (input.countryCheck === "کشور مسدود است") hardReject.push("کشور محل اقامت پذیرفته نمی‌شود");
   else score -= 8;
@@ -111,11 +109,12 @@ function scoreLead(input: {
     && input.countryCheck === "مجاز بودن کشور تأیید شده"
     && ["کیف پول مستقیم", "رمزارز از طریق قرارداد به کیف پول"].includes(input.payout)
     && input.deposit === "بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری"
-    && ["USDT", "USDC"].includes(input.paymentAsset)
+    && Boolean(input.paymentAsset.trim())
+    && !["نامشخص", "سایر رمزارزها"].includes(input.paymentAsset.trim())
     && Boolean(input.network.trim())
     && Boolean(input.minimum.trim())
     && input.fee !== "نامشخص";
-  if (!complianceVerified) return { score: Math.min(score, 44), decision: "نیازمند بررسی", reason: "تا وقتی نبود KYC، کشور مجاز، ارز و شبکه دقیق، حداقل برداشت، پرداخت رمزارزی به کیف پول شخصی، کارمزد و نبود هزینه ثبت‌نام/اشتراک/سپرده مستند نشوند، این فرصت واجد شرایط نیست. ارزهای غیر از USDT و USDC فقط پس از بررسی دستی جداگانه پذیرفته می‌شوند." };
+  if (!complianceVerified) return { score: Math.min(score, 44), decision: "نیازمند بررسی", reason: "تا وقتی نبود KYC، کشور مجاز، نام دقیق رمزارز، شبکه دقیق، حداقل برداشت، پرداخت به کیف پول شخصی، کارمزد و نبود هزینه ثبت‌نام/اشتراک/سپرده مستند نشوند، این فرصت واجد شرایط نیست." };
   if (score >= 70) return { score, decision: "واجد شرایط اولیه", reason: "شرایط پایه ثبت شده؛ قرارداد، حداقل برداشت و پرداخت نهایی را پیش از شروع دوباره بررسی کن." };
   if (score >= 45) return { score, decision: "نیازمند بررسی", reason: "شواهد تکمیلی پرداخت یا شرایط قرارداد کافی نیست." };
   return { score, decision: "اولویت پایین", reason: "شواهد پرداخت، کشور یا هزینه‌ها کافی نیست." };
@@ -130,6 +129,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
   const [countryCheck, setCountryCheck] = useState("هنوز بررسی نشده");
   const [payout, setPayout] = useState("نامشخص");
   const [paymentAsset, setPaymentAsset] = useState("نامشخص");
+  const [customPaymentAsset, setCustomPaymentAsset] = useState("");
   const [network, setNetwork] = useState("");
   const [fee, setFee] = useState("نامشخص");
   const [minimum, setMinimum] = useState("");
@@ -154,7 +154,8 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
   const [proposalDeadline, setProposalDeadline] = useState("");
   const [proposalText, setProposalText] = useState("");
 
-  const assessment = useMemo(() => scoreLead({ sourceUrl: proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, network, minimum, fee, kyc, stream }), [proofUrl, payout, countryCheck, deposit, escrow, paymentAsset, network, minimum, fee, kyc, stream]);
+  const effectivePaymentAsset = paymentAsset === "سایر رمزارزها" ? customPaymentAsset.trim() : paymentAsset;
+  const assessment = useMemo(() => scoreLead({ sourceUrl: proofUrl, payout, countryCheck, deposit, escrow, paymentAsset: effectivePaymentAsset, network, minimum, fee, kyc, stream }), [proofUrl, payout, countryCheck, deposit, escrow, effectivePaymentAsset, network, minimum, fee, kyc, stream]);
 
   async function discoverOpportunities() {
     setLiveLoading(true); setLiveError(""); setLiveNotice("");
@@ -217,7 +218,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
       stream,
       country: country.trim() || "نامشخص",
       payout,
-      network: [paymentAsset, network].filter(Boolean).join(" · "),
+      network: network.trim(),
       minimum: minimum || "نامشخص",
       fee,
       kyc,
@@ -225,7 +226,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
       deposit,
       escrow,
       countryCheck,
-      paymentAsset,
+      paymentAsset: effectivePaymentAsset,
       score: assessment.score,
       decision: assessment.decision,
       ...(stream === "نوشتن و مقاله" ? { writingType, contentLanguage, wordCount: wordCount.trim() || "نامشخص", deadline: deadline.trim() || "نامشخص", seoRequired, commercialRights } : {})
@@ -331,7 +332,8 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         <input value={country} onChange={e => setCountry(e.target.value)} placeholder="کشورهای مجاز یا محدودیت‌ها" aria-label="محدودیت کشور"/>
         <select value={countryCheck} onChange={e => setCountryCheck(e.target.value)} aria-label="بررسی کشور"><option>هنوز بررسی نشده</option><option>مجاز بودن کشور تأیید شده</option><option>کشور مسدود است</option></select>
         <select value={payout} onChange={e => setPayout(e.target.value)} aria-label="روش برداشت"><option>نامشخص</option><option>کیف پول مستقیم</option><option>رمزارز از طریق قرارداد به کیف پول</option></select>
-        <select value={paymentAsset} onChange={e => setPaymentAsset(e.target.value)} aria-label="ارز پرداخت"><option>نامشخص</option><option>USDT</option><option>USDC</option><option>XNO</option><option>سایر رمزارزها</option></select>
+        <select value={paymentAsset} onChange={e => { setPaymentAsset(e.target.value); if (e.target.value !== "سایر رمزارزها") setCustomPaymentAsset(""); }} aria-label="ارز پرداخت"><option>نامشخص</option><option>USDT</option><option>USDC</option><option>XNO</option><option>سایر رمزارزها</option></select>
+        {paymentAsset === "سایر رمزارزها" && <input value={customPaymentAsset} onChange={e => setCustomPaymentAsset(e.target.value)} placeholder="نام دقیق رمزارز، مثلاً SOL یا ETH" aria-label="نام دقیق رمزارز" required />}
         <input value={network} onChange={e => setNetwork(e.target.value)} placeholder="شبکه دقیق پرداخت" aria-label="شبکه"/>
         <select value={deposit} onChange={e => setDeposit(e.target.value)} aria-label="هزینه ورود، اشتراک و سپرده"><option>هنوز بررسی نشده</option><option>بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری</option><option>هزینه ثبت‌نام یا اشتراک اجباری دارد</option><option>سپرده یا خرید اجباری دارد</option></select>
         <select value={escrow} onChange={e => setEscrow(e.target.value)} aria-label="وضعیت امانت‌داری"><option>نامشخص</option><option>وجه در امانت قفل شده</option><option>بدون امانت‌داری</option></select>
