@@ -120,8 +120,30 @@ const seed: KycRecord[] = [
   checkedAt:"2026-11-26"
 } : record.id === "humanbased" ? {
   ...record,
+  kyc:"id" as const,
   kycStage:"multiple" as const,
-  kycStageNote:"احراز هویت ممکن است برای کمپین خاص یا پس از رسیدن درآمد تجمعی به آستانه اعلام‌شده در حساب لازم شود؛ هنگام ثبت‌نام الزامی نیست."
+  kycStageNote:"ثبت‌نام اولیه بدون KYC؛ احراز هویت ممکن است برای کمپین خاص یا پس از آستانه درآمد تجمعی لازم شود و می‌تواند مدرک دولتی و تطبیق چهره/سلفی بخواهد.",
+  payout:"direct-crypto" as const,
+  cost:"free" as const,
+  asset:"USDC",
+  network:"Base mainnet",
+  minimum:"حداقل اختصاصی حساب؛ در Earnings نمایش داده می‌شود",
+  fee:"بدون کارمزد برداشت پلتفرم؛ گس شبکه از مبلغ کسر می‌شود",
+  evidenceUrl:"https://docs.humanbased.ai/rewards/withdraw/",
+  evidenceNote:"راهنمای رسمی برداشت پرداخت USDC روی Base به کیف پول متصل و تحت کنترل مشارکت‌کننده را تأیید می‌کند. حداقل برداشت برای هر حساب در Earnings نمایش داده می‌شود؛ گس شبکه کسر می‌شود و محدودیت‌ها، بررسی و hold ممکن است اعمال شوند.",
+  evidenceCheckedAt:"2026-11-26",
+  checkedAt:"2026-11-26"
+} : record.id === "loopuman" ? {
+  ...record,
+  payout:"direct-crypto" as const,
+  asset:"USDT / USDC / USDm",
+  network:"Celo",
+  minimum:"$1.00 balance threshold (official app claim)",
+  fee:"نامشخص؛ کارمزد شبکه و برداشت باید تأیید شود",
+  evidenceUrl:"https://app.loopuman.com/",
+  evidenceNote:"صفحه رسمی اپ می‌گوید کاربر می‌تواند USDT، USDC یا USDm را انتخاب کند و موجودی پس از رسیدن به ۱ دلار به کیف پول ارسال می‌شود. سایت رسمی شبکه پرداخت را Celo اعلام می‌کند؛ شرایط KYC، کشورها و هزینه دقیق برداشت هنوز روشن نیست.",
+  evidenceCheckedAt:"2026-11-26",
+  checkedAt:"2026-11-26"
 } : record);
 
 // ISO 3166-1 alpha-2 country/territory codes. Names are localized by the browser.
@@ -204,6 +226,23 @@ export default function KycPaymentIntelligence() {
               evidenceNote: x.evidenceNote,
               evidenceCheckedAt: x.evidenceCheckedAt,
               checkedAt: x.checkedAt
+            };
+            // Backfill newly sourced facts into old browser records without overwriting user edits.
+            if (x.id === "humanbased" || x.id === "loopuman") return {
+              ...merged,
+              kyc: existing.kyc === "unknown" ? x.kyc : existing.kyc,
+              kycStage: existing.kycStage === "unknown" || !existing.kycStage ? x.kycStage : existing.kycStage,
+              kycStageNote: !existing.kycStageNote ? x.kycStageNote : existing.kycStageNote,
+              payout: existing.payout === "unknown" ? x.payout : existing.payout,
+              cost: existing.cost === "unknown" ? x.cost : existing.cost,
+              asset: !existing.asset ? x.asset : existing.asset,
+              network: !existing.network ? x.network : existing.network,
+              minimum: !existing.minimum || existing.minimum === "نامشخص" ? x.minimum : existing.minimum,
+              fee: !existing.fee || existing.fee === "نامشخص" ? x.fee : existing.fee,
+              evidenceUrl: !existing.evidenceUrl ? x.evidenceUrl : existing.evidenceUrl,
+              evidenceNote: !existing.evidenceNote ? x.evidenceNote : existing.evidenceNote,
+              evidenceCheckedAt: !existing.evidenceCheckedAt ? x.evidenceCheckedAt : existing.evidenceCheckedAt,
+              checkedAt: !existing.checkedAt ? x.checkedAt : existing.checkedAt
             };
             return merged;
           }).concat(saved.filter(x => !seed.some(s => s.id === x.id))));
