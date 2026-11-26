@@ -28,6 +28,10 @@ The six streams are product scope, not proof that matching live opportunities or
 
 The Creative Producer turns a brief into a deterministic production plan, execution stages, quality checklist, rights warning, and budget-approval flag for image, video, audio, and text work. It does not generate files, call external tools, consume credits, or submit deliverables. Rights marked unknown remain explicitly unresolved, and non-zero tool budgets require separate user approval. The planner is covered by automated Node tests.
 
+## Quality Reviewer
+
+The Quality Reviewer evaluates a manually completed checklist for brief compliance, format, language, technical quality, originality, rights evidence, and destination-platform rules. Unknown or prohibited rights block commercial delivery. A complete checklist reaches human review only: the tool does not inspect media bytes, independently verify rights, approve work, publish, or send files. Checklist entries are user attestations, not independent proof.
+
 ## AI-assisted remote work services
 
 The opportunity workspace now includes a capability catalogue for AI-assisted product imagery, advertising/social graphics, short-video editing, motion-graphics preparation, and visual asset resizing or cleanup. Actual generation depends on connected tools, available quotas, account access, and commercial-use rights. Human approval remains required for account access, identity checks, contracts, final submissions, and financial actions. No paid tool usage or generation is allowed without explicit cost approval.
