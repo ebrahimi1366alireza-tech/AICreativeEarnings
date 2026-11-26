@@ -30,7 +30,7 @@ The Creative Producer turns a brief into a deterministic production plan, execut
 
 ## Quality Reviewer
 
-The Quality Reviewer evaluates a manually completed checklist for brief compliance, format, language, technical quality, originality, rights evidence, and destination-platform rules. Unknown or prohibited rights block commercial delivery. A complete checklist reaches human review only: the tool does not inspect media bytes, independently verify rights, approve work, publish, or send files. Checklist entries are user attestations, not independent proof.
+The Quality Reviewer evaluates a manually completed checklist for brief compliance, format, language, technical quality, originality, rights evidence, and destination-platform rules. Unknown or prohibited rights block commercial delivery. A complete checklist reaches human review only: the tool does not inspect media bytes, independently verify rights or license references, approve work, publish, or send files. Checklist entries and evidence references are user-provided and are not independently validated.
 
 ## AI-assisted remote work services
 
