@@ -162,3 +162,15 @@ Official sources:
 - https://worqen.com/about/
 
 No account, wallet, identity document, public content, or paid action was used in this check.
+
+
+## Buyer-funded fixed-price contract search — 2026-11-26
+- Rechecked current indexed Worqen jobs: the marketplace advertises Solana escrow in USDC/USDT/EURC/SOL, with funds locked before work and no freelancer platform fee. However, the current surfaced entries relevant to writing/design are mainly service offers posted by freelancers (e.g. $25 USDT research/report writing, $50 USDT research/writing, $80 USDT UI concepts, $20 USDT restaurant social media design), not clearly buyer-funded briefs hiring this user. They are **not job leads** and must not be misrepresented as paid work available to apply for.
+- Other surfaced active Worqen buyer posts were primarily smart-contract/security or engineering roles, outside the user's current creative-production fit. No suitable verified buyer-funded AI creative/content fixed-price contract was identified in this search pass.
+- Upwork still has current worldwide AI video roles, including a $60 paid trial listing and $1,200 expert creative-producer listing, but Upwork does not provide direct self-custody crypto payout; keep outside the wallet-only shortlist. User's location in Armenia does not itself prove all payment/identity eligibility.
+- Decision: no application submitted and no task accepted. Continue searching for actual client-posted creative scopes with funded escrow, not seller service listings or unpaid contests.
+- Sources:
+  - Worqen jobs: https://worqen.com/jobs
+  - Worqen About/escrow context: https://worqen.com/about/
+  - Upwork $60 AI video editor listing: https://www.upwork.com/freelance-jobs/apply/Video-Editor-Video-Generation-Specialist_~022124936013399088891/
+  - Upwork $1,200 AI Creative Producer listing: https://www.upwork.com/freelance-jobs/apply/Creative-Producer-Video-Editor_~022122991826076426694/
