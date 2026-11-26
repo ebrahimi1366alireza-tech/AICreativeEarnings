@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { assessOpportunity, parseOpportunityEvidence } from "../../lib/opportunity-triage.mjs";
 
 export type DiscoveryLead = {
   id: string;
@@ -28,6 +29,10 @@ export type DiscoveryLead = {
   deadline?: string;
   seoRequired?: string;
   commercialRights?: string;
+  citizenshipAcceptance?: string;
+  evidenceByField?: Record<string, string>;
+  triageStatus?: "ineligible" | "review_required" | "ready_for_user_approval";
+  missingEvidence?: string[];
 };
 
 type Props = { onAdd: (lead: DiscoveryLead) => void };
@@ -72,53 +77,6 @@ const sources = [
   }
 ];
 
-function scoreLead(input: {
-  sourceUrl: string;
-  payout: string;
-  countryCheck: string;
-  deposit: string;
-  escrow: string;
-  paymentAsset: string;
-  network: string;
-  minimum: string;
-  fee: string;
-  kyc: string;
-  stream: string;
-}) {
-  let score = 0;
-  const hardReject: string[] = [];
-  if (/^(https?:\/\/)?(www\.)?(laborx\.com|subnano\.ai)(\/|$)/i.test(input.sourceUrl)) score += 15;
-  if (input.payout === "کیف پول مستقیم") score += 20;
-  else if (input.payout === "رمزارز از طریق قرارداد به کیف پول") score += 15;
-  else if (/فیات|کارت هدیه|صرافی|بانکی|paypal|payoneer|wise/i.test(input.payout)) hardReject.push("روش برداشت غیررمزارزی یا غیرمستقیم با سیاست پروژه سازگار نیست");
-  if (input.countryCheck === "مجاز بودن کشور تأیید شده") score += 15;
-  else if (input.countryCheck === "کشور مسدود است") hardReject.push("کشور محل اقامت پذیرفته نمی‌شود");
-  else score -= 8;
-  if (input.deposit === "بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری") score += 20;
-  else if (["سپرده یا خرید اجباری دارد", "هزینه ثبت‌نام یا اشتراک اجباری دارد"].includes(input.deposit)) hardReject.push("هزینه ورود، اشتراک اجباری، سپرده یا خرید اجباری با شرط پروژه سازگار نیست");
-  else score -= 10;
-  if (input.escrow === "وجه در امانت قفل شده") score += 15;
-  if (input.fee === "۰ تا ۱۰٪") score += 10;
-  else if (input.fee === "بیشتر از ۱۰٪") score += 4;
-  if (input.kyc === "فقط سلفی/زنده‌سنجی") score -= 5;
-  else if (input.kyc !== "بدون KYC") score -= 25;
-  if (input.stream !== "نامشخص") score += 5;
-  score = Math.max(0, Math.min(100, score));
-  if (hardReject.length) return { score: 0, decision: "رد خودکار", reason: hardReject.join("؛ ") };
-  const complianceVerified = ["بدون KYC", "فقط سلفی/زنده‌سنجی"].includes(input.kyc)
-    && input.countryCheck === "مجاز بودن کشور تأیید شده"
-    && ["کیف پول مستقیم", "رمزارز از طریق قرارداد به کیف پول"].includes(input.payout)
-    && input.deposit === "بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری"
-    && Boolean(input.paymentAsset.trim())
-    && !["نامشخص", "سایر رمزارزها"].includes(input.paymentAsset.trim())
-    && Boolean(input.network.trim())
-    && Boolean(input.minimum.trim())
-    && input.fee !== "نامشخص";
-  if (!complianceVerified) return { score: Math.min(score, 44), decision: "نیازمند بررسی", reason: "تا وقتی کشور مجاز، نوع دقیق احراز هویت، پذیرش مدارک لازم، نام دقیق رمزارز، شبکه، حداقل برداشت، پرداخت به کیف پول شخصی، کارمزد و نبود هزینه ورود مستند نشوند، این فرصت واجد شرایط نیست. سلفی/زنده‌سنجی به‌تنهایی قابل قبول است؛ پاسپورت، مدرک آدرس و اطلاعات مالیاتی باید جداگانه بررسی شوند." };
-  if (score >= 70) return { score, decision: "واجد شرایط اولیه", reason: "شرایط پایه ثبت شده؛ قرارداد، حداقل برداشت و پرداخت نهایی را پیش از شروع دوباره بررسی کن." };
-  if (score >= 45) return { score, decision: "نیازمند بررسی", reason: "شواهد تکمیلی پرداخت یا شرایط قرارداد کافی نیست." };
-  return { score, decision: "اولویت پایین", reason: "شواهد پرداخت، کشور یا هزینه‌ها کافی نیست." };
-}
 
 export default function OpportunityDiscovery({ onAdd }: Props) {
   const [title, setTitle] = useState("");
@@ -127,6 +85,8 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
   const [pay, setPay] = useState("");
   const [country, setCountry] = useState("نامشخص");
   const [countryCheck, setCountryCheck] = useState("هنوز بررسی نشده");
+  const [citizenshipAcceptance, setCitizenshipAcceptance] = useState("هنوز بررسی نشده");
+  const [evidenceText, setEvidenceText] = useState("");
   const [payout, setPayout] = useState("نامشخص");
   const [paymentAsset, setPaymentAsset] = useState("نامشخص");
   const [customPaymentAsset, setCustomPaymentAsset] = useState("");
@@ -155,7 +115,11 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
   const [proposalText, setProposalText] = useState("");
 
   const effectivePaymentAsset = paymentAsset === "سایر رمزارزها" ? customPaymentAsset.trim() : paymentAsset;
-  const assessment = useMemo(() => scoreLead({ sourceUrl: proofUrl, payout, countryCheck, deposit, escrow, paymentAsset: effectivePaymentAsset, network, minimum, fee, kyc, stream }), [proofUrl, payout, countryCheck, deposit, escrow, effectivePaymentAsset, network, minimum, fee, kyc, stream]);
+  const evidenceByField = useMemo(() => parseOpportunityEvidence(evidenceText), [evidenceText]);
+  const assessment = useMemo(() => assessOpportunity({
+    sourceUrl: proofUrl, payout, countryCheck, citizenshipAcceptance, deposit,
+    paymentAsset: effectivePaymentAsset, network, minimum, fee, kyc, evidenceByField
+  }), [proofUrl, payout, countryCheck, citizenshipAcceptance, deposit, effectivePaymentAsset, network, minimum, fee, kyc, evidenceByField]);
 
   async function discoverOpportunities() {
     setLiveLoading(true); setLiveError(""); setLiveNotice("");
@@ -197,7 +161,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
       payout: "روش پرداخت باید در آگهی و قرارداد بررسی شود", network: "نامشخص",
       minimum: "نامشخص", fee: "نامشخص", kyc: "نامشخص", proofUrl: job.url,
       deposit: "هنوز بررسی نشده", escrow: "نامشخص", countryCheck: "هنوز بررسی نشده",
-      paymentAsset: "نامشخص", score: job.score,
+      paymentAsset: "نامشخص", score: job.score, citizenshipAcceptance: "هنوز بررسی نشده", triageStatus: "review_required", missingEvidence: ["country", "citizenship", "kyc", "payout", "asset", "network", "minimum", "fee", "entryCost"],
       decision: job.contractType ? "تطابق موضوعی و نوع قرارداد، نیازمند بررسی شرایط" : "آگهی دورکاری؛ نوع استخدام باید بررسی شود",
       ...(job.stream === "نوشتن و مقاله" ? { writingType: "آگهی نوشتاری دورکاری", contentLanguage: "طبق آگهی اصلی" } : {}),
       wordCount: "در آگهی مشخص نشده", deadline: "طبق آگهی اصلی",
@@ -214,7 +178,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
       title: title.trim(),
       platform,
       pay: pay.trim() || "مبلغ نامشخص",
-      status: assessment.decision === "رد خودکار" ? "رد شد" : "نیازمند بررسی",
+      status: assessment.status === "ineligible" ? "رد شد" : "نیازمند بررسی",
       stream,
       country: country.trim() || "نامشخص",
       payout,
@@ -331,7 +295,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         <select value={stream} onChange={e => setStream(e.target.value)} aria-label="نوع کار"><option>عکس و طراحی</option><option>ویدئو</option><option>نوشتن و مقاله</option><option>تولید آهنگ با هوش مصنوعی</option><option>رأی‌گیری و داوری موسیقی</option><option>نظرسنجی پولی</option><option>نامشخص</option></select>
         <input value={pay} onChange={e => setPay(e.target.value)} placeholder="بودجه و واحد پرداخت" aria-label="بودجه"/>
         <input value={country} onChange={e => setCountry(e.target.value)} placeholder="کشورهای مجاز یا محدودیت‌ها" aria-label="محدودیت کشور"/>
-        <select value={countryCheck} onChange={e => setCountryCheck(e.target.value)} aria-label="بررسی کشور"><option>هنوز بررسی نشده</option><option>مجاز بودن کشور تأیید شده</option><option>کشور مسدود است</option></select>
+        <select value={countryCheck} onChange={e => setCountryCheck(e.target.value)} aria-label="بررسی کشور"><option>هنوز بررسی نشده</option><option>مجاز بودن کشور تأیید شده</option><option>کشور مسدود است</option></select>\n        <select value={citizenshipAcceptance} onChange={e => setCitizenshipAcceptance(e.target.value)} aria-label="پذیرش تابعیت ایرانی"><option>هنوز بررسی نشده</option><option>تابعیت ایرانی پذیرفته می‌شود</option><option>تابعیت ایرانی پذیرفته نمی‌شود</option></select>
         <select value={payout} onChange={e => setPayout(e.target.value)} aria-label="روش برداشت"><option>نامشخص</option><option>کیف پول مستقیم</option><option>رمزارز از طریق قرارداد به کیف پول</option></select>
         <select value={paymentAsset} onChange={e => { setPaymentAsset(e.target.value); if (e.target.value !== "سایر رمزارزها") setCustomPaymentAsset(""); }} aria-label="ارز پرداخت"><option>نامشخص</option><option>USDT</option><option>USDC</option><option>XNO</option><option>سایر رمزارزها</option></select>
         {paymentAsset === "سایر رمزارزها" && <input value={customPaymentAsset} onChange={e => setCustomPaymentAsset(e.target.value)} placeholder="نام دقیق رمزارز، مثلاً SOL یا ETH" aria-label="نام دقیق رمزارز" required />}
@@ -356,13 +320,15 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
             <select value={commercialRights} onChange={e => setCommercialRights(e.target.value)} aria-label="حقوق تجاری محتوا"><option>باید از کارفرما تأیید شود</option><option>حقوق تجاری و مالکیت مشخص است</option><option>استفاده تجاری ممنوع است</option></select>
           </div>
         )}
+        <textarea value={evidenceText} onChange={e => setEvidenceText(e.target.value)} rows={5} placeholder={"برای هر مورد یک لینک رسمی وارد کن، هر خط به شکل field=https://...\\nفیلدها: country, citizenship, kyc, payout, asset, network, minimum, fee, entryCost"} aria-label="مدارک رسمی هر شرط" />
+        <small>لینک‌ها باید از منبع رسمی باشند. هر شرط باید سند جداگانه داشته باشد؛ لینک آگهی به‌تنهایی مدرک KYC یا پذیرش کشور نیست.</small>
         <input value={proofUrl} onChange={e => setProofUrl(e.target.value)} type="url" required placeholder="لینک مستقیم همان سفارش یا منبع رسمی" aria-label="لینک مستقیم سفارش"/>
         <button type="submit">ثبت در رادار فرصت‌ها</button>
       </form>
       <div className="discovery-assessment" role="status">
         <strong>امتیاز فعلی: {assessment.score}/100 · {assessment.decision}</strong>
         <p>{assessment.reason}</p>
-        <small>رد خودکار در صورت KYC اجباری، پرداخت غیررمزارزی، کشور مسدود یا هر هزینه ورود/اشتراک/سپرده اجباری. کشف زنده فقط از منابع عمومی انجام می‌شود؛ شرایط هر سفارش باید دستی و با سند رسمی تأیید شود.</small>
+        <small>رد خودکار در صورت KYC مدرکی، پرداخت غیررمزارزی، کشور یا تابعیت مسدود، یا هزینه ورود. امتیاز کامل فقط پرونده را برای تأیید نهایی انسانی آماده می‌کند و هرگز به معنی تأیید خودکار نیست.</small>
       </div>
     </section>
   );
