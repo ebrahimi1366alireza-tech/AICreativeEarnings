@@ -275,3 +275,25 @@ Research boundary: official public pages only. No account was created, no identi
   - https://ofac.treasury.gov/faqs/updated/2026-10-26
 
 Research boundary: official public terms and documentation only. No account was created, no agreement was accepted, no identity document was submitted, no wallet was connected or signed, and no content was submitted.
+
+
+## Fresh payout workflow verification — 2026-11-26
+
+### Humanbased — payout controls and holds (official docs reread)
+- The official withdrawal guide clarifies that a positive balance does not guarantee withdrawal permission. The account must pass current payout terms, linked-wallet ownership signature, withdrawal permission, account-specific minimum, and any identity/other checks.
+- Withdrawals have per-request, daily and monthly limits plus waiting intervals. Larger requests can enter manual review; reputation and identity verification can create holds with a stated expected release time. The exact network fee is not known until the signed/processed withdrawal receipt; gas is deducted from the amount received.
+- A linked wallet is not sufficient by itself. Do not connect/sign until the portal shows the correct wallet, Base mainnet, amount, and current payout terms. A support ticket should include only a withdrawal/request ID and redacted status, never a seed phrase or private key.
+- Tracker update: USDC / Base mainnet / platform withdrawal fee none / network gas deducted / account-specific minimum. KYC is conditional (campaign or earnings threshold) and may involve government ID plus selfie/face match. Citizenship and Armenia access remain unknown.
+- Official source: https://docs.humanbased.ai/rewards/withdraw/
+
+### Loopuman — worker app now confirms the payout threshold and supported assets
+- The current official worker app says workers choose USDT, USDC or USDm when a task is approved; accumulated earnings are sent to the worker's wallet once the balance reaches $1.00.
+- Loopuman's official homepage says worker payouts are on Celo and typically settle in about 8 seconds after approval. It describes workers in 100+ countries / worldwide reach, but this is not a country-by-country eligibility list and does not establish Iranian-passport or Armenia eligibility.
+- The official homepage says VAE is a platform credit, is not exchangeable for cash and is non-refundable except where law requires. Do not buy VAE; it is not the worker's cash balance and no purchase should be needed to earn.
+- The reviewed official public pages still do not specify the full KYC/liveness requirements, exact supported external wallet providers, country/sanctions exclusions, withdrawal/network fee, or whether the $1.00 transfer is automatic to a self-custody address in all cases.
+- Decision: **conditional lead / priority support confirmation**. The tracker now records USDT/USDC/USDm on Celo and the advertised $1.00 balance threshold, while leaving country eligibility, KYC, and fees unknown. Do not submit identity documents or complete unpaid tasks before written confirmation.
+- Official sources:
+  - https://app.loopuman.com/
+  - https://loopuman.com/
+
+Research boundary: public official pages only. No account was created, no wallet was linked or signed, no VAE/credits were purchased, and no identity document or content was submitted.
