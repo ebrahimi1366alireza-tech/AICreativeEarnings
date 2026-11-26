@@ -11,6 +11,7 @@ const complete = {
   deliverable: "Final MP4 v3 stored in approved project folder",
   format: "MP4, 1080x1920, 30 seconds",
   rightsStatus: "licensed",
+  rightsEvidenceReference: "https://client.example/license/123",
   checks: allChecks
 };
 
@@ -20,6 +21,7 @@ test("complete user-attested checklist only reaches human review, never auto-app
   assert.equal(result.score, 100);
   assert.equal(result.checksAreUserAttested, true);
   assert.equal(result.mediaInspectionPerformed, false);
+  assert.equal(result.rightsEvidenceVerification, "not_verified");
 });
 
 test("unknown rights require correction even when all checklist boxes are checked", () => {
@@ -31,6 +33,7 @@ test("unknown rights require correction even when all checklist boxes are checke
 test("prohibited commercial use blocks delivery", () => {
   const result = reviewCreativeDeliverable({ ...complete, rightsStatus: "prohibited" });
   assert.equal(result.status, "blocked");
+  assert.equal(result.score, 0);
 });
 
 test("unchecked quality criteria are listed for correction", () => {
@@ -46,7 +49,7 @@ test("missing brief and deliverable details cannot pass review", () => {
 });
 
 test("non-evidenced rights labels fall back to unknown", () => {
-  const result = reviewCreativeDeliverable({ ...complete, rightsStatus: "trust-me" });
+  const result = reviewCreativeDeliverable({ ...complete, rightsStatus: "trust-me", rightsEvidenceReference: "" });
   assert.equal(result.rightsStatus, "unknown");
   assert.equal(result.status, "revision_required");
 });
