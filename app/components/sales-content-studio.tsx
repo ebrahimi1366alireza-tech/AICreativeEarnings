@@ -20,12 +20,13 @@ export default function SalesContentStudio() {
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState<"text" | "image" | "">("");
   const [usage, setUsage] = useState<Usage | null>(null);
+  const [paidApiEnabled, setPaidApiEnabled] = useState(false);
 
   useEffect(() => {
     let active = true;
     fetch("/api/creative/generate", { credentials: "same-origin", cache: "no-store" })
       .then(async response => response.ok ? response.json() : null)
-      .then(result => { if (active && result?.usage) setUsage(result.usage as Usage); })
+      .then(result => { if (active && result) { if (result.usage) setUsage(result.usage as Usage); setPaidApiEnabled(result.paidApiEnabled === true); } })
       .catch(() => undefined);
     return () => { active = false; };
   }, []);
@@ -98,6 +99,16 @@ export default function SalesContentStudio() {
     }
   }
 
+  function openFreeChat() {
+    if (!briefText) {
+      setNotice("ابتدا بریف را بساز.");
+      return;
+    }
+    window.open("https://chatgpt.com/", "_blank", "noopener,noreferrer");
+    void copyText(briefText);
+    setNotice("بریف کپی شد و ChatGPT باز شد. متن را در گفت‌وگوی جدید جای‌گذاری کن؛ محدودیت‌های حساب و دسترسی سرویس خارجی برقرار است.");
+  }
+
   async function copyText(value: string) {
     try {
       await navigator.clipboard.writeText(value);
@@ -138,15 +149,26 @@ export default function SalesContentStudio() {
         <div className="panel-head"><strong>بریف تولید</strong><button type="button" onClick={() => copyText(briefText)}>کپی بریف</button></div>
         <pre style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", direction: "ltr", textAlign: "left", background: "#0d121b", border: "1px solid var(--line)", borderRadius: 10, padding: 16, color: "#d9e3f2", fontSize: 12, lineHeight: 1.8 }}>{briefText}</pre>
         <div className="panel-head" style={{ marginTop: 12 }}>
-          <strong>تولید با هوش مصنوعی</strong>
-          <span className="free-tag">ممکن است هزینه API داشته باشد</span>
+          <strong>مسیر تولید بدون API پولی</strong>
+          <span className="free-tag">پیش‌فرض رایگان</span>
         </div>
-        <p className="hub-intro">تولید فقط پس از ورود به حساب انجام می‌شود. کلید API در گوشی ذخیره نمی‌شود. متن ۱ اعتبار و تصویر ۵ اعتبار مصرف می‌کند.</p>
-        {usage && <p className="backup-notice" role="status">سهمیهٔ امروز: {usage.used} از {usage.limit} اعتبار مصرف شده؛ {usage.remaining} اعتبار باقی مانده است. سهمیه هر روز ساعت ۰۰:۰۰ UTC بازنشانی می‌شود.</p>}
+        <p className="hub-intro">بریف را کپی کن و در حساب ChatGPT خودت جای‌گذاری کن. این مسیر از سرور پروژه API پولی صدا نمی‌زند. دسترسی و سقف استفاده تابع شرایط حساب سرویس خارجی است.</p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-          <button type="button" disabled={Boolean(busy)} onClick={() => generate("text")}>{busy === "text" ? "در حال تولید..." : "تولید متن تبلیغاتی"}</button>
-          <button type="button" disabled={Boolean(busy)} onClick={() => generate("image")}>{busy === "image" ? "در حال تولید تصویر..." : "تولید تصویر تبلیغاتی"}</button>
+          <button type="button" onClick={openFreeChat}>کپی بریف و بازکردن ChatGPT</button>
+          <button type="button" onClick={() => copyText(briefText)}>فقط کپی بریف</button>
         </div>
+        {paidApiEnabled && <>
+          <div className="panel-head" style={{ marginTop: 18 }}>
+            <strong>موتور API پولی</strong>
+            <span className="free-tag">فعال‌شده توسط مدیر</span>
+          </div>
+          <p className="hub-intro">این گزینه فقط وقتی مدیر سرور صریحاً CREATIVE_PAID_API_ENABLED=true را فعال کند نمایش داده می‌شود و ممکن است هزینه واقعی API ایجاد کند.</p>
+          {usage && <p className="backup-notice" role="status">سهمیهٔ امروز: {usage.used} از {usage.limit} اعتبار مصرف شده؛ {usage.remaining} اعتبار باقی مانده است.</p>}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+            <button type="button" disabled={Boolean(busy)} onClick={() => generate("text")}>{busy === "text" ? "در حال تولید..." : "تولید متن با API"}</button>
+            <button type="button" disabled={Boolean(busy)} onClick={() => generate("image")}>{busy === "image" ? "در حال تولید تصویر..." : "تولید تصویر با API"}</button>
+          </div>
+        </>}
       </div>}
       {output && <div style={{ marginTop: 16 }}>
         <div className="panel-head"><strong>محتوای تولیدشده</strong><button type="button" onClick={() => copyText(output)}>کپی متن</button></div>
