@@ -120,3 +120,12 @@ The Dev Container keeps OpenCode as the primary coding agent. Free Claude Code (
 See [docs/FCC_SETUP.md](docs/FCC_SETUP.md). Run the preflight with `bash scripts/install-fcc.sh --check`; install only after reviewing the provider-cost and security notes with `bash scripts/install-fcc.sh --install`. Choose OpenCode only in the official installer. FCC installation/provider connection has not been verified merely by adding these setup files.
 
 GitHub Actions runs the TypeScript check on pushes and pull requests. This workflow does not deploy the app or connect to Supabase.
+
+
+## Delivery Assistant
+
+- The supervised Delivery Assistant prepares a delivery manifest from user-entered required and included asset names, order details, version, format, QC state, rights state, open corrections, and an optional deadline.
+- Missing assets, incomplete details, unresolved/prohibited rights, an unreviewed or blocked QC state, and outstanding corrections prevent a ready-for-approval result.
+- A complete pack is marked `ready_for_human_approval`, never sent automatically. It generates a client-message draft but does not invent contact details, verify files, upload assets, contact clients, or submit deliverables.
+- Asset names and QC/rights statuses are user-provided claims. File existence, content, license evidence, and delivery-channel access are not independently verified.
+- Eight Node tests cover complete packs, missing assets, missing QC, unknown/prohibited rights, missing fields, no invented recipient, and outstanding corrections.
