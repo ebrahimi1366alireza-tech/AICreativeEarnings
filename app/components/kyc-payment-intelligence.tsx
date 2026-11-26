@@ -67,6 +67,8 @@ const seed: KycRecord[] = [
   ["AI Film Contests","https://aifilmcontests.com/"],
   ["Sapien","https://www.sapien.io/"],
   ["PublicAI","https://publicai.io/"],
+  ["PublicAI Trajector","https://trajector.publicai.io/"],
+  ["Astra AI Creators","https://agc.astra-ai.co/en/form?track=local"],
   ["Genesis / Onfin","https://genesis.onfin.io/en"],
   ["Kolo Ambassadors","https://ambassadors.kolo.xyz/"],
   ["Zealy","https://zealy.io/"],
@@ -110,7 +112,26 @@ const seed: KycRecord[] = [
   kyc:"unknown" as const, kycStage:"unknown" as const, kycStageNote:"", iranianPassport:"unknown" as const,
   countryAccess:"unknown" as const, payout:"unknown" as const, cost:"unknown" as const,
   asset:"", network:"", minimum:"نامشخص", fee:"نامشخص", evidenceUrl:"", checkedAt:""
-})).map(record => record.id === "gibwork" ? {
+})).map(record => record.id === "astra-ai-creators" ? {
+  ...record,
+  iranianPassport:"rejected" as const,
+  passportAcceptanceByCitizenship:{ IR:"rejected" as const },
+  evidenceUrl:"https://agc.astra-ai.co/en/form?track=local",
+  evidenceNote:"فرم رسمی درخواست سازندگان Astra AI می‌گوید ارائه‌دهنده پرداخت UseGrade نمی‌تواند به شهروندان ایران پرداخت کند، حتی اگر در کشور دیگری زندگی کنند. این محدودیت تابعیت است و اقامت ارمنستان آن را رفع نمی‌کند.",
+  evidenceCheckedAt:"2026-11-26",
+  checkedAt:"2026-11-26"
+} : record.id === "publicai-trajector" ? {
+  ...record,
+  payout:"direct-crypto" as const,
+  asset:"USDC / USDT",
+  network:"Ethereum / BNB Smart Chain (BSC)",
+  minimum:"$10 withdrawable balance",
+  fee:"Network fee deducted from payout; credits mature for 7 days",
+  evidenceUrl:"https://trajector.publicai.io/legal/beta-terms",
+  evidenceNote:"شرایط رسمی Trajector v3: برداشت USDC یا USDT روی Ethereum یا BNB Smart Chain پس از رسیدن موجودی قابل برداشت به 10 دلار؛ هر اعتبار فعلاً 7 روز دوره بلوغ دارد و کارمزد شبکه از پرداخت کسر می‌شود. برنامه فقط sessionهای کدنویسی تعریف‌شده از پروژه‌های متعلق به مشارکت‌کننده یا open-source را می‌پذیرد. مجوز جداگانه استفاده تجاری، انتشار و اعطای مجوز دائمی و غیرقابل‌فسخ به داده جلسه‌ها را می‌دهد. تابعیت ایرانی، حضور ارمنستان و KYC همچنان نامشخص‌اند.",
+  evidenceCheckedAt:"2026-11-26",
+  checkedAt:"2026-11-26"
+} : record.id === "gibwork" ? {
   ...record,
   iranianPassport:"rejected" as const,
   passportAcceptanceByCitizenship:{ IR:"rejected" as const },
