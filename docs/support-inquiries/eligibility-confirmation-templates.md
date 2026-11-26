@@ -111,3 +111,9 @@ I am considering entering the “Create an Engaging X Thread Introducing Anna AI
 I will provide accurate citizenship and residence details and will not use a VPN or another person's account to bypass restrictions. I would appreciate written confirmation before I participate.
 
 Thank you.
+
+
+## Anna bounty — verified contact route and exact deadline question
+- Official listing Contact link opens Telegram **@notinvariant**: https://t.me/notinvariant
+- The official listing currently shows the winner announcement date (Dec 7, 2026), but its live deadline field was "Syncing…" when checked. A third-party mirror claims Nov 30, 2026; do not rely on that date without sponsor confirmation.
+- No message has been sent. Use the Anna-specific template above via the official Telegram contact; ask them to confirm the exact deadline in UTC and whether the user can participate with Iranian citizenship and Armenian residence before following accounts or publishing anything.
