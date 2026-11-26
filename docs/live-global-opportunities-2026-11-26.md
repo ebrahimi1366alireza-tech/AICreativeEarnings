@@ -366,3 +366,19 @@ Research boundary: public official pages only. No account was created, no terms 
   - https://docs.superteam.fun/the-superteam-handbook/community/faqs/superteam-earn-faq
 
 Research boundary: public-source review only. No signup, application, identity submission, account connection, wallet signature, code-session collection, or public content submission was performed.
+
+
+## Live creative bounty candidate — TokenPocket / Superteam Earn (2026-11-26)
+
+Official listing: https://superteam.fun/earn/listing/create-and-earn-explore-tokenpockets-transfer-features/
+
+- The listing is currently shown as **Global** and offers a total 500 USDC prize pool across 10 winners. At the time of review it showed 53 submissions and a winner-announcement date of December 9, 2026. The listing page shows a live Submit Now action; the winner-announcement date is not itself a guaranteed payment date.
+- Accepted formats: X post/thread, video, or animation. The content must explain both TokenPocket's daily free Solana transfer feature and paying TRON network fees with supported tokens such as USDT or USDD. Original visuals are encouraged; English is preferred, but other languages are accepted if an English translation or transcript is included.
+- The listing requires public posting on X, tagging the sponsor, including the official tutorial link, and submitting the post URL. It explicitly says not to fabricate personal usage or promise unconditional free transfers; claims must be grounded in the official tutorials.
+- This is a competitive **Bounty**, not a paid Project or fixed-price commission. Ten winners share the prize pool; there is no guaranteed payment for producing the content. 53 submissions were already visible when checked.
+- The task itself does not state a mandatory deposit or purchase. However, any real wallet demonstration may involve network/asset exposure; use official tutorials or clearly labelled illustrative visuals rather than funding a wallet or signing transactions just to make the entry.
+- Sponsor is TokenPocket (external sponsor), so Superteam's official FAQ says the reward normally goes to the wallet linked to the winner's Earn account, but the external sponsor may separately request KYC or an invoice. Iranian-passport acceptance, Armenia-resident eligibility, KYC/liveness, exact USDC network and sponsor payment checks remain unconfirmed.
+- Decision: **live, global, review-only creative contest**. It is a possible fit for an original explainer animation/video, but not a confirmed earning route. Do not publish or submit until the user's eligibility and sponsor payout terms are confirmed; no content should be posted without explicit approval.
+- Official sources:
+  - Listing: https://superteam.fun/earn/listing/create-and-earn-explore-tokenpockets-transfer-features/
+  - Superteam Earn payment/KYC FAQ: https://docs.superteam.fun/the-superteam-handbook/community/faqs/superteam-earn-faq
