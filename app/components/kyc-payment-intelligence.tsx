@@ -191,7 +191,22 @@ export default function KycPaymentIntelligence() {
         const saved = JSON.parse(raw) as KycRecord[];
         if (Array.isArray(saved)) {
           const byId = new Map(saved.filter(x => x && typeof x.id === "string").map(x => [x.id,x]));
-          setRecords(seed.map(x => byId.get(x.id) || x).concat(saved.filter(x => !seed.some(s => s.id === x.id))));
+          setRecords(seed.map(x => {
+            const existing = byId.get(x.id);
+            if (!existing) return x;
+            const merged = { ...x, ...existing };
+            // Keep newly verified hard eligibility blocks even when older browser data exists.
+            if (x.id === "gibwork") return {
+              ...merged,
+              iranianPassport: "rejected",
+              passportAcceptanceByCitizenship: { ...(existing.passportAcceptanceByCitizenship || {}), IR: "rejected" },
+              evidenceUrl: x.evidenceUrl,
+              evidenceNote: x.evidenceNote,
+              evidenceCheckedAt: x.evidenceCheckedAt,
+              checkedAt: x.checkedAt
+            };
+            return merged;
+          }).concat(saved.filter(x => !seed.some(s => s.id === x.id))));
         }
       }
     } catch { /* keep safe defaults */ }
