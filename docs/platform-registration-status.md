@@ -152,3 +152,23 @@ Mirror is recorded as a historical alias/migration, not as a separate active pla
 - Legacy country-access fields are now used as a fallback for physical-presence access, instead of being silently ignored.
 - UI wording now describes a complete set of recorded fields, not an independently verified eligibility result. The tracker does not automatically read or validate the linked evidence page; source URL, note, and check date are manually entered.
 - This is a local browser-side tracker. No accounts, KYC submissions, wallet connections, applications, or payments were made.
+
+
+## Global creator payout refresh — 2026-11-26 (follow-up)
+
+| Platform | Current classification | Verified public facts | Unresolved before user action |
+|---|---|---|---|
+| Loopuman | Priority conditional | Remote AI evaluation/data annotation/translation examples; official pages advertise USDm/USDT/USDC on Celo, $1 wallet payout threshold, worldwide worker reach | Iranian passport + Armenia presence; KYC/liveness/address proof; arbitrary self-custody wallet support; exact asset/network and fees |
+| LaborX | Conditional | Live short-form video editing gig; crypto rails and escrow advertised; freelancer fee shown as 10% | Exact legal eligibility, KYC at withdrawal, asset/network, personal wallet and country-specific access |
+| Superteam Earn | Conditional | Projects are selective paid work; Superteam/Solana-sponsored rewards require KYC; external sponsors may pay linked wallet and request their own checks | Sponsor-by-sponsor eligibility, Iranian passport + Armenia, payment asset/network and sanctions review |
+| ClipStake | Watchlist | Creator flow is pay-per-verified-views; campaign-specific minimum views; social analytics verification required | Beta payout assurance, funded budget, USDC/Solana confirmation from official terms, minimum/fees, KYC and country eligibility |
+| Yeez | Watchlist | Official site advertises smart-contract-locked budgets and on-chain campaign examples | Live campaign reality, contract verification, external wallet, KYC, supported countries, minimum and fees |
+| Clipur | Watchlist | Creator access is reviewed; social profile/media/analytics access may be requested | OAuth scope, actual payout asset/network, minimum/fees, KYC and country eligibility |
+| ClipRush.net | Hold | Open beta and small batch of campaigns; cash/crypto claims only | Operator, terms, campaign escrow, payout asset/network, minimum/fees, KYC and country eligibility; domain-risk warnings |
+| Reach.cat | Closed / excluded | Closure notice says permanently closed 2026-11-01 | No new registration or work; former unpaid balance status not stated |
+| Promote.sh | Excluded from zero-cost path | Official terms show $100 minimum creator withdrawal, 4% or 10% withdrawal fee, possible creator account fee up to $10/month | Not pursued unless user later approves a paid model |
+
+- [x] Added ClipStake, Yeez, Clipur and Promote (promote.sh) to the KYC tracker. All newly added country, passport, KYC and payout values remain **unknown** until exact evidence is recorded.
+- [x] Corrected Reach.cat to closed/excluded in the research record; do not treat its old no-KYC/USDT marketing as a current earning option.
+- [ ] First external support check should be Loopuman, asking for written confirmation of Iranian passport + Armenia physical presence and self-custody Celo stablecoin payout before any signup/KYC.
+- [ ] No account created, content posted, social OAuth granted, wallet connected/signed, ID/biometric submitted, or payment made in this research pass.
