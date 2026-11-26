@@ -22,7 +22,7 @@ const tools = [
   { name: "ChatGPT", note: "کمک در ایده‌پردازی، نوشتن پرامپت، طراحی بریف، کنترل کیفیت و آماده‌سازی اصلاحات.", status: "دستیار اصلی آماده‌سازی و بازبینی خروجی بصری", mark: "CHATGPT", url: "https://chatgpt.com/" }
 ];
 
-type Opportunity = { id: string; title: string; platform: string; pay: string; status: string; stream?: string; country?: string; payout?: string; network?: string; minimum?: string; fee?: string; kyc?: string; proofUrl?: string; writingType?: string; contentLanguage?: string; wordCount?: string; deadline?: string; seoRequired?: string; commercialRights?: string };
+type Opportunity = { id: string; title: string; platform: string; pay: string; status: string; stream?: string; country?: string; payout?: string; network?: string; minimum?: string; fee?: string; kyc?: string; proofUrl?: string; writingType?: string; contentLanguage?: string; wordCount?: string; deadline?: string; seoRequired?: string; commercialRights?: string; citizenshipAcceptance?: string; evidenceByField?: Record<string, string>; triageStatus?: "ineligible" | "review_required" | "ready_for_user_approval"; missingEvidence?: string[] };
 type Delivery = { id: string; title: string; client: string; due: string; status: string };
 type Income = { id: string; source: string; amount: number; currency: string; received: boolean; date: string };
 
