@@ -140,3 +140,36 @@ Priority for the next review cycle:
 4. Keep all leads marked unverified until the user is accepted, completes an eligible task, and a wallet receipt is actually confirmed.
 
 No accounts were created, no identity documents were submitted, no wallets were connected or signed, no public content was posted, and no applications were submitted during this review.
+
+
+## Official-source refresh — 2026-11-26 (follow-up)
+
+### ClipRush.net — open beta, crypto advertised, payout details still unverified
+- The official ClipRush.net homepage currently says the service is in open beta with a small batch of campaigns and creators can earn for verified views/clicks, with payment advertised as cash or crypto.
+- The public homepage does not establish the supported coin/network, minimum payout, withdrawal fees, KYC provider/document list, Armenia access, or acceptance of an Iranian passport.
+- Do not confuse cliprush.net (creator campaign marketplace) with cliprush.ai (a separate AI creation studio/domain).
+- Decision: **conditional lead only**. No content production or account/KYC submission until a live campaign and exact personal-wallet payout route are confirmed.
+- Official source: https://www.cliprush.net/
+
+### Loopuman — stablecoin claims confirmed, but payout threshold wording needs clarification
+- Current official homepage says approved workers receive 80% of task budgets and can be paid in USDm, USDT or USDC on Celo; it says no bank account is required and advertises withdrawals to MiniPay.
+- The official app says earnings are sent to a wallet after the balance reaches $1.00. However, the official microtasks FAQ still describes a V100 minimum of earned VAE, while the same homepage states purchased VAE is a platform credit and is not exchangeable for cash. This wording is not sufficiently consistent to treat the precise withdrawal threshold/asset flow as fully verified.
+- The official microtasks page says task availability depends on skills, equipment and location, and only approved submissions are paid. No public official confirmation was found for Iranian-passport acceptance, Armenia-resident eligibility, exact KYC documents, or direct withdrawal to an arbitrary external self-custody wallet.
+- Decision: **conditional / support confirmation required**. Ask support to confirm Iranian passport + Armenia residence, identity/liveness requirements, the exact USDT/USDC/USDm withdrawal flow and network, minimum, fees, and whether a personal external wallet can receive funds. Do not buy VAE or produce unpaid work.
+- Official sources: https://loopuman.com/ ; https://loopuman.com/microtasks ; https://app.loopuman.com/ ; https://loopuman.com/why-loopuman
+
+### LaborX — relevant creative marketplace and crypto rails, with legal eligibility unresolved
+- The official site currently shows a short-form video editing gig and says it supports crypto settlement, digital contracts with escrow, and a 10% freelancer fee for completed jobs (premium may change fee terms; no paid upgrade is recommended).
+- Its FAQ lists supported assets across Ethereum and BNB Chain, including USDC and USDT. Current homepage wording also mentions additional chains, so the exact asset/network must be confirmed inside the individual contract before accepting.
+- The official terms say service is unavailable to people barred by applicable law in the country where they reside or use the service. The general claim that the marketplace is global does not confirm Iranian-passport acceptance for an Armenia resident.
+- Decision: **high-priority conditional** for fixed-scope AI video/design work, but do not register/submit KYC or accept a contract until the user's nationality + residence eligibility and wallet withdrawal route are confirmed. Keep the full scope, milestones and funded escrow on-platform; do not pay for Premium.
+- Official sources: https://laborx.com/ ; https://laborx.com/static/docs/terms-of-use.pdf
+
+### Superteam Earn — USDC opportunities exist, but eligibility and sponsor rules apply
+- Official FAQ distinguishes competitive Bounties from selective Projects. Projects are the better match for paid client work; a bounty is a contest and does not guarantee payment.
+- For Superteam/Solana-sponsored winners, KYC is required and payment is expected within seven days after the payment form. External sponsors generally pay the winner's linked wallet, but may separately require KYC or invoices.
+- Current Terms say users must not be subject to relevant economic sanctions and must not be located in, or be a citizen/resident of, a jurisdiction where using the service would be illegal. A listing marked Global is not proof of individual eligibility.
+- Decision: **conditional**. Prefer funded Projects with explicit USDC payout terms; check sponsor, network, KYC, and country rules for each listing. Iranian passport + Armenia residence remains unconfirmed.
+- Official sources: https://docs.superteam.fun/the-superteam-handbook/community/faqs/superteam-earn-faq ; https://superteam.fun/earn/terms-of-use.pdf
+
+Research boundary: these are public-source checks only. No account was created, no identity document was submitted, no wallet connected or signed, no job application or public post submitted, and no payment or purchase was made.
