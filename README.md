@@ -53,7 +53,7 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 
 ## Current earning-channel review
 
-The dashboard includes an 18-platform compatibility review catalogue in `app/components/platform-review-catalog.tsx`. Every entry is review-only by default; country, Iranian passport acceptance, KYC, payout route, fees, and no-deposit conditions must be checked before any platform is marked compatible. Microworker.app, Loopuman, SurveyTokens (IOTA route only for review), Taskmarket, Monero.Jobs, and XmrBazaar are prioritized candidates. The catalogue does not automate signup, KYC, wallet connection, submissions, or payouts.
+The dashboard includes a 25-entry platform compatibility review catalogue in `app/components/platform-review-catalog.tsx`. Every entry is review-only by default; country, Iranian passport acceptance, KYC, payout route, fees, and no-deposit conditions must be checked before any platform is marked compatible. Microworker.app, Loopuman, SurveyTokens (IOTA route only for review), Taskmarket, Monero.Jobs, XmrBazaar, LaborX, and CryptoTask are prioritized candidates. Dework and Open Bounty remain conditional leads; Web3.Career and CryptoJobs.com are job-board sources only, not payout providers. Worqen is recorded as excluded because its current terms explicitly prohibit Iranian nationals and require KYC. The catalogue does not automate signup, KYC, wallet connection, submissions, or payouts.
 
 ## Live discovery and current limitations
 
@@ -90,11 +90,11 @@ A free tier does not automatically grant unlimited generations or commercial-use
 ## Review-only leads
 
 - Subnano: possible paid-content marketplace. Its official FAQ has listed Nano and USDC on Base payouts, a 7.5% Nano fee, and a 15% USDC fee. Verify current country access, identity rules, and payout conditions inside the account.
-- LaborX: crypto freelance marketplace. Its official site documents a standard freelancer fee; verify the current fee, supported USDT network, country access, KYC, and withdrawal terms before accepting a job.
+- LaborX: crypto freelance marketplace with escrow and USDC/USDT/DAI on Ethereum or BNB Chain; the official FAQ states a 10% freelancer fee. Country and identity eligibility for this account remain unverified.\n- CryptoTask: freelance marketplace advertising crypto payments, escrow, and fees up to 3%; exact payout assets/networks and KYC/country acceptance remain unverified.\n- Dework: DAO bounty board; each sponsor determines reward token and conditions, so USDC payout is not guaranteed.\n- Open Bounty: small human-task marketplace using USDC/x402 on Base. Its own FAQ says approval does not guarantee payment because the publisher pays after approval; current live task volume is low.\n- Web3.Career and CryptoJobs.com: discovery boards only. The employer, not the board, determines payout, KYC, and country eligibility.\n- Worqen: excluded for this account. Its official Terms explicitly bar Iranian nationals and require KYC; do not attempt to bypass this restriction.
 
 Official references:
 - https://subnano.ai/faq
-- https://laborx.com/
+- https://laborx.com/\n- https://www.cryptotask.org/en\n- https://app.dework.xyz/bounties\n- https://openbounty.app/\n- https://web3.career/pay-in-crypto-jobs\n- https://www.cryptojobs.com/public/jobs\n- https://worqen.com/legal/terms
 
 ## Development
 
