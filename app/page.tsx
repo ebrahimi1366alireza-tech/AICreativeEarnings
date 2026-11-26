@@ -26,6 +26,15 @@ type Opportunity = { id: string; title: string; platform: string; pay: string; s
 type Delivery = { id: string; title: string; client: string; due: string; status: string };
 type Income = { id: string; source: string; amount: number; currency: string; received: boolean; date: string };
 
+function readStoredJson<T>(key: string, fallback: T): T {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) as T : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 const DEFAULT_WALLET_ADDRESS = "";
 const LEGACY_PLACEHOLDER_WALLET_ADDRESS = "0x9f53b26aec605212f239c33e1017c5d2d188eb4c";
 const INITIAL_OPPORTUNITIES: Opportunity[] = [
@@ -152,7 +161,11 @@ export default function Home() {
       opportunities,
       deliveries,
       income,
-      wallet: { address: walletAddress, network: walletNetwork }
+      wallet: { address: walletAddress, network: walletNetwork },
+      kycRecords: readStoredJson<unknown[]>("creativeops-kyc-intelligence-v1", []),
+      kycResidence: localStorage.getItem("creativeops-kyc-residence-v2") || "AM",
+      kycCitizenship: localStorage.getItem("creativeops-kyc-citizenship-v1") || "IR",
+      kycBankCountry: localStorage.getItem("creativeops-kyc-bank-country-v1") || "AM"
     };
     const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -186,13 +199,15 @@ export default function Home() {
     try {
       const parsed: unknown = JSON.parse(await file.text());
       if (!parsed || typeof parsed !== "object") throw new Error("invalid");
-      const data = parsed as { app?: unknown; schemaVersion?: unknown; opportunities?: unknown; deliveries?: unknown; income?: unknown; wallet?: unknown };
+      const data = parsed as { app?: unknown; schemaVersion?: unknown; opportunities?: unknown; deliveries?: unknown; income?: unknown; wallet?: unknown; kycRecords?: unknown; kycResidence?: unknown; kycCitizenship?: unknown; kycBankCountry?: unknown };
       const isRecord = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === "object" && !Array.isArray(value);
       const validOpportunities = Array.isArray(data.opportunities) && data.opportunities.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
       const validDeliveries = Array.isArray(data.deliveries) && data.deliveries.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
       const validIncome = Array.isArray(data.income) && data.income.every(item => isRecord(item) && typeof item.id === "string" && typeof item.source === "string" && typeof item.amount === "number" && Number.isFinite(item.amount) && typeof item.received === "boolean");
-      const validWallet = data.wallet === undefined || (isRecord(data.wallet) && typeof data.wallet.address === "string" && (data.wallet.address === "" || /^0x[a-fA-F0-9]{40}$/.test(data.wallet.address)) && typeof data.wallet.network === "string");
-      if (data.app !== "AI Creative Earnings" || data.schemaVersion !== 1 || !validOpportunities || !validDeliveries || !validIncome || !validWallet) throw new Error("invalid");
+      const validWallet = data.wallet === undefined || (isRecord(data.wallet) && typeof data.wallet.address === "string" && data.wallet.address.length <= 256 && !/[\\s\\u0000-\\u001F\\u007F]/.test(data.wallet.address) && typeof data.wallet.network === "string");
+      const validKyc = (data.kycRecords === undefined || Array.isArray(data.kycRecords)) &&
+        [data.kycResidence, data.kycCitizenship, data.kycBankCountry].every(value => value === undefined || typeof value === "string");
+      if (data.app !== "AI Creative Earnings" || data.schemaVersion !== 1 || !validOpportunities || !validDeliveries || !validIncome || !validWallet || !validKyc) throw new Error("invalid");
       if (!window.confirm("اطلاعات فعلی جایگزین اطلاعات داخل فایل پشتیبان شود؟ قبل از ادامه، از داده‌های فعلی خروجی بگیر.")) {
         event.target.value = "";
         return;
@@ -205,7 +220,11 @@ export default function Home() {
         opportunities,
         deliveries,
         income,
-        wallet: { address: walletAddress, network: walletNetwork }
+        wallet: { address: walletAddress, network: walletNetwork },
+        kycRecords: readStoredJson<unknown[]>("creativeops-kyc-intelligence-v1", []),
+        kycResidence: localStorage.getItem("creativeops-kyc-residence-v2") || "AM",
+        kycCitizenship: localStorage.getItem("creativeops-kyc-citizenship-v1") || "IR",
+        kycBankCountry: localStorage.getItem("creativeops-kyc-bank-country-v1") || "AM"
       };
       localStorage.setItem("creativeops-pre-import-backup-v1", JSON.stringify(currentBackup, null, 2));
       setHasPreImportBackup(true);
@@ -217,8 +236,13 @@ export default function Home() {
         setWalletAddress(restoredWallet.address);
         setWalletNetwork(restoredWallet.network);
         localStorage.setItem("creativeops-wallet-v1", JSON.stringify(restoredWallet));
-        window.dispatchEvent(new Event("creativeops-workspace-changed"));
       }
+      if (Array.isArray(data.kycRecords)) localStorage.setItem("creativeops-kyc-intelligence-v1", JSON.stringify(data.kycRecords));
+      if (typeof data.kycResidence === "string") localStorage.setItem("creativeops-kyc-residence-v2", data.kycResidence);
+      if (typeof data.kycCitizenship === "string") localStorage.setItem("creativeops-kyc-citizenship-v1", data.kycCitizenship);
+      if (typeof data.kycBankCountry === "string") localStorage.setItem("creativeops-kyc-bank-country-v1", data.kycBankCountry);
+      window.dispatchEvent(new Event("creativeops-workspace-changed"));
+      window.dispatchEvent(new Event("creativeops-kyc-imported"));
       setBackupNotice("اطلاعات فایل پشتیبان با موفقیت در این دستگاه بازیابی شد.");
     } catch {
       setBackupNotice("فایل معتبر نیست یا با نسخه پشتیبان این برنامه سازگار نیست.");
@@ -383,7 +407,7 @@ export default function Home() {
 
         <section className="panel backup-panel" id="backup">
           <div className="panel-head"><div><span className="eyebrow">DATA SAFETY</span><h2>پشتیبان‌گیری و بازیابی اطلاعات</h2></div><span className="free-tag">بدون هزینه</span></div>
-          <p className="hub-intro">از فرصت‌ها، سفارش‌های تولید و درآمدهای ثبت‌شده یک فایل پشتیبان JSON بساز. برای انتقال اطلاعات به گوشی یا مرورگر دیگر، فایل را همان‌جا بازیابی کن. این قابلیت جایگزین فضای ابری نیست و اطلاعات را خودکار همگام‌سازی نمی‌کند.</p>
+          <p className="hub-intro">از فرصت‌ها، سفارش‌های تولید، درآمدها، مقصد کیف پول و فهرست بررسی KYC/کشور یک فایل پشتیبان JSON بساز. برای انتقال اطلاعات به گوشی یا مرورگر دیگر، فایل را همان‌جا بازیابی کن. این قابلیت جایگزین فضای ابری نیست و اطلاعات را خودکار همگام‌سازی نمی‌کند.</p>
           <div className="backup-actions">
             <button type="button" onClick={exportBackup}>دانلود فایل پشتیبان</button>
             {hasPreImportBackup && <button type="button" onClick={downloadPreImportBackup}>دانلود نسخه خودکار قبل از بازیابی</button>}
@@ -391,7 +415,7 @@ export default function Home() {
               <input type="file" accept="application/json,.json" onChange={importBackup}/>
             </label>
           </div>
-          <p className="backup-notice" role="status">{backupNotice || "فایل پشتیبان شامل فرصت‌ها، سفارش‌ها، دفتر درآمد و آدرس عمومی کیف پول است؛ اطلاعات ورود Google و کلیدهای خصوصی هرگز ذخیره نمی‌شوند."}</p>
+          <p className="backup-notice" role="status">{backupNotice || "فایل پشتیبان شامل فرصت‌ها، سفارش‌ها، دفتر درآمد، آدرس عمومی کیف پول و سوابق بررسی KYC/کشور است؛ اطلاعات ورود و کلیدهای خصوصی هرگز ذخیره نمی‌شوند."}</p>
         </section>
 
         <footer id="deliveries"><span>CREATIVEOPS · نسخه ۰.۲.۰</span><span>ساخته‌شده برای گردش‌کار کم‌هزینه و شفاف</span></footer>
