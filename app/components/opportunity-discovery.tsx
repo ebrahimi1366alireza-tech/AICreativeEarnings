@@ -191,12 +191,15 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
       escrow,
       countryCheck,
       paymentAsset: effectivePaymentAsset,
+      citizenshipAcceptance, evidenceByField, triageStatus: assessment.status, missingEvidence: assessment.missingEvidence,
       score: assessment.score,
       decision: assessment.decision,
       ...(stream === "نوشتن و مقاله" ? { writingType, contentLanguage, wordCount: wordCount.trim() || "نامشخص", deadline: deadline.trim() || "نامشخص", seoRequired, commercialRights } : {})
     });
     setTitle("");
     setPay("");
+    setEvidenceText("");
+    setCitizenshipAcceptance("هنوز بررسی نشده");
     setProofUrl("");
     setNetwork("");
     setCustomPaymentAsset("");
