@@ -130,7 +130,7 @@ The first deterministic Opportunity Triage engine has now been added to the appl
 
 - `lib/opportunity-triage.mjs` evaluates residence eligibility, Iranian-citizenship acceptance, KYC level, crypto payout method, asset, exact network, minimum withdrawal, fees, and mandatory entry costs.
 - Each required condition needs its own HTTPS evidence URL. A listing URL alone cannot stand in for KYC, country, or payout evidence.
-- Outcomes are `ineligible`, `review_required`, or `ready_for_user_approval`. The last state means ready for a human's final review only; it is not an approval and triggers no external action.
+- Outcomes are `ineligible` or `review_required`. HTTPS evidence links remain unverified until their page contents, source ownership, freshness, and relevance are checked; the engine does not currently emit `ready_for_user_approval`.
 - The opportunity form captures evidence links and citizenship acceptance; saved opportunity cards show the triage state and missing evidence.
 - Seven Node built-in tests cover complete evidence, missing evidence, deposits, identity-document KYC, insecure URLs, evidence parsing, and missing listing sources.
 - A GitHub Actions workflow runs the triage tests and TypeScript check.
