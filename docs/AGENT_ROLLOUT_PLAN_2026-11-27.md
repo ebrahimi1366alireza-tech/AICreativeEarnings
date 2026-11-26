@@ -139,5 +139,5 @@ Verification snapshot:
 - Local isolated Node test run: 7/7 passed.
 - GitHub Actions triage test job: passed on the initial corrected run.
 - GitHub Actions TypeScript check: passed.
-- The separate existing application quality workflow is running its production build; do not claim production build success until that run completes.
+- GitHub Actions application quality workflow: TypeScript check and production build both passed.
 - No AI model, provider, paid service, agent runtime, wallet action, or account submission was enabled.
