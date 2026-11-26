@@ -22,7 +22,10 @@ test("video prompts include a vertical short-form storyboard brief", () => {
 test("rejects an empty subject and bounds user-provided fields", () => {
   assert.throws(() => buildCreativePrompt({ subject: "  " }), /subject is required/);
   const prompt = buildCreativePrompt({ subject: "x".repeat(900), details: "y".repeat(1000) });
-  assert.ok(prompt.length < 1800);
+  assert.ok(prompt.includes("x".repeat(500)));
+  assert.ok(!prompt.includes("x".repeat(501)));
+  assert.ok(prompt.includes("y".repeat(700)));
+  assert.ok(!prompt.includes("y".repeat(701)));
 });
 
 test("strips control characters and falls back safely for unknown modes", () => {
