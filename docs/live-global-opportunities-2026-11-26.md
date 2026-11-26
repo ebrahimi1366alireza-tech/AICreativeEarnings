@@ -334,3 +334,35 @@ Official sources:
 - https://worqen.com/about/
 
 Research boundary: public official pages only. No account was created, no terms were accepted, no KYC or wallet connection/signature was attempted, and no task or application was submitted.
+
+
+## Fresh global eligibility and rights checks — 2026-11-26 (continued)
+
+### Astra AI Creators — exclude for Iranian citizenship
+- The official creator application form states that its payment provider, UseGrade, cannot pay citizens of Iran (along with several other named nationalities), even when they live in another country.
+- The form separately asks for country of residence, but the citizenship-based payment exclusion is explicit and is not cured by current residence in Armenia.
+- Decision: **blocked / exclude** for this user's Iranian passport. Do not apply or create an account.
+- Official source: https://agc.astra-ai.co/en/form?track=local
+
+### PublicAI Trajector — crypto payout terms are clear; task scope and data licence make it a poor fit
+- The current Trajector Beta Program Terms (v3, effective 20 October 2026) describe a closed-beta program collecting only defined coding sessions from projects the contributor owns or open-source projects under a suitable licence. This is not a general AI image/video creator marketplace.
+- The terms currently allow withdrawal of USDC or USDT on Ethereum or BNB Smart Chain (BSC) once the withdrawable balance reaches $10. Each credit currently matures for 7 days; network fees are deducted. Withdrawals can be refused or delayed where sanctions law or other applicable law requires.
+- The separate Data Collection and Use Authorization grants PublicAI a worldwide, sublicensable, transferable, perpetual and irrevocable licence to use contributed, redacted coding-session data commercially, for research and potentially for selected public dataset release. A published dataset cannot be recalled. The privacy policy says scrubbing targets secrets and credentials, not all personal data; file paths, file contents and command output may be retained as sent.
+- The public authorization says the contributor's name and jurisdiction are self-declared and not verified as identity documents. This does **not** establish acceptance of an Iranian passport or guarantee that no further legal/sanctions review will occur.
+- No official confirmation was found for Iranian-citizenship eligibility, Armenia-specific access, ID/KYC/liveness requirements, or a current open invite route. The public privacy policy describes a closed-beta review of new signups.
+- Decision: **not recommended for the current creative-work path**. Do not enable collection on any personal or client repository, accept the authorization, or upload sessions unless the contributor fully understands and deliberately accepts the irreversible data licence and the exact code/data exposure. The advertised stablecoin rail alone is not enough to qualify it.
+- Official sources:
+  - https://trajector.publicai.io/legal/beta-terms
+  - https://trajector.publicai.io/terms
+  - https://trajector.publicai.io/privacy
+
+### Superteam Earn — legal wording confirmed; Iranian eligibility still unresolved
+- Current official Terms of Use §3.4 require the user not to be subject to applicable economic sanctions; §3.5 excludes users located in, or citizens/residents of, a jurisdiction where use would be illegal or violate applicable law.
+- The terms do not themselves publish a blanket list of every nationality excluded. Therefore they do not, by themselves, establish whether this Iranian citizen physically residing in Armenia is eligible; that needs a direct written answer from Superteam and, for external-sponsor listings, the sponsor's payment/KYC provider.
+- Superteam/Solana-sponsored winners require KYC under the official FAQ; external sponsors usually pay the linked wallet but may separately require KYC or invoices. Superteam's terms also state it is not liable for non-payment disputes between an external Partner and Service Provider.
+- Decision: **conditional / not cleared**. Prefer only funded, fixed-scope Projects over contest Bounties, and do not submit work until written confirmation covers Iranian citizenship, Armenia residence, KYC documents/liveness, sponsor identity, asset/network, and payment responsibility.
+- Official sources:
+  - https://superteam.fun/earn/terms-of-use.pdf
+  - https://docs.superteam.fun/the-superteam-handbook/community/faqs/superteam-earn-faq
+
+Research boundary: public-source review only. No signup, application, identity submission, account connection, wallet signature, code-session collection, or public content submission was performed.
