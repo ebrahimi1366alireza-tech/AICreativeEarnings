@@ -67,3 +67,21 @@ These four repositories were reviewed as cross-project engineering references. T
 - No paid usage, subscription, hosted inference, or other charge without explicit user approval.
 
 **Status:** Saved as reviewed candidates for future evaluation only. No software installation or integration is implied.
+
+
+## Additional cross-project agent platform candidate — 2026-11-26
+
+| Repository | Potential use | Initial priority | Important checks / decision |
+|---|---|---:|---|
+| [Freebuff](https://github.com/CodebuffAI/freebuff) | Multi-agent development and orchestration platform with Desktop, CLI, Web, Cloud (GitHub repository agents), and Chat modes. Potential shared engineering workspace for coding, research, app building, and parallel agent tasks. | High / trial candidate | Apache-2.0. README describes a limited free allowance (reported as 5 hours/day, with lower allowance under VPN/proxy) and access to different model providers; actual availability and quotas may vary by region, account, model capacity, and current terms. Some model/features may collect or process prompts, agent traces, project files, or other data for service operation, advertising, model improvement, or partner evaluation. Do not expose wallet private keys, seed phrases, API tokens, credentials, .env files, or sensitive/private repositories. Verify current privacy terms, data controls, region access, model pricing, and command/file permissions before testing. |
+
+### Cross-project relevance and trial status
+
+- **AI Creative Earnings:** High relevance for agent-assisted coding, research, parallel development, and GitHub workflows.
+- **AIRDROP AI:** High relevance as a possible shared development/orchestration tool; keep project code, secrets, and runtime isolated.
+- **Global Job Intelligence:** Medium–high relevance for building and testing job-search automation and research workflows.
+- **Dropshipping:** Medium relevance for storefront tooling, product research, and marketing workflow development.
+- **AI Crypto Security Hunter:** Medium relevance for code analysis and report-generation workflows; never provide wallet secrets or authorize uncontrolled execution against live systems.
+- **Decision:** Worth a controlled trial, but not approved as production infrastructure. Start with a disposable test repository/workspace, least-privilege permissions, and non-sensitive sample data. Review every command and file change before accepting it.
+- **License note:** Apache-2.0 applies to the Freebuff repository's software; it does not automatically grant commercial rights to third-party models, hosted services, generated media, or external dependencies.
+- **Status:** Candidate reference saved only. No installation, account connection, deployment, security audit, or code integration has been performed.
