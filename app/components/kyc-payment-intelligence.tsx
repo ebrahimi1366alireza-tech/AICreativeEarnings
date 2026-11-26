@@ -93,8 +93,11 @@ type Filter = "all" | "ready" | "review" | "blocked";
 function readiness(item: KycRecord, residence: string, citizenship: string) {
   const countryAccess = item.countryAccessByResidence?.[residence] ?? item.countryAccess;
   const passportAcceptance = item.passportAcceptanceByCitizenship?.[citizenship] ?? (citizenship === "IR" ? item.iranianPassport : "unknown");
-  if (passportAcceptance === "rejected" || countryAccess === "blocked" || item.payout === "fiat" || item.cost === "fee" || item.cost === "deposit") return "blocked";
-  if (["none", "selfie"].includes(item.kyc) && passportAcceptance === "accepted" && countryAccess === "allowed" &&
+  // Passport acceptance is relevant only when the platform actually requires an identity document.
+  // No-KYC and selfie/liveness-only flows must not be rejected for an unused passport check.
+  if ((item.kyc === "id" && passportAcceptance === "rejected") || countryAccess === "blocked" ||
+      item.payout === "fiat" || item.cost === "fee" || item.cost === "deposit") return "blocked";
+  if (["none", "selfie"].includes(item.kyc) && countryAccess === "allowed" &&
       item.payout === "direct-crypto" && item.cost === "free" && item.asset.trim() &&
       item.network.trim() && item.minimum.trim() && item.fee.trim() && item.evidenceUrl.startsWith("https://")) return "ready";
   return "review";
@@ -176,7 +179,7 @@ export default function KycPaymentIntelligence() {
   return (
     <section className="panel kpi-panel" id="kyc-intelligence">
       <div className="panel-head"><div><span className="eyebrow">KYC & PAYMENT INTELLIGENCE</span><h2>هوش احراز هویت و برداشت درآمد</h2></div><span className="free-tag">فقط مسیر قانونی</span></div>
-      <p className="hub-intro">برای هر پلتفرم، کشور محل اقامت، کشور تابعیت و کشور حساب بانکی را جداگانه بررسی کن. فهرست شامل کشورهای جهان است؛ پذیرش پاسپورت، دسترسی منطقه‌ای، نوع KYC، پرداخت و ریسک بلوکه‌شدن را ثبت و غربال کن. سلفی/زنده‌سنجی به‌تنهایی قابل قبول است؛ مدرک هویتی، پاسپورت، آدرس و مالیات باید جداگانه بررسی شوند. اطلاعات اولیه عمداً «نامشخص» هستند؛ تا وقتی منبع رسمی و تاریخ بررسی ثبت نشده، هیچ گزینه‌ای تأییدشده محسوب نمی‌شود.</p>
+      <p className="hub-intro">برای هر پلتفرم، کشور محل اقامت، کشور تابعیت و کشور حساب بانکی را جداگانه بررسی کن. فهرست شامل کشورهای جهان است؛ پذیرش پاسپورت، دسترسی منطقه‌ای، نوع KYC، پرداخت و ریسک بلوکه‌شدن را ثبت و غربال کن. سلفی/زنده‌سنجی به‌تنهایی قابل قبول است؛ اگر پلتفرم فقط سلفی بخواهد یا اصلاً KYC نداشته باشد، پذیرش پاسپورت ملاک نیست. مدرک هویتی، آدرس و مالیات فقط در صورت درخواست واقعی پلتفرم جداگانه بررسی می‌شوند. اطلاعات اولیه عمداً «نامشخص» هستند؛ تا وقتی منبع رسمی و تاریخ بررسی ثبت نشده، هیچ گزینه‌ای تأییدشده محسوب نمی‌شود.</p>
       <div className="kpi-toolbar">
         <label>کشور محل اقامت
           <select value={residence} onChange={e=>setResidence(e.target.value)}>
