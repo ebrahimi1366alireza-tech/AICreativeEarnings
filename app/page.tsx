@@ -204,7 +204,7 @@ export default function Home() {
       const validOpportunities = Array.isArray(data.opportunities) && data.opportunities.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
       const validDeliveries = Array.isArray(data.deliveries) && data.deliveries.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
       const validIncome = Array.isArray(data.income) && data.income.every(item => isRecord(item) && typeof item.id === "string" && typeof item.source === "string" && typeof item.amount === "number" && Number.isFinite(item.amount) && typeof item.received === "boolean");
-      const validWallet = data.wallet === undefined || (isRecord(data.wallet) && typeof data.wallet.address === "string" && data.wallet.address.length <= 256 && !/[\\s\\u0000-\\u001F\\u007F]/.test(data.wallet.address) && typeof data.wallet.network === "string");
+      const validWallet = data.wallet === undefined || (isRecord(data.wallet) && typeof data.wallet.address === "string" && data.wallet.address.length <= 256 && !/[\s\u0000-\u001F\u007F]/.test(data.wallet.address) && typeof data.wallet.network === "string");
       const validKyc = (data.kycRecords === undefined || Array.isArray(data.kycRecords)) &&
         [data.kycResidence, data.kycCitizenship, data.kycBankCountry].every(value => value === undefined || typeof value === "string");
       if (data.app !== "AI Creative Earnings" || data.schemaVersion !== 1 || !validOpportunities || !validDeliveries || !validIncome || !validWallet || !validKyc) throw new Error("invalid");
