@@ -141,3 +141,11 @@ Verification snapshot:
 - GitHub Actions TypeScript check: passed.
 - GitHub Actions application quality workflow: TypeScript check and production build both passed.
 - No AI model, provider, paid service, agent runtime, wallet action, or account submission was enabled.
+
+
+## Follow-up implementation — 2026-11-27
+
+- Evidence-link handling is now explicitly labeled `not_verified`: HTTPS syntax alone does not verify a source's ownership, page contents, freshness, or whether it proves the associated claim. The UI states this limitation; a perfect score is not evidence validation.
+- Added a deterministic Creative Producer planner for image, video, audio, and text briefs. It produces execution stages, a quality/delivery checklist, a rights warning, and a budget-approval flag. It does not generate assets or call external tools.
+- Added four Creative Producer tests and expanded the triage suite to assert the unverified-evidence warning. CI now runs all `tests/*.test.mjs` tests and TypeScript checks on branch pushes and pull requests.
+- The component is a supervised planner, not a deployed LLM agent. Tool quota, regional access, commercial rights, and output licensing still require per-tool review.
