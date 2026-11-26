@@ -35,10 +35,10 @@ export async function GET(request: NextRequest, context: { params: Promise<{ tas
     return NextResponse.json({ error: "نشست پیگیری معتبر نیست." }, { status: 403 });
   }
 
-  let tasks: Array<{ id: string; kind: string; createdAt: number }>;
-  try { tasks = JSON.parse(Buffer.from(encoded, "base64url").toString("utf8")); }
+  let payload: { ownerId?: string; tasks?: Array<{ id: string; kind: string; createdAt: number }> };
+  try { payload = JSON.parse(Buffer.from(encoded, "base64url").toString("utf8")); }
   catch { return NextResponse.json({ error: "اطلاعات پیگیری خراب است." }, { status: 400 }); }
-  if (!Array.isArray(tasks) || !tasks.some(item => item?.id === taskId)) {
+  if (payload.ownerId !== user.id || !Array.isArray(payload.tasks) || !payload.tasks.some(item => item?.id === taskId)) {
     return NextResponse.json({ error: "این کار به حساب فعلی تعلق ندارد." }, { status: 404 });
   }
 
