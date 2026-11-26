@@ -84,6 +84,7 @@ A free tier does not automatically grant unlimited generations or commercial-use
 
 - [OpenMausBot review](docs/tool-reviews/openmausbot.md): candidate for a later isolated multi-agent orchestration experiment. It is not a production dependency or an earning platform. Review runtime requirements, provider costs, licensing, agent permissions, credential handling, and security cautions before any trial.
 - [Stack on a Budget review](docs/tool-reviews/stack-on-a-budget.md): reference catalogue for discovering free-tier infrastructure (hosting, databases, CDN, email, monitoring, APIs, and related services). It is not a provider or runtime dependency; verify every provider's current pricing, Armenia availability, identity restrictions, security, and overage behavior before adoption.
+- [Free Claude Code (FCC) review](docs/tool-reviews/free-claude-code.md): optional local model/provider routing companion for OpenCode, not a multi-agent orchestrator or earning platform. The existing opt-in setup remains confirmation-gated; do not install automatically or enable paid providers without explicit approval.
 
 ## Review-only leads
 
