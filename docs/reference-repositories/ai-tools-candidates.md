@@ -2,7 +2,7 @@
 
 Reviewed on: 2026-11-26
 
-This document records nine external GitHub repositories as candidate references for future evaluation. Recording a repository here does **not** mean it has been installed, integrated, deployed, or approved for production use.
+This document records external GitHub repositories as candidate references for future evaluation. Recording a repository here does **not** mean it has been installed, integrated, deployed, or approved for production use.
 
 ## Candidate repositories
 
@@ -44,3 +44,26 @@ Before adopting any candidate:
 This is a shared reference list copied into this repository for discovery only. Each project should independently decide which tools are relevant; do not install every candidate merely because it appears in this list.
 
 **Status:** Reference list only. No installation, deployment, or code integration has been performed.
+
+
+## Additional engineering and agent infrastructure candidates — 2026-11-26
+
+These four repositories were reviewed as cross-project engineering references. They are candidates only; none has been installed, executed, security-audited, or integrated.
+
+| Repository | Potential use | Initial priority | Important checks / decision |
+|---|---|---:|---|
+| [Ponytail](https://github.com/DietrichGebert/ponytail) | Coding-agent review/audit and simplification workflows; reduce over-engineering and potentially lower token and maintenance costs | High | MIT. Candidate for selective use with Codex/Claude Code-compatible workflows. Treat upstream efficiency claims as hypotheses until benchmarked on our own code. |
+| [OmniRoute](https://github.com/diegosouzapw/OmniRoute) | Local multi-provider AI gateway; route requests across model providers, manage model choice and fallback, and provide a unified endpoint | Very high | MIT. The supplied repository may redirect to the current OmniRoute project under cheaper-inference. The gateway being free does not make inference free: verify provider pricing, free-tier quotas, country/KYC restrictions, API-key handling, privacy, and data routing before use. |
+| [Graphify](https://github.com/Graphify-Labs/graphify) | Build queryable knowledge graphs from codebases, documentation, schemas, and configuration to help agents understand architecture and dependencies | High | Repository contains Apache-2.0 and MIT licensed components/files; inspect the exact component and license before reuse. Structural code parsing can be local; semantic document processing may require an LLM/API or local model. |
+| [Agent Skills](https://github.com/addyosmani/agent-skills) | Engineering skills and workflows for requirements, planning, implementation, testing, security, review, performance, and release | Very high | MIT; 26 skills reported in the reviewed project. Adopt selected skills only. Avoid enabling overlapping instructions alongside Ponytail or other skill packs without checking for conflicts and token overhead. |
+
+### Cross-project use notes
+
+- **AI Creative Earnings:** All four are relevant as development and infrastructure candidates. OmniRoute is the strongest candidate for reducing model-provider lock-in and managing inference costs; Agent Skills and Ponytail can improve development discipline; Graphify can help navigate the growing codebase.
+- **AIRDROP AI:** Keep this project independent. The same four tools may be evaluated as shared engineering references, but do not merge its code, configuration, data, or runtime with AI Creative Earnings.
+- Follow the account-wide project order: finish AI Creative Earnings before starting or advancing AIRDROP AI, unless the user explicitly changes that order.
+- Do not add all skill packs or agents at once. Select only the capabilities needed for a concrete task and test them in isolation.
+- Before any provider integration, verify actual costs, free quotas, country eligibility, KYC, privacy, and whether user data or secrets are sent to third parties.
+- No paid usage, subscription, hosted inference, or other charge without explicit user approval.
+
+**Status:** Saved as reviewed candidates for future evaluation only. No software installation or integration is implied.
