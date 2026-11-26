@@ -90,3 +90,24 @@ I am considering using Microworker while physically residing in Armenia. I hold 
 I will use accurate identity and location information and will not use a VPN or another person's account to bypass restrictions. I would appreciate written clarification before registration.
 
 Thank you.
+
+
+## 4. Anna AI / Superteam Earn — external sponsor payout and eligibility
+**To:** Superteam Earn support or the Anna bounty contact (use the official contact link on the listing)  
+**Subject:** Eligibility and USDC payout confirmation — Anna AI Messenger bounty
+
+Hello,
+
+I am considering entering the “Create an Engaging X Thread Introducing Anna AI Messenger” bounty. Before creating an account, connecting a wallet, or publishing promotional content, please confirm the following for my exact situation:
+
+1. I hold an Iranian passport and currently reside in Armenia. Can I register, participate, submit, and receive a prize under this bounty with that citizenship and residence combination?
+2. Does the sponsor or Superteam Earn apply any nationality, sanctions-screening, residence, or payment-provider restrictions to Iranian citizens residing in Armenia?
+3. If selected as a winner, which entity sends the 250 USDC prize, and is payment made directly to the self-custody wallet linked to my Superteam Earn profile?
+4. Which USDC network is used? Are there minimum payout amounts, network fees, processing fees, invoices, tax forms, or other deductions?
+5. What KYC is required before payment? Is an Iranian passport accepted? Is a selfie/liveness check, proof of Armenian address, or Armenian residence permit required?
+6. Is the bounty still open, and what is the exact deadline and time zone? The public listing's countdown and external listing snapshots appear inconsistent.
+7. Is the X Paid Partnership disclosure mandatory for every promotional entry, and is there a required disclosure format?
+
+I will provide accurate citizenship and residence details and will not use a VPN or another person's account to bypass restrictions. I would appreciate written confirmation before I participate.
+
+Thank you.
