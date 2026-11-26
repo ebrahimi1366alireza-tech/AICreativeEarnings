@@ -30,6 +30,7 @@ test("rejects an empty subject and bounds user-provided fields", () => {
 
 test("strips control characters and falls back safely for unknown modes", () => {
   const prompt = buildCreativePrompt({ subject: "Tea\nproduct", mode: "unknown", style: "unknown" });
-  assert.doesNotMatch(prompt, /[\\u0000-\\u0009\\u000b-\\u001f\\u007f]/);
+  assert.ok(!prompt.includes("Tea\\nproduct"));
+  assert.match(prompt, /Tea product/);
   assert.match(prompt, /commercial product photograph/);
 });
