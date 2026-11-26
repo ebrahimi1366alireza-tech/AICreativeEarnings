@@ -25,7 +25,7 @@ test("wallet backup validation rejects malformed or unsafe fields", () => {
     { address: 123, network: "Ethereum" },
     { address: "0x1234", network: 12 },
     { address: "address with spaces", network: "Solana" },
-    { address: "address\\nwith-control", network: "Bitcoin" },
+    { address: "address\nwith-control", network: "Bitcoin" },
     { address: "a".repeat(257), network: "Unknown" },
     { address: "valid-address", network: "n".repeat(101) }
   ]) {
