@@ -122,3 +122,22 @@ The Opportunity Triage Assistant is done only when it can take a candidate listi
 ## Status
 
 As of 2026-11-27, this document records the agreed rollout design. The logical roles are not deployed agents. No model/provider, paid service, agent runtime, or autonomous external-action permission is enabled by this plan.
+
+
+## Implementation update — 2026-11-27
+
+The first deterministic Opportunity Triage engine has now been added to the application branch:
+
+- `lib/opportunity-triage.mjs` evaluates residence eligibility, Iranian-citizenship acceptance, KYC level, crypto payout method, asset, exact network, minimum withdrawal, fees, and mandatory entry costs.
+- Each required condition needs its own HTTPS evidence URL. A listing URL alone cannot stand in for KYC, country, or payout evidence.
+- Outcomes are `ineligible`, `review_required`, or `ready_for_user_approval`. The last state means ready for a human's final review only; it is not an approval and triggers no external action.
+- The opportunity form captures evidence links and citizenship acceptance; saved opportunity cards show the triage state and missing evidence.
+- Seven Node built-in tests cover complete evidence, missing evidence, deposits, identity-document KYC, insecure URLs, evidence parsing, and missing listing sources.
+- A GitHub Actions workflow runs the triage tests and TypeScript check.
+
+Verification snapshot:
+- Local isolated Node test run: 7/7 passed.
+- GitHub Actions triage test job: passed on the initial corrected run.
+- GitHub Actions TypeScript check: passed.
+- The separate existing application quality workflow is running its production build; do not claim production build success until that run completes.
+- No AI model, provider, paid service, agent runtime, wallet action, or account submission was enabled.
