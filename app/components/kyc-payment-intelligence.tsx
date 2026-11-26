@@ -103,11 +103,20 @@ const seed: KycRecord[] = [
   ["MusedIn","https://musedin.com/"],
   ["AgentPact","https://agentpact.io/"]
 ].map(([platform,url]) => ({
+
   id: platform.toLowerCase().replace(/[^a-z0-9]+/g,"-"), platform, url,
   kyc:"unknown" as const, iranianPassport:"unknown" as const,
   countryAccess:"unknown" as const, payout:"unknown" as const, cost:"unknown" as const,
   asset:"", network:"", minimum:"نامشخص", fee:"نامشخص", evidenceUrl:"", checkedAt:""
-}));
+})).map(record => record.id === "gibwork" ? {
+  ...record,
+  iranianPassport:"rejected" as const,
+  passportAcceptanceByCitizenship:{ IR:"rejected" as const },
+  evidenceUrl:"https://gib.work/terms",
+  evidenceNote:"شرایط رسمی Gibwork استفاده را برای شهروند یا مقیم حوزه‌های مشمول تحریم جامع ممنوع می‌کند. راهنمای رسمی OFAC، ایران را در دسته تحریم‌های گسترده/جامع حوزه‌محور قرار می‌دهد؛ بنابراین شرط شهروندی در متن Gibwork برای تابعیت ایرانی مانع است، حتی اگر محل حضور فعلی ارمنستان باشد.",
+  evidenceCheckedAt:"2026-11-26",
+  checkedAt:"2026-11-26"
+} : record);
 
 // ISO 3166-1 alpha-2 country/territory codes. Names are localized by the browser.
 const COUNTRY_CODES = `AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW`.split(" ");
