@@ -24,6 +24,10 @@ The six streams are product scope, not proof that matching live opportunities or
 - Include browser-only microtasks and website testing where tasks can be completed without installing an app. Exclude mandatory app/game installation, app-only testing, and reward offers that require installing software.
 - Never store passwords, Google credentials, private keys, or wallet recovery phrases in the app or repository.
 
+## Supervised Creative Producer
+
+The Creative Producer turns a brief into a deterministic production plan, execution stages, quality checklist, rights warning, and budget-approval flag for image, video, audio, and text work. It does not generate files, call external tools, consume credits, or submit deliverables. Rights marked unknown remain explicitly unresolved, and non-zero tool budgets require separate user approval. The planner is covered by automated Node tests.
+
 ## AI-assisted remote work services
 
 The opportunity workspace now includes a capability catalogue for AI-assisted product imagery, advertising/social graphics, short-video editing, motion-graphics preparation, and visual asset resizing or cleanup. Actual generation depends on connected tools, available quotas, account access, and commercial-use rights. Human approval remains required for account access, identity checks, contracts, final submissions, and financial actions. No paid tool usage or generation is allowed without explicit cost approval.
