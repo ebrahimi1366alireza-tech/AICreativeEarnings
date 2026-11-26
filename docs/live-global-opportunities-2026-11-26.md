@@ -410,3 +410,17 @@ Official listing: https://superteam.fun/earn/listing/create-and-earn-explore-tok
   - Higher-level example: https://www.upwork.com/freelance-jobs/apply/Creative-Producer-Video-Editor_~022122991826076426694/
 
 Research boundary: public-source review only. No account registration, KYC, bank details, wallet connection, transaction, application or public submission was performed.
+
+
+## KriptoK Creator Challenge — active Global creative bounty (2026-11-26)
+- Official listing labels it **Global** and offers 200 USDC across 10 winners: 50 / 35 / 25 / 20 / 20 / 10 / 10 / 10 / 10 / 10 USDC. Winner announcement is scheduled for 9 December 2026.
+- Accepts an original post, thread, video or product walkthrough. Content must be in English or include English subtitles. Topic can be chosen from product areas such as Earn, everyday onchain use, collectibles, tokenized stocks, or an honest first impression.
+- The listing explicitly says **no purchase, deposit or trade is required**. It asks participants to follow two X accounts, join the Telegram community, participate in conversations and submit one original piece via Superteam Earn.
+- At the time of the latest check, 357 submissions were visible. This is a competitive bounty, and the 200 USDC is split across 10 winners; payment is not guaranteed.
+- The listing does not publish the exact reward network, wallet requirements, KYC/liveness requirements, or explicit Iranian-citizen / Armenia-resident eligibility. Superteam-sponsored winners are subject to KYC under the official FAQ; sponsor-specific payment review may still apply.
+- Decision: **best current low-cost creative candidate for review**, because it is explicitly Global and states no purchase/deposit/trade is required. Still **not cleared for submission** until Superteam confirms Iranian passport + Armenia residence and the payout/KYC path. Do not connect a wallet, sign anything, or publish content until eligibility is confirmed and user approves.
+- Official sources:
+  - Listing: https://superteam.fun/earn/listing/kriptok-creator-challenge-01
+  - Superteam Earn KYC/payment FAQ: https://docs.superteam.fun/the-superteam-handbook/community/faqs/superteam-earn-faq
+
+Research boundary: no registration, account connection, wallet signature, trade, purchase, deposit, KYC, or public submission was performed.
