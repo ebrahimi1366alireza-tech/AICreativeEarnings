@@ -64,7 +64,8 @@ These schedules are design targets. They do not become active until a gh-aw work
 - [x] Reuse the existing specialist role documents.
 - [ ] Choose an AI engine after confirming available access and acceptable cost.
 - [ ] Install and initialize the current gh-aw CLI in the repository checkout.
-- [ ] Create and compile the first read-only executive workflow and commit both its Markdown source and generated lock file.
+- [x] Draft and commit the first read-only executive workflow source at `.github/workflows/executive-agent.md`.
+- [ ] Compile the source with `gh aw compile` in the repository checkout and commit the generated `.lock.yml` file. The source alone is not runnable.
 - [ ] Configure the required provider authentication in GitHub Actions Secrets or supported billing integration.
 - [ ] Run a manual test and inspect its permissions, logs, output, and cost.
 - [ ] Enable a conservative daily schedule only after the test passes.
