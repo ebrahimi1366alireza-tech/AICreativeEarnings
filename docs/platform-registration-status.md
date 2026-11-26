@@ -143,3 +143,12 @@ Research-only status: no accounts were created, no applications submitted, no wa
 The source documents and KYC tracker were not fully aligned. The KYC seed has now been expanded with additional discovery candidates found in the catalog/research notes: Paragraph (the successor to Mirror), Microworkers.com, Freecash, Toloka, Mindrift, Ruul, Gumroad, Ko-fi, Shutterstock Contributor, BeatStars, TryBounty, MusedIn, AgentPact, and AgentBounties. These entries are intentionally initialized as **unknown**, not approved. Several are fiat-first or creator storefronts rather than direct crypto task platforms and must remain outside the primary shortlist unless wallet payout is proven.
 
 Mirror is recorded as a historical alias/migration, not as a separate active platform. Paragraph is the current product. Official migration notice: https://paragraph.com/@blog/bringing-the-best-of-mirror-to-paragraph. Official writer-coin documentation: https://paragraph.com/docs/earn/writer-coins. No Iranian-passport or Armenia-without-residence eligibility has been established.
+
+
+## 2026-11-26 — KYC payout-country gate correction
+
+- The KYC & Payment Intelligence tracker now evaluates the selected receiving-account / payout country separately from physical-presence country and citizenship.
+- Added per-platform, per-country payout availability (payoutCountryAccessByCountry). A platform cannot be classified as fully recorded unless the receiving country is explicitly marked supported.
+- Legacy country-access fields are now used as a fallback for physical-presence access, instead of being silently ignored.
+- UI wording now describes a complete set of recorded fields, not an independently verified eligibility result. The tracker does not automatically read or validate the linked evidence page; source URL, note, and check date are manually entered.
+- This is a local browser-side tracker. No accounts, KYC submissions, wallet connections, applications, or payments were made.
