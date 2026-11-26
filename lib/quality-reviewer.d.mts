@@ -4,6 +4,7 @@ export interface CreativeReviewInput {
   deliverable: string;
   format?: string;
   rightsStatus?: string;
+  rightsEvidenceReference?: string;
   checks?: Record<string, boolean>;
   revisionLimit?: string;
   reviewerNotes?: string;
