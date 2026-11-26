@@ -155,6 +155,6 @@ Verification snapshot:
 
 - Added `lib/quality-reviewer.mjs` and TypeScript declarations for a deterministic quality gate.
 - Added a UI for recording the brief, deliverable description, output format, rights status, revision limits, reviewer notes, and seven manual quality criteria.
-- Unknown rights or incomplete criteria require correction; prohibited commercial use blocks delivery. A complete checklist reaches human review only.
-- The reviewer explicitly reports that media inspection was not performed and that checklist items are user-attested. It does not open or analyze image/video/audio files, independently validate licenses, send deliverables, or publish content.
+- Unknown rights, missing rights-evidence references, or incomplete criteria require correction; prohibited commercial use blocks delivery. A complete checklist reaches human review only.
+- The reviewer explicitly reports that media inspection was not performed, checklist items are user-attested, and rights-evidence references are not verified. It does not open or analyze image/video/audio files, independently validate licenses, send deliverables, or publish content.
 - Added six Node tests covering complete review, unknown/prohibited rights, unchecked criteria, missing brief data, and invalid rights labels.
