@@ -83,6 +83,7 @@ A free tier does not automatically grant unlimited generations or commercial-use
 ## Reviewed agent orchestration tools
 
 - [OpenMausBot review](docs/tool-reviews/openmausbot.md): candidate for a later isolated multi-agent orchestration experiment. It is not a production dependency or an earning platform. Review runtime requirements, provider costs, licensing, agent permissions, credential handling, and security cautions before any trial.
+- [Stack on a Budget review](docs/tool-reviews/stack-on-a-budget.md): reference catalogue for discovering free-tier infrastructure (hosting, databases, CDN, email, monitoring, APIs, and related services). It is not a provider or runtime dependency; verify every provider's current pricing, Armenia availability, identity restrictions, security, and overage behavior before adoption.
 
 ## Review-only leads
 
