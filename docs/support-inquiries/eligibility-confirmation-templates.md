@@ -60,3 +60,11 @@ Thank you.
 - A link or saved copy of the applicable current terms.
 
 Do not mark either platform as eligible based only on a generic "worldwide" or "global" response. The reply must address Iranian citizenship and current Armenia residence separately.
+
+
+### Additional Loopuman support questions (add to the draft before sending)
+8. Does the advertised $1.00 balance threshold trigger automatic transfer to a self-custody wallet, or must a worker manually request/claim the withdrawal?
+9. Which wallet apps and address formats are supported for Celo USDT, USDC and USDm? Are all three assets issued on Celo mainnet, and are there any token-specific restrictions?
+10. Is the $1.00 threshold gross balance or net amount after any platform/network fee? Who pays Celo gas, and what exact deductions apply?
+11. Can an Iranian citizen physically residing in Armenia complete the worker verification and receive payouts, and are there any separate citizenship, residence, task-location or payout-country restrictions?
+12. Is VAE ever required to unlock worker tasks, withdraw earnings, or pass verification? Please confirm that no purchase, deposit, or paid membership is required for a worker to earn and withdraw.
