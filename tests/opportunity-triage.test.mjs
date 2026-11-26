@@ -26,6 +26,8 @@ test("complete evidence only becomes ready for human approval, never auto-approv
   assert.equal(result.status, "ready_for_user_approval");
   assert.equal(result.decision, "آماده بررسی نهایی کاربر");
   assert.equal(result.score, 100);
+  assert.equal(result.evidenceVerification, "not_verified");
+  assert.match(result.reason, /محتوای لینک‌ها/);
 });
 
 test("missing country or citizenship proof remains review-required", () => {
