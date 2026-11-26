@@ -149,3 +149,12 @@ Verification snapshot:
 - Added a deterministic Creative Producer planner for image, video, audio, and text briefs. It produces execution stages, a quality/delivery checklist, a rights warning, and a budget-approval flag. It does not generate assets or call external tools.
 - Added four Creative Producer tests and expanded the triage suite to assert the unverified-evidence warning. CI now runs all `tests/*.test.mjs` tests and TypeScript checks on branch pushes and pull requests.
 - The component is a supervised planner, not a deployed LLM agent. Tool quota, regional access, commercial rights, and output licensing still require per-tool review.
+
+
+## Quality Reviewer implementation — 2026-11-27
+
+- Added `lib/quality-reviewer.mjs` and TypeScript declarations for a deterministic quality gate.
+- Added a UI for recording the brief, deliverable description, output format, rights status, revision limits, reviewer notes, and seven manual quality criteria.
+- Unknown rights or incomplete criteria require correction; prohibited commercial use blocks delivery. A complete checklist reaches human review only.
+- The reviewer explicitly reports that media inspection was not performed and that checklist items are user-attested. It does not open or analyze image/video/audio files, independently validate licenses, send deliverables, or publish content.
+- Added six Node tests covering complete review, unknown/prohibited rights, unchecked criteria, missing brief data, and invalid rights labels.
