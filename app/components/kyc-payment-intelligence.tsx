@@ -129,9 +129,12 @@ function isVerifiedEvidence(item: KycRecord) {
     if (url.protocol !== "https:" || !url.hostname || url.username || url.password) return false;
   } catch { return false; }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(item.evidenceCheckedAt)) return false;
-  const checked = Date.parse(item.evidenceCheckedAt + "T00:00:00.000Z");
+  const checkedDate = new Date(item.evidenceCheckedAt + "T00:00:00.000Z");
+  const checked = checkedDate.getTime();
+  // Reject normalized impossible dates such as 2026-02-31, not just malformed strings.
+  if (!Number.isFinite(checked) || checkedDate.toISOString().slice(0, 10) !== item.evidenceCheckedAt) return false;
   const age = Date.now() - checked;
-  return Number.isFinite(checked) && age >= 0 && age <= 90 * 24 * 60 * 60 * 1000;
+  return age >= 0 && age <= 90 * 24 * 60 * 60 * 1000;
 }
 
 function readiness(item: KycRecord, presenceCountry: string, citizenship: string) {
