@@ -172,3 +172,9 @@ Mirror is recorded as a historical alias/migration, not as a separate active pla
 - [x] Corrected Reach.cat to closed/excluded in the research record; do not treat its old no-KYC/USDT marketing as a current earning option.
 - [ ] First external support check should be Loopuman, asking for written confirmation of Iranian passport + Armenia physical presence and self-custody Celo stablecoin payout before any signup/KYC.
 - [ ] No account created, content posted, social OAuth granted, wallet connected/signed, ID/biometric submitted, or payment made in this research pass.
+
+
+## Additional eligibility finding — 2026-11-26
+
+- **Toloka:** official eligibility terms list Iran as a restricted jurisdiction for access, residence, service performance and payout routing. The terms do not clearly say that Iranian citizenship alone bars an Iranian passport holder whose current residence is Armenia; keep passport acceptance **unknown**, not rejected. The same official terms require identity/residency/eligibility verification and prohibit VPN/proxy location concealment. Official contributor documentation lists PayPal, Payoneer, Papara and QIWI withdrawals, not direct self-custody crypto. Therefore exclude Toloka from the crypto-wallet-only earning shortlist even while retaining its nationality/residence result as unresolved. Sources: https://toloka.ai/legal/eligibility-and-geographic-restrictions ; https://toloka.ai/legal/privacy-notice ; https://github.com/Toloka/docs-tolokers/blob/main/en/common/pay/about.md
+- **ClipStake:** official creator flow reconfirmed: select campaign, publish on own social account, submit, receive brand approval, meet the campaign-specific verified-view minimum, then claim. This is not proof of a funded campaign or guaranteed payout. Keep on watchlist pending campaign-level terms and eligibility. Source: https://www.clipstake.com/creators
