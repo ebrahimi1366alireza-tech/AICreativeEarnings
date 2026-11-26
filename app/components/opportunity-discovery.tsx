@@ -323,7 +323,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
             <select value={commercialRights} onChange={e => setCommercialRights(e.target.value)} aria-label="حقوق تجاری محتوا"><option>باید از کارفرما تأیید شود</option><option>حقوق تجاری و مالکیت مشخص است</option><option>استفاده تجاری ممنوع است</option></select>
           </div>
         )}
-        <textarea value={evidenceText} onChange={e => setEvidenceText(e.target.value)} rows={5} placeholder={"برای هر مورد یک لینک رسمی وارد کن، هر خط به شکل field=https://...\\nفیلدها: country, citizenship, kyc, payout, asset, network, minimum, fee, entryCost"} aria-label="مدارک رسمی هر شرط" />
+        <textarea value={evidenceText} onChange={e => setEvidenceText(e.target.value)} rows={5} placeholder={"برای هر مورد یک لینک رسمی وارد کن، هر مورد در یک خط به شکل field=https://... ؛ فیلدها: country, citizenship, kyc, payout, asset, network, minimum, fee, entryCost"} aria-label="مدارک رسمی هر شرط" />
         <small>لینک‌ها باید از منبع رسمی باشند. هر شرط باید سند جداگانه داشته باشد؛ لینک آگهی به‌تنهایی مدرک KYC یا پذیرش کشور نیست.</small>
         <input value={proofUrl} onChange={e => setProofUrl(e.target.value)} type="url" required placeholder="لینک مستقیم همان سفارش یا منبع رسمی" aria-label="لینک مستقیم سفارش"/>
         <button type="submit">ثبت در رادار فرصت‌ها</button>
