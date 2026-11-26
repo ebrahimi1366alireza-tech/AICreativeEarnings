@@ -235,6 +235,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
     setPay("");
     setProofUrl("");
     setNetwork("");
+    setCustomPaymentAsset("");
     setMinimum("");
     setWordCount("");
     setDeadline("");
