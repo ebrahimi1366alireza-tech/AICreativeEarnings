@@ -228,3 +228,25 @@ Research boundary: these are public-source checks only. No account was created, 
 7. Promote.sh — exclude from zero-cost route due withdrawal minimum/fees and potential monthly creator fee.
 
 Research boundary: public-page research only. No accounts, applications, social OAuth, KYC, wallet connections/signatures, content submissions, payments, or purchases were made.
+
+
+## Eligibility and payout cross-check — 2026-11-26 (additional official evidence)
+
+### Toloka — exclude from the crypto-wallet shortlist; do not misclassify nationality
+- The official eligibility page lists Iran as a Restricted Jurisdiction. It prohibits onboarding/access/services from, residence in, and payout routing to/from restricted jurisdictions. It also says an identity document showing a restricted country of residence will be rejected, and the document must reflect the user's current country of residence.
+- Important distinction: this wording does **not** establish that every Iranian passport holder physically resident in Armenia is automatically rejected solely because of Iranian citizenship. It does establish that Iranian residence, service performed from Iran, or payout routing involving Iran is disallowed. Do not mark Iranian nationality as rejected without an explicit nationality rule.
+- The official page requires identity, residency and eligibility verification, permits enhanced screening, and explicitly prohibits VPNs/proxies used to conceal location or identity. It also warns that individual tasks may add citizenship, residence, language or work-authorization requirements.
+- The official Toloka contributor documentation lists PayPal, Payoneer, Papara and QIWI as withdrawal methods; no direct self-custody crypto payout is documented in the reviewed official material. Its privacy notice says government ID, geolocation and potentially biometric facial matching may be processed for identity/sanctions checks.
+- Decision: **exclude from the project's direct-crypto payout shortlist**. Keep the KYC tracker entry as unknown for Iranian-passport/Armenia onboarding; do not claim blanket nationality rejection. Even if account eligibility were clarified, the documented fiat payout rails do not meet the user's crypto-wallet-only rule.
+- Official sources:
+  - https://toloka.ai/legal/eligibility-and-geographic-restrictions
+  - https://toloka.ai/legal/privacy-notice
+  - https://github.com/Toloka/docs-tolokers/blob/main/en/common/pay/about.md
+
+### ClipStake — official workflow reconfirmed; do not infer a guaranteed payout
+- The official creator page confirms a campaign workflow: choose a brief, publish on the creator's own social account, submit the post, wait for brand approval, then meet the campaign-specific verified-view minimum before claiming payment.
+- This supports the existence of a creator marketplace, but does not by itself prove a funded campaign, exact token/network, country eligibility, KYC rules, or an unconditional payout obligation.
+- Decision unchanged: **watchlist only** until a specific live campaign and official payout terms are checked. No post or social-account permission should be granted in advance.
+- Official source: https://www.clipstake.com/creators
+
+Research boundary: official public pages only. No account was created, no identity document was submitted, no wallet was connected or signed, no content was published, and no payment or purchase was made.
