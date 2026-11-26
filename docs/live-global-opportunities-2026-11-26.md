@@ -173,3 +173,58 @@ No accounts were created, no identity documents were submitted, no wallets were 
 - Official sources: https://docs.superteam.fun/the-superteam-handbook/community/faqs/superteam-earn-faq ; https://superteam.fun/earn/terms-of-use.pdf
 
 Research boundary: these are public-source checks only. No account was created, no identity document was submitted, no wallet connected or signed, no job application or public post submitted, and no payment or purchase was made.
+
+
+## Second follow-up — creator clipping platforms (2026-11-26)
+
+### Reach.cat — CLOSED; remove from active opportunities
+- A current closure notice, independently documented on 2026-11-14, says the platform permanently closed on 2026-11-01. Its static marketing pages and automated campaign recap continued to show campaigns after closure, but signup/dashboard routes returned the closure notice.
+- Earlier claims of no-KYC/USDT payouts are historical only. Its creator terms required identity verification after cumulative payout requests exceeded $500 and its payout screen/marketing claims were inconsistent about asset, minimum and fee. Do not create an account, submit work, or count this as an available earning route.
+- Decision: **closed / excluded**. If the user already had a balance, the closure notice reportedly gave only a contact route and did not explain unpaid balances; this is not a new-user opportunity.
+- Sources: https://darebay.com/en/earnings/reach-cat-review ; https://www.trustpilot.com/review/reach.cat
+
+### ClipStake — active campaign marketplace, payout and beta risks remain
+- Official creator page describes a pay-per-1,000-verified-views model: choose a campaign, publish on the user's own social account, submit the post, pass review and meet the campaign-specific minimum view count. View verification requires the creator to provide access to post analytics (the official FAQ says this does not grant account control).
+- An independent current campaign tracker reports ClipStake terms describe the service as beta and say payouts are not assured; campaigns require view minimums. A third-party directory reports USDC/Solana and gas coverage, but these payout details must be checked against the exact current campaign and official terms before work.
+- No public confirmation found for Iranian-passport acceptance, Armenia-resident access, KYC/liveness, external wallet ownership requirements, minimum cashout, or withdrawal fee.
+- Decision: **watchlist / conditional**. Do not post content until the specific campaign shows a funded budget, exact USDC network, claim minimum, creator-side fee and written payout obligation. Do not authorize broad social-account access if read-only analytics permission is not clearly scoped.
+- Sources: https://www.clipstake.com/creators ; https://clippingalpha.com/brands/clipping-platforms ; https://www.nativelang.org/blog/crypto-paying-clipping-platforms
+
+### Yeez — on-chain payout claims, insufficient operating evidence
+- Official homepage advertises pay-per-view campaigns and smart-contract-locked budgets, with example campaigns displaying Solana, BNB and Base and sample tokens including USDC, USDT, BNB, SOL and ETH. These are platform claims/examples, not proof that a currently live campaign can be claimed or paid.
+- Public official terms for nationality/residence, KYC, withdrawal fees, minimum, and supported external wallets were not located in this pass.
+- Decision: **watchlist only**. Inspect live campaign contracts and verify contract address, token/network, remaining budget, creator claim rules and payout transaction history before posting. Never sign an unknown transaction or pay a join fee.
+- Source: https://www.yeez.app/
+
+### Clipur — applications reviewed; social-account access is material
+- Official site says access is reviewed and that creator payout tracking may request read-only or basic access to YouTube, Instagram and X account/profile/media analytics to verify ownership and views. It advertises funds held until delivery and withdrawals after approval, but public details for the exact payout asset/network, minimum, fees, KYC and country restrictions were not located.
+- Decision: **low-priority watchlist** until the platform publishes its creator terms and wallet/payment details. Do not connect social accounts before reviewing the exact OAuth permissions and campaign-specific compensation.
+- Source: https://www.clipur.com/
+
+### Promote (promote.sh) — unsuitable for zero-cost withdrawal path
+- Current official Terms (updated 2026-10-27) list a $100 minimum creator withdrawal, 4% fee with an active paid creator subscription or brand link and 10% otherwise, and a possible creator account fee up to $10 per calendar month under specified conditions. Creator payout providers may impose separate identity, tax, sanctions and country checks. Brand funds are in a shared wallet, not segregated campaign escrow.
+- Decision: **exclude from zero-capital shortlist**. Do not subscribe or build unpaid content for it. Note: this is promote.sh / Promote It, not necessarily the separate promote.fun service.
+- Source: https://promote.sh/legal/terms
+
+### Loopuman — useful remote microtasks, eligibility still not personalized
+- Official task board currently displays remote AI evaluation, data annotation, research and translation examples, plus local physical-verification tasks. It advertises USDm/USDT/USDC on Celo, says it is open to workers worldwide, and the app says earnings are sent to a wallet at $1.00.
+- The public pages reviewed do not settle whether an Iranian passport holder physically in Armenia can pass any required identity/sanctions screening, whether the payout can be sent to an arbitrary self-custody wallet, or the exact network/fee details for each asset. “Worldwide” is not a substitute for a successful eligibility check.
+- Decision: **top candidate for a low-cost remote-task check**, but ask support first: Iranian passport + Armenia physical presence; exact KYC/liveness and proof-of-address requirements; whether non-custodial wallet withdrawal is supported; supported stablecoin/network; minimum and all fees. No paid VAE/credits or unpaid production.
+- Sources: https://loopuman.com/browse-tasks ; https://app.loopuman.com/
+
+### ClipRush.net — early beta; treat as high uncertainty
+- Official homepage says open beta with a small batch of campaigns and cash/crypto payout for verified views/clicks. It does not publish the supported coin/network, minimum payout, withdrawal fee, identity checks, country rules or a public creator payout history in the reviewed page.
+- A third-party domain-risk scan flags the domain as very new and low-trust/suspicious. This is not proof of fraud, but together with the missing payment terms it is a reason not to submit content or personal documents yet.
+- Decision: **hold / do not onboard** until operator identity, creator terms, campaign funding, exact wallet rail and a small successful payout can be independently verified. Do not confuse cliprush.net with getcliprush.com, a separate video clipping software product.
+- Sources: https://www.cliprush.net/ ; https://www.scamadviser.com/check-website/cliprush.net
+
+### Current shortlist adjustment
+1. Loopuman — first to seek written support confirmation for remote tasks and Celo stablecoin payout.
+2. LaborX — consider only a specific funded escrow job; 10% freelancer fee and exact terms apply.
+3. Superteam Earn — prioritize paid Projects over competitive Bounties; sponsor-specific KYC/payment rules apply.
+4. ClipStake / Yeez — watchlist pending verified campaign funding and exact on-chain claim details.
+5. Clipur / ClipRush.net — hold pending clear creator terms and permission/security review.
+6. Reach.cat — closed; exclude.
+7. Promote.sh — exclude from zero-cost route due withdrawal minimum/fees and potential monthly creator fee.
+
+Research boundary: public-page research only. No accounts, applications, social OAuth, KYC, wallet connections/signatures, content submissions, payments, or purchases were made.
