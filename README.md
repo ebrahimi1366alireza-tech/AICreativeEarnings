@@ -53,7 +53,7 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 
 ## Current earning-channel review
 
-The latest live review is [docs/live-earning-channels-2026-11-26.md](docs/live-earning-channels-2026-11-26.md). It identifies Subnano as a possible free creator storefront (not guaranteed demand), keeps Gibwork on watchlist until a funded eligible creative bounty is verified, treats HireForHumans as waitlist-only until a live worker board is confirmed, and excludes low-value or manipulative Anoworks engagement tasks.
+The dashboard includes an 18-platform compatibility review catalogue in `app/components/platform-review-catalog.tsx`. Every entry is review-only by default; country, Iranian passport acceptance, KYC, payout route, fees, and no-deposit conditions must be checked before any platform is marked compatible. Microworker.app, Loopuman, SurveyTokens (IOTA route only for review), Taskmarket, Monero.Jobs, and XmrBazaar are prioritized candidates. The catalogue does not automate signup, KYC, wallet connection, submissions, or payouts.
 
 ## Live discovery and current limitations
 
