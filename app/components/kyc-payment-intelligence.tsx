@@ -118,6 +118,19 @@ const seed: KycRecord[] = [
   evidenceNote:"شرایط رسمی Gibwork استفاده را برای شهروند یا مقیم حوزه‌های مشمول تحریم جامع ممنوع می‌کند. راهنمای رسمی OFAC، ایران را در دسته تحریم‌های گسترده/جامع حوزه‌محور قرار می‌دهد؛ بنابراین شرط شهروندی در متن Gibwork برای تابعیت ایرانی مانع است، حتی اگر محل حضور فعلی ارمنستان باشد.",
   evidenceCheckedAt:"2026-11-26",
   checkedAt:"2026-11-26"
+} : record.id === "microworker-app" ? {
+  ...record,
+  currentPresenceAccessByCountry:{ AM:"allowed" as const },
+  payout:"direct-crypto" as const,
+  cost:"free" as const,
+  asset:"USDT / USDC",
+  network:"USDT: BNB Smart Chain (BEP20), Arbitrum, Polygon; USDC: BNB Smart Chain (BEP20)",
+  minimum:"$5.00; earnings cash-out eligible 3 days after task payment",
+  fee:"Workers pay no platform fee; network / processor deductions not specified",
+  evidenceUrl:"https://microworker.app/terms/",
+  evidenceNote:"شرایط رسمی نسخه 24 نوامبر 2026: سرویس برای افراد حاضر در ارمنستان در فهرست کشورهاست و ایران را از نظر محل استفاده ممنوع کرده؛ پرداخت مستقیم USDT روی BNB Smart Chain/Arbitrum/Polygon یا USDC روی BNB Smart Chain به کیف پول شخصی؛ حداقل برداشت 5 دلار، سه روز پس از پرداخت تسک. کارمزد پلتفرم از سمت کارفرماست. برداشت ممکن است verification و محدودیت داشته باشد. سابقه استفاده از حساب/دستگاه از ایران می‌تواند باعث رد حساب و بررسی دستی برداشت شود. پذیرش پاسپورت ایرانی و نوع KYC هنوز روشن نیست.",
+  evidenceCheckedAt:"2026-11-26",
+  checkedAt:"2026-11-26"
 } : record.id === "humanbased" ? {
   ...record,
   kyc:"id" as const,
@@ -228,6 +241,20 @@ export default function KycPaymentIntelligence() {
               checkedAt: x.checkedAt
             };
             // Backfill newly sourced facts into old browser records without overwriting user edits.
+            if (x.id === "microworker-app") return {
+              ...merged,
+              currentPresenceAccessByCountry: { ...(existing.currentPresenceAccessByCountry || {}), AM: "allowed" },
+              payout: existing.payout === "unknown" ? x.payout : existing.payout,
+              cost: existing.cost === "unknown" ? x.cost : existing.cost,
+              asset: !existing.asset ? x.asset : existing.asset,
+              network: !existing.network ? x.network : existing.network,
+              minimum: !existing.minimum || existing.minimum === "نامشخص" ? x.minimum : existing.minimum,
+              fee: !existing.fee || existing.fee === "نامشخص" ? x.fee : existing.fee,
+              evidenceUrl: !existing.evidenceUrl ? x.evidenceUrl : existing.evidenceUrl,
+              evidenceNote: !existing.evidenceNote ? x.evidenceNote : existing.evidenceNote,
+              evidenceCheckedAt: !existing.evidenceCheckedAt ? x.evidenceCheckedAt : existing.evidenceCheckedAt,
+              checkedAt: !existing.checkedAt ? x.checkedAt : existing.checkedAt
+            };
             if (x.id === "humanbased" || x.id === "loopuman") return {
               ...merged,
               kyc: existing.kyc === "unknown" ? x.kyc : existing.kyc,
