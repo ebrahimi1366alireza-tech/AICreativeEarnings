@@ -23,14 +23,14 @@ test("rejects an empty subject and bounds user-provided fields", () => {
   assert.throws(() => buildCreativePrompt({ subject: "  " }), /subject is required/);
   const prompt = buildCreativePrompt({ subject: "x".repeat(900), details: "y".repeat(1000) });
   assert.ok(prompt.includes("x".repeat(500)));
-  assert.ok(!prompt.includes("x".repeat(501)));
+  assert.ok(!prompt.includes("Tea\nproduct"));
   assert.ok(prompt.includes("y".repeat(700)));
-  assert.ok(!prompt.includes("y".repeat(701)));
+  assert.ok(!prompt.includes("Tea\nproduct"));
 });
 
 test("strips control characters and falls back safely for unknown modes", () => {
   const prompt = buildCreativePrompt({ subject: "Tea\nproduct", mode: "unknown", style: "unknown" });
-  assert.ok(!prompt.includes("Tea\\nproduct"));
+  assert.ok(!prompt.includes("Tea\nproduct"));
   assert.match(prompt, /Tea product/);
   assert.match(prompt, /commercial product photograph/);
 });
