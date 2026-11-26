@@ -158,3 +158,12 @@ Verification snapshot:
 - Unknown rights, missing rights-evidence references, or incomplete criteria require correction; prohibited commercial use blocks delivery. A complete checklist reaches human review only.
 - The reviewer explicitly reports that media inspection was not performed, checklist items are user-attested, and rights-evidence references are not verified. It does not open or analyze image/video/audio files, independently validate licenses, send deliverables, or publish content.
 - Added six Node tests covering complete review, unknown/prohibited rights, unchecked criteria, missing brief data, and invalid rights labels.
+
+
+## Delivery Assistant implementation — 2026-11-27
+
+- Added `lib/delivery-assistant.mjs`, TypeScript declarations, a UI component, and eight automated tests.
+- The assistant builds a manifest from required/included asset names, records version/format, lists missing assets and open corrections, and drafts a client message without inventing contact information.
+- The result is blocked for prohibited rights or blocked QC; otherwise it requires revision if assets/details are missing, QC is not ready for human review, rights are unknown, or corrections remain open.
+- A complete package reaches `ready_for_human_approval` only. Upload and send flags are always false; final approval remains with the user.
+- File existence/content, QC claims, rights evidence, and recipient/channel details are not independently verified.
