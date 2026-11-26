@@ -5,6 +5,7 @@ import AccountConnections from "./components/account-connections";
 import CloudWorkspaceSync from "./components/cloud-workspace-sync";
 import OpportunityDiscovery from "./components/opportunity-discovery";
 import KycPaymentIntelligence from "./components/kyc-payment-intelligence";
+import PlatformReviewCatalog from "./components/platform-review-catalog";
 
 const workflow = [
   { number: "۰۱", title: "کشف فرصت‌ها", detail: "جست‌وجوی زنده در فیدهای عمومی جهانی؛ آگهی‌ها هنوز سفارش تأییدشده نیستند", state: "فعال · بررسی اولیه" },
@@ -352,6 +353,8 @@ export default function Home() {
 
 
         <OpportunityDiscovery onAdd={(lead) => setOpportunities(current => [{ ...lead }, ...current])} />
+
+        <PlatformReviewCatalog />
 
         <section className="panel vetted-opportunities" id="verified-opportunities">
           <div className="panel-head"><div><span className="eyebrow">CRYPTO PAYMENT EVIDENCE</span><h2>پلتفرم‌های دارای مستندات پرداخت رمزارزی</h2></div><span className="free-tag">بدون سپرده اولیه</span></div>
