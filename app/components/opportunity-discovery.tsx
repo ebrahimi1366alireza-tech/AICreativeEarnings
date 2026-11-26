@@ -100,12 +100,12 @@ function scoreLead(input: {
   if (input.escrow === "وجه در امانت قفل شده") score += 15;
   if (input.fee === "۰ تا ۱۰٪") score += 10;
   else if (input.fee === "بیشتر از ۱۰٪") score += 4;
-  if (input.kyc === "نیازمند KYC") hardReject.push("احراز هویت اجباری با شرط پروژه سازگار نیست");
-  if (input.kyc !== "بدون KYC") score -= 25;
+  if (input.kyc === "فقط سلفی/زنده‌سنجی") score -= 5;
+  else if (input.kyc !== "بدون KYC") score -= 25;
   if (input.stream !== "نامشخص") score += 5;
   score = Math.max(0, Math.min(100, score));
   if (hardReject.length) return { score: 0, decision: "رد خودکار", reason: hardReject.join("؛ ") };
-  const complianceVerified = input.kyc === "بدون KYC"
+  const complianceVerified = ["بدون KYC", "فقط سلفی/زنده‌سنجی"].includes(input.kyc)
     && input.countryCheck === "مجاز بودن کشور تأیید شده"
     && ["کیف پول مستقیم", "رمزارز از طریق قرارداد به کیف پول"].includes(input.payout)
     && input.deposit === "بدون هزینه ثبت‌نام/اشتراک، سپرده یا خرید اجباری"
@@ -114,7 +114,7 @@ function scoreLead(input: {
     && Boolean(input.network.trim())
     && Boolean(input.minimum.trim())
     && input.fee !== "نامشخص";
-  if (!complianceVerified) return { score: Math.min(score, 44), decision: "نیازمند بررسی", reason: "تا وقتی نبود KYC، کشور مجاز، نام دقیق رمزارز، شبکه دقیق، حداقل برداشت، پرداخت به کیف پول شخصی، کارمزد و نبود هزینه ثبت‌نام/اشتراک/سپرده مستند نشوند، این فرصت واجد شرایط نیست." };
+  if (!complianceVerified) return { score: Math.min(score, 44), decision: "نیازمند بررسی", reason: "تا وقتی کشور مجاز، نوع دقیق احراز هویت، پذیرش مدارک لازم، نام دقیق رمزارز، شبکه، حداقل برداشت، پرداخت به کیف پول شخصی، کارمزد و نبود هزینه ورود مستند نشوند، این فرصت واجد شرایط نیست. سلفی/زنده‌سنجی به‌تنهایی قابل قبول است؛ پاسپورت، مدرک آدرس و اطلاعات مالیاتی باید جداگانه بررسی شوند." };
   if (score >= 70) return { score, decision: "واجد شرایط اولیه", reason: "شرایط پایه ثبت شده؛ قرارداد، حداقل برداشت و پرداخت نهایی را پیش از شروع دوباره بررسی کن." };
   if (score >= 45) return { score, decision: "نیازمند بررسی", reason: "شواهد تکمیلی پرداخت یا شرایط قرارداد کافی نیست." };
   return { score, decision: "اولویت پایین", reason: "شواهد پرداخت، کشور یا هزینه‌ها کافی نیست." };
@@ -340,7 +340,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         <select value={escrow} onChange={e => setEscrow(e.target.value)} aria-label="وضعیت امانت‌داری"><option>نامشخص</option><option>وجه در امانت قفل شده</option><option>بدون امانت‌داری</option></select>
         <select value={fee} onChange={e => setFee(e.target.value)} aria-label="کارمزد پلتفرم و برداشت"><option>نامشخص</option><option>۰ تا ۱۰٪</option><option>بیشتر از ۱۰٪</option></select>
         <input value={minimum} onChange={e => setMinimum(e.target.value)} placeholder="حداقل برداشت" aria-label="حداقل برداشت"/>
-        <select value={kyc} onChange={e => setKyc(e.target.value)} aria-label="احراز هویت"><option>نامشخص</option><option>بدون KYC</option><option>نیازمند KYC</option></select>
+        <select value={kyc} onChange={e => setKyc(e.target.value)} aria-label="احراز هویت"><option>نامشخص</option><option>بدون KYC</option><option>فقط سلفی/زنده‌سنجی</option><option>مدرک هویتی/پاسپورت</option><option>مدرک آدرس/مالیات</option><option>نیازمند KYC</option></select>
         {stream === "نوشتن و مقاله" && (
           <div className="writing-order-fields">
             <div className="writing-fields-heading"><strong>مشخصات اختصاصی سفارش متن و مقاله</strong><small>این اطلاعات برای تخمین زمان، قیمت و آماده‌سازی تحویل ثبت می‌شوند.</small></div>
