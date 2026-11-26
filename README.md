@@ -80,6 +80,10 @@ Do not present a public listing as a verified paid order or a review-only platfo
 
 A free tier does not automatically grant unlimited generations or commercial-use rights.
 
+## Reviewed agent orchestration tools
+
+- [OpenMausBot review](docs/tool-reviews/openmausbot.md): candidate for a later isolated multi-agent orchestration experiment. It is not a production dependency or an earning platform. Review runtime requirements, provider costs, licensing, agent permissions, credential handling, and security cautions before any trial.
+
 ## Review-only leads
 
 - Subnano: possible paid-content marketplace. Its official FAQ has listed Nano and USDC on Base payouts, a 7.5% Nano fee, and a 15% USDC fee. Verify current country access, identity rules, and payout conditions inside the account.
@@ -94,7 +98,7 @@ Official references:
 ```bash
 npm install
 npm run dev
-``
+```
 
 The current app is a management workspace, not an earning guarantee. Manual entry does not verify a platform or make an opportunity eligible.
 
