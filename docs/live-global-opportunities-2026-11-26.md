@@ -297,3 +297,40 @@ Research boundary: official public terms and documentation only. No account was 
   - https://loopuman.com/
 
 Research boundary: public official pages only. No account was created, no wallet was linked or signed, no VAE/credits were purchased, and no identity document or content was submitted.
+
+
+## Microworker.app — fresh official payout and country review (2026-11-26)
+
+Official pages reviewed:
+- https://microworker.app/eligibility/
+- https://microworker.app/terms/
+- https://microworker.app/payouts/
+- https://microworker.app/privacy/
+
+Verified from current official pages:
+- Armenia is explicitly listed among the 247 supported countries. The service is not available to people in Iran, Cuba, North Korea, or the listed Ukrainian regions. This is a location/service-access statement; it does not by itself prove that an Iranian passport is accepted or rejected when the worker is genuinely in Armenia.
+- Workers receive USDT on BNB Smart Chain (BEP20), Arbitrum or Polygon, or USDC on BNB Smart Chain (BEP20), sent to their own crypto wallet.
+- Cash-out minimum is $5. Earnings become cash-out eligible three days after the task reward is paid. The public payout page says the median cash-out time so far is about one hour after request, and it links to on-chain examples. As of the page's November 25 update, it reported 46 cash-outs totalling $238.34 and $2,402.17 paid for 45,146 approved tasks. These figures show some payout transactions, not guaranteed future earnings or personal eligibility.
+- Terms say workers pay no platform fee; the employer side pays the platform fee. Payouts are processed through EasyCryptoPay, and withdrawals may be subject to verification and applicable limits. Network/provider deductions are not clearly specified in the reviewed worker payout page.
+- The current Terms and Privacy Policy (both updated November 24, 2026) say an account used from a restricted location may be refused until manual review; related accounts on the same device/browser may also be refused for 30 days, and cash-outs with that history may be held. The Privacy Policy also uses connection country, signup country, browser time zone/language, device/browser identifiers, and relay/VPN signals in location and abuse checks. Do not use a VPN or attempt to disguise location.
+- The reviewed public pages do not specify the exact KYC flow, accepted identity documents, liveness requirement, Iranian passport acceptance, or whether an Armenian residence permit is required.
+
+Decision: **high-priority conditional lead, not ready/eligible yet**. Armenia presence and direct crypto payout are documented, but the Iranian passport/KYC question and any relevant account/device history must be clarified with support before registration. Do not create an account or submit tasks until support confirms this exact situation in writing. No account was created and no identity data or wallet was submitted.
+
+Official sources:
+- https://microworker.app/eligibility/
+- https://microworker.app/terms/
+- https://microworker.app/payouts/
+- https://microworker.app/privacy/
+
+### Worqen — technically attractive crypto escrow, country/KYC gate unresolved
+- Official pages describe Solana-mainnet escrow with USDC, USDT, EURC or SOL. Freelancers pay 0% platform fee; clients pay 5%. Small Solana network fees are separate. The freelancer can use an external self-custody wallet such as Phantom or Solflare, or a platform wallet.
+- The platform says it is unavailable to visitors connecting from Iran and several other restricted jurisdictions. Armenia is not in that published exclusion list, but this is not a complete country eligibility list and does not establish acceptance of Iranian citizenship or an Iranian passport.
+- No complete official public KYC document list, liveness rules, Armenia-specific permit requirements, payout minimum, or Iranian-citizenship determination was verified in this pass. The escrow program is open source but the official About page says it has not had an independent third-party audit.
+- Decision: **conditional watchlist** for funded, fixed-scope creative contracts only. Verify identity/country eligibility and exact contract escrow before any work. Never start before the on-chain escrow is funded; do not assume the platform's 0% freelancer fee means zero network cost.
+
+Official sources:
+- https://worqen.com/
+- https://worqen.com/about/
+
+Research boundary: public official pages only. No account was created, no terms were accepted, no KYC or wallet connection/signature was attempted, and no task or application was submitted.
