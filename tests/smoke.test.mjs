@@ -114,3 +114,24 @@ test("opportunity discovery returns a valid live-feed contract", async () => {
     seen.add(job.url);
   }
 });
+
+test("creative generation status requires an authenticated account", async () => {
+  const response = await fetch(`${host}/api/creative/status`);
+  assert.equal(response.status, 401);
+  const body = await response.json();
+  assert.equal(typeof body.error, "string");
+});
+
+test("creative generation endpoint rejects unauthenticated requests before provider use", async () => {
+  const response = await fetch(`${host}/api/creative/generate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ kind: "image", prompt: "test prompt", confirmed: true })
+  });
+  assert.equal(response.status, 401);
+});
+
+test("creative task polling requires an authenticated account", async () => {
+  const response = await fetch(`${host}/api/creative/tasks/550e8400-e29b-41d4-a716-446655440000`);
+  assert.equal(response.status, 401);
+});
