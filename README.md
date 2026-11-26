@@ -36,7 +36,7 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 
 - Persian right-to-left dashboard focused on AI image, design, and short-video services.
 - Opportunity radar with manual lead entry, source links, and review statuses.
-- Evidence-first Opportunity Triage: separates residence and citizenship acceptance, KYC, wallet payout, asset/network, withdrawal minimum, fees and mandatory entry costs; each required condition needs its own HTTPS evidence link. Missing evidence remains review-required, and complete evidence only becomes ready for human approval.
+- Evidence-first Opportunity Triage: separates residence and citizenship acceptance, KYC, wallet payout, asset/network, withdrawal minimum, fees and mandatory entry costs; each required condition needs its own HTTPS evidence link. Missing evidence remains review-required. Even complete HTTPS links remain review-required until their page contents, source ownership, freshness, and relevance are verified; HTTPS syntax alone is not evidence validation.
 - Production-order and delivery tracking.
 - Income ledger that distinguishes pending from actually received payments.
 - Public wallet-address and network settings for different supported crypto assets; the app does not connect to or control the wallet.
