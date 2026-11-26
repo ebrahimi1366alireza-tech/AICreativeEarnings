@@ -22,6 +22,6 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Run opportunity triage tests
-        run: npm run test:triage
+        run: npm test
       - name: Type-check application
         run: npm run lint
