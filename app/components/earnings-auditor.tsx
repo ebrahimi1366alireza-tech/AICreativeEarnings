@@ -21,7 +21,7 @@ export default function EarningsAuditor() {
   const [loaded, setLoaded] = useState(false);
   const [source, setSource] = useState("");
   const [orderId, setOrderId] = useState("");
-  const [currency, setCurrency] = useState("USDT");
+  const [currency, setCurrency] = useState("");
   const [expectedAmount, setExpectedAmount] = useState("");
   const [paymentStatus, setPaymentStatus] = useState("pending");
   const [receivedAmount, setReceivedAmount] = useState("");
@@ -69,7 +69,7 @@ export default function EarningsAuditor() {
       <form className="opportunity-form" onSubmit={addRecord}>
         <input required value={source} onChange={e => setSource(e.target.value)} placeholder="منبع درآمد یا نام پلتفرم" aria-label="منبع درآمد"/>
         <input value={orderId} onChange={e => setOrderId(e.target.value)} placeholder="شناسه سفارش، اختیاری" aria-label="شناسه سفارش"/>
-        <input required value={currency} onChange={e => setCurrency(e.target.value.toUpperCase())} placeholder="دارایی، مثلاً USDT یا XNO" aria-label="دارایی"/>
+        <input required value={currency} onChange={e => setCurrency(e.target.value.toUpperCase())} placeholder="دارایی یا ارز، مثلاً USD، EUR، USDT یا BTC" aria-label="دارایی"/>
         <input required inputMode="decimal" value={expectedAmount} onChange={e => setExpectedAmount(e.target.value)} placeholder="مبلغ خالص مورد انتظار" aria-label="مبلغ مورد انتظار"/>
         <select value={paymentStatus} onChange={e => setPaymentStatus(e.target.value)} aria-label="وضعیت پرداخت">
           <option value="pending">در انتظار پرداخت</option>
