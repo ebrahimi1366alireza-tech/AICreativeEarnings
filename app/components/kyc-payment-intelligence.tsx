@@ -7,6 +7,8 @@ type KycRecord = {
   platform: string;
   url: string;
   kyc: "none" | "id" | "address" | "selfie" | "unknown";
+  kycStage?: "signup" | "before-first-task" | "campaign-specific" | "earnings-threshold" | "before-withdrawal" | "multiple" | "unknown";
+  kycStageNote?: string;
   iranianPassport: "accepted" | "rejected" | "unknown";
   passportAcceptanceByCitizenship?: Record<string, "accepted" | "rejected" | "unknown">;
   countryAccess: "allowed" | "blocked" | "unknown";
@@ -105,7 +107,7 @@ const seed: KycRecord[] = [
 ].map(([platform,url]) => ({
 
   id: platform.toLowerCase().replace(/[^a-z0-9]+/g,"-"), platform, url,
-  kyc:"unknown" as const, iranianPassport:"unknown" as const,
+  kyc:"unknown" as const, kycStage:"unknown" as const, kycStageNote:"", iranianPassport:"unknown" as const,
   countryAccess:"unknown" as const, payout:"unknown" as const, cost:"unknown" as const,
   asset:"", network:"", minimum:"نامشخص", fee:"نامشخص", evidenceUrl:"", checkedAt:""
 })).map(record => record.id === "gibwork" ? {
@@ -116,6 +118,10 @@ const seed: KycRecord[] = [
   evidenceNote:"شرایط رسمی Gibwork استفاده را برای شهروند یا مقیم حوزه‌های مشمول تحریم جامع ممنوع می‌کند. راهنمای رسمی OFAC، ایران را در دسته تحریم‌های گسترده/جامع حوزه‌محور قرار می‌دهد؛ بنابراین شرط شهروندی در متن Gibwork برای تابعیت ایرانی مانع است، حتی اگر محل حضور فعلی ارمنستان باشد.",
   evidenceCheckedAt:"2026-11-26",
   checkedAt:"2026-11-26"
+} : record.id === "humanbased" ? {
+  ...record,
+  kycStage:"multiple" as const,
+  kycStageNote:"احراز هویت ممکن است برای کمپین خاص یا پس از رسیدن درآمد تجمعی به آستانه اعلام‌شده در حساب لازم شود؛ هنگام ثبت‌نام الزامی نیست."
 } : record);
 
 // ISO 3166-1 alpha-2 country/territory codes. Names are localized by the browser.
@@ -127,6 +133,7 @@ const countryName = (code:string) => COUNTRIES.find(c => c.code === code)?.name 
 
 const labels = {
   kyc: { none:"بدون KYC", id:"مدرک هویتی / پاسپورت", address:"مدرک آدرس / مالیات", selfie:"سلفی / زنده‌سنجی", unknown:"نامشخص" },
+  kycStage: { signup:"هنگام ثبت‌نام", "before-first-task":"قبل از اولین تسک", "campaign-specific":"بسته به کمپین", "earnings-threshold":"پس از آستانه درآمد", "before-withdrawal":"قبل از برداشت", multiple:"چند مرحله / شرط", unknown:"نامشخص" },
   iranianPassport: { accepted:"پذیرفته می‌شود", rejected:"پذیرفته نمی‌شود", unknown:"بررسی نشده" },
   countryAccess: { allowed:"دسترسی کشور مجاز", blocked:"دسترسی کشور مسدود", unknown:"نامشخص" },
   currentPresenceAccess: { allowed:"حضور فعلی مجاز", blocked:"حضور فعلی غیرمجاز", unknown:"بررسی نشده" },
@@ -296,6 +303,7 @@ export default function KycPaymentIntelligence() {
             </div>
             <div className="kpi-fields">
               <label>KYC<select value={item.kyc} onChange={e=>update(item.id,{kyc:e.target.value as KycRecord["kyc"]})}>{Object.entries(labels.kyc).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
+              <label>زمان الزام KYC<select value={item.kycStage || "unknown"} onChange={e=>update(item.id,{kycStage:e.target.value as KycRecord["kycStage"]})}>{Object.entries(labels.kycStage).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>پذیرش مدرک تابعیت<select value={passportAcceptance} onChange={e=>updatePassportAcceptance(item.id,e.target.value as KycRecord["iranianPassport"])}>{Object.entries(labels.iranianPassport).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>دسترسی حضور در {countryName(residence)}<select value={presenceAccess} onChange={e=>updatePresenceAccess(item.id,e.target.value as "allowed" | "blocked" | "unknown")}>{Object.entries(labels.currentPresenceAccess).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
               <label>پشتیبانی کشور دریافت {countryName(bankCountry)}<select value={payoutCountryAccess} onChange={e=>update(item.id,{payoutCountryAccessByCountry:{...(item.payoutCountryAccessByCountry || {}),[bankCountry]:e.target.value as "allowed" | "blocked" | "unknown"}})}>{Object.entries(labels.payoutCountryAccess).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label>
@@ -306,6 +314,7 @@ export default function KycPaymentIntelligence() {
               <label>شبکه<input value={item.network} onChange={e=>update(item.id,{network:e.target.value})} placeholder="مثلاً Polygon"/></label>
               <label>حداقل برداشت<input value={item.minimum} onChange={e=>update(item.id,{minimum:e.target.value})} placeholder="مقدار و واحد"/></label>
               <label>کارمزد<input value={item.fee} onChange={e=>update(item.id,{fee:e.target.value})} placeholder="مقدار / درصد"/></label>
+              <label className="wide">توضیح مرحله KYC<input value={item.kycStageNote || ""} onChange={e=>update(item.id,{kycStageNote:e.target.value})} placeholder="مثلاً احراز هویت فقط برای کمپین خاص یا پس از آستانه درآمد"/></label>
               <label className="wide">لینک مدرک رسمی<input value={item.evidenceUrl} onChange={e=>update(item.id,{evidenceUrl:e.target.value})} placeholder="https://... (شرایط KYC، کشور یا برداشت)"/></label>
               <label className="wide">خلاصه بند رسمی<input value={item.evidenceNote || ""} onChange={e=>update(item.id,{evidenceNote:e.target.value})} placeholder="حداقل ۳۰ نویسه از شرط رسمی مربوط به تابعیت، حضور یا اقامت"/></label>
               <label>تاریخ بررسی مدرک<input type="date" value={item.evidenceCheckedAt || ""} onChange={e=>update(item.id,{evidenceCheckedAt:e.target.value})}/></label>
