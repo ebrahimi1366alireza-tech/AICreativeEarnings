@@ -18,6 +18,7 @@ export default function QualityReviewer() {
   const [deliverable, setDeliverable] = useState("");
   const [format, setFormat] = useState("");
   const [rightsStatus, setRightsStatus] = useState("unknown");
+  const [rightsEvidenceReference, setRightsEvidenceReference] = useState("");
   const [revisionLimit, setRevisionLimit] = useState("");
   const [reviewerNotes, setReviewerNotes] = useState("");
   const [checks, setChecks] = useState<Record<string, boolean>>({});
@@ -25,7 +26,7 @@ export default function QualityReviewer() {
 
   function runReview(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setResult(reviewCreativeDeliverable({ brief, deliverable, format, rightsStatus, revisionLimit, reviewerNotes, checks }));
+    setResult(reviewCreativeDeliverable({ brief, deliverable, format, rightsStatus, rightsEvidenceReference, revisionLimit, reviewerNotes, checks }));
   }
 
   const statusLabels: Record<string, string> = {
@@ -50,6 +51,7 @@ export default function QualityReviewer() {
           <option value="client_permission">اجازه کتبی صاحب اثر موجود است</option>
           <option value="prohibited">استفاده تجاری ممنوع یا بدون اجازه است</option>
         </select>
+        <input value={rightsEvidenceReference} onChange={e => setRightsEvidenceReference(e.target.value)} placeholder="مرجع مدرک مالکیت/مجوز، مانند URL یا شناسه قرارداد" aria-label="مرجع مدرک حقوق محتوا"/>
         <input value={revisionLimit} onChange={e => setRevisionLimit(e.target.value)} placeholder="تعداد اصلاحات مجاز و باقی‌مانده" aria-label="محدودیت اصلاحات"/>
         <textarea rows={2} value={reviewerNotes} onChange={e => setReviewerNotes(e.target.value)} placeholder="ایرادها، اصلاحات لازم و یادداشت بازبین" aria-label="یادداشت بازبین"/>
         <div className="writing-order-fields">
@@ -65,7 +67,7 @@ export default function QualityReviewer() {
         {result.unchecked.length > 0 && <><strong>موارد تکمیل‌نشده</strong><ul>{result.unchecked.map(item => <li key={item.key}>{item.label}</li>)}</ul></>}
         <strong>محدودیت‌های بررسی</strong>
         <ul>{result.limitations.map(item => <li key={item}>{item}</li>)}</ul>
-        <small>فرمت ثبت‌شده: {result.format || "تعیین نشده"} · محدودیت اصلاحات: {result.revisionLimit || "تعیین نشده"} · بررسی فایل واقعی: انجام نشده</small>
+        <small>مرجع مدرک حقوق: {result.rightsEvidenceReferenceProvided ? "ثبت شده، اما مستقلاً راستی‌آزمایی نشده" : "ثبت نشده"} · فرمت ثبت‌شده: {result.format || "تعیین نشده"} · محدودیت اصلاحات: {result.revisionLimit || "تعیین نشده"} · بررسی فایل واقعی: انجام نشده</small>
       </div>}
     </section>
   );
