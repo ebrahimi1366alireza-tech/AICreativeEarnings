@@ -192,3 +192,10 @@ Mirror is recorded as a historical alias/migration, not as a separate active pla
 - Humanbased is prefilled as **multiple / conditional**: its official docs say identity verification may be required by a campaign or at an unpublished lifetime-earnings threshold, but not at contributor signup.
 - Existing browser records are merged with new seed metadata so newly added fields appear without erasing the user's saved entries. The verified Gibwork citizenship restriction is forced over stale local values so an old "unknown/accepted" value cannot silently override the newer official evidence.
 - This is still a browser-local tracker, not an automated KYC verifier. The new fields record the source-based timing; they do not trigger any identity check or transmit personal data.
+
+
+## Fresh payout detail update — 2026-11-26
+
+- **Humanbased:** tracker now records USDC on Base mainnet, no platform withdrawal fee, network gas deducted, and an account-specific minimum. The official withdrawal guide additionally documents payout-terms acceptance, wallet ownership signature, withdrawal permission, per-request/daily/monthly limits, waiting intervals, manual review and potential holds. Do not interpret a balance or linked wallet as a guarantee of withdrawal. Source: https://docs.humanbased.ai/rewards/withdraw/
+- **Loopuman:** official worker app states USDT, USDC or USDm are selectable at task approval and accumulated balance is sent to a wallet once it reaches $1.00; official homepage says payouts are on Celo. VAE is a platform credit, not redeemable cash, and must not be purchased as an earning prerequisite. Exact KYC, country/sanctions eligibility, wallet support and withdrawal/network fees remain unknown. Sources: https://app.loopuman.com/ ; https://loopuman.com/
+- The KYC tracker now pre-fills these confirmed payout facts for Humanbased and Loopuman. Existing browser-local manual choices are preserved; newly sourced values are backfilled only into empty/unknown fields. Iranian passport and current Armenia access are intentionally left unknown for both.
