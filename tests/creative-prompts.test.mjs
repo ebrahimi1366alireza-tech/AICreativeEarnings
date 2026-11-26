@@ -10,6 +10,7 @@ test("builds a complete product image prompt", () => {
   assert.match(prompt, /premium luxury art direction/);
   assert.match(prompt, /4:5 portrait/);
   assert.match(prompt, /Avoid watermarks/);
+  assert.ok(prompt.includes("\n"));
 });
 
 test("video prompts include a vertical short-form storyboard brief", () => {
@@ -25,7 +26,7 @@ test("rejects an empty subject and bounds user-provided fields", () => {
 });
 
 test("strips control characters and falls back safely for unknown modes", () => {
-  const prompt = buildCreativePrompt({ subject: "Tea\\nproduct", mode: "unknown", style: "unknown" });
-  assert.doesNotMatch(prompt, /\\u0000/);
+  const prompt = buildCreativePrompt({ subject: "Tea\nproduct", mode: "unknown", style: "unknown" });
+  assert.doesNotMatch(prompt, /[\u0000-\u001f\u007f]/);
   assert.match(prompt, /commercial product photograph/);
 });
