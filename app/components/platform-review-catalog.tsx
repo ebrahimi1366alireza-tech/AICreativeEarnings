@@ -6,7 +6,7 @@ const platforms = [
   { name: "Loopuman", stream: "تحقیق، ترجمه و ارزیابی AI", payout: "USDT / USDC / USDm روی Celo", fit: "نیازمند تأیید KYC و کشور", url: "https://loopuman.com/browse-tasks", note: "سهم پلتفرم اعلام‌شده ۲۰٪ است." },
   { name: "SurveyTokens", stream: "نظرسنجی و تحقیقات بازار", payout: "IOTA", fit: "فقط مسیر IOTA برای بررسی؛ USDT به‌علت محدودیت پردازشگر تأیید نمی‌شود", url: "https://surveytokens.org/terms", note: "حداقل برداشت اعلام‌شده ۰٫۵۰ دلار؛ پذیرش ارمنستان و مدارک باید تأیید شود." },
   { name: "Taskmarket", stream: "نوشتن و طراحی", payout: "USDC / OUSD", fit: "نیازمند بررسی کشور و تسک", url: "https://taskmarket.dev/tasks", note: "تسک‌های نیازمند TAP Verified یا وثیقه کنار گذاشته شوند." },
-  { name: "Monero.Jobs", stream: "پروژه‌های فریلنسری", payout: "XMR مستقیم", fit: "قابل بررسی؛ ریسک معامله مستقیم", url: "https://monero.jobs/jobs", note: "بدون KYC اجباری اعلام شده؛ اعتبار مشتری باید جداگانه سنجیده شود." },
+  { name: "Monero.Jobs", stream: "پروژه‌های فریلنسری", payout: "XMR مستقیم", kycStatus: "بدون KYC اجباری اعلام‌شده؛ تأیید مستقل نشده", fit: "قابل بررسی؛ ریسک معامله مستقیم", url: "https://monero.jobs/jobs", note: "بدون KYC اجباری اعلام شده؛ اعتبار مشتری باید جداگانه سنجیده شود." },
   { name: "XmrBazaar", stream: "بازار همتا‌به‌همتا", payout: "XMR", fit: "قابل بررسی؛ ریسک طرف معامله", url: "https://xmrbazaar.com/", note: "پیش از شروع کار، سازوکار امانت و شرایط معامله را بررسی کن." },
   { name: "GIMI", stream: "کمپین محتوایی", payout: "USDC از شریک پرداخت", fit: "نیازمند بررسی KYC و پذیرش پاسپورت", url: "https://gimi.xyz/", note: "کارمزد و حداقل برداشت اعلام‌شده باید در حساب تأیید شود." },
   { name: "make.fun", stream: "مسابقات و bounty", payout: "USDC روی Solana", fit: "نیازمند بررسی محدودیت تحریم و کشور", url: "https://make.fun/", note: "کارمزد شبکه SOL ممکن است لازم شود؛ هیچ وثیقه‌ای نپرداز." },
@@ -25,12 +25,12 @@ export default function PlatformReviewCatalog() {
   return (
     <section className="panel vetted-opportunities" id="platform-review-catalog">
       <div className="panel-head"><div><span className="eyebrow">PLATFORM COMPATIBILITY REVIEW</span><h2>فهرست سایت‌های بررسی‌شده برای شرایط حساب</h2></div><span className="free-tag">۱۸ پلتفرم · بررسی اولیه</span></div>
-      <p className="hub-intro">همه موارد زیر به‌صورت پیش‌فرض «نیازمند بررسی» هستند، نه فرصت تأییدشده. معیار بررسی: اقامت ارمنستان، تابعیت و پاسپورت ایرانی، KYC، پرداخت مستقیم رمزارزی، کارمزد و نبود سپرده یا اشتراک اجباری. وضعیت کشور یا هویت نامعلوم به معنی رد خودکار نیست.</p>
+      <p className="hub-intro">این فهرست عمداً سایت‌هایی را هم نگه می‌دارد که شرایط احراز هویت، پذیرش پاسپورت ایرانی یا کشور محل اقامتشان هنوز روشن نیست. این موارد با برچسب مستقل «KYC نامشخص» نمایش داده می‌شوند و حذف خودکار نمی‌شوند. معیار بررسی: اقامت ارمنستان، تابعیت و پاسپورت ایرانی، KYC، پرداخت مستقیم رمزارزی، کارمزد و نبود سپرده یا اشتراک اجباری.</p>
       <div className="lead-grid">
         {platforms.map((item) => (
           <article className="saved-opportunity" key={item.name}>
             <div><strong>{item.name} · {item.stream}</strong><p>{item.payout}</p><p className="opportunity-meta">{item.fit}</p><p>{item.note}</p><a href={item.url} target="_blank" rel="noreferrer">منبع و شرایط رسمی ↗</a></div>
-            <span className="status">نیازمند بررسی</span>
+            <span className="status">KYC: {item.kycStatus ?? "نامشخص · نیازمند تأیید"}</span>
           </article>
         ))}
       </div>
