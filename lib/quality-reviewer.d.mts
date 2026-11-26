@@ -16,6 +16,8 @@ export interface CreativeReviewResult {
   unchecked: { key: string; label: string }[];
   rightsStatus: string;
   rightsEvidenceMissing: boolean;
+  rightsEvidenceReferenceProvided: boolean;
+  rightsEvidenceVerification: "not_verified";
   format: string;
   revisionLimit: string;
   reviewerNotes: string;
