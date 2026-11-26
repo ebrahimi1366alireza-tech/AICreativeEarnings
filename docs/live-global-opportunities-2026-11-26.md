@@ -382,3 +382,31 @@ Official listing: https://superteam.fun/earn/listing/create-and-earn-explore-tok
 - Official sources:
   - Listing: https://superteam.fun/earn/listing/create-and-earn-explore-tokenpockets-transfer-features/
   - Superteam Earn payment/KYC FAQ: https://docs.superteam.fun/the-superteam-handbook/community/faqs/superteam-earn-faq
+
+
+## Additional live global listings and eligibility filter — 2026-11-26
+
+### Raenest Global Bounty — $13,000 USDC pool; exclude for current residence
+- Official Superteam Earn listing labels this campaign **Global**, with a $13,000 USDC prize pool: five ranked prizes ($1,500, $1,400, $1,300, $1,200, $1,000) and 20 random eligible-participant prizes of $330 each. Winner announcement is scheduled for 21 December 2026.
+- Accepts written content, video or animation. However, all tracks require a Raenest account, product usage, a unique referral link/code and a public CTA; video/animation must be posted to X, TikTok, Instagram and YouTube. The judging criteria heavily include verified referrals and product activation. It is not a simple create-and-submit contest.
+- Raenest's own Terms of Service (last modified February 2025) say personal accounts are only available to legal residents of the United States, Nigeria, Kenya, Ghana, Uganda, South Africa, Egypt and the United Kingdom. Armenia is not listed. The terms also say Raenest may request government ID and additional KYC checks.
+- Raenest's Help Center says identity verification is mandatory and accepted document options vary by country. Another KYC guide describes proof of address, employment details, bank information, passport/ID and selfie verification. This still does not confirm acceptance of an Iranian passport.
+- Decision: **exclude for this user at present**. The Superteam listing's "Global" label does not override Raenest's personal-account residency restrictions. Do not sign up, fund, transact, or produce a campaign requiring genuine Raenest product usage unless Raenest confirms an exception in writing. No signup or transaction was performed.
+- Official sources:
+  - Listing: https://superteam.fun/earn/listing/the-raenest-global-bounty-writing-video-and-animation/
+  - Raenest Terms: https://www.raenest.com/terms-of-service
+  - Accepted ID documents: https://help.raenest.com/en/articles/12470813-accepted-id-documents-for-verifying-your-identity-on-raenest
+  - Verification guide: https://help.raenest.com/en/articles/6309281-verifying-your-raenest-formerly-geegpay-account-step-by-step-guide
+
+### Upwork AI Video Editor listings — not a wallet-payout route; eligibility must be handled accurately
+- A current worldwide AI video-editor listing advertised a $60 fixed-price amount and a paid 30-day trial; it requires CapCut, AI image/video generation, a portfolio and weekly delivery capacity. A second AI Creative Producer listing advertised $1,200 fixed price but requires a stronger commercial-advertising portfolio and advanced production workflow.
+- Upwork's official eligibility page says individuals located in or traveling in Iran cannot register or use the platform. The current published restriction list does **not** state a blanket ban on every Iranian citizen residing outside Iran; it separately names individual Cuban nationals. Therefore do not infer an automatic nationality-only ban for an Iranian physically residing in Armenia. The user must still pass identity/location checks and any applicable sanctions screening.
+- Upwork's current User Agreement allows identity/location verification using official documents and can hold disbursements where sanctions or payment partners prevent withdrawals. The user prefers direct crypto-wallet payouts; Upwork is not a direct self-custody crypto payout platform, so these listings are **not a match for the wallet-only path** unless a lawful, supported withdrawal method is independently confirmed.
+- Decision: **not added to the wallet-first actionable shortlist**. Keep as an employment/freelance alternative only if the user explicitly wants conventional payment rails and Upwork confirms the account and payout route. Do not create a false location or misrepresent nationality.
+- Official sources:
+  - Eligibility: https://support.upwork.com/hc/en-us/articles/211067778-Who-s-eligible-to-join-and-use-Upwork
+  - User Agreement: https://www.upwork.com/legal
+  - Example listing: https://www.upwork.com/freelance-jobs/apply/Video-Editor-Video-Generation-Specialist_~022124936013399088891/
+  - Higher-level example: https://www.upwork.com/freelance-jobs/apply/Creative-Producer-Video-Editor_~022122991826076426694/
+
+Research boundary: public-source review only. No account registration, KYC, bank details, wallet connection, transaction, application or public submission was performed.
