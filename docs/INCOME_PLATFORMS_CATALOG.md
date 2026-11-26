@@ -30,7 +30,7 @@ This is a starting catalog for AI Creative Earnings and future income-oriented p
 
 ## Operating rules
 
-0. **Crypto-only withdrawals:** accept only cryptocurrency payouts that reach the user's own wallet, either directly or through a smart-contract/escrow release to that wallet. Prefer USDT, then USDC; consider another established crypto asset only when the platform explicitly supports it and its exact network, fees, minimum, country access, and wallet delivery are verified. Reject PayPal, Payoneer, Wise, bank transfers, cards, gift cards, exchange-account-only balances, and fiat payouts.
+0. **Crypto-only withdrawals:** accept only cryptocurrency payouts that reach the user's own wallet, either directly or through a smart-contract/escrow release to that wallet. No coin or token has priority. Accept any asset only when the platform explicitly supports direct wallet delivery and its exact asset, network, fees, minimum withdrawal, country access, and payout conditions are verified from authoritative sources. Reject PayPal, Payoneer, Wise, bank transfers, cards, gift cards, exchange-account-only balances, and fiat payouts.
 1. The user's preference is genuinely free entry: no mandatory deposit, no paid signup, no refundable-fee trick, and no required purchase to unlock work.
 2. Prioritize AI-assisted creative work and services that can be completed from an Android phone/cloud workspace where practical.
 3. Before listing a lead as actionable, verify official terms for the user's current country, KYC, payment rails, fees, minimum withdrawal, and whether a client/task is real.
