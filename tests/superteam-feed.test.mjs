@@ -70,7 +70,7 @@ test("filters unsafe requirements hidden in listing descriptions", () => {
 test("strips markup from listing descriptions before displaying them", () => {
   const jobs = normalizeSuperteamListings([{
     status: "OPEN",
-    title: "Design a product image",
+    title: "Graphic design for product images",
     slug: "design-product-image",
     description: "<p>Create a <strong>clean product image</strong>.</p><script>alert(1)</script>"
   }]);
