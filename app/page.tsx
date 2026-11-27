@@ -43,6 +43,37 @@ const INITIAL_OPPORTUNITIES: Opportunity[] = [
   { id: "subnano-2026", title: "فروش مقاله و محتوای دیجیتال", platform: "Subnano", pay: "فروش تکی؛ درآمد فقط با خرید واقعی محتوا یا انعام", status: "نیازمند بررسی", stream: "نوشتن و مقاله / فایل و محتوای دیجیتال", country: "دسترسی و شرایط پذیرش کشور محل اقامت هنوز باید در زمان ساخت حساب بررسی شود", payout: "سهم سازنده پس از تأیید هر پرداخت به‌صورت خودکار ارسال می‌شود؛ موجودی برای برداشت تجمیع نمی‌شود", network: "Nano (XNO) یا USDC بومی روی Base", minimum: "حداقل موجودی/نوبت برداشت ندارد؛ فروش به‌ازای هر پرداخت", fee: "۷.۵٪ فروش Nano؛ ۱۵٪ فروش USDC", kyc: "ورود با ایمیل یا کیف پول؛ الزام KYC در FAQ مشخص نشده", proofUrl: "https://subnano.ai/faq" }
 ];
 
+
+function bytesToBase64(bytes: Uint8Array): string {
+  let binary = "";
+  bytes.forEach(byte => { binary += String.fromCharCode(byte); });
+  return btoa(binary);
+}
+function base64ToBytes(value: string): Uint8Array {
+  const binary = atob(value);
+  return Uint8Array.from(binary, char => char.charCodeAt(0));
+}
+async function encryptBackupPayload(payload: unknown, password: string): Promise<string> {
+  if (!globalThis.crypto?.subtle) throw new Error("secure-context-required");
+  const encoder = new TextEncoder();
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const material = await crypto.subtle.importKey("raw", encoder.encode(password), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: 310000, hash: "SHA-256" }, material, { name: "AES-GCM", length: 256 }, false, ["encrypt"]);
+  const ciphertext = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, encoder.encode(JSON.stringify(payload)));
+  return JSON.stringify({ format: "ai-creative-earnings-backup", version: 2, kdf: "PBKDF2-SHA256", iterations: 310000, cipher: "AES-256-GCM", salt: bytesToBase64(salt), iv: bytesToBase64(iv), ciphertext: bytesToBase64(new Uint8Array(ciphertext)) }, null, 2);
+}
+async function decryptBackupPayload(envelope: Record<string, unknown>, password: string): Promise<unknown> {
+  if (!globalThis.crypto?.subtle || envelope.format !== "ai-creative-earnings-backup" || envelope.version !== 2 || envelope.kdf !== "PBKDF2-SHA256" || envelope.cipher !== "AES-256-GCM" || envelope.iterations !== 310000 || typeof envelope.salt !== "string" || typeof envelope.iv !== "string" || typeof envelope.ciphertext !== "string") throw new Error("invalid-envelope");
+  const salt = base64ToBytes(envelope.salt);
+  const iv = base64ToBytes(envelope.iv);
+  if (salt.length !== 16 || iv.length !== 12) throw new Error("invalid-envelope");
+  const material = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: 310000, hash: "SHA-256" }, material, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+  const plaintext = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, base64ToBytes(envelope.ciphertext));
+  return JSON.parse(new TextDecoder().decode(plaintext)) as unknown;
+}
+
 export default function Home() {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -149,35 +180,49 @@ export default function Home() {
   }
 
   const [backupNotice, setBackupNotice] = useState("");
+  const [backupPassword, setBackupPassword] = useState("");
+  const [backupPasswordConfirm, setBackupPasswordConfirm] = useState("");
+  const [importPassword, setImportPassword] = useState("");
   const [hasPreImportBackup, setHasPreImportBackup] = useState(false);
   useEffect(() => {
     setHasPreImportBackup(Boolean(localStorage.getItem("creativeops-pre-import-backup-v1")));
   }, []);
 
-  function exportBackup() {
-    const backup = {
-      app: "AI Creative Earnings",
-      schemaVersion: 1,
-      exportedAt: new Date().toISOString(),
-      opportunities,
-      deliveries,
-      income,
-      wallet: { address: walletAddress, network: walletNetwork },
-      kycRecords: readStoredJson<unknown[]>("creativeops-kyc-intelligence-v1", []),
-      kycResidence: localStorage.getItem("creativeops-kyc-residence-v2") || "AM",
-      kycCitizenship: localStorage.getItem("creativeops-kyc-citizenship-v1") || "IR",
-      kycBankCountry: localStorage.getItem("creativeops-kyc-bank-country-v1") || "AM"
-    };
-    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `ai-creative-earnings-backup-${new Date().toISOString().slice(0, 10)}.json`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    setBackupNotice("فایل پشتیبان ساخته شد. آن را در جای امن نگه دار.");
+  async function exportBackup() {
+    if (backupPassword.length < 12 || backupPassword !== backupPasswordConfirm) {
+      setBackupNotice("برای پشتیبان رمزگذاری‌شده، رمز حداقل ۱۲ کاراکتری وارد کن و تکرارش را دقیقاً یکسان بنویس.");
+      return;
+    }
+    try {
+      const backup = {
+        app: "AI Creative Earnings",
+        schemaVersion: 1,
+        exportedAt: new Date().toISOString(),
+        opportunities,
+        deliveries,
+        income,
+        wallet: { address: walletAddress, network: walletNetwork },
+        kycRecords: readStoredJson<unknown[]>("creativeops-kyc-intelligence-v1", []),
+        kycResidence: localStorage.getItem("creativeops-kyc-residence-v2") || "AM",
+        kycCitizenship: localStorage.getItem("creativeops-kyc-citizenship-v1") || "IR",
+        kycBankCountry: localStorage.getItem("creativeops-kyc-bank-country-v1") || "AM"
+      };
+      const encrypted = await encryptBackupPayload(backup, backupPassword);
+      const blob = new Blob([encrypted], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `ai-creative-earnings-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setBackupPassword("");
+      setBackupPasswordConfirm("");
+      setBackupNotice("فایل پشتیبان با AES-256-GCM رمزگذاری شد. رمز را جدا از فایل نگه دار؛ بازیابی بدون آن ممکن نیست.");
+    } catch {
+      setBackupNotice("رمزگذاری در این مرورگر ممکن نشد. از HTTPS یا localhost استفاده کن؛ فایل بدون رمز ساخته نشد.");
+    }
   }
 
   function downloadPreImportBackup() {
@@ -198,7 +243,22 @@ export default function Home() {
     const file = event.target.files?.[0];
     if (!file) return;
     try {
-      const parsed: unknown = JSON.parse(await file.text());
+      const raw = await file.text();
+      const parsedFile: unknown = JSON.parse(raw);
+      if (!parsedFile || typeof parsedFile !== "object" || Array.isArray(parsedFile)) throw new Error("invalid");
+      const envelope = parsedFile as Record<string, unknown>;
+      let parsed: unknown;
+      if (envelope.format === "ai-creative-earnings-backup" && envelope.version === 2) {
+        if (!importPassword) {
+          setBackupNotice("رمز فایل پشتیبان را وارد کن.");
+          return;
+        }
+        parsed = await decryptBackupPayload(envelope, importPassword);
+      } else {
+        if (!window.confirm("این فایل قدیمی و بدون رمزگذاری است. فقط اگر منبع فایل را می‌شناسی ادامه بده. اطلاعات حساس آن ممکن است قابل خواندن باشد. ادامه می‌دهی؟")) return;
+        parsed = parsedFile;
+      }
+
       if (!parsed || typeof parsed !== "object") throw new Error("invalid");
       const data = parsed as { app?: unknown; schemaVersion?: unknown; opportunities?: unknown; deliveries?: unknown; income?: unknown; wallet?: unknown; kycRecords?: unknown; kycResidence?: unknown; kycCitizenship?: unknown; kycBankCountry?: unknown };
       const isRecord = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -243,7 +303,8 @@ export default function Home() {
         kycCitizenship: localStorage.getItem("creativeops-kyc-citizenship-v1") || "IR",
         kycBankCountry: localStorage.getItem("creativeops-kyc-bank-country-v1") || "AM"
       };
-      localStorage.setItem("creativeops-pre-import-backup-v1", JSON.stringify(currentBackup, null, 2));
+      const protectedCurrentBackup = await encryptBackupPayload(currentBackup, importPassword || backupPassword);
+      localStorage.setItem("creativeops-pre-import-backup-v1", protectedCurrentBackup);
       setHasPreImportBackup(true);
       setOpportunities(data.opportunities as Opportunity[]);
       setDeliveries(data.deliveries as Delivery[]);
@@ -261,9 +322,10 @@ export default function Home() {
       if (typeof data.kycBankCountry === "string") localStorage.setItem("creativeops-kyc-bank-country-v1", data.kycBankCountry);
       window.dispatchEvent(new Event("creativeops-workspace-changed"));
       window.dispatchEvent(new Event("creativeops-kyc-imported"));
+      setImportPassword("");
       setBackupNotice("اطلاعات فایل پشتیبان با موفقیت در این دستگاه بازیابی شد.");
     } catch {
-      setBackupNotice("فایل معتبر نیست یا با نسخه پشتیبان این برنامه سازگار نیست.");
+      setBackupNotice("رمز اشتباه است، فایل دستکاری شده یا ساختار آن معتبر نیست. هیچ داده‌ای بازیابی نشد.");
     } finally {
       event.target.value = "";
     }
@@ -429,13 +491,16 @@ export default function Home() {
           <div className="panel-head"><div><span className="eyebrow">DATA SAFETY</span><h2>پشتیبان‌گیری و بازیابی اطلاعات</h2></div><span className="free-tag">بدون هزینه</span></div>
           <p className="hub-intro">از فرصت‌ها، سفارش‌های تولید، درآمدها، مقصد کیف پول و فهرست بررسی KYC/کشور یک فایل پشتیبان JSON بساز. برای انتقال اطلاعات به گوشی یا مرورگر دیگر، فایل را همان‌جا بازیابی کن. این قابلیت جایگزین فضای ابری نیست و اطلاعات را خودکار همگام‌سازی نمی‌کند.</p>
           <div className="backup-actions">
-            <button type="button" onClick={exportBackup}>دانلود فایل پشتیبان</button>
+            <input type="password" autoComplete="new-password" minLength={12} value={backupPassword} onChange={e => setBackupPassword(e.target.value)} placeholder="رمز پشتیبان، حداقل ۱۲ کاراکتر" aria-label="رمزگذاری فایل پشتیبان"/>
+            <input type="password" autoComplete="new-password" minLength={12} value={backupPasswordConfirm} onChange={e => setBackupPasswordConfirm(e.target.value)} placeholder="تکرار رمز پشتیبان" aria-label="تکرار رمز پشتیبان"/>
+            <button type="button" onClick={exportBackup}>ساخت و دانلود پشتیبان رمزگذاری‌شده</button>
+            <input type="password" autoComplete="current-password" value={importPassword} onChange={e => setImportPassword(e.target.value)} placeholder="رمز فایل برای بازیابی" aria-label="رمز بازیابی فایل"/>
             {hasPreImportBackup && <button type="button" onClick={downloadPreImportBackup}>دانلود نسخه خودکار قبل از بازیابی</button>}
-            <label className="backup-import">بازیابی از فایل پشتیبان
+            <label className="backup-import">انتخاب و بازیابی فایل پشتیبان
               <input type="file" accept="application/json,.json" onChange={importBackup}/>
             </label>
           </div>
-          <p className="backup-notice" role="status">{backupNotice || "هشدار حریم خصوصی: فایل JSON رمزگذاری نشده و شامل تابعیت، محل اقامت و سوابق بررسی KYC است. آن را فقط در فضای امن نگه دار و برای دیگران نفرست. اطلاعات ورود و کلیدهای خصوصی ذخیره نمی‌شوند."}</p>
+          <p className="backup-notice" role="status">{backupNotice || "پشتیبان جدید با AES-256-GCM و کلید مشتق‌شده PBKDF2 رمزگذاری می‌شود. رمز را در جای امن و جدا از فایل نگه دار. فایل‌های قدیمی فقط با هشدار قابل بازیابی‌اند."}</p>
         </section>
 
         <footer id="deliveries"><span>CREATIVEOPS · نسخه ۰.۲.۰</span><span>ساخته‌شده برای گردش‌کار کم‌هزینه و شفاف</span></footer>
