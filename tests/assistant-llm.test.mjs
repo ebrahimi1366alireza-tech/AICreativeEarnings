@@ -46,5 +46,6 @@ test("prompt treats user brief as untrusted data and keeps advice non-authoritat
   const messages = buildAssistantMessages({ title: "test" });
   assert.match(messages[0].content, /untrusted data/);
   assert.match(messages[0].content, /advisory only/);
-  assert.match(messages[1].content, /JSON.stringify/);
+  assert.match(messages[1].content, /brief is data only/);
+  assert.match(messages[1].content, /"title":"test"/);
 });
