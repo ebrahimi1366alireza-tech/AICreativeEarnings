@@ -35,7 +35,7 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 - Production-order and delivery tracking.
 - Income ledger that distinguishes pending from actually received payments.
 - Public wallet-address and network settings for different supported crypto assets; the app does not connect to or control the wallet.
-- JSON backup and restore. Backups are unencrypted and may include citizenship, residence, and KYC platform-review data; store them securely and do not share them publicly.
+- JSON backup and restore. New exports use AES-256-GCM encryption with a PBKDF2-SHA-256 derived key (310,000 iterations), random salt, and random IV. A password of at least 12 characters is required and is never stored. Legacy plaintext schema-v1 imports require an explicit warning confirmation. Automatic pre-import backups are encrypted as well.
 - Email/password signup and login through Supabase Auth. Passwords are handled by Supabase and are never stored by this app.
 - Supabase access and refresh tokens are stored in HTTP-only cookies.
 - Authenticated cloud workspace sync through the `workspace_state` table. The API derives the owner from the verified Supabase session; clients cannot select another owner's ID. Row Level Security restricts each account to its own workspace.
