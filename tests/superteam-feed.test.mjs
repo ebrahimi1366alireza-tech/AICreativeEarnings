@@ -43,3 +43,38 @@ test("accepts an items wrapper and does not assume missing payout details", () =
   assert.equal(jobs[0].salary, "پاداش در فید مشخص نشده");
   assert.equal(jobs[0].sourceType, "freelance");
 });
+
+
+test("classifies generic titles from the full creative brief", () => {
+  const jobs = normalizeSuperteamListings([{
+    status: "OPEN",
+    title: "Community Growth Campaign",
+    slug: "community-growth-campaign",
+    description: "Create a short promotional video and deliver editable project files."
+  }]);
+  assert.equal(jobs.length, 1);
+  assert.equal(jobs[0].stream, "ویدئو");
+  assert.match(jobs[0].description, /promotional video/);
+});
+
+test("filters unsafe requirements hidden in listing descriptions", () => {
+  const jobs = normalizeSuperteamListings([{
+    status: "OPEN",
+    title: "Create promotional video",
+    slug: "promotional-video",
+    description: "Install this mobile game and deposit 20 USDC before starting."
+  }]);
+  assert.equal(jobs.length, 0);
+});
+
+test("strips markup from listing descriptions before displaying them", () => {
+  const jobs = normalizeSuperteamListings([{
+    status: "OPEN",
+    title: "Design a product image",
+    slug: "design-product-image",
+    description: "<p>Create a <strong>clean product image</strong>.</p><script>alert(1)</script>"
+  }]);
+  assert.equal(jobs.length, 1);
+  assert.equal(jobs[0].description, "Create a clean product image .");
+  assert.doesNotMatch(jobs[0].description, /<|script|alert/);
+});
