@@ -58,10 +58,10 @@ The dashboard includes a 25-entry platform compatibility review catalogue in `ap
 
 ## Live discovery and current limitations
 
-- A server-side public-feed discovery endpoint currently reads LaborX freelance posts and Subnano public requests. Employment feeds (Jobicy, Himalayas, Remote OK) are intentionally excluded because job vacancies are not the same as paid creative orders. The endpoint deduplicates and ranks topical matches and returns source links.
+- A server-side public-feed discovery endpoint currently reads LaborX freelance posts, Subnano public requests, and open creative listings from Superteam Earn. Employment feeds (Jobicy, Himalayas, Remote OK) are intentionally excluded because job vacancies are not the same as paid creative orders. The endpoint deduplicates and ranks topical matches and returns source links.
 - The discovery feed is global; it is not restricted to the user's separate chef-job-search countries.
 - Subnano requests are public budgets, not escrowed funds or guaranteed purchases. LaborX listings still require checking that the specific page is an actual freelance order, not an employment vacancy.
-- Every discovered lead is unverified by default. A high topical score is not an eligibility or payment score. Do not mark a platform or lead eligible until no-KYC status, the user's country eligibility, direct wallet payout, supported asset/network, all fees, minimum withdrawal, and no-deposit/no-purchase conditions are documented from official sources.
+- Every discovered lead is unverified by default. A high topical score is not an eligibility or payment score. Do not mark a platform or lead eligible until its KYC requirements and document rules, the user's country eligibility, direct wallet payout, supported asset/network, all fees, minimum withdrawal, and no-deposit/no-purchase conditions are documented from official sources.
 - Subnano's current FAQ documents Nano and USDC on Base creator payouts, with a 7.5% Nano sale fee and 15% USDC sale fee. The FAQ does not itself establish that KYC is never required or that every country is eligible, so Subnano remains review-only until those points are confirmed.
 - LaborX listings can be found publicly, but this project has not established a no-KYC guarantee or universal country eligibility for LaborX. Keep it review-only.
 - No marketplace account, client application, contract, content submission, or financial action is automated. Human approval is required.
