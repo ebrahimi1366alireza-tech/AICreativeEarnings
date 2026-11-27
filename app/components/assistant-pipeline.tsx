@@ -11,7 +11,44 @@ export default function AssistantPipeline() {
   const [form, setForm] = useState(initial);
   const [result, setResult] = useState<PipelineResult | null>(null);
   const [notice, setNotice] = useState("");
+  const [aiConsent, setAiConsent] = useState(false);
+  const [aiAdvice, setAiAdvice] = useState("");
+  const [aiBusy, setAiBusy] = useState(false);
   const update = (key: keyof typeof initial, value: string) => setForm((current) => ({ ...current, [key]: value }));
+  async function requestAiAdvice() {
+    if (!aiConsent) {
+      setNotice("برای ارسال بریف به سرویس خارجی، ابتدا رضایت صریح را فعال کن.");
+      return;
+    }
+    setAiBusy(true);
+    setAiAdvice("");
+    try {
+      const response = await fetch("/api/assistants/advice", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          allowExternalProcessing: true,
+          brief: {
+            title: form.title,
+            contentType: form.contentType,
+            platform: form.platform,
+            product: form.product,
+            audience: form.audience,
+            message: form.message,
+            specifications: form.specifications
+          }
+        })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || "دریافت پیشنهاد هوش مصنوعی انجام نشد.");
+      setAiAdvice(String(data.advice || ""));
+      setNotice("پیشنهاد هوش مصنوعی دریافت شد؛ این خروجی فقط مشورتی است و تأیید نهایی نیست.");
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "ارتباط با دستیار برقرار نشد.");
+    } finally {
+      setAiBusy(false);
+    }
+  }
   function run(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const next = runAssistantPipeline({ ...form, id: crypto.randomUUID() });
@@ -52,6 +89,16 @@ export default function AssistantPipeline() {
       <input value={form.expectedAmount} onChange={e=>update("expectedAmount",e.target.value)} placeholder="مبلغ مورد انتظار، اختیاری" aria-label="مبلغ مورد انتظار"/>
       <button type="submit">اجرای پنج دستیار و انتقال خروجی‌ها</button>
     </form>
+    <div className="panel" style={{marginTop:16}}>
+      <strong>۴. مشاوره اختیاری مدل هوش مصنوعی</strong>
+      <p className="hub-intro">این بخش فقط بریف خلاقانه را ارسال می‌کند. اطلاعات تابعیت، KYC، کیف پول، پرداخت و درآمد به سرویس مدل فرستاده نمی‌شوند. اتصال در نسخه فعلی خاموش است مگر اینکه مدیر سایت، ارائه‌دهنده را در تنظیمات سرور فعال کند.</p>
+      <label style={{display:"flex",gap:8,alignItems:"flex-start",margin:"12px 0"}}>
+        <input type="checkbox" checked={aiConsent} onChange={event=>setAiConsent(event.target.checked)} />
+        <span>رضایت می‌دهم بریف تولید محتوا برای پردازش به ارائه‌دهنده مدل هوش مصنوعی متصل‌شده به سرور ارسال شود.</span>
+      </label>
+      <button type="button" onClick={requestAiAdvice} disabled={aiBusy || !form.title || !form.message}>{aiBusy ? "در حال دریافت پیشنهاد..." : "دریافت پیشنهاد هوش مصنوعی"}</button>
+      {aiAdvice && <article className="saved-opportunity" style={{marginTop:12}}><strong>پیشنهاد مشورتی مدل</strong><pre style={{whiteSpace:"pre-wrap",overflowWrap:"anywhere"}}>{aiAdvice}</pre><p className="opportunity-meta">این متن به‌تنهایی مجوز محتوا، کیفیت، تحویل یا پرداخت را تأیید نمی‌کند.</p></article>}
+    </div>
     {notice && <p className="backup-notice" role="status">{notice}</p>}
     {result?.ok && <div className="discovery-assessment">
       <strong>{result.project?.title} · گزارش اجرای زنجیره</strong>
