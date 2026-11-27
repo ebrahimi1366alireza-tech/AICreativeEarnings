@@ -18,7 +18,7 @@ test("normalizes open creative Superteam listings with token and deadline", () =
 
 test("keeps video and design listings but excludes unrelated and unsafe tasks", () => {
   const jobs = normalizeSuperteamListings([
-    { status: "OPEN", title: "Create a short video animation", slug: "short-video-animation", token: "USDC" },
+    { status: "OPEN", title: "Create a video editing animation", slug: "short-video-animation", token: "USDC" },
     { status: "OPEN", title: "Graphic design for product photos", slug: "product-photo-design", token: "SOL" },
     { status: "OPEN", title: "Install this mobile game to earn", slug: "install-game", token: "USDC" },
     { status: "OPEN", title: "Build a blockchain protocol", slug: "build-protocol", token: "USDC" }
