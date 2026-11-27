@@ -94,7 +94,7 @@ A free tier does not automatically grant unlimited generations or commercial-use
 - LaborX: crypto freelance marketplace with escrow and USDC/USDT/DAI on Ethereum or BNB Chain; the official FAQ states a 10% freelancer fee. Country and identity eligibility for this account remain unverified.
 - CryptoTask: freelance marketplace advertising crypto payments, escrow, and fees up to 3%; exact payout assets/networks and KYC/country acceptance remain unverified.
 - Dework: DAO bounty board; each sponsor determines reward token and conditions, so USDC payout is not guaranteed.
-- Open Bounty: small human-task marketplace using USDC/x402 on Base. Its own FAQ says approval does not guarantee payment because the publisher pays after approval; current live task volume is low.
+- Open Bounty: its current official API documentation explicitly describes the marketplace integration as testnet, with USDC/x402 on the configured Base network. Public bounty reads exist, but real mainnet worker payouts are not established by that documentation. Keep it catalog-only until production-network status and real payouts are independently confirmed.
 - Web3.Career and CryptoJobs.com: discovery boards only. The employer, not the board, determines payout, KYC, and country eligibility.
 - Worqen: excluded for this account. Its official Terms explicitly bar Iranian nationals and require KYC; do not attempt to bypass this restriction.
 
