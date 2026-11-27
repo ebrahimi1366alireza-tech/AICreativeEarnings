@@ -7,7 +7,7 @@ test("keeps all 25 reviewed platforms in the source registry", () => {
   assert.equal(new Set(OPPORTUNITY_SOURCES.map((source) => source.name)).size, 25);
 });
 
-test("marks only LaborX and Subnano as connected live sources", () => {
+test("marks the three implemented public feeds as connected live sources", () => {
   const summary = getOpportunitySourceSummary();
   assert.equal(summary.connected, 3);
   assert.deepEqual(
