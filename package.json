@@ -12,7 +12,8 @@
     "test:creative-producer": "node --test tests/creative-producer.test.mjs",
     "test:quality-reviewer": "node --test tests/quality-reviewer.test.mjs",
     "test:earnings-auditor": "node --test tests/earnings-auditor.test.mjs",
-    "test:assistant-pipeline": "node --test tests/assistant-pipeline.test.mjs"
+    "test:assistant-pipeline": "node --test tests/assistant-pipeline.test.mjs",
+    "prebuild": "npm test"
   },
   "dependencies": {
     "next": "15.5.29",
