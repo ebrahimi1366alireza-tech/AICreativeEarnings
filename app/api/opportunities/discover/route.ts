@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isDisallowedOpportunity } from "../../../lib/opportunity-filter.mjs";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -19,21 +20,6 @@ const STREAM_TERMS: Record<string, string[]> = {
   "نوشتن و مقاله": ["article writing", "content writing", "blog writing", "copywriting", "technical writing", "seo writing", "proofreading", "editing", "translation", "research writing"],
   "تولید آهنگ با هوش مصنوعی": ["music production", "song production", "ai music", "music composition", "soundtrack", "jingle", "audio production", "songwriting", "music generation"]
 };
-const DISALLOWED_TASK_PATTERNS = [
-  /\b(?:install|download)\s+(?:a\s+)?(?:mobile\s+)?games?\b/i,
-  /\b(?:play|test)\s+(?:a\s+)?games?\s+(?:for|to earn)\b/i,
-  /\b(?:paid\s+)?(?:likes?|followers?|fake reviews?|fake votes?|vote manipulation|engagement manipulation)\b/i,
-  /\b(?:buy|purchase)\s+(?:likes?|followers?|reviews?|votes?)\b/i,
-  /\b(?:pay|deposit)\s+(?:an?\s+)?(?:upfront\s+)?(?:fee|deposit|bond|stake)\b/i,
-  /\b(?:mandatory|required)\s+(?:paid\s+)?(?:subscription|membership|deposit|bond|stake)\b/i,
-  /\bfee\s+to\s+unlock\s+(?:tasks?|withdrawals?)\b/i,
-  /\b(?:pay|send|transfer)\s+(?:money|funds|crypto|tokens?)\s+(?:first|before|in advance)\b/i
-];
-
-function isDisallowedOpportunity(value: string): boolean {
-  return DISALLOWED_TASK_PATTERNS.some(pattern => pattern.test(value));
-}
-
 function inferStream(value: string): string | null {
   const text = value.toLowerCase();
   for (const [stream, terms] of Object.entries(STREAM_TERMS)) {
