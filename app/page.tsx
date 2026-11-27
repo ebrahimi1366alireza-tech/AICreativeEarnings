@@ -206,8 +206,24 @@ export default function Home() {
       const validDeliveries = Array.isArray(data.deliveries) && data.deliveries.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
       const validIncome = Array.isArray(data.income) && data.income.every(item => isRecord(item) && typeof item.id === "string" && typeof item.source === "string" && typeof item.amount === "number" && Number.isFinite(item.amount) && typeof item.received === "boolean");
       const validWallet = data.wallet === undefined || (isRecord(data.wallet) && typeof data.wallet.address === "string" && data.wallet.address.length <= 256 && !/[\s\u0000-\u001F\u007F]/.test(data.wallet.address) && typeof data.wallet.network === "string");
-      const validKyc = (data.kycRecords === undefined || Array.isArray(data.kycRecords)) &&
-        [data.kycResidence, data.kycCitizenship, data.kycBankCountry].every(value => value === undefined || typeof value === "string");
+      const validCountryCode = (value: unknown) => value === undefined || (typeof value === "string" && /^[A-Z]{2}$/.test(value));
+      const validKycRecord = (value: unknown) => {
+        if (!isRecord(value)) return false;
+        const enumValue = (candidate: unknown, allowed: string[]) => typeof candidate === "string" && allowed.includes(candidate);
+        const validCountryMap = (candidate: unknown) => candidate === undefined || (isRecord(candidate) && Object.entries(candidate).every(([code, status]) => /^[A-Z]{2}$/.test(code) && enumValue(status, ["accepted", "rejected", "unknown", "allowed", "blocked"])));
+        return typeof value.id === "string" && value.id.length > 0 && value.id.length <= 120 &&
+          typeof value.platform === "string" && value.platform.length > 0 && value.platform.length <= 160 &&
+          typeof value.url === "string" && value.url.startsWith("https://") &&
+          enumValue(value.kyc, ["none", "id", "address", "selfie", "unknown"]) &&
+          enumValue(value.iranianPassport, ["accepted", "rejected", "unknown"]) &&
+          validCountryMap(value.passportAcceptanceByCitizenship) && validCountryMap(value.countryAccessByResidence) &&
+          enumValue(value.countryAccess, ["allowed", "blocked", "unknown"]) &&
+          enumValue(value.payout, ["direct-crypto", "platform-wallet", "fiat", "unknown"]) &&
+          enumValue(value.cost, ["free", "fee", "deposit", "unknown"]) &&
+          ["asset", "network", "minimum", "fee", "evidenceUrl", "checkedAt"].every(key => typeof value[key] === "string");
+      };
+      const validKyc = (data.kycRecords === undefined || (Array.isArray(data.kycRecords) && data.kycRecords.length <= 500 && data.kycRecords.every(validKycRecord))) &&
+        validCountryCode(data.kycResidence) && validCountryCode(data.kycCitizenship) && validCountryCode(data.kycBankCountry);
       if (data.app !== "AI Creative Earnings" || data.schemaVersion !== 1 || !validOpportunities || !validDeliveries || !validIncome || !validWallet || !validKyc) throw new Error("invalid");
       if (!window.confirm("اطلاعات فعلی جایگزین اطلاعات داخل فایل پشتیبان شود؟ قبل از ادامه، از داده‌های فعلی خروجی بگیر.")) {
         event.target.value = "";
@@ -238,6 +254,7 @@ export default function Home() {
         setWalletNetwork(restoredWallet.network);
         localStorage.setItem("creativeops-wallet-v1", JSON.stringify(restoredWallet));
       }
+      // Older schema-v1 backups may not contain KYC review data. Preserve the current catalogue in that case.
       if (Array.isArray(data.kycRecords)) localStorage.setItem("creativeops-kyc-intelligence-v1", JSON.stringify(data.kycRecords));
       if (typeof data.kycResidence === "string") localStorage.setItem("creativeops-kyc-residence-v2", data.kycResidence);
       if (typeof data.kycCitizenship === "string") localStorage.setItem("creativeops-kyc-citizenship-v1", data.kycCitizenship);
@@ -418,7 +435,7 @@ export default function Home() {
               <input type="file" accept="application/json,.json" onChange={importBackup}/>
             </label>
           </div>
-          <p className="backup-notice" role="status">{backupNotice || "فایل پشتیبان شامل فرصت‌ها، سفارش‌ها، دفتر درآمد، آدرس عمومی کیف پول و سوابق بررسی KYC/کشور است؛ اطلاعات ورود و کلیدهای خصوصی هرگز ذخیره نمی‌شوند."}</p>
+          <p className="backup-notice" role="status">{backupNotice || "هشدار حریم خصوصی: فایل JSON رمزگذاری نشده و شامل تابعیت، محل اقامت و سوابق بررسی KYC است. آن را فقط در فضای امن نگه دار و برای دیگران نفرست. اطلاعات ورود و کلیدهای خصوصی ذخیره نمی‌شوند."}</p>
         </section>
 
         <footer id="deliveries"><span>CREATIVEOPS · نسخه ۰.۲.۰</span><span>ساخته‌شده برای گردش‌کار کم‌هزینه و شفاف</span></footer>
