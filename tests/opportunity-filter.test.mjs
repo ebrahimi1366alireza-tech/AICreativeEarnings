@@ -11,6 +11,8 @@ test("blocks fake engagement and manipulation tasks", () => {
   assert.equal(isDisallowedOpportunity("Buy fake followers for a campaign"), true);
   assert.equal(isDisallowedOpportunity("Vote manipulation service"), true);
   assert.equal(isDisallowedOpportunity("Sell fake reviews"), true);
+  assert.equal(isDisallowedOpportunity("Fake votes for a contest"), true);
+  assert.equal(isDisallowedOpportunity("Paid followers campaign"), true);
 });
 
 test("blocks mandatory deposits, subscriptions, and withdrawal unlock fees", () => {
