@@ -16,7 +16,7 @@ The six streams are product scope, not proof that matching live opportunities or
 ## Operating rules
 
 - Start with free tools and free quotas. No registration fees, deposits, required purchases, or subscriptions to unlock tasks.
-- Payouts must be crypto/token-only to the user's own wallet. No cryptocurrency or token has priority. Accept any asset only when the platform genuinely supports wallet payout for that asset and its exact network, fees, minimum withdrawal, and country restrictions have been verified.
+- Payouts must be crypto/token-only to the user's own wallet. Fiat, PayPal, Payoneer, Wise, gift cards, and bank withdrawals are excluded. Verify the exact asset, network, fees, minimum withdrawal, and country restrictions before accepting any task.
 - Never claim revenue until payment has actually arrived.
 - Human approval is required for account verification, contracts, and financial actions.
 - Never use fake votes, fake reviews, bots, or duplicate accounts to manipulate a platform.
@@ -123,3 +123,40 @@ The Dev Container keeps OpenCode as the primary coding agent. Free Claude Code (
 See [docs/FCC_SETUP.md](docs/FCC_SETUP.md). Run the preflight with `bash scripts/install-fcc.sh --check`; install only after reviewing the provider-cost and security notes with `bash scripts/install-fcc.sh --install`. Choose OpenCode only in the official installer. FCC installation/provider connection has not been verified merely by adding these setup files.
 
 GitHub Actions runs the TypeScript check on pushes and pull requests. This workflow does not deploy the app or connect to Supabase.
+
+## Supervised Orchestration Manager
+
+The deterministic Orchestration Manager creates and tracks project records across opportunity triage, creative production, quality review, delivery preparation, and earnings audit. It records stage, status, blockers, next action, approvals, and an event log. This first version is a supervised state tracker: it does not yet invoke or transfer data between the five assistants automatically, and it performs no external actions. Completion requires explicit user confirmation.
+
+## Supervised Creative Producer
+
+The Creative Producer turns a brief into a deterministic production plan, execution stages, quality checklist, rights warning, and budget-approval flag for image, video, audio, and text work. It does not generate files, call external tools, consume credits, or submit deliverables. Rights marked unknown remain explicitly unresolved, and non-zero tool budgets require separate user approval. The planner is covered by automated Node tests.
+
+## Quality Reviewer
+
+The Quality Reviewer evaluates a manually completed checklist for brief compliance, format, language, technical quality, originality, rights evidence, and destination-platform rules. Unknown or prohibited rights block commercial delivery. A complete checklist reaches human review only: the tool does not inspect media bytes, independently verify rights or license references, approve work, publish, or send files. Checklist entries and evidence references are user-provided and are not independently validated.
+
+## Delivery Assistant
+
+- The supervised Delivery Assistant prepares a delivery manifest from user-entered required and included asset names, order details, version, format, QC state, rights state, open corrections, and an optional deadline.
+- Missing assets, incomplete details, unresolved/prohibited rights, an unreviewed or blocked QC state, and outstanding corrections prevent a ready-for-approval result.
+- A complete pack is marked `ready_for_human_approval`, never sent automatically. It generates a client-message draft but does not invent contact details, verify files, upload assets, contact clients, or submit deliverables.
+- Asset names and QC/rights statuses are user-provided claims. File existence, content, license evidence, and delivery-channel access are not independently verified.
+- Eight Node tests cover complete packs, missing assets, missing QC, unknown/prohibited rights, missing fields, no invented recipient, and outstanding corrections.
+
+
+## Earnings Auditor
+
+- The supervised Earnings Auditor records expected net payout, user-entered gross receipt, fees, asset, order/source, optional payment date, transaction reference, evidence reference, and notes.
+- It separates pending, received, disputed, refunded, amount-mismatch, and incomplete records. Summaries are grouped by asset and distinguish expected, pending, and user-recorded received amounts.
+- Decimal arithmetic supports up to 18 fractional digits. A received amount is reconciled against expected net amount after the entered fee.
+- A transaction hash or receipt URL is stored as a reference only. The app does not connect to wallets, query blockchains or platforms, verify payment, or send follow-up messages.
+- Follow-up text is a draft only. Records are stored in the current browser's local storage; export a workspace backup before changing devices or clearing site data.
+- Ten Node tests cover exact reconciliation, pending and disputed/refunded states, amount mismatch, missing data, fee validation, aggregation, decimal precision, and the absence of external actions.
+
+
+## Connected assistant pipeline
+
+The Connected Assistant Pipeline runs the five local deterministic modules in sequence: Opportunity Triage -> Creative Producer -> Quality Reviewer -> Delivery Assistant -> Earnings Auditor. Each stage receives structured output from the previous stage, records its status and handoff, and creates a reviewable execution report. The pipeline is local and does not require a model API or paid inference.
+
+This is real module orchestration, not a claim that independent cloud agents or LLMs are running. Source pages, licenses, media files, and payments are not independently verified. Unknown rights, incomplete QC, missing assets, and unverified earnings remain unresolved. No account registration, wallet connection, payment, upload, client message, or external submission is performed. Human approval remains mandatory.
