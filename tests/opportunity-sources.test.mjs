@@ -1,0 +1,31 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { getOpportunitySourceSummary, OPPORTUNITY_SOURCES } from "../lib/opportunity-sources.mjs";
+
+test("keeps all 25 reviewed platforms in the source registry", () => {
+  assert.equal(OPPORTUNITY_SOURCES.length, 25);
+  assert.equal(new Set(OPPORTUNITY_SOURCES.map((source) => source.name)).size, 25);
+});
+
+test("marks only LaborX and Subnano as connected live sources", () => {
+  const summary = getOpportunitySourceSummary();
+  assert.equal(summary.connected, 2);
+  assert.deepEqual(
+    summary.sources.filter((source) => source.status === "connected").map((source) => source.name).sort(),
+    ["LaborX", "Subnano"]
+  );
+});
+
+test("keeps the known restricted platform distinct from unconnected sources", () => {
+  const worqen = OPPORTUNITY_SOURCES.find((source) => source.name === "Worqen");
+  assert.equal(worqen?.status, "restricted");
+  assert.equal(getOpportunitySourceSummary().restricted, 1);
+});
+
+test("every registry entry has a valid HTTPS source link and explicit state", () => {
+  for (const source of OPPORTUNITY_SOURCES) {
+    assert.equal(new URL(source.url).protocol, "https:");
+    assert.ok(["connected", "catalog_only", "restricted"].includes(source.status));
+    assert.ok(source.integration);
+  }
+});
