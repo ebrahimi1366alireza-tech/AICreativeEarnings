@@ -276,6 +276,7 @@ export default function Home() {
         exportedAt: new Date().toISOString(),
         backupReason: "automatic-before-import",
         opportunities,
+        assistantRuns: readStoredJson<unknown[]>("creativeops-assistant-runs-v1", []),
         deliveries,
         income,
         wallet: { address: walletAddress, network: walletNetwork },
