@@ -35,7 +35,7 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 - Production-order and delivery tracking.
 - Income ledger that distinguishes pending from actually received payments.
 - Public wallet-address and network settings for different supported crypto assets; the app does not connect to or control the wallet.
-- JSON backup and restore.
+- JSON backup and restore. Backups are unencrypted and may include citizenship, residence, and KYC platform-review data; store them securely and do not share them publicly.
 - Email/password signup and login through Supabase Auth. Passwords are handled by Supabase and are never stored by this app.
 - Supabase access and refresh tokens are stored in HTTP-only cookies.
 - Authenticated cloud workspace sync through the `workspace_state` table. The API derives the owner from the verified Supabase session; clients cannot select another owner's ID. Row Level Security restricts each account to its own workspace.
@@ -90,11 +90,22 @@ A free tier does not automatically grant unlimited generations or commercial-use
 ## Review-only leads
 
 - Subnano: possible paid-content marketplace. Its official FAQ has listed Nano and USDC on Base payouts, a 7.5% Nano fee, and a 15% USDC fee. Verify current country access, identity rules, and payout conditions inside the account.
-- LaborX: crypto freelance marketplace with escrow and USDC/USDT/DAI on Ethereum or BNB Chain; the official FAQ states a 10% freelancer fee. Country and identity eligibility for this account remain unverified.\n- CryptoTask: freelance marketplace advertising crypto payments, escrow, and fees up to 3%; exact payout assets/networks and KYC/country acceptance remain unverified.\n- Dework: DAO bounty board; each sponsor determines reward token and conditions, so USDC payout is not guaranteed.\n- Open Bounty: small human-task marketplace using USDC/x402 on Base. Its own FAQ says approval does not guarantee payment because the publisher pays after approval; current live task volume is low.\n- Web3.Career and CryptoJobs.com: discovery boards only. The employer, not the board, determines payout, KYC, and country eligibility.\n- Worqen: excluded for this account. Its official Terms explicitly bar Iranian nationals and require KYC; do not attempt to bypass this restriction.
+- LaborX: crypto freelance marketplace with escrow and USDC/USDT/DAI on Ethereum or BNB Chain; the official FAQ states a 10% freelancer fee. Country and identity eligibility for this account remain unverified.
+- CryptoTask: freelance marketplace advertising crypto payments, escrow, and fees up to 3%; exact payout assets/networks and KYC/country acceptance remain unverified.
+- Dework: DAO bounty board; each sponsor determines reward token and conditions, so USDC payout is not guaranteed.
+- Open Bounty: small human-task marketplace using USDC/x402 on Base. Its own FAQ says approval does not guarantee payment because the publisher pays after approval; current live task volume is low.
+- Web3.Career and CryptoJobs.com: discovery boards only. The employer, not the board, determines payout, KYC, and country eligibility.
+- Worqen: excluded for this account. Its official Terms explicitly bar Iranian nationals and require KYC; do not attempt to bypass this restriction.
 
 Official references:
 - https://subnano.ai/faq
-- https://laborx.com/\n- https://www.cryptotask.org/en\n- https://app.dework.xyz/bounties\n- https://openbounty.app/\n- https://web3.career/pay-in-crypto-jobs\n- https://www.cryptojobs.com/public/jobs\n- https://worqen.com/legal/terms
+- https://laborx.com/
+- https://www.cryptotask.org/en
+- https://app.dework.xyz/bounties
+- https://openbounty.app/
+- https://web3.career/pay-in-crypto-jobs
+- https://www.cryptojobs.com/public/jobs
+- https://worqen.com/legal/terms
 
 ## Development
 
