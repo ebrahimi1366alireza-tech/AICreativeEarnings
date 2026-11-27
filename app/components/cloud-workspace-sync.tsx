@@ -68,7 +68,7 @@ export default function CloudWorkspaceSync() {
 
     function preserveLocalBeforeRestore(email: string) {
       const local = readLocal();
-      const hasLocal = local.opportunities.length > 0 || (local.assistantRuns?.length ?? 0) > 0 || local.deliveries.length > 0 || local.income.length > 0 || Boolean(local.wallet.address);
+      const hasLocal = local.opportunities.length > 0 || (local.assistantRuns?.length ?? 0) > 0 || local.deliveries.length > 0 || local.income.length > 0 || Boolean(local.wallet.address) || (local.kycRecords?.length ?? 0) > 0 || local.kycResidence !== "AM" || local.kycCitizenship !== "IR" || local.kycBankCountry !== "AM";
       if (!hasLocal) return;
       localStorage.setItem(RESTORE_BACKUP_KEY, JSON.stringify({
         app: "AI Creative Earnings",
@@ -121,12 +121,21 @@ export default function CloudWorkspaceSync() {
         const response = await fetch("/api/workspace/sync", { cache: "no-store" });
         if (!response.ok) throw new Error("دریافت اطلاعات ابری ناموفق بود.");
         const remote = await response.json();
-        const data = remote.data as Workspace | null;
-        const hasRemote = Boolean(data && (
-          data.opportunities?.length || data.assistantRuns?.length || data.deliveries?.length || data.income?.length ||
-          data.kycRecords?.length || (data.wallet?.address && data.wallet.address.length > 0)
-        ));
-        if (hasRemote) {
+        const rawRemote = remote.data as unknown;
+        const hasRemoteSnapshot = rawRemote !== null && typeof rawRemote === "object" && !Array.isArray(rawRemote);
+        if (hasRemoteSnapshot) {
+          const candidate = rawRemote as Partial<Workspace>;
+          const validRemote = Array.isArray(candidate.opportunities) &&
+            Array.isArray(candidate.deliveries) &&
+            Array.isArray(candidate.income) &&
+            Boolean(candidate.wallet && typeof candidate.wallet === "object" && !Array.isArray(candidate.wallet)) &&
+            (candidate.assistantRuns === undefined || Array.isArray(candidate.assistantRuns)) &&
+            (candidate.kycRecords === undefined || Array.isArray(candidate.kycRecords));
+          if (!validRemote) {
+            setStatus("اطلاعات فضای ابری با ساختار فعلی سازگار نیست؛ برای جلوگیری از بازنویسی یا از دست رفتن داده‌ها، همگام‌سازی متوقف شد.");
+            return;
+          }
+          const data = candidate as Workspace;
           const marker = remote.updatedAt || "remote";
           if (localStorage.getItem("creativeops-cloud-version-v1") !== marker) {
             preserveLocalBeforeRestore(email);
