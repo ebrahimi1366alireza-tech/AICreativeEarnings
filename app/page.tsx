@@ -303,7 +303,13 @@ export default function Home() {
         kycCitizenship: localStorage.getItem("creativeops-kyc-citizenship-v1") || "IR",
         kycBankCountry: localStorage.getItem("creativeops-kyc-bank-country-v1") || "AM"
       };
-      const protectedCurrentBackup = await encryptBackupPayload(currentBackup, importPassword || backupPassword);
+      let protectionPassword = importPassword || backupPassword;
+      if (protectionPassword.length < 12) {
+        const entered = window.prompt("برای رمزگذاری نسخه پشتیبان خودکار، یک رمز حداقل ۱۲ کاراکتری وارد کن. این رمز ذخیره نمی‌شود.");
+        if (!entered || entered.length < 12) throw new Error("backup-password-required");
+        protectionPassword = entered;
+      }
+      const protectedCurrentBackup = await encryptBackupPayload(currentBackup, protectionPassword);
       localStorage.setItem("creativeops-pre-import-backup-v1", protectedCurrentBackup);
       setHasPreImportBackup(true);
       setOpportunities(data.opportunities as Opportunity[]);
