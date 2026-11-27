@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { runAssistantPipeline } from "../../lib/assistant-pipeline.mjs";
 
 type PipelineResult = ReturnType<typeof runAssistantPipeline>;
@@ -14,6 +14,15 @@ export default function AssistantPipeline() {
   const [aiConsent, setAiConsent] = useState(false);
   const [aiAdvice, setAiAdvice] = useState("");
   const [aiBusy, setAiBusy] = useState(false);
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("creativeops-last-assistant-pipeline-v1");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed?.ok === true && Array.isArray(parsed.stages)) setResult(parsed as PipelineResult);
+      }
+    } catch { /* ignore invalid local assistant history */ }
+  }, []);
   const update = (key: keyof typeof initial, value: string) => setForm((current) => ({ ...current, [key]: value }));
   async function requestAiAdvice() {
     if (!aiConsent) {
@@ -54,7 +63,18 @@ export default function AssistantPipeline() {
     const next = runAssistantPipeline({ ...form, id: crypto.randomUUID() });
     setResult(next);
     setNotice(next.ok ? "پنج دستیار به‌ترتیب اجرا شدند و خروجی هر مرحله به مرحله بعد منتقل شد." : next.error || "خطا در اجرای زنجیره");
-    if (next.ok) localStorage.setItem("creativeops-last-assistant-pipeline-v1", JSON.stringify(next));
+    if (next.ok) {
+      const serialized = JSON.stringify(next);
+      localStorage.setItem("creativeops-last-assistant-pipeline-v1", serialized);
+      let history: PipelineResult[] = [];
+      try {
+        const saved = JSON.parse(localStorage.getItem("creativeops-assistant-runs-v1") || "[]");
+        if (Array.isArray(saved)) history = saved.filter((item) => item?.ok === true);
+      } catch { /* replace invalid local history safely */ }
+      history.push(next);
+      localStorage.setItem("creativeops-assistant-runs-v1", JSON.stringify(history.slice(-20)));
+      window.dispatchEvent(new Event("creativeops-workspace-changed"));
+    }
   }
   return <section className="panel" id="assistant-pipeline">
     <div className="panel-head"><div><span className="eyebrow">CONNECTED ASSISTANT PIPELINE</span><h2>اجرای زنجیره‌ای پنج دستیار</h2></div><span className="free-tag">اجرای محلی · بدون هزینه API</span></div>
