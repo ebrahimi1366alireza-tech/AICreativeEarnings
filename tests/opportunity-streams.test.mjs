@@ -7,6 +7,7 @@ test("classifies all seven requested income streams", () => {
     ["Short-form video editor", "ویدئو"],
     ["Product photography and graphic design", "عکس و طراحی"],
     ["Technical article writing", "نوشتن و مقاله"],
+    ["Write an Article on Fundraising Opportunities", "نوشتن و مقاله"],
     ["AI music production and soundtrack", "تولید آهنگ با هوش مصنوعی"],
     ["Paid music voting panel", "رأی‌گیری و داوری موسیقی"],
     ["Paid survey and market research study", "نظرسنجی و تحقیقات بازار"],
