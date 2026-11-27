@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { isDisallowedOpportunity } from "../../../../lib/opportunity-filter.mjs";
+import { inferOpportunityStream } from "../../../../lib/opportunity-streams.mjs";
+import { getOpportunitySourceSummary } from "../../../../lib/opportunity-sources.mjs";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -12,24 +14,6 @@ type DiscoveredItem = {
   sourceType: "employment" | "freelance" | "request";
   budgetScope?: string; paymentNote?: string; actionNote?: string;
 };
-
-const SEARCH_TAGS = ["ai video", "video editing", "graphic design", "image editing", "product photography", "paid surveys", "music evaluation", "website testing", "data annotation"];
-const STREAM_TERMS: Record<string, string[]> = {
-  "ویدئو": ["video editor", "video editing", "video producer", "short-form video", "motion graphics", "motion designer", "ai video", "reels editor", "tiktok video"],
-  "عکس و طراحی": ["graphic design", "graphic designer", "image editing", "photo editing", "product photography", "illustrator", "thumbnail design", "visual designer", "ai image", "ai art", "social media design", "banner design", "poster design"],
-  "نوشتن و مقاله": ["article writing", "content writing", "blog writing", "copywriting", "technical writing", "seo writing", "proofreading", "editing", "translation", "research writing"],
-  "تولید آهنگ با هوش مصنوعی": ["music production", "song production", "ai music", "music composition", "soundtrack", "jingle", "audio production", "songwriting", "music generation"],
-  "رأی‌گیری و داوری موسیقی": ["music voting", "song voting", "music judging", "song judging", "music rating panel", "audio evaluation", "track evaluation", "judge music contest"],
-  "نظرسنجی و تحقیقات بازار": ["paid survey", "market research", "user research", "research study", "survey respondent", "focus group", "product research", "participant study"],
-  "میکروتسک و ارزیابی وب": ["microtask", "website testing", "usability testing", "data labeling", "data annotation", "content evaluation", "ai evaluation", "web research task"]
-};
-function inferOpportunityStream(value: string): string | null {
-  const text = value.toLowerCase();
-  for (const [stream, terms] of Object.entries(STREAM_TERMS)) {
-    if (terms.some(term => text.includes(term))) return stream;
-  }
-  return null;
-}
 
 function plainText(value: unknown, max = 420) {
   if (typeof value !== "string") return "";
@@ -181,7 +165,7 @@ export async function GET() {
     return NextResponse.json({ error: "منابع عمومی فعلاً در دسترس نیستند.", jobs: [], warnings }, { status: 502, headers: { "Cache-Control": "no-store" } });
   }
   return NextResponse.json({
-    source: ["LaborX", "Subnano"], fetchedAt: new Date().toISOString(),
+    source: ["LaborX", "Subnano"], sourceRegistry: getOpportunitySourceSummary(), fetchedAt: new Date().toISOString(),
     count: jobs.length, jobs, warnings,
     notice: "نتایج زنده LaborX و Subnano با دسته‌بندی تصویر و طراحی، ویدئو، نویسندگی، موسیقی، رأی‌گیری/داوری مشروع، نظرسنجی و تحقیقات، و میکروتسک‌های مرورگری طبقه‌بندی می‌شوند؛ پوشش هر دسته به آگهی‌های واقعاً منتشرشده در این دو منبع وابسته است و منبع مستقل برای همه دسته‌ها هنوز متصل نشده است. بودجه Subnano تضمین یا وجه امانی نیست. روش پرداخت، پذیرش کشور، KYC، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. هیچ درخواست یا اقدامی خودکار ارسال نمی‌شود."
   }, { headers: { "Cache-Control": "public, s-maxage=900, stale-while-revalidate=600" } });
