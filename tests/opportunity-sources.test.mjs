@@ -9,10 +9,10 @@ test("keeps all 25 reviewed platforms in the source registry", () => {
 
 test("marks only LaborX and Subnano as connected live sources", () => {
   const summary = getOpportunitySourceSummary();
-  assert.equal(summary.connected, 2);
+  assert.equal(summary.connected, 3);
   assert.deepEqual(
     summary.sources.filter((source) => source.status === "connected").map((source) => source.name).sort(),
-    ["LaborX", "Subnano"]
+    ["LaborX", "Subnano", "Superteam Earn"]
   );
 });
 
