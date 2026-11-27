@@ -2,16 +2,17 @@
 
 A Persian RTL workspace for discovering, reviewing, producing, delivering, and tracking paid creative work. This project is completely separate from AIRDROP AI.
 
-## Six income streams
+## Seven income streams
 
 1. Paid writing and text services: articles, product copy, editing, and related client work.
 2. AI music and audio production: original tracks, sound effects, and promotional audio.
 3. Music evaluation and voting: only legitimate paid rating or judging programs with transparent rules; no fake or manipulated votes.
 4. Paid surveys and market research: only genuine research participation with clear compensation.
-5. AI image and video production: product visuals, advertising graphics, short videos, and creative deliverables.
-6. Browser-only microtasks and website testing: web QA, content/data evaluation, and short tasks usable directly in a mobile browser.
+5. AI image and graphic-design services: product visuals, advertising graphics, thumbnails, and creative deliverables.
+6. AI video and motion-graphics services: short videos, editing, and motion assets.
+7. Browser-only microtasks and website testing: web QA, content/data evaluation, and short tasks usable directly in a mobile browser.
 
-The six streams are product scope, not proof that matching live opportunities or integrations already exist. The current public discovery feed reads LaborX and Subnano only; surveys, music evaluation, and browser-task platforms are not yet connected to live feeds. Every lead remains unverified until country eligibility, identity/KYC, payment method, fees, minimum withdrawal, task requirements, and zero mandatory entry costs are documented.
+The seven streams are product scope, not proof that matching live opportunities or integrations already exist. The current public discovery feed reads LaborX and Subnano only. The 25-platform registry explicitly distinguishes connected feeds (2), catalog-only sources (22), and a restricted platform (1); a catalog entry is never presented as a live integration. Surveys, music evaluation, and browser-task platforms remain unconnected until an official public feed is implemented and tested. Every lead remains unverified until country eligibility, Iranian passport acceptance, identity/KYC, payment method, asset/network, fees, minimum withdrawal, task requirements, and zero mandatory entry costs are documented.
 
 ## Operating rules
 
@@ -164,3 +165,8 @@ This is real module orchestration, not a claim that independent cloud agents or 
 ## Optional LLM assistant adapter
 
 An authenticated, server-side OpenAI-compatible adapter is available at `/api/assistants/advice`. It is disabled by default, requires server-only provider configuration and explicit per-request consent, and forwards only allowlisted creative-brief fields. It returns advisory text only and cannot override deterministic safety gates. See [the adapter guide](docs/assistant-llm-adapter.md). No provider credentials, paid inference, or live external processing are configured by this repository change.
+
+
+## Opportunity source integration status
+
+The discovery UI reads the explicit 25-platform integration registry from `lib/opportunity-sources.mjs`. Only LaborX (public Telegram feed) and Subnano (public requests API) are marked connected. The other 22 sources are catalog-only and Worqen is marked restricted for this target profile. Tests in `tests/opportunity-sources.test.mjs`, `tests/opportunity-streams.test.mjs`, and `tests/opportunity-filter.test.mjs` prevent catalog entries from being mistaken for live feeds and cover the safety filters.
