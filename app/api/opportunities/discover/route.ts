@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isDisallowedOpportunity } from "../../../lib/opportunity-filter.mjs";
+import { isDisallowedOpportunity } from "../../../../lib/opportunity-filter.mjs";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
