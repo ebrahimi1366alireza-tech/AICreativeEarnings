@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 type AuthStatus = { connected: boolean; profile: { email: string; name?: string } | null };
 type Workspace = {
   opportunities: unknown[];
+  assistantRuns?: unknown[];
   deliveries: unknown[];
   income: unknown[];
   wallet: { address: string; network: string };
@@ -18,6 +19,7 @@ const OWNER_KEY = "creativeops-cloud-owner-v1";
 const RESTORE_BACKUP_KEY = "creativeops-cloud-restore-backup-v1";
 const KEYS = {
   opportunities: "creativeops-opportunities-v1",
+  assistantRuns: "creativeops-assistant-runs-v1",
   deliveries: "creativeops-deliveries-v1",
   income: "creativeops-income-v1",
   wallet: "creativeops-wallet-v1"
@@ -31,6 +33,7 @@ function readLocal(): Workspace {
   };
   return {
     opportunities: read(KEYS.opportunities) ?? [],
+    assistantRuns: read(KEYS.assistantRuns) ?? [],
     deliveries: read(KEYS.deliveries) ?? [],
     income: read(KEYS.income) ?? [],
     wallet: read(KEYS.wallet) ?? { address: "", network: "EVM - انتخاب شبکه هنگام برداشت" },
@@ -43,6 +46,7 @@ function readLocal(): Workspace {
 
 function writeLocal(data: Workspace) {
   localStorage.setItem(KEYS.opportunities, JSON.stringify(data.opportunities));
+  if (Array.isArray(data.assistantRuns)) localStorage.setItem(KEYS.assistantRuns, JSON.stringify(data.assistantRuns));
   localStorage.setItem(KEYS.deliveries, JSON.stringify(data.deliveries));
   localStorage.setItem(KEYS.income, JSON.stringify(data.income));
   localStorage.setItem(KEYS.wallet, JSON.stringify(data.wallet));
@@ -64,7 +68,7 @@ export default function CloudWorkspaceSync() {
 
     function preserveLocalBeforeRestore(email: string) {
       const local = readLocal();
-      const hasLocal = local.opportunities.length > 0 || local.deliveries.length > 0 || local.income.length > 0 || Boolean(local.wallet.address);
+      const hasLocal = local.opportunities.length > 0 || (local.assistantRuns?.length ?? 0) > 0 || local.deliveries.length > 0 || local.income.length > 0 || Boolean(local.wallet.address);
       if (!hasLocal) return;
       localStorage.setItem(RESTORE_BACKUP_KEY, JSON.stringify({
         app: "AI Creative Earnings",
@@ -119,7 +123,7 @@ export default function CloudWorkspaceSync() {
         const remote = await response.json();
         const data = remote.data as Workspace | null;
         const hasRemote = Boolean(data && (
-          data.opportunities?.length || data.deliveries?.length || data.income?.length ||
+          data.opportunities?.length || data.assistantRuns?.length || data.deliveries?.length || data.income?.length ||
           data.kycRecords?.length || (data.wallet?.address && data.wallet.address.length > 0)
         ));
         if (hasRemote) {
