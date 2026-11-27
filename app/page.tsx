@@ -5,6 +5,7 @@ import AccountConnections from "./components/account-connections";
 import CloudWorkspaceSync from "./components/cloud-workspace-sync";
 import OpportunityDiscovery from "./components/opportunity-discovery";
 import KycPaymentIntelligence from "./components/kyc-payment-intelligence";
+import PlatformReviewCatalog from "./components/platform-review-catalog";
 
 const workflow = [
   { number: "۰۱", title: "کشف فرصت‌ها", detail: "جست‌وجوی زنده در فیدهای عمومی جهانی؛ آگهی‌ها هنوز سفارش تأییدشده نیستند", state: "فعال · بررسی اولیه" },
@@ -26,12 +27,25 @@ type Opportunity = { id: string; title: string; platform: string; pay: string; s
 type Delivery = { id: string; title: string; client: string; due: string; status: string };
 type Income = { id: string; source: string; amount: number; currency: string; received: boolean; date: string };
 
+function readStoredJson<T>(key: string, fallback: T): T {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) as T : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 const DEFAULT_WALLET_ADDRESS = "";
 const LEGACY_PLACEHOLDER_WALLET_ADDRESS = "0x9f53b26aec605212f239c33e1017c5d2d188eb4c";
 const INITIAL_OPPORTUNITIES: Opportunity[] = [
   { id: "laborx-2026", title: "سفارش‌های فریلنسری نوشتن و طراحی با پرداخت رمزارزی", platform: "LaborX", pay: "مبلغ توافقی در قرارداد و سفارش", status: "نیازمند بررسی", stream: "نوشتن و مقاله / عکس و ویدئو", country: "پذیرش کشور محل اقامت و محدودیت‌های قانونی باید پیش از ثبت‌نام بررسی شود؛ ادعای جهانی بودن جای بررسی حساب را نمی‌گیرد", payout: "پرداخت رمزارزی از مسیر قرارداد و امانت‌داری پلتفرم؛ مقصد و شرایط برداشت داخل حساب تأیید شود", network: "Ethereum و BNB Chain؛ از جمله USDT و USDC", minimum: "در منبع رسمی بررسی‌شده مشخص نشده", fee: "۱۰٪ کارمزد فریلنسر برای هر سفارش؛ Premium برای نرخ پایه اجباری نیست", kyc: "در منبع رسمی بررسی‌شده مشخص نشده", proofUrl: "https://laborx.com/vacancies/crypto" },
   { id: "subnano-2026", title: "فروش مقاله و محتوای دیجیتال", platform: "Subnano", pay: "فروش تکی؛ درآمد فقط با خرید واقعی محتوا یا انعام", status: "نیازمند بررسی", stream: "نوشتن و مقاله / فایل و محتوای دیجیتال", country: "دسترسی و شرایط پذیرش کشور محل اقامت هنوز باید در زمان ساخت حساب بررسی شود", payout: "سهم سازنده پس از تأیید هر پرداخت به‌صورت خودکار ارسال می‌شود؛ موجودی برای برداشت تجمیع نمی‌شود", network: "Nano (XNO) یا USDC بومی روی Base", minimum: "حداقل موجودی/نوبت برداشت ندارد؛ فروش به‌ازای هر پرداخت", fee: "۷.۵٪ فروش Nano؛ ۱۵٪ فروش USDC", kyc: "ورود با ایمیل یا کیف پول؛ الزام KYC در FAQ مشخص نشده", proofUrl: "https://subnano.ai/faq" }
 ];
+
+
+import { encryptBackupPayload, decryptBackupPayload } from "../lib/backup-crypto.mjs";
+
 
 export default function Home() {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
@@ -139,31 +153,49 @@ export default function Home() {
   }
 
   const [backupNotice, setBackupNotice] = useState("");
+  const [backupPassword, setBackupPassword] = useState("");
+  const [backupPasswordConfirm, setBackupPasswordConfirm] = useState("");
+  const [importPassword, setImportPassword] = useState("");
   const [hasPreImportBackup, setHasPreImportBackup] = useState(false);
   useEffect(() => {
     setHasPreImportBackup(Boolean(localStorage.getItem("creativeops-pre-import-backup-v1")));
   }, []);
 
-  function exportBackup() {
-    const backup = {
-      app: "AI Creative Earnings",
-      schemaVersion: 1,
-      exportedAt: new Date().toISOString(),
-      opportunities,
-      deliveries,
-      income,
-      wallet: { address: walletAddress, network: walletNetwork }
-    };
-    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `ai-creative-earnings-backup-${new Date().toISOString().slice(0, 10)}.json`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    setBackupNotice("فایل پشتیبان ساخته شد. آن را در جای امن نگه دار.");
+  async function exportBackup() {
+    if (backupPassword.length < 12 || backupPassword !== backupPasswordConfirm) {
+      setBackupNotice("برای پشتیبان رمزگذاری‌شده، رمز حداقل ۱۲ کاراکتری وارد کن و تکرارش را دقیقاً یکسان بنویس.");
+      return;
+    }
+    try {
+      const backup = {
+        app: "AI Creative Earnings",
+        schemaVersion: 1,
+        exportedAt: new Date().toISOString(),
+        opportunities,
+        deliveries,
+        income,
+        wallet: { address: walletAddress, network: walletNetwork },
+        kycRecords: readStoredJson<unknown[]>("creativeops-kyc-intelligence-v1", []),
+        kycResidence: localStorage.getItem("creativeops-kyc-residence-v2") || "AM",
+        kycCitizenship: localStorage.getItem("creativeops-kyc-citizenship-v1") || "IR",
+        kycBankCountry: localStorage.getItem("creativeops-kyc-bank-country-v1") || "AM"
+      };
+      const encrypted = await encryptBackupPayload(backup, backupPassword);
+      const blob = new Blob([encrypted], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `ai-creative-earnings-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setBackupPassword("");
+      setBackupPasswordConfirm("");
+      setBackupNotice("فایل پشتیبان با AES-256-GCM رمزگذاری شد. رمز را جدا از فایل نگه دار؛ بازیابی بدون آن ممکن نیست.");
+    } catch {
+      setBackupNotice("رمزگذاری در این مرورگر ممکن نشد. از HTTPS یا localhost استفاده کن؛ فایل بدون رمز ساخته نشد.");
+    }
   }
 
   function downloadPreImportBackup() {
@@ -184,15 +216,48 @@ export default function Home() {
     const file = event.target.files?.[0];
     if (!file) return;
     try {
-      const parsed: unknown = JSON.parse(await file.text());
+      const raw = await file.text();
+      const parsedFile: unknown = JSON.parse(raw);
+      if (!parsedFile || typeof parsedFile !== "object" || Array.isArray(parsedFile)) throw new Error("invalid");
+      const envelope = parsedFile as Record<string, unknown>;
+      let parsed: unknown;
+      if (envelope.format === "ai-creative-earnings-backup" && envelope.version === 2) {
+        if (!importPassword) {
+          setBackupNotice("رمز فایل پشتیبان را وارد کن.");
+          return;
+        }
+        parsed = await decryptBackupPayload(envelope, importPassword);
+      } else {
+        if (!window.confirm("این فایل قدیمی و بدون رمزگذاری است. فقط اگر منبع فایل را می‌شناسی ادامه بده. اطلاعات حساس آن ممکن است قابل خواندن باشد. ادامه می‌دهی؟")) return;
+        parsed = parsedFile;
+      }
+
       if (!parsed || typeof parsed !== "object") throw new Error("invalid");
-      const data = parsed as { app?: unknown; schemaVersion?: unknown; opportunities?: unknown; deliveries?: unknown; income?: unknown; wallet?: unknown };
+      const data = parsed as { app?: unknown; schemaVersion?: unknown; opportunities?: unknown; deliveries?: unknown; income?: unknown; wallet?: unknown; kycRecords?: unknown; kycResidence?: unknown; kycCitizenship?: unknown; kycBankCountry?: unknown };
       const isRecord = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === "object" && !Array.isArray(value);
       const validOpportunities = Array.isArray(data.opportunities) && data.opportunities.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
       const validDeliveries = Array.isArray(data.deliveries) && data.deliveries.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
       const validIncome = Array.isArray(data.income) && data.income.every(item => isRecord(item) && typeof item.id === "string" && typeof item.source === "string" && typeof item.amount === "number" && Number.isFinite(item.amount) && typeof item.received === "boolean");
-      const validWallet = data.wallet === undefined || (isRecord(data.wallet) && typeof data.wallet.address === "string" && (data.wallet.address === "" || /^0x[a-fA-F0-9]{40}$/.test(data.wallet.address)) && typeof data.wallet.network === "string");
-      if (data.app !== "AI Creative Earnings" || data.schemaVersion !== 1 || !validOpportunities || !validDeliveries || !validIncome || !validWallet) throw new Error("invalid");
+      const validWallet = data.wallet === undefined || (isRecord(data.wallet) && typeof data.wallet.address === "string" && data.wallet.address.length <= 256 && !/[\s\u0000-\u001F\u007F]/.test(data.wallet.address) && typeof data.wallet.network === "string");
+      const validCountryCode = (value: unknown) => value === undefined || (typeof value === "string" && /^[A-Z]{2}$/.test(value));
+      const validKycRecord = (value: unknown) => {
+        if (!isRecord(value)) return false;
+        const enumValue = (candidate: unknown, allowed: string[]) => typeof candidate === "string" && allowed.includes(candidate);
+        const validCountryMap = (candidate: unknown) => candidate === undefined || (isRecord(candidate) && Object.entries(candidate).every(([code, status]) => /^[A-Z]{2}$/.test(code) && enumValue(status, ["accepted", "rejected", "unknown", "allowed", "blocked"])));
+        return typeof value.id === "string" && value.id.length > 0 && value.id.length <= 120 &&
+          typeof value.platform === "string" && value.platform.length > 0 && value.platform.length <= 160 &&
+          typeof value.url === "string" && value.url.startsWith("https://") &&
+          enumValue(value.kyc, ["none", "id", "address", "selfie", "unknown"]) &&
+          enumValue(value.iranianPassport, ["accepted", "rejected", "unknown"]) &&
+          validCountryMap(value.passportAcceptanceByCitizenship) && validCountryMap(value.countryAccessByResidence) &&
+          enumValue(value.countryAccess, ["allowed", "blocked", "unknown"]) &&
+          enumValue(value.payout, ["direct-crypto", "platform-wallet", "fiat", "unknown"]) &&
+          enumValue(value.cost, ["free", "fee", "deposit", "unknown"]) &&
+          ["asset", "network", "minimum", "fee", "evidenceUrl", "checkedAt"].every(key => typeof value[key] === "string");
+      };
+      const validKyc = (data.kycRecords === undefined || (Array.isArray(data.kycRecords) && data.kycRecords.length <= 500 && data.kycRecords.every(validKycRecord))) &&
+        validCountryCode(data.kycResidence) && validCountryCode(data.kycCitizenship) && validCountryCode(data.kycBankCountry);
+      if (data.app !== "AI Creative Earnings" || data.schemaVersion !== 1 || !validOpportunities || !validDeliveries || !validIncome || !validWallet || !validKyc) throw new Error("invalid");
       if (!window.confirm("اطلاعات فعلی جایگزین اطلاعات داخل فایل پشتیبان شود؟ قبل از ادامه، از داده‌های فعلی خروجی بگیر.")) {
         event.target.value = "";
         return;
@@ -205,9 +270,20 @@ export default function Home() {
         opportunities,
         deliveries,
         income,
-        wallet: { address: walletAddress, network: walletNetwork }
+        wallet: { address: walletAddress, network: walletNetwork },
+        kycRecords: readStoredJson<unknown[]>("creativeops-kyc-intelligence-v1", []),
+        kycResidence: localStorage.getItem("creativeops-kyc-residence-v2") || "AM",
+        kycCitizenship: localStorage.getItem("creativeops-kyc-citizenship-v1") || "IR",
+        kycBankCountry: localStorage.getItem("creativeops-kyc-bank-country-v1") || "AM"
       };
-      localStorage.setItem("creativeops-pre-import-backup-v1", JSON.stringify(currentBackup, null, 2));
+      let protectionPassword = importPassword || backupPassword;
+      if (protectionPassword.length < 12) {
+        const entered = window.prompt("برای رمزگذاری نسخه پشتیبان خودکار، یک رمز حداقل ۱۲ کاراکتری وارد کن. این رمز ذخیره نمی‌شود.");
+        if (!entered || entered.length < 12) throw new Error("backup-password-required");
+        protectionPassword = entered;
+      }
+      const protectedCurrentBackup = await encryptBackupPayload(currentBackup, protectionPassword);
+      localStorage.setItem("creativeops-pre-import-backup-v1", protectedCurrentBackup);
       setHasPreImportBackup(true);
       setOpportunities(data.opportunities as Opportunity[]);
       setDeliveries(data.deliveries as Delivery[]);
@@ -217,11 +293,18 @@ export default function Home() {
         setWalletAddress(restoredWallet.address);
         setWalletNetwork(restoredWallet.network);
         localStorage.setItem("creativeops-wallet-v1", JSON.stringify(restoredWallet));
-        window.dispatchEvent(new Event("creativeops-workspace-changed"));
       }
+      // Older schema-v1 backups may not contain KYC review data. Preserve the current catalogue in that case.
+      if (Array.isArray(data.kycRecords)) localStorage.setItem("creativeops-kyc-intelligence-v1", JSON.stringify(data.kycRecords));
+      if (typeof data.kycResidence === "string") localStorage.setItem("creativeops-kyc-residence-v2", data.kycResidence);
+      if (typeof data.kycCitizenship === "string") localStorage.setItem("creativeops-kyc-citizenship-v1", data.kycCitizenship);
+      if (typeof data.kycBankCountry === "string") localStorage.setItem("creativeops-kyc-bank-country-v1", data.kycBankCountry);
+      window.dispatchEvent(new Event("creativeops-workspace-changed"));
+      window.dispatchEvent(new Event("creativeops-kyc-imported"));
+      setImportPassword("");
       setBackupNotice("اطلاعات فایل پشتیبان با موفقیت در این دستگاه بازیابی شد.");
     } catch {
-      setBackupNotice("فایل معتبر نیست یا با نسخه پشتیبان این برنامه سازگار نیست.");
+      setBackupNotice("رمز اشتباه است، فایل دستکاری شده یا ساختار آن معتبر نیست. هیچ داده‌ای بازیابی نشد.");
     } finally {
       event.target.value = "";
     }
@@ -329,6 +412,8 @@ export default function Home() {
 
         <OpportunityDiscovery onAdd={(lead) => setOpportunities(current => [{ ...lead }, ...current])} />
 
+        <PlatformReviewCatalog />
+
         <section className="panel vetted-opportunities" id="verified-opportunities">
           <div className="panel-head"><div><span className="eyebrow">CRYPTO PAYMENT EVIDENCE</span><h2>پلتفرم‌های دارای مستندات پرداخت رمزارزی</h2></div><span className="free-tag">بدون سپرده اولیه</span></div>
           <p className="hub-intro">این‌ها فرصت قطعی یا درآمد تضمین‌شده نیستند؛ فقط روش پرداخت و کارمزدشان در منبع رسمی مستند شده است. دسترسی کشور، احراز هویت و امکان استفاده از حساب باید پیش از صرف وقت بررسی شود.</p>
@@ -383,15 +468,18 @@ export default function Home() {
 
         <section className="panel backup-panel" id="backup">
           <div className="panel-head"><div><span className="eyebrow">DATA SAFETY</span><h2>پشتیبان‌گیری و بازیابی اطلاعات</h2></div><span className="free-tag">بدون هزینه</span></div>
-          <p className="hub-intro">از فرصت‌ها، سفارش‌های تولید و درآمدهای ثبت‌شده یک فایل پشتیبان JSON بساز. برای انتقال اطلاعات به گوشی یا مرورگر دیگر، فایل را همان‌جا بازیابی کن. این قابلیت جایگزین فضای ابری نیست و اطلاعات را خودکار همگام‌سازی نمی‌کند.</p>
+          <p className="hub-intro">از فرصت‌ها، سفارش‌های تولید، درآمدها، مقصد کیف پول و فهرست بررسی KYC/کشور یک فایل پشتیبان JSON بساز. برای انتقال اطلاعات به گوشی یا مرورگر دیگر، فایل را همان‌جا بازیابی کن. این قابلیت جایگزین فضای ابری نیست و اطلاعات را خودکار همگام‌سازی نمی‌کند.</p>
           <div className="backup-actions">
-            <button type="button" onClick={exportBackup}>دانلود فایل پشتیبان</button>
+            <input type="password" autoComplete="new-password" minLength={12} value={backupPassword} onChange={e => setBackupPassword(e.target.value)} placeholder="رمز پشتیبان، حداقل ۱۲ کاراکتر" aria-label="رمزگذاری فایل پشتیبان"/>
+            <input type="password" autoComplete="new-password" minLength={12} value={backupPasswordConfirm} onChange={e => setBackupPasswordConfirm(e.target.value)} placeholder="تکرار رمز پشتیبان" aria-label="تکرار رمز پشتیبان"/>
+            <button type="button" onClick={exportBackup}>ساخت و دانلود پشتیبان رمزگذاری‌شده</button>
+            <input type="password" autoComplete="current-password" value={importPassword} onChange={e => setImportPassword(e.target.value)} placeholder="رمز فایل برای بازیابی" aria-label="رمز بازیابی فایل"/>
             {hasPreImportBackup && <button type="button" onClick={downloadPreImportBackup}>دانلود نسخه خودکار قبل از بازیابی</button>}
-            <label className="backup-import">بازیابی از فایل پشتیبان
+            <label className="backup-import">انتخاب و بازیابی فایل پشتیبان
               <input type="file" accept="application/json,.json" onChange={importBackup}/>
             </label>
           </div>
-          <p className="backup-notice" role="status">{backupNotice || "فایل پشتیبان شامل فرصت‌ها، سفارش‌ها، دفتر درآمد و آدرس عمومی کیف پول است؛ اطلاعات ورود Google و کلیدهای خصوصی هرگز ذخیره نمی‌شوند."}</p>
+          <p className="backup-notice" role="status">{backupNotice || "پشتیبان جدید با AES-256-GCM و کلید مشتق‌شده PBKDF2 رمزگذاری می‌شود. رمز را در جای امن و جدا از فایل نگه دار. فایل‌های قدیمی فقط با هشدار قابل بازیابی‌اند."}</p>
         </section>
 
         <footer id="deliveries"><span>CREATIVEOPS · نسخه ۰.۲.۰</span><span>ساخته‌شده برای گردش‌کار کم‌هزینه و شفاف</span></footer>

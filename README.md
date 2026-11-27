@@ -35,7 +35,7 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 - Production-order and delivery tracking.
 - Income ledger that distinguishes pending from actually received payments.
 - Public wallet-address and network settings for different supported crypto assets; the app does not connect to or control the wallet.
-- JSON backup and restore.
+- JSON backup and restore. New exports use AES-256-GCM encryption with a PBKDF2-SHA-256 derived key (310,000 iterations), random salt, and random IV. A password of at least 12 characters is required and is never stored. Legacy plaintext schema-v1 imports require an explicit warning confirmation. Automatic pre-import backups are encrypted as well.
 - Email/password signup and login through Supabase Auth. Passwords are handled by Supabase and are never stored by this app.
 - Supabase access and refresh tokens are stored in HTTP-only cookies.
 - Authenticated cloud workspace sync through the `workspace_state` table. The API derives the owner from the verified Supabase session; clients cannot select another owner's ID. Row Level Security restricts each account to its own workspace.
@@ -47,12 +47,13 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 - GitHub repository: `ebrahimi1366alireza-tech/AICreativeEarnings`
 - Vercel project: `ai-creative-earnings`
 - Supabase project: `AI-Creative-Earnings` (`eu-central-1`)
-- Core Supabase tables: `profiles`, `opportunities`, `production_orders`, `assets`, `earnings`, and `workspace_state`. RLS is enabled on all six tables.
+- Supabase public tables: `profiles`, `opportunities`, `production_orders`, `assets`, `earnings`, `workspace_state`, `verification_devices`, `verification_handoffs`, and `creative_daily_usage`. RLS is enabled on all nine tables.
 - The latest production deployment completed successfully. A user account has not yet been registered, so end-to-end signup, login, and cross-device sync still require a real account test.
+- Supabase Auth's leaked-password protection is currently disabled. Supabase documentation states this feature is available on Pro plan and above; this organization is currently on the Free plan. Do not upgrade or incur a subscription without the owner's explicit budget approval. Review the setting under [Supabase Auth password security](https://supabase.com/dashboard/project/hkbyijbvkymwnsgyoqmm/auth/providers?provider=Email) if the plan is later upgraded.
 
 ## Current earning-channel review
 
-The latest live review is [docs/live-earning-channels-2026-11-26.md](docs/live-earning-channels-2026-11-26.md). It identifies Subnano as a possible free creator storefront (not guaranteed demand), keeps Gibwork on watchlist until a funded eligible creative bounty is verified, treats HireForHumans as waitlist-only until a live worker board is confirmed, and excludes low-value or manipulative Anoworks engagement tasks.
+The dashboard includes a 25-entry platform compatibility review catalogue in `app/components/platform-review-catalog.tsx`. Every entry is review-only by default; country, Iranian passport acceptance, KYC, payout route, fees, and no-deposit conditions must be checked before any platform is marked compatible. Microworker.app, Loopuman, SurveyTokens (IOTA route only for review), Taskmarket, Monero.Jobs, XmrBazaar, LaborX, and CryptoTask are prioritized candidates. Dework and Open Bounty remain conditional leads; Web3.Career and CryptoJobs.com are job-board sources only, not payout providers. Worqen is recorded as excluded because its current terms explicitly prohibit Iranian nationals and require KYC. The catalogue does not automate signup, KYC, wallet connection, submissions, or payouts.
 
 ## Live discovery and current limitations
 
@@ -89,11 +90,22 @@ A free tier does not automatically grant unlimited generations or commercial-use
 ## Review-only leads
 
 - Subnano: possible paid-content marketplace. Its official FAQ has listed Nano and USDC on Base payouts, a 7.5% Nano fee, and a 15% USDC fee. Verify current country access, identity rules, and payout conditions inside the account.
-- LaborX: crypto freelance marketplace. Its official site documents a standard freelancer fee; verify the current fee, supported USDT network, country access, KYC, and withdrawal terms before accepting a job.
+- LaborX: crypto freelance marketplace with escrow and USDC/USDT/DAI on Ethereum or BNB Chain; the official FAQ states a 10% freelancer fee. Country and identity eligibility for this account remain unverified.
+- CryptoTask: freelance marketplace advertising crypto payments, escrow, and fees up to 3%; exact payout assets/networks and KYC/country acceptance remain unverified.
+- Dework: DAO bounty board; each sponsor determines reward token and conditions, so USDC payout is not guaranteed.
+- Open Bounty: small human-task marketplace using USDC/x402 on Base. Its own FAQ says approval does not guarantee payment because the publisher pays after approval; current live task volume is low.
+- Web3.Career and CryptoJobs.com: discovery boards only. The employer, not the board, determines payout, KYC, and country eligibility.
+- Worqen: excluded for this account. Its official Terms explicitly bar Iranian nationals and require KYC; do not attempt to bypass this restriction.
 
 Official references:
 - https://subnano.ai/faq
 - https://laborx.com/
+- https://www.cryptotask.org/en
+- https://app.dework.xyz/bounties
+- https://openbounty.app/
+- https://web3.career/pay-in-crypto-jobs
+- https://www.cryptojobs.com/public/jobs
+- https://worqen.com/legal/terms
 
 ## Development
 

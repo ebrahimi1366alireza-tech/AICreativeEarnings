@@ -90,6 +90,26 @@ const labels = {
 
 type Filter = "all" | "ready" | "review" | "blocked";
 
+function isKycRecord(value: unknown): value is KycRecord {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const item = value as Record<string, unknown>;
+  const oneOf = (candidate: unknown, allowed: string[]) => typeof candidate === "string" && allowed.includes(candidate);
+  const validCountryMap = (candidate: unknown, allowed: string[]) => candidate === undefined ||
+    (Boolean(candidate) && typeof candidate === "object" && !Array.isArray(candidate) &&
+      Object.entries(candidate as Record<string, unknown>).every(([code, status]) => /^[A-Z]{2}$/.test(code) && oneOf(status, allowed)));
+  return typeof item.id === "string" && item.id.length > 0 && item.id.length <= 120 &&
+    typeof item.platform === "string" && item.platform.length > 0 && item.platform.length <= 160 &&
+    typeof item.url === "string" && item.url.startsWith("https://") &&
+    oneOf(item.kyc, ["none", "id", "address", "selfie", "unknown"]) &&
+    oneOf(item.iranianPassport, ["accepted", "rejected", "unknown"]) &&
+    validCountryMap(item.passportAcceptanceByCitizenship, ["accepted", "rejected", "unknown"]) &&
+    oneOf(item.countryAccess, ["allowed", "blocked", "unknown"]) &&
+    validCountryMap(item.countryAccessByResidence, ["allowed", "blocked", "unknown"]) &&
+    oneOf(item.payout, ["direct-crypto", "platform-wallet", "fiat", "unknown"]) &&
+    oneOf(item.cost, ["free", "fee", "deposit", "unknown"]) &&
+    ["asset", "network", "minimum", "fee", "evidenceUrl", "checkedAt"].every(key => typeof item[key] === "string");
+}
+
 function readiness(item: KycRecord, residence: string, citizenship: string) {
   const countryAccess = item.countryAccessByResidence?.[residence] ?? item.countryAccess;
   const passportAcceptance = item.passportAcceptanceByCitizenship?.[citizenship] ?? (citizenship === "IR" ? item.iranianPassport : "unknown");
@@ -112,23 +132,28 @@ export default function KycPaymentIntelligence() {
   const [notice,setNotice] = useState("");
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem("creativeops-kyc-intelligence-v1");
-      if (raw) {
-        const saved = JSON.parse(raw) as KycRecord[];
-        if (Array.isArray(saved)) {
-          const byId = new Map(saved.filter(x => x && typeof x.id === "string").map(x => [x.id,x]));
-          setRecords(seed.map(x => byId.get(x.id) || x).concat(saved.filter(x => !seed.some(s => s.id === x.id))));
+    function restoreFromLocalStorage() {
+      try {
+        const raw = localStorage.getItem("creativeops-kyc-intelligence-v1");
+        if (raw) {
+          const saved = JSON.parse(raw) as KycRecord[];
+          if (Array.isArray(saved) && saved.length <= 500 && saved.every(isKycRecord)) {
+            const byId = new Map(saved.map(x => [x.id,x]));
+            setRecords(seed.map(x => byId.get(x.id) || x).concat(saved.filter(x => !seed.some(s => s.id === x.id))));
+          }
         }
-      }
-    } catch { /* keep safe defaults */ }
-    const savedResidence = localStorage.getItem("creativeops-kyc-residence-v2") || localStorage.getItem("creativeops-kyc-residence-v1");
-    if (savedResidence) setResidence(savedResidence === "ارمنستان" ? "AM" : savedResidence === "ایران" ? "IR" : savedResidence);
-    const savedCitizenship = localStorage.getItem("creativeops-kyc-citizenship-v1");
-    if (savedCitizenship) setCitizenship(savedCitizenship);
-    const savedBankCountry = localStorage.getItem("creativeops-kyc-bank-country-v1");
-    if (savedBankCountry) setBankCountry(savedBankCountry);
+      } catch { /* keep safe defaults */ }
+      const savedResidence = localStorage.getItem("creativeops-kyc-residence-v2") || localStorage.getItem("creativeops-kyc-residence-v1");
+      if (savedResidence) setResidence(savedResidence === "ارمنستان" ? "AM" : savedResidence === "ایران" ? "IR" : savedResidence);
+      const savedCitizenship = localStorage.getItem("creativeops-kyc-citizenship-v1");
+      if (savedCitizenship) setCitizenship(savedCitizenship);
+      const savedBankCountry = localStorage.getItem("creativeops-kyc-bank-country-v1");
+      if (savedBankCountry) setBankCountry(savedBankCountry);
+    }
+    restoreFromLocalStorage();
     setLoaded(true);
+    window.addEventListener("creativeops-kyc-imported", restoreFromLocalStorage);
+    return () => window.removeEventListener("creativeops-kyc-imported", restoreFromLocalStorage);
   },[]);
 
   useEffect(() => {
