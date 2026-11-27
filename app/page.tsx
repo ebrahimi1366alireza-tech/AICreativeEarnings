@@ -9,6 +9,7 @@ import QualityReviewer from "./components/quality-reviewer";
 import DeliveryAssistant from "./components/delivery-assistant";
 import EarningsAuditor from "./components/earnings-auditor";
 import OrchestrationManager from "./components/orchestration-manager";
+import AssistantPipeline from "./components/assistant-pipeline";
 import KycPaymentIntelligence from "./components/kyc-payment-intelligence";
 
 const workflow = [
@@ -337,6 +338,7 @@ export default function Home() {
         <QualityReviewer />
         <DeliveryAssistant />
         <EarningsAuditor />
+        <AssistantPipeline />
         <OrchestrationManager />
 
         <section className="panel vetted-opportunities" id="verified-opportunities">
