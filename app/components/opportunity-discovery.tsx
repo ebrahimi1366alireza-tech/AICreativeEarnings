@@ -36,6 +36,7 @@ export type DiscoveryLead = {
 };
 
 type Props = { onAdd: (lead: DiscoveryLead) => void };
+type SourceRegistry = { total: number; connected: number; catalogOnly: number; restricted: number; sources: { name: string; url: string; status: "connected" | "catalog_only" | "restricted"; note: string }[] };
 type LiveOpportunity = { id: string; title: string; company: string; url: string; sourceUrl?: string; location: string; types: string[]; salary: string; description: string; postedAt: string | null; score: number; contractType: boolean; source: string; stream?: string };
 type DiscoveredOpportunity = LiveOpportunity & {
   sourceType?: "employment" | "freelance" | "request";
@@ -108,6 +109,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
   const [liveError, setLiveError] = useState("");
   const [liveNotice, setLiveNotice] = useState("");
   const [liveFetchedAt, setLiveFetchedAt] = useState("");
+  const [sourceRegistry, setSourceRegistry] = useState<SourceRegistry | null>(null);
   const [proposalTitle, setProposalTitle] = useState("");
   const [proposalBrief, setProposalBrief] = useState("");
   const [proposalBudget, setProposalBudget] = useState("");
@@ -128,6 +130,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
       const payload = await response.json();
       if (!response.ok) throw new Error(payload?.error || "دریافت آگهی‌ها ناموفق بود.");
       setLiveJobs(Array.isArray(payload.jobs) ? payload.jobs : []);
+      if (payload.sourceRegistry && Array.isArray(payload.sourceRegistry.sources)) setSourceRegistry(payload.sourceRegistry as SourceRegistry);
       setLiveFetchedAt(payload.fetchedAt || new Date().toISOString());
       setLiveNotice(payload.notice || "اطلاعات از منابع عمومی دریافت شد.");
       if (payload.warnings?.length) setLiveError(payload.warnings.join(" "));
@@ -252,7 +255,24 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
           <div><span className="eyebrow">LIVE PUBLIC LISTINGS</span><h3>جست‌وجوی زنده فرصت‌های درآمدی</h3></div>
           <button type="button" onClick={discoverOpportunities} disabled={liveLoading}>{liveLoading ? "در حال جست‌وجو..." : "جست‌وجوی فرصت‌های جدید"}</button>
         </div>
-        <p className="hub-intro">جست‌وجوی زنده فعلی LaborX و Subnano سفارش‌های فریلنسری مرتبط با تصویر، طراحی، ویدئو، نویسندگی و تولید موسیقی را بررسی می‌کند. رأی‌گیری و نظرسنجی پولی هنوز منبع زنده متصل ندارند و فقط به‌صورت دستی ثبت می‌شوند. هیچ نتیجه‌ای تا زمان تأیید مستندِ «بدون KYC»، کشور مجاز، پرداخت مستقیم رمزارزی، نبود سپرده و کارمزد، واجد شرایط محسوب نمی‌شود.</p>
+        <p className="hub-intro">وضعیت اتصال هر ۲۵ پلتفرم جداگانه نمایش داده می‌شود. فعلاً فقط فید عمومی LaborX و API عمومی Subnano زنده‌اند؛ سایر سایت‌ها تا زمان اتصال و تست واقعی، صرفاً در کاتالوگ بررسی باقی می‌مانند. دسته‌بندی‌ها شامل تصویر، ویدئو، نویسندگی، موسیقی، داوری مشروع، نظرسنجی و میکروتسک است. هیچ نتیجه‌ای تا زمان تأیید مستندِ «بدون KYC»، کشور مجاز، پرداخت مستقیم رمزارزی، نبود سپرده و کارمزد، واجد شرایط محسوب نمی‌شود.</p>
+        {sourceRegistry && <section className="saved-opportunity" aria-label="وضعیت اتصال منابع">
+          <div>
+            <strong>وضعیت منابع فرصت‌یابی: {sourceRegistry.connected} از {sourceRegistry.total} متصل</strong>
+            <p>در کاتالوگ: {sourceRegistry.catalogOnly} · محدودشده برای این پروفایل: {sourceRegistry.restricted}</p>
+            <details>
+              <summary>نمایش وضعیت هر ۲۵ پلتفرم</summary>
+              <ul>
+                {sourceRegistry.sources.map(source => <li key={source.name}>
+                  <a href={source.url} target="_blank" rel="noreferrer">{source.name}</a>
+                  {" · "}
+                  <strong>{source.status === "connected" ? "فید زنده متصل" : source.status === "restricted" ? "محدودیت قطعی" : "فقط کاتالوگ، بدون اتصال زنده"}</strong>
+                  {" · "}{source.note}
+                </li>)}
+              </ul>
+            </details>
+          </div>
+        </section>}
         {liveFetchedAt && <small>آخرین دریافت: {new Date(liveFetchedAt).toLocaleString("fa-IR")}</small>}
         {liveError && <p role="alert" className="discovery-assessment">{liveError}</p>}
         {liveNotice && <p className="discovery-assessment">{liveNotice}</p>}
