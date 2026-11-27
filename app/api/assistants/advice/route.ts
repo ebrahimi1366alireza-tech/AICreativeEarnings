@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
   }
   const input = body as Record<string, unknown>;
   if (input.allowExternalProcessing !== true) {
-    return NextResponse.json({ error: "برای ارسال بریف به سرویس مدل، رضایت صریح همین درخواست لازم است." }, { status:  consentStatus() });
+    return NextResponse.json({ error: "برای ارسال بریف به سرویس مدل، رضایت صریح همین درخواست لازم است." }, { status: 403 });
   }
   const brief = sanitizeAssistantBrief(input.brief && typeof input.brief === "object" && !Array.isArray(input.brief) ? input.brief as Record<string, unknown> : {});
   if (!brief.title || (!brief.message && !brief.specifications)) {
