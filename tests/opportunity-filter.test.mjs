@@ -19,6 +19,8 @@ test("blocks mandatory deposits, subscriptions, and withdrawal unlock fees", () 
   assert.equal(isDisallowedOpportunity("Pay an upfront deposit before starting"), true);
   assert.equal(isDisallowedOpportunity("Mandatory paid membership required"), true);
   assert.equal(isDisallowedOpportunity("Fee to unlock withdrawals"), true);
+  assert.equal(isDisallowedOpportunity("A deposit is required before starting"), true);
+  assert.equal(isDisallowedOpportunity("You must pay a membership fee to unlock tasks"), true);
 });
 
 test("keeps legitimate paid evaluation and music voting tasks eligible for review", () => {
