@@ -150,3 +150,8 @@ GitHub Actions runs the TypeScript check on pushes and pull requests. This workf
 The Connected Assistant Pipeline runs the five local deterministic modules in sequence: Opportunity Triage -> Creative Producer -> Quality Reviewer -> Delivery Assistant -> Earnings Auditor. Each stage receives structured output from the previous stage, records its status and handoff, and creates a reviewable execution report. The pipeline is local and does not require a model API or paid inference.
 
 This is real module orchestration, not a claim that independent cloud agents or LLMs are running. Source pages, licenses, media files, and payments are not independently verified. Unknown rights, incomplete QC, missing assets, and unverified earnings remain unresolved. No account registration, wallet connection, payment, upload, client message, or external submission is performed. Human approval remains mandatory.
+
+
+## Optional LLM assistant adapter
+
+An authenticated, server-side OpenAI-compatible adapter is available at `/api/assistants/advice`. It is disabled by default, requires server-only provider configuration and explicit per-request consent, and forwards only allowlisted creative-brief fields. It returns advisory text only and cannot override deterministic safety gates. See [the adapter guide](docs/assistant-llm-adapter.md). No provider credentials, paid inference, or live external processing are configured by this repository change.
