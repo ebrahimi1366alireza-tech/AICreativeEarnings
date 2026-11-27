@@ -255,7 +255,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
           <div><span className="eyebrow">LIVE PUBLIC LISTINGS</span><h3>جست‌وجوی زنده فرصت‌های درآمدی</h3></div>
           <button type="button" onClick={discoverOpportunities} disabled={liveLoading}>{liveLoading ? "در حال جست‌وجو..." : "جست‌وجوی فرصت‌های جدید"}</button>
         </div>
-        <p className="hub-intro">وضعیت اتصال هر ۲۵ پلتفرم جداگانه نمایش داده می‌شود. فعلاً فقط فید عمومی LaborX و API عمومی Subnano زنده‌اند؛ سایر سایت‌ها تا زمان اتصال و تست واقعی، صرفاً در کاتالوگ بررسی باقی می‌مانند. دسته‌بندی‌ها شامل تصویر، ویدئو، نویسندگی، موسیقی، داوری مشروع، نظرسنجی و میکروتسک است. هیچ نتیجه‌ای تا زمان تأیید مستندِ «بدون KYC»، کشور مجاز، پرداخت مستقیم رمزارزی، نبود سپرده و کارمزد، واجد شرایط محسوب نمی‌شود.</p>
+        <p className="hub-intro">وضعیت اتصال هر ۲۵ پلتفرم جداگانه نمایش داده می‌شود. فعلاً فید عمومی LaborX، API عمومی Subnano و API عمومی Superteam Earn زنده‌اند؛ سایر سایت‌ها تا زمان اتصال و تست واقعی، صرفاً در کاتالوگ بررسی باقی می‌مانند. دسته‌بندی‌ها شامل تصویر، ویدئو، نویسندگی، موسیقی، داوری مشروع، نظرسنجی و میکروتسک است. هیچ نتیجه‌ای تا زمان تأیید مستندِ «بدون KYC»، کشور مجاز، پرداخت مستقیم رمزارزی، نبود سپرده و کارمزد، واجد شرایط محسوب نمی‌شود.</p>
         {sourceRegistry && <section className="saved-opportunity" aria-label="وضعیت اتصال منابع">
           <div>
             <strong>وضعیت منابع فرصت‌یابی: {sourceRegistry.connected} از {sourceRegistry.total} متصل</strong>
