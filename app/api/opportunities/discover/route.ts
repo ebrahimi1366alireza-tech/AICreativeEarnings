@@ -23,7 +23,7 @@ const STREAM_TERMS: Record<string, string[]> = {
   "نظرسنجی و تحقیقات بازار": ["paid survey", "market research", "user research", "research study", "survey respondent", "focus group", "product research", "participant study"],
   "میکروتسک و ارزیابی وب": ["microtask", "website testing", "usability testing", "data labeling", "data annotation", "content evaluation", "ai evaluation", "web research task"]
 };
-function inferStream(value: string): string | null {
+function inferOpportunityStream(value: string): string | null {
   const text = value.toLowerCase();
   for (const [stream, terms] of Object.entries(STREAM_TERMS)) {
     if (terms.some(term => text.includes(term))) return stream;
@@ -77,7 +77,7 @@ async function fetchLaborX(warnings: string[]): Promise<DiscoveredItem[]> {
       const title = plainText(titleMatch[1], 180);
       // Some LaborX posts have generic titles while the creative service appears
       // only in the body. Match the full post to avoid silently dropping those briefs.
-      const stream = inferStream(`${title} ${text}`);
+      const stream = inferOpportunityStream(`${title} ${text}`);
       if (!stream) continue;
       const budgetMatch = text.match(/Budget:\s*(.+?)(?=🤝|With:|LaborX New job on LaborX\.com|Job Title:|\d+\s+views|$)/i);
       const budget = budgetMatch ? plainText(budgetMatch[1], 60) : "در آگهی مشخص نشده";
@@ -132,7 +132,7 @@ async function fetchSubnano(warnings: string[]): Promise<DiscoveredItem[]> {
       const description = plainText(`${request.description || ""} ${request.deliverable || ""}`, 650);
       const searchable = `${title} ${description}`.toLowerCase();
       if (isDisallowedOpportunity(searchable)) continue;
-      const stream = inferStream(searchable);
+      const stream = inferOpportunityStream(searchable);
       if (!stream) continue;
       if (typeof request.urlPath !== "string" || !request.urlPath.startsWith("/")) continue;
       const requestUrl = new URL(request.urlPath, "https://subnano.ai");
