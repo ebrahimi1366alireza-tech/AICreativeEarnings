@@ -83,3 +83,22 @@ test("missing source URL cannot be treated as a verified opportunity", () => {
   assert.equal(result.status, "review_required");
   assert.ok(result.missingEvidence.includes("source"));
 });
+
+test("evidence URLs reject embedded credentials and local-only hosts", () => {
+  const parsed = parseOpportunityEvidence([
+    "country=https://user:secret@official.example/country",
+    "kyc=https://localhost/kyc",
+    "payout=https://127.0.0.1/payout",
+    "asset=https://official.example/asset"
+  ].join("\\n"));
+  assert.deepEqual(Object.keys(parsed), ["asset"]);
+});
+
+test("a source URL with embedded credentials is not accepted as secure evidence", () => {
+  const result = assessOpportunity({
+    ...eligibleForReview,
+    sourceUrl: "https://user:secret@market.example/listing/123"
+  });
+  assert.equal(result.status, "review_required");
+  assert.ok(result.missingEvidence.includes("source"));
+});
