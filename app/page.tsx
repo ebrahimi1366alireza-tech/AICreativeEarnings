@@ -178,6 +178,7 @@ export default function Home() {
         schemaVersion: 1,
         exportedAt: new Date().toISOString(),
         opportunities,
+        assistantRuns: readStoredJson<unknown[]>("creativeops-assistant-runs-v1", []),
         deliveries,
         income,
         wallet: { address: walletAddress, network: walletNetwork },
@@ -239,9 +240,10 @@ export default function Home() {
       }
 
       if (!parsed || typeof parsed !== "object") throw new Error("invalid");
-      const data = parsed as { app?: unknown; schemaVersion?: unknown; opportunities?: unknown; deliveries?: unknown; income?: unknown; wallet?: unknown; kycRecords?: unknown; kycResidence?: unknown; kycCitizenship?: unknown; kycBankCountry?: unknown };
+      const data = parsed as { app?: unknown; schemaVersion?: unknown; opportunities?: unknown; assistantRuns?: unknown; deliveries?: unknown; income?: unknown; wallet?: unknown; kycRecords?: unknown; kycResidence?: unknown; kycCitizenship?: unknown; kycBankCountry?: unknown };
       const isRecord = (value: unknown): value is Record<string, unknown> => Boolean(value) && typeof value === "object" && !Array.isArray(value);
       const validOpportunities = Array.isArray(data.opportunities) && data.opportunities.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
+      const validAssistantRuns = data.assistantRuns === undefined || (Array.isArray(data.assistantRuns) && data.assistantRuns.length <= 20 && data.assistantRuns.every(item => isRecord(item) && item.ok === true && Array.isArray(item.stages) && JSON.stringify(item).length <= 500000));
       const validDeliveries = Array.isArray(data.deliveries) && data.deliveries.every(item => isRecord(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.status === "string");
       const validIncome = Array.isArray(data.income) && data.income.every(item => isRecord(item) && typeof item.id === "string" && typeof item.source === "string" && typeof item.amount === "number" && Number.isFinite(item.amount) && typeof item.received === "boolean");
       const validWallet = data.wallet === undefined || (isRecord(data.wallet) && typeof data.wallet.address === "string" && data.wallet.address.length <= 256 && !/[\s\u0000-\u001F\u007F]/.test(data.wallet.address) && typeof data.wallet.network === "string");
@@ -263,7 +265,7 @@ export default function Home() {
       };
       const validKyc = (data.kycRecords === undefined || (Array.isArray(data.kycRecords) && data.kycRecords.length <= 500 && data.kycRecords.every(validKycRecord))) &&
         validCountryCode(data.kycResidence) && validCountryCode(data.kycCitizenship) && validCountryCode(data.kycBankCountry);
-      if (data.app !== "AI Creative Earnings" || data.schemaVersion !== 1 || !validOpportunities || !validDeliveries || !validIncome || !validWallet || !validKyc) throw new Error("invalid");
+      if (data.app !== "AI Creative Earnings" || data.schemaVersion !== 1 || !validOpportunities || !validAssistantRuns || !validDeliveries || !validIncome || !validWallet || !validKyc) throw new Error("invalid");
       if (!window.confirm("اطلاعات فعلی جایگزین اطلاعات داخل فایل پشتیبان شود؟ قبل از ادامه، از داده‌های فعلی خروجی بگیر.")) {
         event.target.value = "";
         return;
@@ -292,6 +294,11 @@ export default function Home() {
       localStorage.setItem("creativeops-pre-import-backup-v1", protectedCurrentBackup);
       setHasPreImportBackup(true);
       setOpportunities(data.opportunities as Opportunity[]);
+      if (Array.isArray(data.assistantRuns)) {
+        localStorage.setItem("creativeops-assistant-runs-v1", JSON.stringify(data.assistantRuns));
+        const lastRun = data.assistantRuns[data.assistantRuns.length - 1];
+        if (lastRun) localStorage.setItem("creativeops-last-assistant-pipeline-v1", JSON.stringify(lastRun));
+      }
       setDeliveries(data.deliveries as Delivery[]);
       setIncome(data.income as Income[]);
       if (data.wallet && typeof data.wallet === "object" && "address" in data.wallet && "network" in data.wallet) {
