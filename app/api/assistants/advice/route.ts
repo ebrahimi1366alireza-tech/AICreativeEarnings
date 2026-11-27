@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseUser } from "@/lib/supabase-auth";
-import { buildAssistantMessages, getAssistantProviderConfig, sanitizeAssistantBrief } from "@/lib/assistant-llm";
+import { buildAssistantMessages, getAssistantProviderConfig, sanitizeAssistantBrief } from "@/lib/assistant-llm.mjs";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
