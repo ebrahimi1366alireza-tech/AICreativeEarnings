@@ -4,6 +4,12 @@ import { useEffect, useState } from "react";
 import AccountConnections from "./components/account-connections";
 import CloudWorkspaceSync from "./components/cloud-workspace-sync";
 import OpportunityDiscovery from "./components/opportunity-discovery";
+import CreativeProducer from "./components/creative-producer";
+import QualityReviewer from "./components/quality-reviewer";
+import DeliveryAssistant from "./components/delivery-assistant";
+import EarningsAuditor from "./components/earnings-auditor";
+import OrchestrationManager from "./components/orchestration-manager";
+import AssistantPipeline from "./components/assistant-pipeline";
 import KycPaymentIntelligence from "./components/kyc-payment-intelligence";
 import PlatformReviewCatalog from "./components/platform-review-catalog";
 
@@ -411,6 +417,12 @@ export default function Home() {
 
 
         <OpportunityDiscovery onAdd={(lead) => setOpportunities(current => [{ ...lead }, ...current])} />
+        <CreativeProducer />
+        <QualityReviewer />
+        <DeliveryAssistant />
+        <EarningsAuditor />
+        <AssistantPipeline />
+        <OrchestrationManager />
 
         <PlatformReviewCatalog />
 

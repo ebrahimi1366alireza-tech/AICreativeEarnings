@@ -1,0 +1,29 @@
+name: Opportunity triage tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "**"
+
+permissions:
+  contents: read
+
+jobs:
+  triage-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm install
+      - name: Run opportunity triage tests
+        run: npm test
+      - name: Type-check application
+        run: npm run lint
+      - name: Build production application
+        run: npm run build
