@@ -43,9 +43,23 @@ test("a deposit is an automatic rejection", () => {
   assert.equal(result.score, 0);
 });
 
-test("identity-document KYC is rejected under the current project rules", () => {
+test("passport KYC remains eligible for documented human review, not auto-approved", () => {
   const result = assessOpportunity({ ...eligibleForReview, kyc: "مدرک هویتی/پاسپورت" });
-  assert.equal(result.status, "ineligible");
+  assert.equal(result.status, "review_required");
+  assert.ok(result.missingEvidence.includes("content_verification"));
+  assert.equal(result.evidenceVerification, "not_verified");
+});
+
+test("address and tax-document KYC remains reviewable rather than auto-rejected", () => {
+  const result = assessOpportunity({ ...eligibleForReview, kyc: "مدرک آدرس/مالیات" });
+  assert.equal(result.status, "review_required");
+  assert.ok(result.missingEvidence.includes("content_verification"));
+});
+
+test("unknown KYC requirements remain unresolved", () => {
+  const result = assessOpportunity({ ...eligibleForReview, kyc: "نامشخص" });
+  assert.equal(result.status, "review_required");
+  assert.ok(result.missingEvidence.includes("kyc"));
 });
 
 test("non-HTTPS or malformed evidence cannot satisfy a requirement", () => {
