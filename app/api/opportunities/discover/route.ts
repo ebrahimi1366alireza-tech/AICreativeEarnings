@@ -20,13 +20,14 @@ const STREAM_TERMS: Record<string, string[]> = {
   "تولید آهنگ با هوش مصنوعی": ["music production", "song production", "ai music", "music composition", "soundtrack", "jingle", "audio production", "songwriting", "music generation"]
 };
 const DISALLOWED_TASK_PATTERNS = [
-  /\\b(?:install|download)\\s+(?:a\\s+)?(?:mobile\\s+)?games?\\b/i,
-  /\\b(?:play|test)\\s+(?:a\\s+)?games?\\s+(?:for|to earn)\\b/i,
-  /\\b(?:paid\\s+)?(?:likes?|followers?|fake reviews?|fake votes?|vote manipulation|engagement manipulation)\\b/i,
-  /\\b(?:buy|purchase)\\s+(?:likes?|followers?|reviews?|votes?)\\b/i,
-  /\\b(?:pay|deposit)\\s+(?:an?\\s+)?(?:upfront\\s+)?(?:fee|deposit|bond|stake)\\b/i,
-  /\\b(?:mandatory|required)\\s+(?:paid\\s+)?(?:subscription|membership|deposit|bond|stake)\\b/i,
-  /\\bfee\\s+to\\s+unlock\\s+(?:tasks?|withdrawals?)\\b/i
+  /\b(?:install|download)\s+(?:a\s+)?(?:mobile\s+)?games?\b/i,
+  /\b(?:play|test)\s+(?:a\s+)?games?\s+(?:for|to earn)\b/i,
+  /\b(?:paid\s+)?(?:likes?|followers?|fake reviews?|fake votes?|vote manipulation|engagement manipulation)\b/i,
+  /\b(?:buy|purchase)\s+(?:likes?|followers?|reviews?|votes?)\b/i,
+  /\b(?:pay|deposit)\s+(?:an?\s+)?(?:upfront\s+)?(?:fee|deposit|bond|stake)\b/i,
+  /\b(?:mandatory|required)\s+(?:paid\s+)?(?:subscription|membership|deposit|bond|stake)\b/i,
+  /\bfee\s+to\s+unlock\s+(?:tasks?|withdrawals?)\b/i,
+  /\b(?:pay|send|transfer)\s+(?:money|funds|crypto|tokens?)\s+(?:first|before|in advance)\b/i
 ];
 
 function isDisallowedOpportunity(value: string): boolean {
@@ -78,6 +79,7 @@ async function fetchLaborX(warnings: string[]): Promise<DiscoveredItem[]> {
       const url = safeJobUrl(jobMatch?.[0]?.replace(/&amp;/g, "&"), "laborx.com", "/jobs/");
       if (!url) continue;
       const text = plainText(chunk, 5000);
+      if (isDisallowedOpportunity(text)) continue;
       // Telegram widget text is flattened to one line by plainText(), so stop each
       // field at the next known label instead of consuming the rest of the post.
       const titleMatch = text.match(/Freelance Opportunity:\s*(.+?)(?=💰|Budget:|🤝|With:|LaborX New job on LaborX\.com|Job Title:|\d+\s+views|$)/i)
@@ -140,6 +142,7 @@ async function fetchSubnano(warnings: string[]): Promise<DiscoveredItem[]> {
       const title = plainText(request.title, 180);
       const description = plainText(`${request.description || ""} ${request.deliverable || ""}`, 650);
       const searchable = `${title} ${description}`.toLowerCase();
+      if (isDisallowedOpportunity(searchable)) continue;
       const stream = inferStream(searchable);
       if (!stream) continue;
       if (typeof request.urlPath !== "string" || !request.urlPath.startsWith("/")) continue;
