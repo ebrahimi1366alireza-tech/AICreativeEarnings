@@ -12,7 +12,7 @@ A Persian RTL workspace for discovering, reviewing, producing, delivering, and t
 6. AI video and motion-graphics services: short videos, editing, and motion assets.
 7. Browser-only microtasks and website testing: web QA, content/data evaluation, and short tasks usable directly in a mobile browser.
 
-The seven streams are product scope, not proof that matching live opportunities or integrations already exist. The current public discovery feed reads LaborX and Subnano only. The 25-platform registry explicitly distinguishes connected feeds (2), catalog-only sources (22), and a restricted platform (1); a catalog entry is never presented as a live integration. Surveys, music evaluation, and browser-task platforms remain unconnected until an official public feed is implemented and tested. Every lead remains unverified until country eligibility, Iranian passport acceptance, identity/KYC, payment method, asset/network, fees, minimum withdrawal, task requirements, and zero mandatory entry costs are documented.
+The seven streams are product scope, not proof that matching live opportunities or integrations already exist. The current public discovery feed reads LaborX, Subnano, and Superteam Earn. The 25-platform registry explicitly distinguishes connected feeds (3), catalog-only sources (21), and a restricted platform (1); a catalog entry is never presented as a live integration. Surveys, music evaluation, and browser-task platforms remain unconnected until an official public feed is implemented and tested. Every lead remains unverified until country eligibility, Iranian passport acceptance, identity/KYC, payment method, asset/network, fees, minimum withdrawal, task requirements, and zero mandatory entry costs are documented.
 
 ## Operating rules
 
@@ -169,4 +169,7 @@ An authenticated, server-side OpenAI-compatible adapter is available at `/api/as
 
 ## Opportunity source integration status
 
-The discovery UI reads the explicit 25-platform integration registry from `lib/opportunity-sources.mjs`. Only LaborX (public Telegram feed) and Subnano (public requests API) are marked connected. The other 22 sources are catalog-only and Worqen is marked restricted for this target profile. Tests in `tests/opportunity-sources.test.mjs`, `tests/opportunity-streams.test.mjs`, and `tests/opportunity-filter.test.mjs` prevent catalog entries from being mistaken for live feeds and cover the safety filters.
+The discovery UI reads the explicit 25-platform integration registry from `lib/opportunity-sources.mjs`. LaborX (public Telegram feed), Subnano (public requests API), and Superteam Earn (public listings API) are marked connected. The other 21 sources are catalog-only and Worqen is marked restricted for this target profile. Tests in `tests/opportunity-sources.test.mjs`, `tests/opportunity-streams.test.mjs`, and `tests/opportunity-filter.test.mjs` prevent catalog entries from being mistaken for live feeds and cover the safety filters.
+
+
+Superteam Earn uses the read-only public listings endpoint `https://superteam.fun/api/listings?take=100&status=open`. The integration keeps open, not-yet-awarded listings whose titles match the creative stream classifier; it records the token as stated by the API and never assumes the network, eligibility, KYC, or payment guarantee. Apply/submit remains a manual user action.
