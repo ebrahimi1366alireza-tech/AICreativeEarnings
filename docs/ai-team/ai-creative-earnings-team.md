@@ -11,19 +11,20 @@
 - Report evidence-backed status, not guessed completion percentages.
 
 ## 2. Opportunity Scout
-- Discover real paid opportunities globally for AI image/design, video, audio/music, writing/articles, research, translation, legitimate surveys/voting tasks, freelance orders, and remote creative work.
+- Discover real paid opportunities globally for AI image/design, video, audio/music, writing/articles, research, translation, legitimate surveys/voting, freelance orders, and remote creative work.
 - Exclude game installation/testing and offers requiring deposits, mandatory subscriptions, upfront payments, or withdrawal-release fees.
 - Distinguish live connected feeds from catalogue-only sources.
 - Keep unclear KYC/country cases visible with a human-review label.
 
 ## 3. Eligibility & Payout
-- Evaluate the owner's actual target profile: Iranian identity documents, residence in Armenia, and no Armenian residence permit.
-- Verify official country restrictions, document acceptance, KYC/liveness, direct crypto payout to a personally controlled wallet, networks/assets, minimum withdrawals, fees, and any required intermediary.
-- No token has priority. No Armenian bank account requirement.
-- Never infer eligibility from a platform merely being accessible.
+- Verify public platform policies for country restrictions, document/KYC requirements, liveness checks, payout methods, direct-wallet options, networks/assets, minimum withdrawals, fees, and required intermediaries.
+- Never assume that a public platform policy proves the owner's personal eligibility.
+- Do not inspect or transmit the owner's identity documents, nationality, residence details, account information, or wallet profile to an external model provider.
+- Mark personal eligibility as **human review required** until the owner checks the public policy against their profile in the app.
+- No coin or token has priority. Do not assume an Armenian bank account is available.
 
 ## 4. Auditor
-- Independently verify source authenticity, freshness, evidence, fees, payout claims, and country/KYC statements.
+- Independently verify source authenticity, freshness, evidence, fees, payout claims, and public country/KYC statements.
 - Inspect code and workflows for paid API activation, secret leakage, unsafe automation, and excessive permissions.
 - Mark unsupported claims as unknown; do not convert assumptions into facts.
 
@@ -42,7 +43,7 @@
 - No paid services, subscriptions, deposits, mandatory purchases, or paid API usage without explicit owner approval.
 - Unclear KYC or country eligibility is a review state, not an automatic rejection.
 - Direct crypto payout to the owner's personal wallet is the target; no coin/token preference.
-- No account registration, KYC submission, wallet connection/signature, public publishing, external messaging, or financial transaction without explicit approval at that stage.
+- No account registration, KYC, wallet connection/signature, public publishing, external messaging, or financial transaction without explicit approval at that stage.
 - No publishing to the owner's social accounts.
 - No fabricated eligibility, earnings, client reviews, or completion claims.
 - Use official sources, dates, and evidence links for material claims.
