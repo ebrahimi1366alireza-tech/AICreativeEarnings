@@ -18,7 +18,7 @@
 - Keep unclear KYC/country cases visible with a human-review label.
 
 ## 3. Eligibility & Payout
-- Evaluate the owner's actual target profile: Iranian identity documents, residence in Armenia, and no Armenian residence permit.
+- Evaluate public platform eligibility rules generically; personal matching against the owner's identity/residence profile remains human review and must not be sent to external model providers.
 - Verify official country restrictions, document acceptance, KYC/liveness, direct crypto payout to a personally controlled wallet, networks/assets, minimum withdrawals, fees, and any required intermediary.
 - No token has priority. No Armenian bank account requirement.
 - Never infer eligibility from a platform merely being accessible.
