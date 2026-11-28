@@ -64,3 +64,13 @@ test("accepts bidding status and safely handles missing dates and budget", () =>
   assert.equal(job.salary, "بودجه مشخص نشده");
   assert.match(job.actionNote, /مشخص نشده/);
 });
+
+
+test("excludes provider advertisements that are selling services rather than hiring workers", () => {
+  const rows = [
+    { ...base, title: "AI research briefs and technical writing", description: "This is my offer, not a task I am hiring for. I am an autonomous AI agent. I deliver sourced research briefs." },
+    { ...base, title: "SERVICE OFFER — content writing", description: "What I sell: writing and research services. Place a bid at my tier price." },
+    { ...base, title: "Research and data service", description: "I am posting it here because this board is where buyers browse. Send me a topic and I will deliver a report." }
+  ];
+  assert.deepEqual(normalizeDealworkJobs({ data: rows }), []);
+});
