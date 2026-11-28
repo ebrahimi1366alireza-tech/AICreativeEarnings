@@ -199,10 +199,10 @@ async function fetchSuperteam(warnings: string[]): Promise<DiscoveredItem[]> {
 
 export async function GET() {
   const warnings: string[] = [];
-  const [laborx, subnano, superteam, dealwork] = await Promise.all([
-    fetchLaborX(warnings), fetchSubnano(warnings), fetchSuperteam(warnings), fetchDealwork(warnings)
+  const [laborx, subnano, superteam, dealwork, remotive] = await Promise.all([
+    fetchLaborX(warnings), fetchSubnano(warnings), fetchSuperteam(warnings), fetchDealwork(warnings), fetchRemotive(warnings)
   ]);
-  const all = [...laborx, ...subnano, ...superteam, ...dealwork];
+  const all = [...laborx, ...subnano, ...superteam, ...dealwork, ...remotive];
   const unique = new Map<string, DiscoveredItem>();
   for (const item of all) {
     if (!unique.has(item.url)) unique.set(item.url, item);
@@ -219,6 +219,6 @@ export async function GET() {
   return NextResponse.json({
     source: ["LaborX", "Subnano", "Superteam Earn", "Dealwork AI", "Remotive"], sourceRegistry: getOpportunitySourceSummary(), fetchedAt: new Date().toISOString(),
     count: jobs.length, jobs, warnings,
-    notice: "نتایج زنده LaborX، Subnano، Superteam Earn، Dealwork AI و Remotive با دسته‌بندی تصویر و طراحی، ویدئو، نویسندگی، موسیقی، رأی‌گیری/داوری مشروع، نظرسنجی و تحقیقات، و میکروتسک‌های مرورگری طبقه‌بندی می‌شوند؛ فید Remotive با رعایت کش شش‌ساعته (حداکثر چهار دریافت روزانه) و لینک‌دهی به منبع اصلی اضافه شده است. کلیدواژه‌های پاداش تماشای تبلیغ/ویدئو و گوش‌دادن به موسیقی نیز به دسته‌بندی اضافه شده‌اند، اما هنوز منبع اختصاصی PTC/reward متصل نیست و فقط آگهی‌های منطبق در چهار فید فعلی قابل شناسایی‌اند. بودجه Subnano تضمین یا وجه امانی نیست. روش پرداخت، پذیرش کشور، KYC، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. هیچ درخواست یا اقدامی خودکار ارسال نمی‌شود."
+    notice: "نتایج زنده LaborX، Subnano، Superteam Earn، Dealwork AI و Remotive با دسته‌بندی تصویر و طراحی، ویدئو، نویسندگی، موسیقی، رأی‌گیری/داوری مشروع، نظرسنجی و تحقیقات، و میکروتسک‌های مرورگری طبقه‌بندی می‌شوند؛ فید Remotive با رعایت کش شش‌ساعته (حداکثر چهار دریافت روزانه) و لینک‌دهی به منبع اصلی اضافه شده است. کلیدواژه‌های پاداش تماشای تبلیغ/ویدئو و گوش‌دادن به موسیقی نیز به دسته‌بندی اضافه شده‌اند، اما هنوز منبع اختصاصی PTC/reward متصل نیست و فقط آگهی‌های منطبق در پنج فید فعلی قابل شناسایی‌اند. بودجه Subnano تضمین یا وجه امانی نیست. روش پرداخت، پذیرش کشور، KYC، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. هیچ درخواست یا اقدامی خودکار ارسال نمی‌شود."
   }, { headers: { "Cache-Control": "public, s-maxage=900, stale-while-revalidate=600" } });
 }
