@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json() as { email?: string };
     const email = String(body.email || "").trim().toLowerCase();
-    if (!/^\\S+@\\S+\\.\\S+$/.test(email)) {
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
       return NextResponse.json({ error: "یک ایمیل معتبر وارد کن." }, { status: 400 });
     }
 
