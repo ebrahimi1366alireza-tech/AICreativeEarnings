@@ -2,17 +2,17 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { getOpportunitySourceSummary, OPPORTUNITY_SOURCES } from "../lib/opportunity-sources.mjs";
 
-test("keeps all 26 reviewed platforms in the source registry", () => {
-  assert.equal(OPPORTUNITY_SOURCES.length, 26);
+test("keeps all 27 reviewed platforms in the source registry", () => {
+  assert.equal(OPPORTUNITY_SOURCES.length, 27);
   assert.equal(new Set(OPPORTUNITY_SOURCES.map((source) => source.name)).size, 26);
 });
 
-test("marks the five implemented public feeds as connected live sources", () => {
+test("marks the six implemented public feeds as connected live sources", () => {
   const summary = getOpportunitySourceSummary();
-  assert.equal(summary.connected, 5);
+  assert.equal(summary.connected, 6);
   assert.deepEqual(
     summary.sources.filter((source) => source.status === "connected").map((source) => source.name).sort(),
-    ["Dealwork AI", "LaborX", "Remotive", "Subnano", "Superteam Earn"]
+    ["Dealwork AI", "Himalayas", "LaborX", "Remotive", "Subnano", "Superteam Earn"]
   );
 });
 
@@ -44,4 +44,13 @@ test("marks Remotive public remote jobs API as connected with attribution and co
   assert.equal(remotive?.integration, "public_jobs_api");
   assert.match(remotive?.note || "", /شش‌ساعته/);
   assert.match(remotive?.note || "", /لینک اصلی/);
+});
+
+
+test("marks Himalayas public jobs API as a connected source with human review for country and payout", () => {
+  const himalayas = OPPORTUNITY_SOURCES.find((source) => source.name === "Himalayas");
+  assert.equal(himalayas?.status, "connected");
+  assert.equal(himalayas?.integration, "public_jobs_api");
+  assert.match(himalayas?.note || "", /شش‌ساعته/);
+  assert.match(himalayas?.note || "", /محدودیت کشور/);
 });
