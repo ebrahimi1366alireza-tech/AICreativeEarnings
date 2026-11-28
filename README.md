@@ -54,7 +54,7 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 
 ## Current earning-channel review
 
-The dashboard includes a 25-entry platform compatibility review catalogue in `app/components/platform-review-catalog.tsx`. Every entry is review-only by default; country, Iranian passport acceptance, KYC, payout route, fees, and no-deposit conditions must be checked before any platform is marked compatible. Microworker.app, Loopuman, SurveyTokens (IOTA route only for review), Taskmarket, Monero.Jobs, XmrBazaar, LaborX, and CryptoTask are prioritized candidates. Dework and Open Bounty remain conditional leads; Web3.Career and CryptoJobs.com are job-board sources only, not payout providers. Worqen is recorded as excluded because its current terms explicitly prohibit Iranian nationals and require KYC. The catalogue does not automate signup, KYC, wallet connection, submissions, or payouts.
+The dashboard includes a 25-entry platform compatibility review catalogue in `app/components/platform-review-catalog.tsx`. Every entry is review-only by default; country, Iranian passport acceptance, KYC, payout route, fees, and no-deposit conditions must be checked before any platform is marked compatible. Microworker.app, Loopuman, SurveyTokens (IOTA route only for review), Taskmarket, Monero.Jobs, XmrBazaar, LaborX, CryptoTask, and Dealwork AI are prioritized candidates. Dework and Open Bounty remain conditional leads; Web3.Career and CryptoJobs.com are job-board sources only, not payout providers. Worqen is recorded as excluded because its current terms explicitly prohibit Iranian nationals and require KYC. The catalogue does not automate signup, KYC, wallet connection, submissions, or payouts.
 
 ## Live discovery and current limitations
 
