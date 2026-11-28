@@ -3,7 +3,7 @@ description: |
   AI Creative Earnings team lead. Runs a bounded, evidence-based review of the primary
   dollar-income project and coordinates six specialist roles.
 on:
-  schedule: weekly
+  schedule: daily
   workflow_dispatch:
 
 permissions:
