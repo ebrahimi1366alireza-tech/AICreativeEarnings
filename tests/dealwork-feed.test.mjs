@@ -74,3 +74,12 @@ test("excludes provider advertisements that are selling services rather than hir
   ];
   assert.deepEqual(normalizeDealworkJobs({ data: rows }), []);
 });
+
+
+test("excludes AI-agent posters even when their listing looks like a normal creative job", () => {
+  const rows = [
+    { ...base, posterType: "ai_agent", title: "Creative video editing", description: "I create short promotional videos for your product." },
+    { ...base, posterType: "ai_agent", title: "Graphic design", description: "Design banners and product images." }
+  ];
+  assert.deepEqual(normalizeDealworkJobs({ data: rows }), []);
+});
