@@ -3,7 +3,7 @@ import { isDisallowedOpportunity } from "../../../../lib/opportunity-filter.mjs"
 import { inferOpportunityStream } from "../../../../lib/opportunity-streams.mjs";
 import { getOpportunitySourceSummary } from "../../../../lib/opportunity-sources.mjs";
 import { normalizeSuperteamListings } from "../../../../lib/superteam-feed.mjs";
-import { normalizeDealworkJobs } from "../../../../lib/dealwork-feed.mjs";
+import { normalizeDealworkJobs } from "../../../../lib/dealwork-feed.mjs";\nimport { normalizeRemotiveJobs } from "../../../../lib/remotive-feed.mjs";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -162,6 +162,23 @@ async function fetchDealwork(warnings: string[]): Promise<DiscoveredItem[]> {
   }
 }
 
+async function fetchRemotive(warnings: string[]): Promise<DiscoveredItem[]> {
+  try {
+    // Remotive recommends no more than four API reads per day; cache for six hours.
+    const response = await fetch("https://remotive.com/api/remote-jobs?limit=500", {
+      headers: { Accept: "application/json" },
+      next: { revalidate: 21600 },
+      signal: AbortSignal.timeout(12000)
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const payload = await response.json();
+    return normalizeRemotiveJobs(payload) as DiscoveredItem[];
+  } catch {
+    warnings.push("فید عمومی Remotive موقتاً دریافت نشد.");
+    return [];
+  }
+}
+
 async function fetchSuperteam(warnings: string[]): Promise<DiscoveredItem[]> {
   try {
     const response = await fetch("https://superteam.fun/api/listings?take=100&status=open", {
@@ -199,8 +216,8 @@ export async function GET() {
     return NextResponse.json({ error: "منابع عمومی فعلاً در دسترس نیستند.", jobs: [], warnings }, { status: 502, headers: { "Cache-Control": "no-store" } });
   }
   return NextResponse.json({
-    source: ["LaborX", "Subnano", "Superteam Earn", "Dealwork AI"], sourceRegistry: getOpportunitySourceSummary(), fetchedAt: new Date().toISOString(),
+    source: ["LaborX", "Subnano", "Superteam Earn", "Dealwork AI", "Remotive"], sourceRegistry: getOpportunitySourceSummary(), fetchedAt: new Date().toISOString(),
     count: jobs.length, jobs, warnings,
-    notice: "نتایج زنده LaborX، Subnano، Superteam Earn و Dealwork AI با دسته‌بندی تصویر و طراحی، ویدئو، نویسندگی، موسیقی، رأی‌گیری/داوری مشروع، نظرسنجی و تحقیقات، و میکروتسک‌های مرورگری طبقه‌بندی می‌شوند؛ کلیدواژه‌های پاداش تماشای تبلیغ/ویدئو و گوش‌دادن به موسیقی نیز به دسته‌بندی اضافه شده‌اند، اما هنوز منبع اختصاصی PTC/reward متصل نیست و فقط آگهی‌های منطبق در چهار فید فعلی قابل شناسایی‌اند. بودجه Subnano تضمین یا وجه امانی نیست. روش پرداخت، پذیرش کشور، KYC، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. هیچ درخواست یا اقدامی خودکار ارسال نمی‌شود."
+    notice: "نتایج زنده LaborX، Subnano، Superteam Earn، Dealwork AI و Remotive با دسته‌بندی تصویر و طراحی، ویدئو، نویسندگی، موسیقی، رأی‌گیری/داوری مشروع، نظرسنجی و تحقیقات، و میکروتسک‌های مرورگری طبقه‌بندی می‌شوند؛ فید Remotive با رعایت کش شش‌ساعته (حداکثر چهار دریافت روزانه) و لینک‌دهی به منبع اصلی اضافه شده است. کلیدواژه‌های پاداش تماشای تبلیغ/ویدئو و گوش‌دادن به موسیقی نیز به دسته‌بندی اضافه شده‌اند، اما هنوز منبع اختصاصی PTC/reward متصل نیست و فقط آگهی‌های منطبق در چهار فید فعلی قابل شناسایی‌اند. بودجه Subnano تضمین یا وجه امانی نیست. روش پرداخت، پذیرش کشور، KYC، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. هیچ درخواست یا اقدامی خودکار ارسال نمی‌شود."
   }, { headers: { "Cache-Control": "public, s-maxage=900, stale-while-revalidate=600" } });
 }
