@@ -2,12 +2,12 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { getOpportunitySourceSummary, OPPORTUNITY_SOURCES } from "../lib/opportunity-sources.mjs";
 
-test("keeps all 25 reviewed platforms in the source registry", () => {
+test("keeps all 26 reviewed platforms in the source registry", () => {
   assert.equal(OPPORTUNITY_SOURCES.length, 26);
-  assert.equal(new Set(OPPORTUNITY_SOURCES.map((source) => source.name)).size, 25);
+  assert.equal(new Set(OPPORTUNITY_SOURCES.map((source) => source.name)).size, 26);
 });
 
-test("marks the four implemented public feeds as connected live sources", () => {
+test("marks the five implemented public feeds as connected live sources", () => {
   const summary = getOpportunitySourceSummary();
   assert.equal(summary.connected, 5);
   assert.deepEqual(
