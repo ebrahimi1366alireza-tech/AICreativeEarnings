@@ -69,7 +69,7 @@ The dashboard includes a 25-entry platform compatibility review catalogue in `ap
 
 Do not present a public listing as a verified paid order or a review-only platform as KYC-free.
 
-## Creative toolkit
+## Free-first AI video generation\n\nSee [docs/free-video-generation.md](docs/free-video-generation.md). The current release supports manual handoff to consumer tools and open-source self-hosting; it does not claim a free unlimited video API. All provider APIs remain disabled, and Runway Dev API remains disabled because it requires paid API credits.\n\n## Creative toolkit
 
 - Dreamina: image and video drafts.
 - Krea: image/video generation and editing. Verify the current account quota, regional access, watermark rules, and commercial rights for the exact model/output. Krea API billing is separate from the consumer app plan; do not trigger paid API generations without explicit cost approval.
