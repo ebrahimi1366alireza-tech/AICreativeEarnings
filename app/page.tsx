@@ -26,7 +26,8 @@ const tools = [
   { name: "Krea", note: "تولید و ویرایش تصویر و ویدئو؛ سهمیه رایگان، دسترسی منطقه‌ای و مجوز تجاری به طرح و مدل انتخابی بستگی دارد و باید داخل حساب بررسی شود. API جدا از وب‌اپ است و ممکن است هزینه داشته باشد.", status: "ابزار متصل به ChatGPT؛ سهمیه و مجوز هر خروجی باید بررسی شود", mark: "KREA", url: "https://www.krea.ai/" },
   { name: "Canva", note: "طراحی پوستر، تبلیغات، تصاویر محصول و محتوای شبکه‌های اجتماعی؛ امکانات AI رایگان محدود است.", status: "برای طراحی و آماده‌سازی فایل مشتری", mark: "CANVA", url: "https://www.canva.com/" },
   { name: "CapCut", note: "تدوین ویدئو، زیرنویس و صداگذاری؛ برخی قابلیت‌ها و دارایی‌ها پولی یا منطقه‌ای هستند.", status: "برای تدوین و خروجی نهایی ویدئو", mark: "CAPCUT", url: "https://www.capcut.com/" },
-  { name: "ChatGPT", note: "کمک در ایده‌پردازی، نوشتن پرامپت، طراحی بریف، کنترل کیفیت و آماده‌سازی اصلاحات.", status: "دستیار اصلی آماده‌سازی و بازبینی خروجی بصری", mark: "CHATGPT", url: "https://chatgpt.com/" }
+  { name: "ChatGPT", note: "کمک در ایده‌پردازی، نوشتن پرامپت، طراحی بریف، کنترل کیفیت و آماده‌سازی اصلاحات.", status: "دستیار اصلی آماده‌سازی و بازبینی خروجی بصری", mark: "CHATGPT", url: "https://chatgpt.com/" },
+  { name: "ComfyUI + Wan", note: "مسیر متن‌باز برای تولید ویدئو؛ نرم‌افزار و مدل می‌توانند رایگان باشند، اما اجرای مدل به GPU و حافظه کافی نیاز دارد و GPU ابری ممکن است پولی باشد. API رایگان یا اجرای مستقیم روی گوشی تضمین نمی‌شود.", status: "متن‌باز · نیازمند سخت‌افزار مناسب یا GPU ابری", mark: "WAN / OPEN", url: "https://github.com/comfyanonymous/ComfyUI" }
 ];
 
 type Opportunity = { id: string; title: string; platform: string; pay: string; status: string; stream?: string; country?: string; payout?: string; network?: string; minimum?: string; fee?: string; kyc?: string; proofUrl?: string; writingType?: string; contentLanguage?: string; wordCount?: string; deadline?: string; seoRequired?: string; commercialRights?: string };
