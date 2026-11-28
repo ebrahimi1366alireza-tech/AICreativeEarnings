@@ -29,3 +29,11 @@ test("every registry entry has a valid HTTPS source link and explicit state", ()
     assert.ok(source.integration);
   }
 });
+
+
+test("keeps Dealwork AI review-only until human payout eligibility is verified", () => {
+  const dealwork = OPPORTUNITY_SOURCES.find((source) => source.name === "Dealwork AI");
+  assert.equal(dealwork?.status, "catalog_only");
+  assert.equal(dealwork?.integration, "public_board_not_connected");
+  assert.match(dealwork?.note || "", /برداشت رمزارزی/);
+});
