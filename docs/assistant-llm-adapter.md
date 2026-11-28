@@ -13,6 +13,19 @@ Set all four variables on the server runtime only:
 
 Production requires HTTPS. Do not commit credentials or place them in client-side code. No provider is selected by default and no paid provider or account has been configured.
 
+## Free-first provider candidate (not yet connected)
+
+Google AI Studio's Gemini API currently lists a free tier for selected models. Its OpenAI-compatible Chat Completions endpoint matches this adapter's request format:
+
+- `AI_ASSISTANT_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai`
+- `AI_ASSISTANT_MODEL=gemini-2.5-flash-lite`
+- `AI_ASSISTANT_API_KEY` must be a Gemini API key created in Google AI Studio.
+- `AI_ASSISTANTS_ENABLED=true`
+
+Important: Google's published free-tier terms state that submitted content may be used to improve its products. Do not send client-confidential material, personal data, account credentials, KYC documents, wallet details, or unreleased sensitive work. The app's current adapter forwards only the allowlisted creative brief, and the user must consent on every request. Verify current model availability, free quota, regional eligibility, and terms in Google AI Studio before adding a key. Do not enable Cloud Billing or a paid tier for this project without explicit budget approval.
+
+This is a documented candidate only. No Google account, API key, provider connection, or paid service has been created or enabled.
+
 ## Request contract
 
 Authenticated users may POST to `/api/assistants/advice` with:
