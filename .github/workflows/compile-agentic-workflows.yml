@@ -5,14 +5,16 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/*.md"
+      - ".github/workflows/compile-agentic-workflows.yml"
   push:
     branches: [main]
     paths:
       - ".github/workflows/*.md"
+      - ".github/workflows/compile-agentic-workflows.yml"
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: compile-agentic-workflows
@@ -21,11 +23,11 @@ concurrency:
 jobs:
   compile:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true
 
       - name: Install GitHub Agentic Workflows CLI extension
         env:
@@ -39,8 +41,33 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh aw compile --validate --strict
 
-      - name: Commit generated lock files on the default branch only
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+      - name: Upload generated lock files
+        uses: actions/upload-artifact@v4
+        with:
+          name: gh-aw-lock-files
+          path: .github/workflows/*.lock.yml
+          if-no-files-found: error
+
+  publish:
+    needs: compile
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      workflows: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Download generated lock files
+        uses: actions/download-artifact@v4
+        with:
+          name: gh-aw-lock-files
+          path: .github/workflows
+
+      - name: Commit generated lock files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
