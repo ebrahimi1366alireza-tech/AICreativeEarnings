@@ -1,8 +1,10 @@
-# AI Creative Earnings — Six-Specialist Team
+# AI Creative Earnings — Six Specialist Review Roles
 
 **Active scope:** AI Creative Earnings (the dollar-income project) only.
-**Execution model:** one orchestrated GitHub Agentic Workflow performs six specialist review passes. These are role-based responsibilities, not six separate model instances.
-**Other projects:** AIRDROP AI is separate. AI Crypto Security Hunter, Global Job Intelligence, and ARVZENO are paused/deferred and must not receive work from this team.
+
+**Execution model:** Six specialist roles are documented as review passes to be performed within a GitHub Copilot session using the repository instructions in `.github/copilot-instructions.md`. They are not six independent agents, background processes, or scheduled workflows. GitHub Copilot Free browser access is not treated as an autonomous cloud agent.
+
+**Automation status:** No autonomous executive-agent workflow is active. The cancelled Gemini workflow and its generated lock file have been removed. No Gemini, Amazon Q, or Ollama execution is configured. No paid model, API, subscription, or infrastructure may be activated without explicit owner approval.
 
 ## 1. Manager
 - Own the project backlog, dependencies, acceptance criteria, and priority.
@@ -14,14 +16,14 @@
 - Discover real paid opportunities globally for AI image/design, video, audio/music, writing/articles, research, translation, legitimate surveys/voting tasks, freelance orders, and remote creative work.
 - Exclude game installation/testing and offers requiring deposits, mandatory subscriptions, upfront payments, or withdrawal-release fees.
 - Distinguish live connected feeds from catalogue-only sources.
-- Current limitation: no web-search MCP is connected to the initial GitHub agent. It can inspect the repository and genuinely connected feeds, but must not claim fresh global web discovery until a vetted search integration is added.
+- Do not claim fresh global web discovery unless a working, approved search source was actually used.
 - Keep unclear KYC/country cases visible with a human-review label.
 
 ## 3. Eligibility & Payout
-- Evaluate public platform eligibility rules generically; personal matching against the owner's identity/residence profile remains human review and must not be sent to external model providers.
 - Verify official country restrictions, document acceptance, KYC/liveness, direct crypto payout to a personally controlled wallet, networks/assets, minimum withdrawals, fees, and any required intermediary.
 - No token has priority. No Armenian bank account requirement.
 - Never infer eligibility from a platform merely being accessible.
+- Personal eligibility remains subject to human review; do not send personal identity or residence details to external model providers.
 
 ## 4. Auditor
 - Independently verify source authenticity, freshness, evidence, fees, payout claims, and country/KYC statements.
@@ -47,3 +49,4 @@
 - No publishing to the owner's social accounts.
 - No fabricated eligibility, earnings, client reviews, or completion claims.
 - Use official sources, dates, and evidence links for material claims.
+- Report exact actions and checks actually completed. Never imply background work continues after the session ends.
