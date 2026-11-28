@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import AccountConnections from "./components/account-connections";
+import SocialConnections from "./components/social-connections";
 import CloudWorkspaceSync from "./components/cloud-workspace-sync";
 import OpportunityDiscovery from "./components/opportunity-discovery";
 import CreativeProducer from "./components/creative-producer";
@@ -365,6 +366,7 @@ export default function Home() {
         <section className="panel tools-panel" id="tools"><div className="panel-head"><div><span className="eyebrow">PROJECT CREATIVE TOOLKIT</span><h2>ابزارهای پروژه و دسترسی‌ها</h2></div><span className="free-tag">اولویت با رایگان‌ها</span></div><div className="tool-grid">{tools.map((tool) => <article className="tool-card" key={tool.mark}><div className="tool-mark">{tool.mark}</div><div><strong>{tool.name}</strong><p>{tool.note}</p><small>{tool.status}</small><a href={tool.url} target="_blank" rel="noreferrer" style={{display:"inline-block",marginTop:7,color:"#b9a4ff",fontSize:10,textDecoration:"none"}}>بازکردن ابزار ↗</a></div></article>)}</div><p className="footnote">این ابزارها سرویس‌های جداگانه‌اند و بر اساس دسترسی حساب کاربر استفاده می‌شوند؛ نمایش آن‌ها به معنی اتصال مستقیم API به اپ یا بازار سفارش نیست. سهمیه، دسترسی منطقه‌ای، واترمارک و مجوز تجاری را پیش از استفاده بررسی کن.</p></section>
 
         <AccountConnections />
+        <SocialConnections />
         <CloudWorkspaceSync />
         <KycPaymentIntelligence />
 
