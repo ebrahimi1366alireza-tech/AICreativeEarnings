@@ -6,6 +6,7 @@ on:
   schedule: daily
   workflow_dispatch:
   push:
+    branches: [main]
     paths:
       - ".github/workflows/executive-agent.lock.yml"
 
