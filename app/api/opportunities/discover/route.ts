@@ -6,6 +6,7 @@ import { normalizeSuperteamListings } from "../../../../lib/superteam-feed.mjs";
 import { normalizeDealworkJobs } from "../../../../lib/dealwork-feed.mjs";
 import { normalizeRemotiveJobs } from "../../../../lib/remotive-feed.mjs";
 import { normalizeHimalayasJobs } from "../../../../lib/himalayas-feed.mjs";
+import { normalizeRemoteOkJobs } from "../../../../lib/remoteok-feed.mjs";
 
 export const runtime = "nodejs";
 export const revalidate = 900;
@@ -206,6 +207,21 @@ async function fetchHimalayas(warnings: string[]): Promise<DiscoveredItem[]> {
   }
 }
 
+async function fetchRemoteOk(warnings: string[]): Promise<DiscoveredItem[]> {
+  try {
+    const response = await fetch("https://remoteok.com/api", {
+      headers: { Accept: "application/json" },
+      next: { revalidate: 21600 },
+      signal: AbortSignal.timeout(12000)
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return normalizeRemoteOkJobs(await response.json()) as DiscoveredItem[];
+  } catch {
+    warnings.push("فید عمومی Remote OK موقتاً دریافت نشد.");
+    return [];
+  }
+}
+
 async function fetchSuperteam(warnings: string[]): Promise<DiscoveredItem[]> {
   try {
     const response = await fetch("https://superteam.fun/api/listings?take=100&status=open", {
@@ -225,10 +241,10 @@ async function fetchSuperteam(warnings: string[]): Promise<DiscoveredItem[]> {
 
 export async function GET() {
   const warnings: string[] = [];
-  const [laborx, subnano, superteam, dealwork, remotive, himalayas] = await Promise.all([
-    fetchLaborX(warnings), fetchSubnano(warnings), fetchSuperteam(warnings), fetchDealwork(warnings), fetchRemotive(warnings), fetchHimalayas(warnings)
+  const [laborx, subnano, superteam, dealwork, remotive, himalayas, remoteOk] = await Promise.all([
+    fetchLaborX(warnings), fetchSubnano(warnings), fetchSuperteam(warnings), fetchDealwork(warnings), fetchRemotive(warnings), fetchHimalayas(warnings), fetchRemoteOk(warnings)
   ]);
-  const all = [...laborx, ...subnano, ...superteam, ...dealwork, ...remotive, ...himalayas];
+  const all = [...laborx, ...subnano, ...superteam, ...dealwork, ...remotive, ...himalayas, ...remoteOk];
   const unique = new Map<string, DiscoveredItem>();
   for (const item of all) {
     if (!unique.has(item.url)) unique.set(item.url, item);
@@ -243,8 +259,8 @@ export async function GET() {
     return NextResponse.json({ error: "منابع عمومی فعلاً در دسترس نیستند.", jobs: [], warnings }, { status: 502, headers: { "Cache-Control": "no-store" } });
   }
   return NextResponse.json({
-    source: ["LaborX", "Subnano", "Superteam Earn", "Dealwork AI", "Remotive", "Himalayas"], sourceRegistry: getOpportunitySourceSummary(), fetchedAt: new Date().toISOString(),
+    source: ["LaborX", "Subnano", "Superteam Earn", "Dealwork AI", "Remotive", "Himalayas", "Remote OK"], sourceRegistry: getOpportunitySourceSummary(), fetchedAt: new Date().toISOString(),
     count: jobs.length, jobs, warnings,
-    notice: "نتایج زنده LaborX، Subnano، Superteam Earn، Dealwork AI، Remotive و Himalayas با دسته‌بندی تصویر و طراحی، ویدئو، نویسندگی، موسیقی، رأی‌گیری/داوری مشروع، نظرسنجی و تحقیقات، و میکروتسک‌های مرورگری طبقه‌بندی می‌شوند؛ فید Remotive با رعایت کش شش‌ساعته (حداکثر چهار دریافت روزانه) و لینک‌دهی به منبع اصلی اضافه شده است. فید Himalayas حداکثر سه صفحه از API عمومی را با کش شش‌ساعته دریافت می‌کند. کلیدواژه‌های پاداش تماشای تبلیغ/ویدئو و گوش‌دادن به موسیقی نیز به دسته‌بندی اضافه شده‌اند، اما هنوز منبع اختصاصی PTC/reward متصل نیست و فقط آگهی‌های منطبق در شش فید فعلی قابل شناسایی‌اند. بودجه Subnano تضمین یا وجه امانی نیست. روش پرداخت، پذیرش کشور، KYC، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. هیچ درخواست یا اقدامی خودکار ارسال نمی‌شود."
+    notice: "نتایج زنده LaborX، Subnano، Superteam Earn، Dealwork AI، Remotive، Himalayas و Remote OK با دسته‌بندی تصویر و طراحی، ویدئو، نویسندگی، موسیقی، رأی‌گیری/داوری مشروع، نظرسنجی و تحقیقات، و میکروتسک‌های مرورگری طبقه‌بندی می‌شوند؛ فید Remotive با رعایت کش شش‌ساعته (حداکثر چهار دریافت روزانه) و لینک‌دهی به منبع اصلی اضافه شده است. فید Himalayas حداکثر سه صفحه از API عمومی را با کش شش‌ساعته دریافت می‌کند؛ فید Remote OK با ذکر منبع و لینک مستقیم آگهی نمایش داده می‌شود. کلیدواژه‌های پاداش تماشای تبلیغ/ویدئو و گوش‌دادن به موسیقی نیز به دسته‌بندی اضافه شده‌اند، اما هنوز منبع اختصاصی PTC/reward متصل نیست و فقط آگهی‌های منطبق در هفت فید فعلی قابل شناسایی‌اند. بودجه Subnano تضمین یا وجه امانی نیست. روش پرداخت، پذیرش کشور، KYC، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. هیچ درخواست یا اقدامی خودکار ارسال نمی‌شود."
   }, { headers: { "Cache-Control": "public, s-maxage=900, stale-while-revalidate=600" } });
 }
