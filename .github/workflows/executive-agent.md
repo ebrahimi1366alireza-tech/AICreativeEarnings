@@ -33,13 +33,7 @@ safe-outputs:
     title-prefix: "[executive-report] "
     labels: [report]
     close-older-issues: false
-  threat-detection:
-    engine:
-      id: gemini
-      model: gemini-3.8-flash
-    max-ai-credits: 50
-    continue-on-error: false
-    report-as-issue: false
+  threat-detection: false
 ---
 
 # AI Creative Earnings Executive Agent
