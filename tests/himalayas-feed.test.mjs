@@ -59,3 +59,10 @@ test("handles malformed payloads and missing salary safely", () => {
   const [result] = normalizeHimalayasJobs({ jobs: [job({ minSalary: null, maxSalary: null, currency: null })] });
   assert.equal(result.salary, "حقوق در آگهی مشخص نشده");
 });
+
+
+test("keeps part-time employee roles distinct from freelance contracts", () => {
+  const [result] = normalizeHimalayasJobs({ jobs: [job({ employmentType: "Part Time" })] });
+  assert.equal(result.sourceType, "employment");
+  assert.equal(result.contractType, false);
+});
