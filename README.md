@@ -173,3 +173,8 @@ The discovery UI reads the explicit 25-platform integration registry from `lib/o
 
 
 Superteam Earn uses the read-only public listings endpoint `https://superteam.fun/api/listings?take=100&status=open`. The integration keeps open, not-yet-awarded listings whose titles match the creative stream classifier; it records the token as stated by the API and never assumes the network, eligibility, KYC, or payment guarantee. Apply/submit remains a manual user action.
+
+
+## Optional social account connections
+
+The dashboard includes a task-oriented catalogue for 17 social/community services and a local queue for recording which integrations should be prepared. All providers remain **not connected** until an official OAuth integration is implemented and verified. Queueing a provider does not connect an account or grant permissions. See [docs/social-account-connections.md](docs/social-account-connections.md) for the security model, provider limitations, and implementation requirements. No account action is automated.
