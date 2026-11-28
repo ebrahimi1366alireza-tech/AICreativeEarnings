@@ -107,3 +107,23 @@ These were added as candidate platforms from the earlier discussion. They are no
 - **Monero Bounties:** Community bounty board appears weighted toward software/development. A site notice indicated translation/research bounty intake had been paused since March 2024 and established-project bounty submissions require prior approval since March 2025; verify current rules and open listings.
 
 These are research leads only. No account was created, no application submitted, no wallet connected, and no legal acceptance or transaction made. Check current country eligibility, sanctions terms, KYC, fees, escrow funding, AI-use rules, payout thresholds, and net reward before applying. Never pay to unlock a task or withdraw earnings.
+
+## Paid media and content-consumption rewards — added 2026-11-28
+
+A separate discovery stream now covers platforms that claim to reward genuine human activity such as viewing advertisements, watching short videos, or listening to music. This is distinct from paid creator work: the participant consumes content rather than producing a deliverable.
+
+Search vocabulary:
+- Paid-to-click (PTC), paid ad viewing, ad-viewing rewards.
+- Watch videos for rewards, paid video tasks.
+- Paid music listening, music listening rewards.
+
+**Verification status: discovery category enabled; no platform or payout provider is approved by this entry.** Candidate services must be added only after current official terms and payout evidence are checked. For every candidate, record:
+- Whether users in Armenia and Iranian nationals are accepted, separately.
+- Passport/document KYC, liveness checks, and any additional identity/address requirements.
+- Direct wallet payout availability, supported assets/networks, minimum withdrawal, fees, and payout proof.
+- Whether rewards are cash/withdrawable crypto versus points, sweepstakes, gift cards, or locked tokens.
+- Required watch/listen duration, reward rate, daily caps, and realistic effective earnings per hour.
+- Deposits, subscriptions, purchases, withdrawal-release fees, and other entry costs. Any mandatory upfront payment is disqualifying.
+- Whether the official terms permit browser automation. Never simulate views/listens, bypass timers, create multiple accounts, or fake engagement. Cloud execution may be considered only for explicitly permitted workflows and must not claim a human watched/listened when that did not happen.
+
+Keep platforms with unclear KYC or country eligibility visible as **KYC / country eligibility unclear — human review required**. Do not mark any candidate eligible based on marketing claims alone.
