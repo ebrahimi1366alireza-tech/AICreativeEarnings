@@ -90,7 +90,7 @@ test("evidence URLs reject embedded credentials and local-only hosts", () => {
     "kyc=https://localhost/kyc",
     "payout=https://127.0.0.1/payout",
     "asset=https://official.example/asset"
-  ].join("\\n"));
+  ].join("\n"));
   assert.deepEqual(Object.keys(parsed), ["asset"]);
 });
 
