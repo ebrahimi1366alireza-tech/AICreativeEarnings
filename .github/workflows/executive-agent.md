@@ -12,7 +12,9 @@ permissions:
   pull-requests: read
   actions: read
 
-engine: gemini
+engine:
+  id: gemini
+  model: gemini-3.8-flash
 max-turns: 8
 
 
