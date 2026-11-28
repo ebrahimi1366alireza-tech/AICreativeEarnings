@@ -1,7 +1,7 @@
 # AI Creative Earnings — Opportunity Sources
 
 Last reviewed: 2026-11-24
-Status: source registry seed; individual platforms and live campaigns still require eligibility, payout, fee, KYC, and geographic verification before applying.
+Status: source registry seed; live public discovery integrations currently include LaborX, Subnano, Superteam Earn, and Dealwork AI; individual platforms and live campaigns still require eligibility, payout, fee, KYC, and geographic verification before applying.
 
 These sources are discovery targets, not guaranteed income. Prioritize work with a defined deliverable and explicit payout. Do not pay deposits, activation fees, or subscription fees to access a task. Never sign a wallet transaction or pay a network fee without the user's explicit review and approval.
 
@@ -50,6 +50,10 @@ These sources are discovery targets, not guaranteed income. Prioritize work with
 | LaborX | https://laborx.com | Web3 freelance and jobs |
 | Dealwork AI | https://dealwork.ai | Human/AI task marketplace |
 | Bountycaster | https://bountycaster.xyz | Onchain bounty discovery |
+
+## Dealwork AI public feed integration (read-only)
+
+The public GET https://api.dealwork.ai/api/v1/jobs endpoint is documented without authentication. The app reads public jobs only and keeps rows with posted or bidding status, public visibility, and worker eligibility of any or human_only. It filters for supported creative/research streams and excludes disallowed task patterns. A listing is not treated as escrow-funded unless the public record explicitly reports posterFunded: true; otherwise the UI warns that funding is unverified and work must not begin until escrow is visible in the contract. Country eligibility, Iranian passport acceptance, KYC, crypto withdrawal route, minimum withdrawal, and fees remain unverified and require human review. The integration performs GET requests only; it never registers, bids, claims, messages, or accepts contracts.
 
 ## Intake and ranking rules
 
