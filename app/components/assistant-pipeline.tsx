@@ -14,6 +14,19 @@ export default function AssistantPipeline() {
   const [aiConsent, setAiConsent] = useState(false);
   const [aiAdvice, setAiAdvice] = useState("");
   const [aiBusy, setAiBusy] = useState(false);
+  const [aiStatus, setAiStatus] = useState<"checking" | "ready" | "disabled" | "login_required" | "error">("checking");
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/api/assistants/status", { cache: "no-store", signal: controller.signal })
+      .then(async response => {
+        const data = await response.json().catch(() => ({}));
+        if (response.status === 401) setAiStatus("login_required");
+        else if (!response.ok) setAiStatus("error");
+        else setAiStatus(data.enabled === true ? "ready" : "disabled");
+      })
+      .catch(() => { if (!controller.signal.aborted) setAiStatus("error"); });
+    return () => controller.abort();
+  }, []);
   useEffect(() => {
     try {
       const saved = localStorage.getItem("creativeops-last-assistant-pipeline-v1");
@@ -111,7 +124,8 @@ export default function AssistantPipeline() {
     </form>
     <div className="panel" style={{marginTop:16}}>
       <strong>۴. مشاوره اختیاری مدل هوش مصنوعی</strong>
-      <p className="hub-intro">این بخش فقط بریف خلاقانه را ارسال می‌کند. اطلاعات تابعیت، KYC، کیف پول، پرداخت و درآمد به سرویس مدل فرستاده نمی‌شوند. اتصال در نسخه فعلی خاموش است مگر اینکه مدیر سایت، ارائه‌دهنده را در تنظیمات سرور فعال کند.</p>
+      <p className="hub-intro">این بخش فقط بریف خلاقانه را ارسال می‌کند. اطلاعات تابعیت، KYC، کیف پول، پرداخت و درآمد به سرویس مدل فرستاده نمی‌شوند.</p>
+      <p className="backup-notice" role="status" aria-live="polite">{aiStatus === "checking" ? "در حال بررسی اتصال دستیار..." : aiStatus === "ready" ? "اتصال مدل روی سرور آماده است؛ ارسال هر بریف همچنان به رضایت جداگانه نیاز دارد." : aiStatus === "login_required" ? "برای بررسی و استفاده از اتصال مدل، ابتدا وارد حساب شو." : aiStatus === "disabled" ? "اتصال مدل روی سرور خاموش یا ناقص است؛ پنج دستیار محلی همچنان رایگان کار می‌کنند." : "وضعیت اتصال مدل قابل بررسی نیست؛ پنج دستیار محلی همچنان در دسترس‌اند."}</p>
       <label style={{display:"flex",gap:8,alignItems:"flex-start",margin:"12px 0"}}>
         <input type="checkbox" checked={aiConsent} onChange={event=>setAiConsent(event.target.checked)} />
         <span>رضایت می‌دهم بریف تولید محتوا برای پردازش به ارائه‌دهنده مدل هوش مصنوعی متصل‌شده به سرور ارسال شود.</span>
