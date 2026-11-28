@@ -23,6 +23,7 @@ tools:
     toolsets: [repos, issues, pull_requests, actions]
 
 safe-outputs:
+  threat-detection: false
   mentions: false
   allowed-github-references: []
   create-issue:
