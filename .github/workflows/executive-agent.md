@@ -26,7 +26,7 @@ max-ai-credits: 50
 tools:
   bash: ["cat", "ls", "find", "grep", "head", "tail", "wc"]
   github:
-    lockdown: true
+    lockdown: false
     toolsets: [repos, issues, pull_requests, actions]
 
 safe-outputs:
