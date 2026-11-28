@@ -49,7 +49,7 @@ The opportunity workspace now includes a capability catalogue for AI-assisted pr
 - Vercel project: `ai-creative-earnings`
 - Supabase project: `AI-Creative-Earnings` (`eu-central-1`)
 - Supabase public tables: `profiles`, `opportunities`, `production_orders`, `assets`, `earnings`, `workspace_state`, `verification_devices`, `verification_handoffs`, and `creative_daily_usage`. RLS is enabled on all nine tables.
-- The latest production deployment completed successfully. A user account has not yet been registered, so end-to-end signup, login, and cross-device sync still require a real account test.
+- The latest production deployment completed successfully. Supabase Auth currently contains one user record, but an authenticated end-to-end login and cross-device workspace-sync test has not yet been completed from a real browser session.
 - Supabase Auth's leaked-password protection is currently disabled. Supabase documentation states this feature is available on Pro plan and above; this organization is currently on the Free plan. Do not upgrade or incur a subscription without the owner's explicit budget approval. Review the setting under [Supabase Auth password security](https://supabase.com/dashboard/project/hkbyijbvkymwnsgyoqmm/auth/providers?provider=Email) if the plan is later upgraded.
 
 ## Current earning-channel review
