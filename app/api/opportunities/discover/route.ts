@@ -3,7 +3,8 @@ import { isDisallowedOpportunity } from "../../../../lib/opportunity-filter.mjs"
 import { inferOpportunityStream } from "../../../../lib/opportunity-streams.mjs";
 import { getOpportunitySourceSummary } from "../../../../lib/opportunity-sources.mjs";
 import { normalizeSuperteamListings } from "../../../../lib/superteam-feed.mjs";
-import { normalizeDealworkJobs } from "../../../../lib/dealwork-feed.mjs";\nimport { normalizeRemotiveJobs } from "../../../../lib/remotive-feed.mjs";
+import { normalizeDealworkJobs } from "../../../../lib/dealwork-feed.mjs";
+import { normalizeRemotiveJobs } from "../../../../lib/remotive-feed.mjs";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
