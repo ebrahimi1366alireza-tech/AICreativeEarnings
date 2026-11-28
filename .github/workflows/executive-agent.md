@@ -14,7 +14,6 @@ permissions:
 engine:
   id: gemini
   model: gemini-3.8-flash
-  model-catalog: false
 
 max-turns: 8
 max-ai-credits: 50
@@ -38,7 +37,6 @@ safe-outputs:
     engine:
       id: gemini
       model: gemini-3.8-flash
-      model-catalog: false
     max-ai-credits: 50
     continue-on-error: false
     report-as-issue: false
