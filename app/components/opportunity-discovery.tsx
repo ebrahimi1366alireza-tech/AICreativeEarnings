@@ -223,7 +223,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
         <div><span className="eyebrow">OPPORTUNITY DISCOVERY ENGINE · MVP</span><h2>موتور پیدا کردن و ارزیابی سفارش</h2></div>
         <span className="free-tag">منابع رایگان</span>
       </div>
-      <p className="hub-intro">فرصت‌های درآمدی تصویر و طراحی، ویدئو، نویسندگی و مقاله، تولید موسیقی با AI، داوری موسیقی و نظرسنجی پولی را در مسیرهای جداگانه ثبت و ارزیابی کن. جست‌وجوی خودکار فعلی فقط آگهی‌های فریلنسری منابع متصل را پوشش می‌دهد؛ رأی‌گیری و نظرسنجی تا اتصال منبع معتبر باید دستی ثبت شوند. امتیاز موضوعی فقط میزان تطابق کار با مهارت‌ها را نشان می‌دهد و تأیید پرداخت نیست. تا وقتی نوع KYC، پذیرش پاسپورت ایرانی و کشور محل اقامت، روش پرداخت، نبود هزینه ورود و همه کارمزدها از منبع رسمی بررسی نشده‌اند، هیچ موردی واجد شرایط نیست.</p>
+      <p className="hub-intro">فرصت‌های درآمدی تصویر و طراحی، ویدئو، نویسندگی و مقاله، تولید موسیقی با AI، داوری موسیقی، نظرسنجی پولی، پاداش تماشای محتوا و وظایف شبکه‌های اجتماعی و کامیونیتی را در مسیرهای جداگانه ثبت و ارزیابی کن. جست‌وجوی خودکار فعلی فقط آگهی‌های فریلنسری منابع متصل را پوشش می‌دهد؛ رأی‌گیری و نظرسنجی تا اتصال منبع معتبر باید دستی ثبت شوند. امتیاز موضوعی فقط میزان تطابق کار با مهارت‌ها را نشان می‌دهد و تأیید پرداخت نیست. تا وقتی نوع KYC، پذیرش پاسپورت ایرانی و کشور محل اقامت، روش پرداخت، نبود هزینه ورود و همه کارمزدها از منبع رسمی بررسی نشده‌اند، هیچ موردی واجد شرایط نیست.</p>
       <section className="live-discovery-block" aria-label="weekly income target and work priorities">
         <div className="panel-head discovery-form-head">
           <div><span className="eyebrow">WEEKLY EARNING PLAN</span><h3>هدف اولیه درآمد هفتگی</h3></div>
@@ -321,7 +321,7 @@ export default function OpportunityDiscovery({ onAdd }: Props) {
       <form className="opportunity-form" onSubmit={submit}>
         <input value={title} onChange={e => setTitle(e.target.value)} required placeholder="عنوان دقیق سفارش" aria-label="عنوان دقیق سفارش"/>
         <select value={platform} onChange={e => setPlatform(e.target.value)} aria-label="منبع آگهی"><option>LaborX</option><option>Subnano</option><option>سایر منابع رسمی</option></select>
-        <select value={stream} onChange={e => setStream(e.target.value)} aria-label="نوع کار"><option>عکس و طراحی</option><option>ویدئو</option><option>نوشتن و مقاله</option><option>تولید آهنگ با هوش مصنوعی</option><option>رأی‌گیری و داوری موسیقی</option><option>نظرسنجی پولی</option><option>تبلیغات، تماشای ویدئو و گوش دادن به موسیقی</option><option>نامشخص</option></select>
+        <select value={stream} onChange={e => setStream(e.target.value)} aria-label="نوع کار"><option>عکس و طراحی</option><option>ویدئو</option><option>نوشتن و مقاله</option><option>تولید آهنگ با هوش مصنوعی</option><option>رأی‌گیری و داوری موسیقی</option><option>نظرسنجی پولی</option><option>تبلیغات، تماشای ویدئو و گوش دادن به موسیقی</option><option>وظایف شبکه‌های اجتماعی و کامیونیتی</option><option>نامشخص</option></select>
         <input value={pay} onChange={e => setPay(e.target.value)} placeholder="بودجه و واحد پرداخت" aria-label="بودجه"/>
         <input value={country} onChange={e => setCountry(e.target.value)} placeholder="کشورهای مجاز یا محدودیت‌ها" aria-label="محدودیت کشور"/>
         <select value={countryCheck} onChange={e => setCountryCheck(e.target.value)} aria-label="بررسی کشور"><option>هنوز بررسی نشده</option><option>مجاز بودن کشور تأیید شده</option><option>کشور مسدود است</option></select>
