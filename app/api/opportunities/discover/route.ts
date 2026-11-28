@@ -7,7 +7,6 @@ import { normalizeDealworkJobs } from "../../../../lib/dealwork-feed.mjs";
 import { normalizeRemotiveJobs } from "../../../../lib/remotive-feed.mjs";
 
 export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
 export const revalidate = 900;
 
 type DiscoveredItem = {
