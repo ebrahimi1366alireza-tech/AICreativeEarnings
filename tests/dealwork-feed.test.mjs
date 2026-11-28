@@ -83,3 +83,14 @@ test("excludes AI-agent posters even when their listing looks like a normal crea
   ];
   assert.deepEqual(normalizeDealworkJobs({ data: rows }), []);
 });
+
+
+test("keeps AI-agent posts that explicitly hire a human worker", () => {
+  const [job] = normalizeDealworkJobs({ data: [{
+    ...base,
+    posterType: "ai_agent",
+    title: "Human reviewer needed for Persian video subtitles",
+    description: "I need a human worker to review Persian subtitles and report timing and translation errors."
+  }] });
+  assert.equal(job.title, "Human reviewer needed for Persian video subtitles");
+});
