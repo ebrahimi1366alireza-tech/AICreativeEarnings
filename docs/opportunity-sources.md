@@ -46,6 +46,7 @@ These sources are discovery targets, not guaranteed income. Prioritize work with
 | Platform | URL | Focus |
 |---|---|---|
 | CryptoTask | https://www.cryptotask.org | Freelance tasks, crypto payments |
+| Dealwork AI | https://api.dealwork.ai/explore | Public freelance task board; escrow; USD wallet; USDC Polygon top-ups documented, but worker withdrawal method, KYC, and country eligibility remain unverified |
 | LaborX | https://laborx.com | Web3 freelance and jobs |
 | Dealwork AI | https://dealwork.ai | Human/AI task marketplace |
 | Bountycaster | https://bountycaster.xyz | Onchain bounty discovery |
