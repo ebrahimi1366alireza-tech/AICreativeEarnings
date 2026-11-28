@@ -6,6 +6,9 @@ on:
     paths:
       - ".github/workflows/executive-agent.md"
       - ".github/workflows/agent-workflow-compile.yml"
+  push:
+    branches:
+      - "chore/activate-creative-earnings-agent-team"
   workflow_dispatch:
 
 permissions:
@@ -13,7 +16,7 @@ permissions:
 
 jobs:
   compile:
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Check out source
