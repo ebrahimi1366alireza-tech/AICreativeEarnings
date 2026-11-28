@@ -127,3 +127,23 @@ Search vocabulary:
 - Whether the official terms permit browser automation. Never simulate views/listens, bypass timers, create multiple accounts, or fake engagement. Cloud execution may be considered only for explicitly permitted workflows and must not claim a human watched/listened when that did not happen.
 
 Keep platforms with unclear KYC or country eligibility visible as **KYC / country eligibility unclear — human review required**. Do not mark any candidate eligible based on marketing claims alone.
+
+
+## Social media and community task campaigns — added 2026-11-28
+
+A separate discovery stream covers paid social/community actions and marketing bounties. Candidate task types include:
+- Follow or subscribe to a brand account, join a Telegram channel or Discord server.
+- Genuine comments, replies, shares, reposts, and participation in community discussions.
+- Publish an approved campaign post, UGC clip, product review, or creator promotion.
+- Brand ambassador programs, referral campaigns, community moderation, and marketing bounties.
+
+**Verification status: discovery category enabled; individual campaigns and payout providers are not approved by this entry.** For each campaign verify:
+- Official campaign URL, sponsor identity, campaign deadline, task steps, acceptance criteria, and evidence required.
+- Whether it requires the user's personal social account, public profile, follower count, audience location, language, or content niche.
+- Whether the requested action is permitted by the relevant social network's current rules and the campaign's terms. Exclude fake engagement, purchased followers, spam comments, coordinated inauthentic behavior, and account manipulation.
+- Whether the reward is guaranteed per accepted task or merely a contest/prize/points allocation; record payout rail, minimum, fees, and actual payout evidence.
+- Country eligibility and Iranian nationality acceptance separately, plus KYC, identity/address documents, and any age requirements.
+- Any required purchase, deposit, subscription, paid verification, or gas fee. Mandatory upfront costs disqualify the opportunity.
+- Whether AI-assisted content is permitted and whether advertising/sponsorship disclosure is required.
+
+Do not auto-follow, auto-join, comment, repost, or publish from the user's accounts. The app may discover, classify, prepare a checklist, and queue opportunities. Any action on a personal account or submission of personal data requires explicit user approval. Keep unclear country/KYC cases visible for human review.
