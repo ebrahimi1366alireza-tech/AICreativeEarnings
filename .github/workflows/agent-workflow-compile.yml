@@ -1,0 +1,38 @@
+name: Compile agentic workflow
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/executive-agent.md"
+      - ".github/workflows/agent-workflow-compile.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull request
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Install GitHub Agentic Workflows CLI
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh extension install github/gh-aw
+          gh aw version
+      - name: Compile and strictly validate executive agent
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh aw compile .github/workflows/executive-agent.md --validate --strict
+      - name: Upload generated lock file for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: executive-agent-lock
+          path: .github/workflows/executive-agent.lock.yml
+          if-no-files-found: error
+          retention-days: 3
