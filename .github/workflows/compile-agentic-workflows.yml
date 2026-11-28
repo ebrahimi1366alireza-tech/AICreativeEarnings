@@ -1,0 +1,48 @@
+name: Compile GitHub Agentic Workflows
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/*.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: compile-agentic-workflows
+  cancel-in-progress: false
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Install GitHub Agentic Workflows CLI extension
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh extension install github/gh-aw
+          gh aw version
+
+      - name: Compile and validate agent workflows
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh aw compile --validate --strict
+
+      - name: Commit generated lock files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/workflows/*.lock.yml
+          if git diff --cached --quiet; then
+            echo "No generated workflow changes."
+          else
+            git commit -m "chore: compile GitHub Agentic Workflows"
+            git push
+          fi
