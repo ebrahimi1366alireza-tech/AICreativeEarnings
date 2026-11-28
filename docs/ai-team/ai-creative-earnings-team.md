@@ -14,6 +14,7 @@
 - Discover real paid opportunities globally for AI image/design, video, audio/music, writing/articles, research, translation, legitimate surveys/voting tasks, freelance orders, and remote creative work.
 - Exclude game installation/testing and offers requiring deposits, mandatory subscriptions, upfront payments, or withdrawal-release fees.
 - Distinguish live connected feeds from catalogue-only sources.
+- Current limitation: no web-search MCP is connected to the initial GitHub agent. It can inspect the repository and genuinely connected feeds, but must not claim fresh global web discovery until a vetted search integration is added.
 - Keep unclear KYC/country cases visible with a human-review label.
 
 ## 3. Eligibility & Payout
