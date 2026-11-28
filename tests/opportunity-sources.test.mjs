@@ -9,10 +9,10 @@ test("keeps all 25 reviewed platforms in the source registry", () => {
 
 test("marks the three implemented public feeds as connected live sources", () => {
   const summary = getOpportunitySourceSummary();
-  assert.equal(summary.connected, 3);
+  assert.equal(summary.connected, 4);
   assert.deepEqual(
     summary.sources.filter((source) => source.status === "connected").map((source) => source.name).sort(),
-    ["LaborX", "Subnano", "Superteam Earn"]
+    ["Dealwork AI", "LaborX", "Subnano", "Superteam Earn"]
   );
 });
 
@@ -31,9 +31,9 @@ test("every registry entry has a valid HTTPS source link and explicit state", ()
 });
 
 
-test("keeps Dealwork AI review-only until human payout eligibility is verified", () => {
+test("marks Dealwork AI public read-only jobs API as connected", () => {
   const dealwork = OPPORTUNITY_SOURCES.find((source) => source.name === "Dealwork AI");
-  assert.equal(dealwork?.status, "catalog_only");
-  assert.equal(dealwork?.integration, "public_board_not_connected");
+  assert.equal(dealwork?.status, "connected");
+  assert.equal(dealwork?.integration, "public_jobs_api");
   assert.match(dealwork?.note || "", /برداشت رمزارزی/);
 });
