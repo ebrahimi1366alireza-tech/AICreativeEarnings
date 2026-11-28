@@ -41,6 +41,27 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh aw compile --validate --strict
 
+      - name: Commit generated lock files
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          WORKFLOW_PUSH_TOKEN: ${{ secrets.GH_AW_WORKFLOW_PUSH_TOKEN }}
+          BRANCH_NAME: ${{ github.event.pull_request.head.ref || github.ref_name }}
+        run: |
+          if [ -z "$WORKFLOW_PUSH_TOKEN" ]; then
+            echo "::warning::GH_AW_WORKFLOW_PUSH_TOKEN is not configured. Compiled lock files will be uploaded as artifacts but not committed."
+            exit 0
+          fi
+          git add .github/workflows/*.lock.yml
+          if git diff --cached --quiet; then
+            echo "All generated lock files are already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: compile GitHub Agentic Workflows"
+          git remote set-url origin "https://x-access-token:${WORKFLOW_PUSH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push origin "HEAD:${BRANCH_NAME}"
+
       - name: Upload generated lock files
         uses: actions/upload-artifact@v4
         with:
