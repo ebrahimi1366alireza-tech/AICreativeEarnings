@@ -8,14 +8,12 @@ on:
 
 permissions:
   contents: read
-  issues: write
   pull-requests: read
   actions: read
 
 engine: gemini
 max-turns: 8
 
-network: defaults
 
 tools:
   bash: ["cat", "ls", "find", "grep", "head", "tail", "wc"]
