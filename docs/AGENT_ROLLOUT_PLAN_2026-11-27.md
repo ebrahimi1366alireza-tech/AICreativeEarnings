@@ -28,7 +28,7 @@ This is an implementation plan, not a claim that agents are already running.
 6. No agent may create accounts, complete KYC, sign wallet messages/transactions, accept contracts, apply to jobs, follow accounts, post publicly, submit work, purchase, or move funds.
 7. Human approval is required before external publication, client submission, account changes, contracts, and every financial action.
 8. Never report projected, pending, or contest prize money as received income.
-9. Keep the six existing income streams distinct: paid writing, original audio/music, legitimate paid evaluation, paid surveys/research, image/video/design production, and browser-only microtasks/website testing. Exclude fake engagement, fake reviews/votes, mandatory app/game installs, and deposit-funded tasks.
+9. Keep the seven existing income streams distinct: paid writing, original audio/music, legitimate paid evaluation, paid surveys/research, image/video/design production, and browser-only microtasks/website testing. Exclude fake engagement, fake reviews/votes, mandatory app/game installs, and deposit-funded tasks.
 
 ## Proposed assistant roles
 
