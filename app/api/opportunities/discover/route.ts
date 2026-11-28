@@ -5,6 +5,7 @@ import { getOpportunitySourceSummary } from "../../../../lib/opportunity-sources
 import { normalizeSuperteamListings } from "../../../../lib/superteam-feed.mjs";
 import { normalizeDealworkJobs } from "../../../../lib/dealwork-feed.mjs";
 import { normalizeRemotiveJobs } from "../../../../lib/remotive-feed.mjs";
+import { normalizeHimalayasJobs } from "../../../../lib/himalayas-feed.mjs";
 
 export const runtime = "nodejs";
 export const revalidate = 900;
@@ -179,6 +180,32 @@ async function fetchRemotive(warnings: string[]): Promise<DiscoveredItem[]> {
   }
 }
 
+async function fetchHimalayas(warnings: string[]): Promise<DiscoveredItem[]> {
+  const results: DiscoveredItem[] = [];
+  try {
+    // Read at most three cursor pages and cache each page for six hours.
+    let cursor: string | null = null;
+    for (let page = 0; page < 3; page++) {
+      const url = new URL("https://himalayas.app/jobs/api");
+      if (cursor) url.searchParams.set("cursor", cursor);
+      const response = await fetch(url.toString(), {
+        headers: { Accept: "application/json" },
+        next: { revalidate: 21600 },
+        signal: AbortSignal.timeout(12000)
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const payload = await response.json();
+      results.push(...normalizeHimalayasJobs(payload) as DiscoveredItem[]);
+      cursor = typeof payload?.nextCursor === "string" && payload.nextCursor ? payload.nextCursor : null;
+      if (!cursor) break;
+    }
+    return results;
+  } catch {
+    warnings.push("فید عمومی Himalayas موقتاً دریافت نشد.");
+    return results;
+  }
+}
+
 async function fetchSuperteam(warnings: string[]): Promise<DiscoveredItem[]> {
   try {
     const response = await fetch("https://superteam.fun/api/listings?take=100&status=open", {
@@ -198,10 +225,10 @@ async function fetchSuperteam(warnings: string[]): Promise<DiscoveredItem[]> {
 
 export async function GET() {
   const warnings: string[] = [];
-  const [laborx, subnano, superteam, dealwork, remotive] = await Promise.all([
-    fetchLaborX(warnings), fetchSubnano(warnings), fetchSuperteam(warnings), fetchDealwork(warnings), fetchRemotive(warnings)
+  const [laborx, subnano, superteam, dealwork, remotive, himalayas] = await Promise.all([
+    fetchLaborX(warnings), fetchSubnano(warnings), fetchSuperteam(warnings), fetchDealwork(warnings), fetchRemotive(warnings), fetchHimalayas(warnings)
   ]);
-  const all = [...laborx, ...subnano, ...superteam, ...dealwork, ...remotive];
+  const all = [...laborx, ...subnano, ...superteam, ...dealwork, ...remotive, ...himalayas];
   const unique = new Map<string, DiscoveredItem>();
   for (const item of all) {
     if (!unique.has(item.url)) unique.set(item.url, item);
@@ -216,8 +243,8 @@ export async function GET() {
     return NextResponse.json({ error: "منابع عمومی فعلاً در دسترس نیستند.", jobs: [], warnings }, { status: 502, headers: { "Cache-Control": "no-store" } });
   }
   return NextResponse.json({
-    source: ["LaborX", "Subnano", "Superteam Earn", "Dealwork AI", "Remotive"], sourceRegistry: getOpportunitySourceSummary(), fetchedAt: new Date().toISOString(),
+    source: ["LaborX", "Subnano", "Superteam Earn", "Dealwork AI", "Remotive", "Himalayas"], sourceRegistry: getOpportunitySourceSummary(), fetchedAt: new Date().toISOString(),
     count: jobs.length, jobs, warnings,
-    notice: "نتایج زنده LaborX، Subnano، Superteam Earn، Dealwork AI و Remotive با دسته‌بندی تصویر و طراحی، ویدئو، نویسندگی، موسیقی، رأی‌گیری/داوری مشروع، نظرسنجی و تحقیقات، و میکروتسک‌های مرورگری طبقه‌بندی می‌شوند؛ فید Remotive با رعایت کش شش‌ساعته (حداکثر چهار دریافت روزانه) و لینک‌دهی به منبع اصلی اضافه شده است. کلیدواژه‌های پاداش تماشای تبلیغ/ویدئو و گوش‌دادن به موسیقی نیز به دسته‌بندی اضافه شده‌اند، اما هنوز منبع اختصاصی PTC/reward متصل نیست و فقط آگهی‌های منطبق در پنج فید فعلی قابل شناسایی‌اند. بودجه Subnano تضمین یا وجه امانی نیست. روش پرداخت، پذیرش کشور، KYC، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. هیچ درخواست یا اقدامی خودکار ارسال نمی‌شود."
+    notice: "نتایج زنده LaborX، Subnano، Superteam Earn، Dealwork AI، Remotive و Himalayas با دسته‌بندی تصویر و طراحی، ویدئو، نویسندگی، موسیقی، رأی‌گیری/داوری مشروع، نظرسنجی و تحقیقات، و میکروتسک‌های مرورگری طبقه‌بندی می‌شوند؛ فید Remotive با رعایت کش شش‌ساعته (حداکثر چهار دریافت روزانه) و لینک‌دهی به منبع اصلی اضافه شده است. فید Himalayas حداکثر سه صفحه از API عمومی را با کش شش‌ساعته دریافت می‌کند. کلیدواژه‌های پاداش تماشای تبلیغ/ویدئو و گوش‌دادن به موسیقی نیز به دسته‌بندی اضافه شده‌اند، اما هنوز منبع اختصاصی PTC/reward متصل نیست و فقط آگهی‌های منطبق در شش فید فعلی قابل شناسایی‌اند. بودجه Subnano تضمین یا وجه امانی نیست. روش پرداخت، پذیرش کشور، KYC، کارمزد و حقوق تجاری باید در صفحه اصلی هر مورد تأیید شود. هیچ درخواست یا اقدامی خودکار ارسال نمی‌شود."
   }, { headers: { "Cache-Control": "public, s-maxage=900, stale-while-revalidate=600" } });
 }
