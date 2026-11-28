@@ -64,6 +64,7 @@ For each discovered opportunity, record:
 - Reward amount, currency, payout rail, payout threshold, and estimated time.
 - Entry cost and any required purchase, deposit, subscription, or gas fee.
 - KYC / identity requirements and country eligibility, including restrictions affecting Iranian nationals or residents of Armenia.
+- Phone verification separately: whether required, accepted phone countries, allowed number types, and whether it applies at signup, before work, before withdrawal, or only during risk review. Record official evidence and check date; an OTP is not identity or residence verification.
 - Audience/follower requirements, portfolio requirements, and required social accounts.
 - Whether AI-assisted production is allowed and any disclosure or originality rules.
 - Submission steps, acceptance criteria, and evidence of successful payout.
