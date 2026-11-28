@@ -11,7 +11,10 @@ test("classifies all seven requested income streams", () => {
     ["AI music production and soundtrack", "تولید آهنگ با هوش مصنوعی"],
     ["Paid music voting panel", "رأی‌گیری و داوری موسیقی"],
     ["Paid survey and market research study", "نظرسنجی و تحقیقات بازار"],
-    ["Website usability testing microtask", "میکروتسک و ارزیابی وب"]
+    ["Website usability testing microtask", "میکروتسک و ارزیابی وب"],
+    ["Get paid to watch ads and videos", "تبلیغات، تماشای ویدئو و گوش دادن به موسیقی"],
+    ["Paid to listen to music rewards", "تبلیغات، تماشای ویدئو و گوش دادن به موسیقی"],
+    ["PTC ads and paid to click", "تبلیغات، تماشای ویدئو و گوش دادن به موسیقی"]
   ];
   for (const [brief, expected] of examples) assert.equal(inferOpportunityStream(brief), expected);
 });
@@ -24,4 +27,6 @@ test("includes discovery keywords for the newly added streams", () => {
   assert.ok(OPPORTUNITY_SEARCH_TAGS.includes("paid surveys"));
   assert.ok(OPPORTUNITY_SEARCH_TAGS.includes("music evaluation"));
   assert.ok(OPPORTUNITY_SEARCH_TAGS.includes("website testing"));
+  assert.ok(OPPORTUNITY_SEARCH_TAGS.includes("paid to watch ads"));
+  assert.ok(OPPORTUNITY_SEARCH_TAGS.includes("paid to listen to music"));
 });
