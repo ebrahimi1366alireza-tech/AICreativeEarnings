@@ -1,6 +1,10 @@
 name: Compile GitHub Agentic Workflows
 
 on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/*.md"
   push:
     branches: [main]
     paths:
@@ -35,7 +39,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh aw compile --validate --strict
 
-      - name: Commit generated lock files
+      - name: Commit generated lock files on the default branch only
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
