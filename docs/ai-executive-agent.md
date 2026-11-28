@@ -1,6 +1,6 @@
 # AI Executive Agent
 
-Status: **Workflow source prepared; autonomous execution is not enabled yet.**
+Status: **Workflow source prepared and strict compilation validated in GitHub Actions; execution is not enabled yet.**
 
 The AI Executive Agent is the coordinator for **AI Creative Earnings only**. It is intended to run as a bounded GitHub Actions job through GitHub Agentic Workflows (gh-aw). It is not a persistent, always-on process and does not have access to ChatGPT conversations, memory, the owner's phone, personal accounts, or external services unless those integrations are explicitly configured.
 
@@ -9,7 +9,7 @@ The AI Executive Agent is the coordinator for **AI Creative Earnings only**. It 
 1. **AI Creative Earnings** — the only active project for this agent.
 2. **AI Crypto Security Hunter** — paused and out of scope until AI Creative Earnings is complete.
 3. **Global Job Intelligence** — deferred.
-4. **AIRDROP AI** — separate project; do not combine its roadmap or data with this repository.
+4. **AIRDROP AI** — separate project; do not combine its roadmap or data with AI Creative Earnings.
 5. Other store or personal projects are out of scope.
 
 ## Executive responsibilities
@@ -31,7 +31,7 @@ Do not transmit or repeat the owner's passport, nationality, residence, account,
 
 - **Daily scheduled run:** inspect repository state, deadlines, open tasks, and relevant project progress; publish a concise report only when there is meaningful new information.
 - **Manual run:** allow a maintainer to test the workflow from GitHub Actions.
-- These schedules do not become active until the Markdown source is compiled, the generated lock file is committed, provider authentication is configured, and a successful test run is verified.
+- These schedules do not become active until the Markdown source and generated lock file are on the default branch, provider authentication is configured, and a successful test run is verified.
 
 ## Permission stages
 
@@ -67,12 +67,13 @@ Do not transmit or repeat the owner's passport, nationality, residence, account,
 - [x] Define six specialist workstreams for AI Creative Earnings.
 - [x] Draft the read-only workflow source at `.github/workflows/executive-agent.md`.
 - [x] Select a free-tier-only Gemini model in the workflow source, with bounded turns and AI credits.
-- [ ] Install/verify the current gh-aw CLI in a repository checkout.
-- [ ] Compile the source with `gh aw compile` and commit the generated `.lock.yml` file. The Markdown source alone is not runnable.
+- [x] Install the current gh-aw CLI in GitHub Actions and strictly validate the workflow source.
+- [ ] Commit the generated `.lock.yml` file to the default branch. The source alone is not runnable.
 - [ ] Add `GEMINI_API_KEY` as a GitHub Actions repository secret. Do not paste it into chat or commit it.
-- [ ] Run a manual test and inspect permissions, logs, output, and provider usage.
+- [ ] Add `GH_AW_WORKFLOW_PUSH_TOKEN` as a repository secret. It must be a fine-grained token limited to this repository with **Contents: read/write** and **Workflows: read/write** so the compile workflow can commit the generated lock file. Do not paste it into chat.
+- [ ] Run the compile workflow manually after both secrets are configured; verify the generated lock file reaches the default branch.
+- [ ] Run a manual agent test and inspect permissions, logs, output, and provider usage.
 - [ ] Enable the daily schedule only after the test passes.
-- [ ] Add proposal-only pull-request capability after a separate review.
 
 ## Important reality check
 
