@@ -12,7 +12,7 @@ A Persian RTL workspace for discovering, reviewing, producing, delivering, and t
 6. AI video and motion-graphics services: short videos, editing, and motion assets.
 7. Browser-only microtasks and website testing: web QA, content/data evaluation, and short tasks usable directly in a mobile browser.
 
-The seven streams are product scope, not proof that matching live opportunities or integrations already exist. The current public discovery feed reads LaborX, Subnano, and Superteam Earn. The 25-platform registry explicitly distinguishes connected feeds (3), catalog-only sources (21), and a restricted platform (1); a catalog entry is never presented as a live integration. Surveys, music evaluation, and browser-task platforms remain unconnected until an official public feed is implemented and tested. Every lead remains unverified until country eligibility, Iranian passport acceptance, identity/KYC, payment method, asset/network, fees, minimum withdrawal, task requirements, and zero mandatory entry costs are documented.
+The seven streams are product scope, not proof that matching live opportunities or integrations already exist. The current public discovery feed reads LaborX, Subnano, Superteam Earn, and Dealwork AI. The 25-platform registry explicitly distinguishes connected feeds (4), catalog-only sources (20), and a restricted platform (1); a catalog entry is never presented as a live integration. Surveys, music evaluation, and browser-task platforms remain unconnected until an official public feed is implemented and tested. Every lead remains unverified until country eligibility, Iranian passport acceptance, identity/KYC, payment method, asset/network, fees, minimum withdrawal, task requirements, and zero mandatory entry costs are documented.
 
 ## Operating rules
 
@@ -58,7 +58,7 @@ The dashboard includes a 25-entry platform compatibility review catalogue in `ap
 
 ## Live discovery and current limitations
 
-- A server-side public-feed discovery endpoint currently reads LaborX freelance posts, Subnano public requests, and open creative listings from Superteam Earn. Employment feeds (Jobicy, Himalayas, Remote OK) are intentionally excluded because job vacancies are not the same as paid creative orders. The endpoint deduplicates and ranks topical matches and returns source links.
+- A server-side public-feed discovery endpoint currently reads LaborX freelance posts, Subnano public requests, open creative listings from Superteam Earn, and public Dealwork AI jobs through its documented unauthenticated GET API. Employment feeds (Jobicy, Himalayas, Remote OK) are intentionally excluded because job vacancies are not the same as paid creative orders. The endpoint deduplicates and ranks topical matches and returns source links.
 - The discovery feed is global; it is not restricted to the user's separate chef-job-search countries.
 - Subnano requests are public budgets, not escrowed funds or guaranteed purchases. LaborX listings still require checking that the specific page is an actual freelance order, not an employment vacancy.
 - Every discovered lead is unverified by default. A high topical score is not an eligibility or payment score. Do not mark a platform or lead eligible until its KYC requirements and document rules, the user's country eligibility, direct wallet payout, supported asset/network, all fees, minimum withdrawal, and no-deposit/no-purchase conditions are documented from official sources.
