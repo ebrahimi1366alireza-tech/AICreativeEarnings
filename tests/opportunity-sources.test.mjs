@@ -4,7 +4,7 @@ import { getOpportunitySourceSummary, OPPORTUNITY_SOURCES } from "../lib/opportu
 
 test("keeps all 27 reviewed platforms in the source registry", () => {
   assert.equal(OPPORTUNITY_SOURCES.length, 27);
-  assert.equal(new Set(OPPORTUNITY_SOURCES.map((source) => source.name)).size, 26);
+  assert.equal(new Set(OPPORTUNITY_SOURCES.map((source) => source.name)).size, 27);
 });
 
 test("marks the six implemented public feeds as connected live sources", () => {
